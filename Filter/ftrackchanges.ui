@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FTrackChanges</class>
+ <widget class="QWidget" name="FTrackChanges">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>48</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="9">
+      <widget class="EQLineEdit" name="leUser">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="ShowButton" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="EnableHiddenText" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="HiddenTextValidator" stdset="0">
+        <string>[0-9,]*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="10">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="3">
+      <widget class="EQDateEdit" name="deEnd"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Start time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>End time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="EQTimeEdit" name="teStart">
+       <property name="dateTime">
+        <datetime>
+         <hour>0</hour>
+         <minute>0</minute>
+         <second>1</second>
+         <year>2000</year>
+         <month>1</month>
+         <day>1</day>
+        </datetime>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7">
+      <widget class="EQTimeEdit" name="teEnd">
+       <property name="dateTime">
+        <datetime>
+         <hour>23</hour>
+         <minute>59</minute>
+         <second>59</second>
+         <year>2000</year>
+         <month>1</month>
+         <day>1</day>
+        </datetime>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Users</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Start date</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>End date</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="EQDateEdit" name="deStart"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <widget class="EQLineEdit" name="leType">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string/>
+       </property>
+       <property name="ShowButton" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="EnableHiddenText" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="HiddenTextValidator" stdset="0">
+        <string>[0-9,]*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="EQLineEdit" name="leID"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EQDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header location="global">eqdateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTimeEdit</class>
+   <extends>QTimeEdit</extends>
+   <header location="global">eqtimeedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

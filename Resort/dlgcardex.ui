@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgCardex</class>
+ <widget class="QDialog" name="DlgCardex">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>630</width>
+    <height>448</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Partner</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="6" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leContactPos">
+       <property name="Field" stdset="0">
+        <string>f_contactPos</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leEmail">
+       <property name="Field" stdset="0">
+        <string>f_email</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leTel">
+       <property name="Field" stdset="0">
+        <string>f_tel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leName">
+       <property name="Field" stdset="0">
+        <string>f_name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="5">
+      <widget class="EQDateEdit" name="deValidTo">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="displayFormat">
+        <string>dd/MM/yyyy</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_dateTo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="Cardex">
+       <property name="text">
+        <string>Code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>Comission</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Tel.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Address 2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Fax</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Contact</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Email</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>Valid from</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="3">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>VAT Mode</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Contact position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leAddr1">
+       <property name="Field" stdset="0">
+        <string>f_addr1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leCardex">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_cardex</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Address 1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="3">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Valid to</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leFax">
+       <property name="Field" stdset="0">
+        <string>f_fax</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="5" colspan="2">
+      <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="EQLineEdit" name="leVATModeCode">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="Field" stdset="0">
+           <string>f_vatMode</string>
+          </property>
+          <property name="ShowButton" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="EQLineEdit" name="leVATModeName">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>Group</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="0" colspan="7">
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>124</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnRemove">
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnOk">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCancel">
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>123</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="EQLineEdit" name="leCode">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="PrimaryKey" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_id</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leContact">
+       <property name="Field" stdset="0">
+        <string>f_contact</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="EQLineEdit" name="leCardexGroupName">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_group</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="6">
+      <widget class="EQLineEdit" name="leAddr2">
+       <property name="Field" stdset="0">
+        <string>f_addr2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1" colspan="2">
+      <widget class="EQDateEdit" name="deValidFrom">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="minimumDate">
+        <date>
+         <year>2000</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
+       <property name="displayFormat">
+        <string>dd/MM/yyyy</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_dateFrom</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leCommision">
+       <property name="Field" stdset="0">
+        <string>f_commission</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="EQLineEdit" name="leCardexGroupCode"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>City ledger code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4" colspan="3">
+      <widget class="EQLineEdit" name="leCLCode">
+       <property name="Field" stdset="0">
+        <string>f_cityLedger</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="5">
+      <widget class="QCheckBox" name="chCityLedger">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>Create city ledger</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1" colspan="3">
+      <widget class="EQCheckBox" name="chBookingRequire">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>Booking required</string>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_bookingRequired</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1" colspan="4">
+      <widget class="EQLineEdit" name="leExtra2">
+       <property name="Field" stdset="0">
+        <string>f_extra2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1" colspan="4">
+      <widget class="EQLineEdit" name="leExtra1">
+       <property name="Field" stdset="0">
+        <string>f_extra1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_16">
+       <property name="text">
+        <string>Extra1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>Extra2</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EQDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header location="global">eqdateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>leCode</tabstop>
+  <tabstop>leCardexGroupCode</tabstop>
+  <tabstop>leCardexGroupName</tabstop>
+  <tabstop>leCardex</tabstop>
+  <tabstop>leCLCode</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leAddr1</tabstop>
+  <tabstop>leAddr2</tabstop>
+  <tabstop>leContact</tabstop>
+  <tabstop>leContactPos</tabstop>
+  <tabstop>leEmail</tabstop>
+  <tabstop>leTel</tabstop>
+  <tabstop>leFax</tabstop>
+  <tabstop>deValidFrom</tabstop>
+  <tabstop>deValidTo</tabstop>
+  <tabstop>leCommision</tabstop>
+  <tabstop>leVATModeCode</tabstop>
+  <tabstop>leVATModeName</tabstop>
+  <tabstop>btnOk</tabstop>
+  <tabstop>btnCancel</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

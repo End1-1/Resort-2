@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WVaucherEditor</class>
+ <widget class="QDialog" name="WVaucherEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>557</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit raw data of voucher</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0" colspan="2">
+    <widget class="QWidget" name="widget_4" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QToolButton" name="btnNewVaucher">
+        <property name="text">
+         <string>New voucher</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnSave">
+        <property name="text">
+         <string>Save</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnPrint">
+        <property name="text">
+         <string>Print voucher</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnTrack">
+        <property name="text">
+         <string>Show history</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/tracking.png</normaloff>:/images/tracking.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>1129</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Main</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QWidget" name="widget_2" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="13" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Payment comment</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="2">
+           <widget class="EQLineEdit" name="leCLCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="2" colspan="2">
+           <widget class="EQLineEdit" name="lePayComment"/>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="leReservation"/>
+          </item>
+          <item row="16" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Amount</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Payment mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="2">
+           <widget class="EQLineEdit" name="leAmount">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="EQLineEdit" name="lePayCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="3">
+           <widget class="EQLineEdit" name="leCLName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>VAT mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>City ledger</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="3">
+           <widget class="EQLineEdit" name="leCardName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="EQLineEdit" name="leUserName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="EQLineEdit" name="leUserCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="EQLineEdit" name="leSourceName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="3">
+           <widget class="EQLineEdit" name="leItemName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Item</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="EQLineEdit" name="leSourceCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="2">
+           <widget class="EQLineEdit" name="leItemCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>User</string>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="2">
+           <widget class="EQLineEdit" name="leVATCode">
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Invoice / Reservation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="EQLineEdit" name="leInvoice"/>
+          </item>
+          <item row="11" column="2">
+           <widget class="EQLineEdit" name="leCardCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="3">
+           <widget class="EQLineEdit" name="lePayName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Credit card</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Working date</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leCode">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Guest</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="EDateEdit" name="deWorking"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Room</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="EDateEdit" name="deReal"/>
+          </item>
+          <item row="18" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Final name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="2" colspan="4">
+           <widget class="EQLineEdit" name="leFinalName">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80000</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2" colspan="3">
+           <widget class="EQLineEdit" name="leGuestName">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Real date / time</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" colspan="3">
+           <widget class="EQLineEdit" name="leRoom">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>8000</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Source</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="EQTimeEdit" name="teTime"/>
+          </item>
+          <item row="17" column="2">
+           <widget class="EQLineEdit" name="leVAT">
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>VAT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="3">
+           <widget class="EQLineEdit" name="leVATName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Additional</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>500</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Used prepaid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Fiscal</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Finance flag</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0" colspan="2">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Remarks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Debit/Credit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Sign</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Cancel date</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>Guest/Company (0/1)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Cancel user</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Cancel flag</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="2">
+           <widget class="EQLineEdit" name="leCancelUserCode">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leCancelFlag"/>
+          </item>
+          <item row="8" column="3">
+           <widget class="EQLineEdit" name="leCancelUserName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leFinFlag"/>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Cancel reason</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="2" colspan="2">
+           <widget class="QPlainTextEdit" name="teRemarks"/>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leDC"/>
+          </item>
+          <item row="4" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leSign"/>
+          </item>
+          <item row="10" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leCancelReason"/>
+          </item>
+          <item row="11" column="2" colspan="2">
+           <widget class="EQLineEdit" name="leGuestCompany"/>
+          </item>
+          <item row="9" column="2" colspan="2">
+           <widget class="QDateTimeEdit" name="deCancelDate">
+            <property name="displayFormat">
+             <string>dd.MM.yyyy HH:mm:ss</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="EQLineEdit" name="leFiscal">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="EQLineEdit" name="leUSD">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="EQLineEdit" name="lePrepaid">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>USD Rate</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTimeEdit</class>
+   <extends>QTimeEdit</extends>
+   <header location="global">eqtimeedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../Resort/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

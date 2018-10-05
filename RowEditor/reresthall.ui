@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RERestHall</class>
+ <widget class="QDialog" name="RERestHall">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>410</width>
+    <height>344</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Hall</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="8" column="1">
+      <widget class="EQLineEdit" name="leServiceItem">
+       <property name="Field" stdset="0">
+        <string>f_serviceItem</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Service item</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="EQLineEdit" name="leItemId">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_itemForInvoice</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Item id (invoice)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0" colspan="3">
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>99</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnOk">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCancel">
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>99</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leCode">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_id</string>
+       </property>
+       <property name="PrimaryKey" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="Code">
+       <property name="text">
+        <string>Code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leService">
+       <property name="Field" stdset="0">
+        <string>f_defaultSvc</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leNameAm">
+       <property name="Field" stdset="0">
+        <string>f_name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="EQLineEdit" name="leMenuCode">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_defaultMenu</string>
+       </property>
+       <property name="ShowButton" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Receipt Printer</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="EQLineEdit" name="leMenuName">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Menu</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leReceiptPrinter">
+       <property name="Field" stdset="0">
+        <string>f_receiptPrinter</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Tax print, no VAT dept</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Tax print, VAT dept</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leNoVatDept">
+       <property name="Field" stdset="0">
+        <string>f_noVatDept</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Service value</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="2">
+      <widget class="EQLineEdit" name="leVATDept">
+       <property name="Field" stdset="0">
+        <string>f_vatDept</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="EQCheckBox" name="chShowBanket">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Show in banket</string>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_showBanket</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="EQCheckBox" name="chShowHall">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Show in hall</string>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_showHall</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Order prefix</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="EQLineEdit" name="lePrefix">
+       <property name="Field" stdset="0">
+        <string>f_prefix</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>leNameAm</tabstop>
+  <tabstop>leMenuCode</tabstop>
+  <tabstop>leService</tabstop>
+  <tabstop>leItemId</tabstop>
+  <tabstop>leReceiptPrinter</tabstop>
+  <tabstop>btnOk</tabstop>
+  <tabstop>btnCancel</tabstop>
+  <tabstop>leMenuName</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

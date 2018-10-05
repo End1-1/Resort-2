@@ -1,0 +1,267 @@
+create table r_recipe (f_id integer primary key auto_increment, f_dish integer, f_part integer, f_qty decimal(12,3));
+create table r_docs (f_id nvarchar(16), f_type integer, f_date date, f_state smallint,f_inv nvarchar(32), f_invDate date,f_amount decimal(14,2), f_remarks tinytext, f_op integer, f_fullDate datetime);
+create table r_partners (f_id integer primary key auto_increment, f_name nvarchar(256), f_taxcode nvarchar(32), f_phone nvarchar(252), f_comment tinytext);
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('40', 'Partners');
+create table r_doc_type (f_id integer primary key, f_name nvarchar(64));
+create table r_doc_state (f_id integer primary key, f_name nvarchar(64));
+insert into r_doc_type values (1, 'Պահեստի մուտք'), (2, 'Պահեստի տեղաշարժ'), (3, 'Պահեստ ելք');
+insert into r_doc_state values (0, 'Սևագիր'), (1, 'Գրանցված');
+create table serv_id_counter(f_id nvarchar(2), f_max integer, f_zero smallint);
+alter table r_docs add column f_partner integer after f_state;
+create table r_body (f_id integer primary key auto_increment, f_doc nvarchar(32), f_store integer, f_sign smallint,f_material integer, f_qty decimal(9,4), f_price decimal(14,2), f_total decimal(14,2));
+alter table users_rights add column f_type integer;
+create table d_coupon (f_id integer primary key auto_increment, f_dest nvarchar(256), f_dateRelease date, f_dateEnd date, f_serial nvarchar(64), f_number nvarchar(64), f_type smallint, f_state smallint, f_value tinytext);
+create table d_type (f_id integer primary key, f_name nvarchar(64));
+insert into d_type values (1, 'Տոկոս'), (2, 'Կանխիկ');
+insert into d_type values (3, 'Մասնակի մարում');
+create table d_state (f_id integer primary key, f_name nvarchar(64));
+insert into d_state values (1, 'Նոր'), (2, 'Տրված է հաճաոխրդին'), (3, 'Օգտագործված է'), (4, 'Չեհյալ');
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('41', 'Coupon');
+create table r_config (f_id integer primary key auto_increment, f_comp nvarchar(64), f_key nvarchar(128), f_value nvarchar(128));
+create table o_recipe (f_id integer primary key auto_increment, f_dish integer, f_material integer, f_qty decimal(12,4), f_price decimal(14,2), f_total decimal(14,2));
+alter table o_recipe add column f_header nvarchar(32) after f_id;
+alter table o_recipe add column f_body nvarchar(32) after f_header;
+alter table r_dish add column f_lastPrice decimal(14,2);
+insert into serv_id_counter values ('DR', 0, 0), ('IN', 0, 6), ('RS', 0, 6), ('CH', 0, 6), ('PS', 0, 7), ('CO', 0, 6), ('AV', 0, 5), ('RC', 0, 5), ('TF', 0, 6), ('RM', 0, 6), ('CM', 0, 6), ('RV', 0, 6), ('DS', 0, 6), ('RR', 0, 5), ('PE', 0, 6), ('RF', 0, 6), ('CR', 0, 1);
+alter table r_docs add column f_rest smallint default 0;
+alter table o_recipe add column f_store integer;
+create table r_lastPrice (f_id integer primary key auto_increment, f_date date, f_material integer, f_price decimal(14,2));
+
+create table r_dish_scancode (f_id integer primary key auto_increment, f_dish integer, f_code nvarchar(128));
+create table serv_tax (f_id integer primary key auto_increment, f_comp nvarchar(128), f_host nvarchar(64), f_port nvarchar(16), f_password nvarchar(64));
+alter table serv_tax add column f_active smallint after f_comp;
+create table f_invoice_item_tax (f_id integer primary key auto_increment, f_item integer, f_comp nvarchar(128), f_dept smallint);
+
+/* 08022018 */
+alter table d_coupon add column f_used smallint default 0;
+
+/* 15022018 */
+INSERT INTO `nat1`.`f_payment_type` (`f_id`, `f_en`) VALUES ('36', 'Discount');
+INSERT INTO `nat1`.`f_payment_type` (`f_id`, `f_en`) VALUES ('40', 'Transfer');
+INSERT INTO `resort2`.`f_payment_type` (`f_id`, `f_en`) VALUES ('36', 'Discount');
+INSERT INTO `resort2`.`f_payment_type` (`f_id`, `f_en`) VALUES ('40', 'Transfer');
+
+create table d_car_model (f_id integer primary key auto_increment, f_model nvarchar(128), f_class nvarchar(128));
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('40', 'Partners of storage');
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('41', 'Coupons');
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('42', 'Models of cars');
+create table o_car (f_id integer primary key auto_increment, f_order nvarchar(32), f_model integer, f_govNumber nvarchar(32));
+
+/*03032018*/
+create table d_car_client (f_id integer primary key auto_increment, f_model int, f_govNumber nvarchar(32), f_name nvarchar(512), f_info nvarchar(512), f_card nvarchar(64));
+INSERT INTO `f_changes_windows` (`f_id`, `f_name`) VALUES ('43', 'Car clients');
+create table r_package (f_id integer primary key, f_name nvarchar(256));
+/* 06032018*/
+create table o_header_payment (f_id nvarchar(32) primary key, f_cash decimal(12,2), f_card decimal(12,2), f_coupon decimal(12,2), f_couponSeria nvarchar(256), f_couponNumber nvarchar(32), f_discountCard nvarchar(32), f_costumer integer);
+alter table o_header_payment add column f_finalAmount decimal(12,2);
+alter table o_header_payment add column f_debt decimal(12,2) after f_coupon;
+alter table o_header_payment add column f_debtHolder integer;
+/* 07032018 */
+create table o_debts (f_id nvarchar(32) primary key, f_holder int, f_debt decimal(12,2));
+create table o_debt_holder (f_id integer primary key auto_increment, f_name nvarchar(512), f_info nvarchar(512));
+alter table r_dish add column f_tax smallint;
+alter table o_header_payment add column f_discount decimal(12,2) after f_debt;
+
+
+create table r_doc_payment (f_id integer primary key, f_name nvarchar(64));
+insert into r_doc_payment values (1, 'Կանխիկ, վճարված');
+insert into r_doc_payment values (2, 'Անկանխիկ, վճարված');
+insert into r_doc_payment values (3, 'Կանկխիկ, չվաճարված');
+insert into r_doc_payment values (4, 'Անկանխիկ, չվաճարված');
+alter table r_docs add column f_payment smallint;
+
+/* 11032018 */
+create table d_coupon_sale (f_id integer primary key auto_increment, f_date date, 
+f_partner integer,  f_payment integer, f_serai nvarchar(64), f_qty integer);
+create table d_count_sale_member (f_id integer primary key auto_increment, f_doc integer, f_coupon integer);
+drop table d_count_sale_member;
+create table d_coupon_sale_member (f_id integer primary key auto_increment, f_doc integer, f_coupon integer);
+alter table d_coupon drop f_dest;
+alter table d_coupon add column f_partner integer after f_id;
+create table d_coupon_seria (f_id integer primary key auto_increment, f_name nvarchar(128));
+alter table d_coupon drop f_serial;
+alter table d_coupon add column f_seria integer after f_partner;
+alter table d_coupon_sale drop column f_serai;
+alter table d_coupon_sale add column f_seria integer;
+alter table d_coupon_seria add column f_price decimal(12,2);
+alter table d_coupon_sale add column f_amount decimal(12,2);
+create table c_cash_names (f_id integer primary key auto_increment, f_name nvarchar(512), f_comment nvarchar(512));
+insert into f_changes_windows values (44, 'Coupon seria'), (45, 'Cashdesk');
+create table c_cash (f_id integer primary key auto_increment, f_debit integer, f_credit integer, f_docType smallint, f_docNum integer, f_partner integer, f_amount decimal(12,2), f_comment nvarchar(512));
+alter table c_cash add f_date date after f_id;
+create table c_doc_type (f_id integer primary key, f_name nvarchar(128);
+insert into c_doc_type values (1, 'Պահեստի մուտք');
+create table st_header (f_id integer primary key auto_increment, f_date date, f_amount decimal(12,2));
+create table st_body (f_id integer primary key auto_increment, f_doc integer, f_goods integer, f_qty decimal(12,2), f_amount decimal(12,2));
+alter table st_header add column f_store integer after f_date;
+
+/* 14032018 */
+create table r_partner_debt (f_id integer primary key auto_increment, f_date date, f_partner integer, f_payment integer, f_amount decimal(12,2));
+insert into c_doc_type values (2, 'Հասույթ');
+insert into c_doc_type values (3, 'Աշխատավարձ');
+ALTER TABLE `f_invoice_item` AUTO_INCREMENT = 2 ;
+insert into c_doc_type values (4, 'Դրամարկղի շարժ');
+insert into c_doc_type values (5, 'Պարտքի մարում');
+
+/* 16032018 */
+alter table d_coupon_seria add column f_items nvarchar(1024);
+insert into r_partners (f_id, f_name) values (0, '-');
+
+/*17032018*/
+alter table f_reservation_guests add column f_first smallint;
+/* 19032018 */
+alter table d_car_client add column f_mode tinytext;
+update d_car_client set f_mode='1;11;100;150,162';
+
+/*31032018 */
+create table salary (f_id integer primary key auto_increment, f_date date, f_employee integer);
+
+
+/*07042018*/
+alter table o_car add column f_costumer integer;
+create table o_temp_disc (f_id nvarchar(32) primary key, f_costumer integer, f_val decimal(9,2), f_amount decimal(14,2));
+ALTER TABLE o_header CHANGE COLUMN `f_tax` `f_tax` INT(12) NULL DEFAULT NULL ;
+ALTER TABLE `m_register` CHANGE COLUMN `f_fiscal` `f_fiscal` INT(12) NULL DEFAULT NULL ;
+
+/* 12042018 */
+alter table salary add column f_amount decimal(14,2);
+
+/*13042018 */
+create table o_debt_holder_car (f_id integer primary key auto_increment, f_holder integer, f_govnumber nvarchar(128));
+
+
+/* 11052018 */
+create table f_house (f_id integer primary key auto_increment, f_room integer, f_item integer, f_state smallint, f_date date, f_price decimal(14,2));
+create table f_house_item (f_id integer primary key auto_increment, f_name nvarchar(256));
+alter table f_house add column f_comment tinytext;
+create database airlog default character set utf8 collate utf8_general_ci;
+create table airlog.log (f_id integer primary key auto_increment, f_comp tinytext, f_date date, f_time time, f_user tinytext, f_type integer, f_rec nvarchar(32), f_invoice nvarchar(32), f_reservation nvarchar(32), f_action nvarchar(256), f_value1 text, f_value2 text);
+
+/* 22052018 */
+create table o_debt_pay (f_id integer primary key auto_increment, f_date date, f_holder integer, f_amount decimal(14,2));
+/* 24052018 */
+create table airwick.f_id (f_id integer primary key auto_increment, f_value nvarchar(16), f_try integer, f_comp nvarchar(32), f_user nvarchar(32), f_date date, f_time time);
+ALTER TABLE `airwick`.`f_id`  ADD INDEX `idx_value` (`f_value` ASC);
+ALTER TABLE `airwick`.`f_id` DROP INDEX `idx_value` ,ADD UNIQUE INDEX `idx_value` (`f_value` ASC);
+alter table airwick.f_id add column f_db nvarchar(32);
+
+/*25052018*/
+create table airlog.logt (f_id integer primary key auto_increment, f_name tinytext);
+
+/*27052018*/
+alter table r_table add column f_store integer;
+alter table f_room_state_change add column f_reservation tinytext;
+create table f_city_ledger_advance (f_id integer primary key auto_increment, f_date date, f_time time, f_cityLedger integer, f_amount decimal(14,2), f_usd decimal(12,2), f_user integer, f_state smallint);
+drop table f_city_ledger_advance;
+create table m_city_ledger_advance (f_id nvarchar(32) primary key, f_state smallint);
+INSERT INTO m_vaucher (`f_id`, `f_code`, `f_description`) VALUES ('21', 'TC', 'TRANSFER AMOUNT TO C/L');
+dROP TABLE m_v_transfer_amount;
+DROP TABLE `m_v_discount`
+DROP TABLE m_v_postcharge;
+DROP TABLE `m_v_advance`;
+DROP TABLE `m_v_refund`;
+DROP TABLE `m_v_invoice`;
+DROP TABLE `m_v_checkout`;
+DROP TABLE `m_v_receipt`;
+DROP TABLE `m_v_call`;
+drop table m_city_ledger_advance;
+alter table f_room add f_building integer;
+create table f_room_building (f_id integer primary key auto_increment, f_name nvarchar(64));
+ALTER TABLE `f_room` DROP FOREIGN KEY `fk_view`,DROP FOREIGN KEY `fk_class`,DROP FOREIGN KEY `fk_bed`;
+ALTER TABLE `f_room` DROP INDEX `fk_view_idx` ,DROP INDEX `fk_bed_idx` ,DROP INDEX `fk_class_idx` ;
+ALTER TABLE `f_room` CHANGE COLUMN `f_bed` `f_bed` VARCHAR(4) NULL DEFAULT NULL ;
+insert into serv_id_counter values ('ST', 0, 0),('TC', 0, 0);
+alter table r_hall add column f_service decimal(12,3);
+alter table r_hall drop column f_service, add column f_serviceItem integer;
+ALTER TABLE `f_reservation` CHANGE COLUMN `f_id` `f_id` CHAR(16) NOT NULL ;
+ALTER TABLE `f_reservation` CHANGE COLUMN `f_invoice` `f_invoice` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `m_register` CHANGE COLUMN `f_inv` `f_inv` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `m_register` CHANGE COLUMN `f_id` `f_id` CHAR(16) NOT NULL ;
+ALTER TABLE `f_reservation_last` CHANGE COLUMN `f_id` `f_id` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `m_register` 
+CHANGE COLUMN `f_res` `f_res` CHAR(16) NULL DEFAULT NULL ,
+CHANGE COLUMN `f_doc` `f_doc` CHAR(16) NULL DEFAULT NULL ,
+CHANGE COLUMN `f_rec` `f_rec` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `o_header` CHANGE COLUMN `f_id` `f_id` CHAR(16) NOT NULL ;
+ALTER TABLE `o_header_payment` CHANGE COLUMN `f_id` `f_id` CHAR(16) NOT NULL ;
+ALTER TABLE `o_dish` CHANGE COLUMN `f_id` `f_id` CHAR(16) NOT NULL ;
+ALTER TABLE  `o_dish` CHANGE COLUMN `f_header` `f_header` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `f_reservation_guests_history`  CHANGE COLUMN `f_reservation` `f_reservation` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `o_dish_qty` CHANGE COLUMN `f_rec` `f_rec` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `r_table` CHANGE COLUMN `f_order` `f_order` CHAR(16) NULL DEFAULT NULL ;
+ALTER TABLE `o_header` CHANGE COLUMN `f_reservation` `f_reservation` CHAR(16) NULL DEFAULT NULL ;
+alter table f_room_state_change add column f_rdate date AFTER f_date;
+alter table f_room_state_change drop column f_rdate, add column f_wdate date after f_date;
+
+
+alter table m_register add column f_cash smallint default 0;
+UPDATE `f_payment_type` SET `f_id`='1' WHERE `f_id`='20';
+UPDATE `f_payment_type` SET `f_id`='2' WHERE `f_id`='21';
+UPDATE `f_payment_type` SET `f_id`='3' WHERE `f_id`='22';
+UPDATE `f_payment_type` SET `f_id`='4' WHERE `f_id`='23';
+UPDATE `f_payment_type` SET `f_id`='5' WHERE `f_id`='29';
+UPDATE `f_payment_type` SET `f_id`='6' WHERE `f_id`='24';
+UPDATE `f_payment_type` SET `f_id`='7' WHERE `f_id`='36';
+UPDATE `f_payment_type` SET `f_id`='8' WHERE `f_id`='40';
+UPDATE `f_payment_type` SET `f_id`='9' WHERE `f_id`='72';
+UPDATE `f_payment_type` SET `f_id`='10' WHERE `f_id`='81';
+UPDATE `m_register` SET `f_paymentMode`='1' WHERE `f_paymentMode`='20';
+UPDATE `m_register` SET `f_paymentMode`='2' WHERE `f_paymentMode`='21';
+UPDATE `m_register` SET `f_paymentMode`='3' WHERE `f_paymentMode`='22';
+UPDATE `m_register` SET `f_paymentMode`='4' WHERE `f_paymentMode`='23';
+UPDATE `m_register` SET `f_paymentMode`='5' WHERE `f_paymentMode`='24';
+UPDATE `m_register` SET `f_paymentMode`='6' WHERE `f_paymentMode`='29';
+UPDATE `m_register` SET `f_paymentMode`='7' WHERE `f_paymentMode`='36';
+UPDATE `m_register` SET `f_paymentMode`='8' WHERE `f_paymentMode`='40';
+UPDATE `m_register` SET `f_paymentMode`='9' WHERE `f_paymentMode`='72';
+UPDATE `m_register` SET `f_paymentMode` = '10' WHERE `f_paymentMode` = '81';
+UPDATE `o_header` SET `f_paymentMode`='1' WHERE `f_paymentMode`='20';
+UPDATE `o_header` SET `f_paymentMode`='2' WHERE `f_paymentMode`='21';
+UPDATE `o_header` SET `f_paymentMode`='3' WHERE `f_paymentMode`='22';
+UPDATE `o_header` SET `f_paymentMode`='4' WHERE `f_paymentMode`='23';
+UPDATE `o_header` SET `f_paymentMode`='5' WHERE `f_paymentMode`='24';
+UPDATE `o_header` SET `f_paymentMode`='6' WHERE `f_paymentMode`='29';
+UPDATE `o_header` SET `f_paymentMode`='7' WHERE `f_paymentMode`='36';
+UPDATE `o_header` SET `f_paymentMode`='8' WHERE `f_paymentMode`='40';
+UPDATE `o_header` SET `f_paymentMode`='9' WHERE `f_paymentMode`='72';
+UPDATE `o_header` SET `f_paymentMode` = '10' WHERE `f_paymentMode` = '81';
+UPDATE `o_breakfast` SET `f_paymentMode`='1' WHERE `f_paymentMode`='20';
+UPDATE `o_breakfast` SET `f_paymentMode`='2' WHERE `f_paymentMode`='21';
+UPDATE `o_breakfast` SET `f_paymentMode`='3' WHERE `f_paymentMode`='22';
+UPDATE `o_breakfast` SET `f_paymentMode`='4' WHERE `f_paymentMode`='23';
+UPDATE `o_breakfast` SET `f_paymentMode`='5' WHERE `f_paymentMode`='24';
+UPDATE `o_breakfast` SET `f_paymentMode`='6' WHERE `f_paymentMode`='29';
+UPDATE `o_breakfast` SET `f_paymentMode`='7' WHERE `f_paymentMode`='36';
+UPDATE `o_breakfast` SET `f_paymentMode`='8' WHERE `f_paymentMode`='40';
+UPDATE `o_breakfast` SET `f_paymentMode`='9' WHERE `f_paymentMode`='72';
+UPDATE `o_breakfast` SET `f_paymentMode` = '10' WHERE `f_paymentMode` = '81';
+UPDATE `o_event` SET `f_paymentMode`='1' WHERE `f_paymentMode`='20';
+UPDATE `o_event` SET `f_paymentMode`='2' WHERE `f_paymentMode`='21';
+UPDATE `o_event` SET `f_paymentMode`='3' WHERE `f_paymentMode`='22';
+UPDATE `o_event` SET `f_paymentMode`='4' WHERE `f_paymentMode`='23';
+UPDATE `o_event` SET `f_paymentMode`='5' WHERE `f_paymentMode`='24';
+UPDATE `o_event` SET `f_paymentMode`='6' WHERE `f_paymentMode`='29';
+UPDATE `o_event` SET `f_paymentMode`='7' WHERE `f_paymentMode`='36';
+UPDATE `o_event` SET `f_paymentMode`='8' WHERE `f_paymentMode`='40';
+UPDATE `o_event` SET `f_paymentMode`='9' WHERE `f_paymentMode`='72';
+UPDATE `o_event` SET `f_paymentMode` = '10' WHERE `f_paymentMode` = '81';
+update f_payment_type set f_en=upper(f_en);
+
+/* 08062018 */
+update f_room_arrangement set f_ru=f_en, f_am=f_en;
+
+/* 090618 */
+create table f_room_inventory (f_id integer primary key auto_increment, f_name nvarchar(512));
+create table f_room_inventory_state (f_id integer primary key auto_increment, f_name nvarchar(512));
+insert into f_room_inventory_state values (1, 'OK');
+create table f_room_inventory_journal (f_id integer primary key auto_increment, f_room integer, f_inventory integer, f_state integer, f_date date, f_comment nvarchar(512));
+INSERT into airlog.logt values (42, 'Model of cars'), (43, 'Car client'), (44, 'Coupon seria'), (45, 'Cash desk'), (46, 'Room inventory'), (47, 'Room inventory state');
+
+--11092018
+INSERT into airlog.logt values (48, 'Reservation group');
+
+
+
+--16062018
+ALTER TABLE `airwick`.`serv_id_counter` CHANGE COLUMN `f_id` `f_id` VARCHAR(4) NULL DEFAULT NULL ;
+alter table r_hall add column f_prefix nvarchar(32);

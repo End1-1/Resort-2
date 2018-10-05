@@ -1,0 +1,46 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include "base.h"
+#include <QMainWindow>
+#include <QTimer>
+
+namespace Ui {
+class MainWindow;
+}
+
+class BaseWidget;
+
+class MainWindow : public QMainWindow, public Base
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+    void login();
+    void addTabWidget(BaseWidget *widget);
+
+private slots:
+    void tabCloseRequested(int index);
+    void timeout();
+    void on_actionExit_triggered();
+    void on_actionLogin_triggered();
+    void on_actionLogout_triggered();
+    void on_actionLock_triggered();
+    void on_actionDatabases_triggered();
+    void on_actionMain_desk_triggered();
+    void on_actionRoom_list_triggered();
+    void on_actionAbout_triggered();
+    void on_actionGuest_file_triggered();
+    void on_actionReservatios_triggered();
+
+private:
+    Ui::MainWindow *ui;
+    QTimer fTimer;
+    void logout();
+    void lock();
+    void enableMainMenu(bool value);
+};
+
+#endif // MAINWINDOW_H

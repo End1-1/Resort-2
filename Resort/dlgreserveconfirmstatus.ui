@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgReserveConfirmStatus</class>
+ <widget class="QDialog" name="DlgReserveConfirmStatus">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>216</width>
+    <height>311</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Confirmation</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QPushButton" name="btnConfirmed">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Confirmed</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/ball-green.png</normaloff>:/images/ball-green.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnGuaranted">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Guaranted</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/ball-yellow.png</normaloff>:/images/ball-yellow.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnTentative">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Tentative</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/ball-gray.png</normaloff>:/images/ball-gray.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnWaiting">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Waiting</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/ball-red.png</normaloff>:/images/ball-red.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnBlock">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Block</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/ball-blue.png</normaloff>:/images/ball-blue.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnCancel">
+     <property name="maximumSize">
+      <size>
+       <width>222</width>
+       <height>222</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

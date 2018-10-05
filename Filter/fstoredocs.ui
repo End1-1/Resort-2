@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FStoreDocs</class>
+ <widget class="QWidget" name="FStoreDocs">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>965</width>
+    <height>66</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="12">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>27</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="6">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Document type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Date range</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="EDateEdit" name="deStart"/>
+   </item>
+   <item row="0" column="5">
+    <widget class="QToolButton" name="btnDateRight">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../Resort/res.qrc">
+       <normaloff>:/images/right.png</normaloff>:/images/right.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="EQLineEdit" name="leDocType">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="btnDateLeft">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../Resort/res.qrc">
+       <normaloff>:/images/left.png</normaloff>:/images/left.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leStore">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Storage</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Partner</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" colspan="2">
+    <widget class="EDateEdit" name="deEnd"/>
+   </item>
+   <item row="1" column="4" colspan="2">
+    <widget class="EQLineEdit" name="lePartner">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="8">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>State</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="9">
+    <widget class="EQLineEdit" name="leState">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>deStart</tabstop>
+  <tabstop>deEnd</tabstop>
+  <tabstop>leDocType</tabstop>
+  <tabstop>leState</tabstop>
+  <tabstop>leStore</tabstop>
+  <tabstop>lePartner</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../Resort/res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

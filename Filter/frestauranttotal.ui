@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FRestaurantTotal</class>
+ <widget class="QWidget" name="FRestaurantTotal">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>907</width>
+    <height>210</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="4">
+    <widget class="EQCheckBox" name="chOrderNum">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>13</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_id</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="11">
+    <widget class="EQLineEdit" name="leStore">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="6">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Table</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="EDateEdit" name="deStart"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_14">
+     <property name="text">
+      <string>Order #</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="12">
+    <widget class="EQCheckBox" name="chDishState">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Field" stdset="0">
+      <string>od.f_state;ds.f_en</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="11">
+    <widget class="QLineEdit" name="leArmSoft">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="9" rowspan="7">
+    <widget class="Line" name="line_2">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="10">
+    <widget class="QLabel" name="label_16">
+     <property name="text">
+      <string>ArmSoft</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="12">
+    <widget class="EQCheckBox" name="chArmSoft">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Field" stdset="0">
+      <string>d.f_as</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="11">
+    <widget class="EQLineEdit" name="leDishState">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5" rowspan="7">
+    <widget class="Line" name="line">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QPushButton" name="btnOrdersSubtotal">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string>Subtotals</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="6">
+    <widget class="QLabel" name="label_17">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string>Show complex</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="10">
+    <widget class="QLabel" name="label_15">
+     <property name="text">
+      <string>Dish state</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="7">
+    <widget class="EQLineEdit" name="lePMComment">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="6">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>P/M comment</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="12">
+    <widget class="EQCheckBox" name="chTax">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>11</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_tax</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="11">
+    <widget class="EQLineEdit" name="leTax">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_tax</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Hall</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="7">
+    <widget class="EQLineEdit" name="leCL">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_cityLedger,cl.f_name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Payment
+mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="6">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>City
+ledger</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="6">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Staff</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="8">
+    <widget class="EQCheckBox" name="chStaff">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_staff;concat(u.f_firstName,' ',u.f_lastName)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="8">
+    <widget class="EQCheckBox" name="chCL">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>12</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_cityLedger;cl.f_name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="8">
+    <widget class="EQCheckBox" name="chTable">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>4</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_table;t.f_name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="7">
+    <widget class="EQLineEdit" name="leTable">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="7">
+    <widget class="EQLineEdit" name="leStaff">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="8">
+    <widget class="EQCheckBox" name="chPMComment">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>10</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_paymentModeComment</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="8">
+    <widget class="EQCheckBox" name="chHall">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>3</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_hall;h.f_name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="12">
+    <widget class="EQCheckBox" name="chDishType">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>7</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>d.f_type;dt.f_</string>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="EQLineEdit" name="leHall">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="4">
+    <widget class="EQCheckBox" name="chPaymentMode">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>9</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_paymentMode;pm.f_</string>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Date end</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="11">
+    <widget class="EQLineEdit" name="leDish">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="11">
+    <widget class="EQLineEdit" name="leDishType">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="10">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Tax</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="12">
+    <widget class="EQCheckBox" name="chStore">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>6</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>od.f_store;s.f_name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="12">
+    <widget class="EQCheckBox" name="chDish">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>8</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>od.f_dish;d.f_</string>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Date start</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="10">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
+      <string>Store</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="EQCheckBox" name="chDate">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>1</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_dateCash</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Order state</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="10">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Dish</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="EQCheckBox" name="chState">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Tag" stdset="0">
+      <number>2</number>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_state;os.f_</string>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" colspan="3">
+    <widget class="EQCheckBox" name="chShowOpenClose">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Show open and close date</string>
+     </property>
+     <property name="Field" stdset="0">
+      <string>oh.f_dateOpen;oh.f_dateClose</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="10">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Dish type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="7" colspan="2">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="rbShowComplex">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="text">
+         <string>Yes</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbNoShowComplex">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="text">
+         <string>No</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbOnlycomplex">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="text">
+         <string>Only complex</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QWidget" name="widget_2" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>55</width>
+       <height>0</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="btnPrevDate">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/left.png</normaloff>:/images/left.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnNextDate">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/right.png</normaloff>:/images/right.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="EQLineEdit" name="leOrder">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="EDateEdit" name="deEnd"/>
+   </item>
+   <item row="3" column="2">
+    <widget class="EQLineEdit" name="leState">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="EQLineEdit" name="lePaymentMode">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="EnableHiddenText" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="RequireLang" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>leOrder</tabstop>
+  <tabstop>chOrderNum</tabstop>
+  <tabstop>deStart</tabstop>
+  <tabstop>chDate</tabstop>
+  <tabstop>deEnd</tabstop>
+  <tabstop>leState</tabstop>
+  <tabstop>chState</tabstop>
+  <tabstop>lePaymentMode</tabstop>
+  <tabstop>chPaymentMode</tabstop>
+  <tabstop>leHall</tabstop>
+  <tabstop>chHall</tabstop>
+  <tabstop>leTable</tabstop>
+  <tabstop>chTable</tabstop>
+  <tabstop>leStaff</tabstop>
+  <tabstop>chStaff</tabstop>
+  <tabstop>leCL</tabstop>
+  <tabstop>chCL</tabstop>
+  <tabstop>lePMComment</tabstop>
+  <tabstop>chPMComment</tabstop>
+  <tabstop>leDishState</tabstop>
+  <tabstop>chDishState</tabstop>
+  <tabstop>leStore</tabstop>
+  <tabstop>chStore</tabstop>
+  <tabstop>leDishType</tabstop>
+  <tabstop>chDishType</tabstop>
+  <tabstop>leDish</tabstop>
+  <tabstop>chDish</tabstop>
+  <tabstop>leTax</tabstop>
+  <tabstop>chTax</tabstop>
+  <tabstop>leArmSoft</tabstop>
+  <tabstop>chArmSoft</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../Resort/res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>chDate</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chStaff</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chState</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chHall</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chTable</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>413</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chCL</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chTax</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>595</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chPMComment</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>646</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chPaymentMode</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chDish</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chDishType</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chStore</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>587</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chOrderNum</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chArmSoft</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chDishState</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>897</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chShowOpenClose</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>groupCheckClicked(bool)</slot>
+ </slots>
+</ui>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgPostBreakfast</class>
+ <widget class="QDialog" name="DlgPostBreakfast">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>594</width>
+    <height>412</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Breakfast</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="9" column="2" colspan="3">
+       <widget class="EQLineEdit" name="lePMComment">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Voucher</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Reservation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="EQLineEdit" name="leVoucher">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Invoice</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Date</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="EDateEdit" name="deDate"/>
+      </item>
+      <item row="0" column="6">
+       <widget class="EQLineEdit" name="leInvoice">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="EQLineEdit" name="leRes">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Qty</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Guest</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="EQDoubleEdit" name="leQty"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Amount</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>Dish</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLineEdit" name="leRoom">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Room</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="6">
+       <widget class="EQLineEdit" name="leGuest">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="EQLineEdit" name="leHall"/>
+      </item>
+      <item row="5" column="2" colspan="3">
+       <widget class="EQLineEdit" name="leDishName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Payment</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="EQLineEdit" name="leDish"/>
+      </item>
+      <item row="4" column="2" colspan="3">
+       <widget class="EQLineEdit" name="leTableName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" colspan="3">
+       <widget class="EQLineEdit" name="leHallName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="EQLineEdit" name="leTable"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Table</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="EQLineEdit" name="lePMCode"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Hall</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>Price</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="EQDoubleEdit" name="leAmount">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="EQLineEdit" name="leTax">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Tax number</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2" colspan="3">
+       <widget class="QPushButton" name="btnPrintTax">
+        <property name="text">
+         <string>Print Tax</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="4">
+       <widget class="EQLineEdit" name="lePrice">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="5" colspan="2">
+       <widget class="EQLineEdit" name="leStore">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="lbCard">
+        <property name="text">
+         <string>Credit card</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="EQLineEdit" name="leCardCode"/>
+      </item>
+      <item row="10" column="2" colspan="3">
+       <widget class="EQLineEdit" name="leCardName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>192</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSave">
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>192</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQDoubleEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqdoubleedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>deDate</tabstop>
+  <tabstop>leHall</tabstop>
+  <tabstop>leTable</tabstop>
+  <tabstop>leDish</tabstop>
+  <tabstop>leQty</tabstop>
+  <tabstop>leAmount</tabstop>
+  <tabstop>lePMCode</tabstop>
+  <tabstop>btnPrintTax</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnCancel</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

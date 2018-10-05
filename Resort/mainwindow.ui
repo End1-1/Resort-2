@@ -1,0 +1,1340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1375</width>
+    <height>596</height>
+   </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>SmartHotel</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>2</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1375</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuWorking">
+    <property name="title">
+     <string>Working</string>
+    </property>
+    <addaction name="actionLogin"/>
+    <addaction name="actionLogout"/>
+    <addaction name="actionLock"/>
+    <addaction name="actionChange_password"/>
+    <addaction name="separator"/>
+    <addaction name="actionConfigure_Welcome_Page"/>
+    <addaction name="actionDatabases"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuReservation">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>Reservation</string>
+    </property>
+    <addaction name="actionRoomChart"/>
+    <addaction name="actionNew_reservation"/>
+    <addaction name="actionNew_group_reservation"/>
+    <addaction name="actionReservatios"/>
+    <addaction name="actionReservations_by_date_created"/>
+    <addaction name="actionCanceled_reservations"/>
+    <addaction name="actionReservation_groups"/>
+    <addaction name="actionCategory_to_sell"/>
+    <addaction name="actionForecast_Occupancy_Category"/>
+    <addaction name="actionList_of_source_reservation"/>
+    <addaction name="actionChanges_of_states_of_room"/>
+    <addaction name="actionCancelation_No_show_fees"/>
+    <addaction name="actionAvaiable_rooms"/>
+    <addaction name="actionLenght_of_stay"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuReports">
+    <property name="title">
+     <string>Bookkeeping</string>
+    </property>
+    <addaction name="actionVauchers"/>
+    <addaction name="actionGuest_Tray_Ledger"/>
+    <addaction name="actionIn_house_detailed_balance"/>
+    <addaction name="actionDaily_movement"/>
+    <addaction name="actionMonthly_Report"/>
+    <addaction name="actionDaily_financial_report"/>
+    <addaction name="actionYearly_financial_report"/>
+    <addaction name="actionInvoices"/>
+    <addaction name="actionCheckout_invoices_free_rooming"/>
+   </widget>
+   <widget class="QMenu" name="menuDirectory">
+    <property name="title">
+     <string>Directory of Hotel</string>
+    </property>
+    <addaction name="actionInvoice_items"/>
+    <addaction name="actionPartners_group"/>
+    <addaction name="actionPartners"/>
+    <addaction name="actionCity_Ledger"/>
+    <addaction name="actionNationality_file"/>
+    <addaction name="actionGuest_titles"/>
+    <addaction name="actionGuest_file"/>
+    <addaction name="actionCredit_card"/>
+    <addaction name="actionSetup_Tax_Printer"/>
+    <addaction name="actionCategories"/>
+    <addaction name="actionType_of_bed"/>
+    <addaction name="actionRoom_view"/>
+    <addaction name="actionRoom_list"/>
+    <addaction name="actionModels_of_cars"/>
+    <addaction name="actionCostumers_cars"/>
+    <addaction name="actionAccounts_2"/>
+    <addaction name="actionRoom_inventory"/>
+    <addaction name="actionRoom_inventory_states"/>
+   </widget>
+   <widget class="QMenu" name="menuApplication">
+    <property name="title">
+     <string>Application</string>
+    </property>
+    <addaction name="actionUsers_groups"/>
+    <addaction name="actionUsers"/>
+    <addaction name="actionTrack_changes"/>
+    <addaction name="actionGlobal_config"/>
+    <addaction name="actionReport_buillder"/>
+    <addaction name="actionUpdate_program"/>
+    <addaction name="actionExport_invoices"/>
+    <addaction name="actionSynchronization"/>
+    <addaction name="actionExport_active_reservations"/>
+    <addaction name="actionExport_data"/>
+    <addaction name="actionExport_reservations"/>
+    <addaction name="actionExport_back"/>
+    <addaction name="actionUtils"/>
+    <addaction name="actionWeb"/>
+   </widget>
+   <widget class="QMenu" name="menuRestaurant">
+    <property name="title">
+     <string>Directory of Restaurant</string>
+    </property>
+    <addaction name="actionHakk"/>
+    <addaction name="actionTables"/>
+    <addaction name="actionStorages"/>
+    <addaction name="actionNames_of_menu"/>
+    <addaction name="actionMain_partitions_of_menu"/>
+    <addaction name="actionType_of_dishes"/>
+    <addaction name="actionDishes"/>
+    <addaction name="actionModifiers"/>
+    <addaction name="actionPrinters"/>
+    <addaction name="actionMenu_review"/>
+    <addaction name="actionComplex_dish"/>
+    <addaction name="actionBanquet_comment"/>
+    <addaction name="actionComplimentary_comment"/>
+   </widget>
+   <widget class="QMenu" name="menuCity_ledger_advance">
+    <property name="title">
+     <string>City ledger </string>
+    </property>
+    <addaction name="actionCity_Ledger_balance"/>
+    <addaction name="actionCity_ledger_balance_2"/>
+    <addaction name="actionCity_Ledger_detailed_balance"/>
+    <addaction name="actionAvailable_amounts"/>
+   </widget>
+   <widget class="QMenu" name="menuReception">
+    <property name="title">
+     <string>Reception</string>
+    </property>
+    <addaction name="actionIn_house_guest"/>
+    <addaction name="actionList_of_checkin_guests"/>
+    <addaction name="actionExpected_arrivals_simple"/>
+    <addaction name="actionExpected_arrivals"/>
+    <addaction name="actionRe_checkin"/>
+    <addaction name="actionContacts"/>
+    <addaction name="actionNotes"/>
+    <addaction name="actionRemarks"/>
+    <addaction name="actionHotel_status"/>
+    <addaction name="actionRoom_inventory_2"/>
+   </widget>
+   <widget class="QMenu" name="menuCachier">
+    <property name="title">
+     <string>Cashier</string>
+    </property>
+    <addaction name="actionNew_advance_entry"/>
+    <addaction name="actionTransfer_CL_amount"/>
+    <addaction name="actionReceipt_vaucher"/>
+    <addaction name="actionPosting_charge"/>
+    <addaction name="actionCancelation_No_show_fee"/>
+    <addaction name="actionDiscount"/>
+    <addaction name="actionTransfer_amount"/>
+    <addaction name="actionRefund_voucher"/>
+    <addaction name="actionCash_report_total"/>
+    <addaction name="actionCash_repoort_detailed"/>
+    <addaction name="actionAdvance_report"/>
+    <addaction name="actionCurrencies"/>
+    <addaction name="actionAccounts"/>
+   </widget>
+   <widget class="QMenu" name="menuAnalytics">
+    <property name="title">
+     <string>Analytics</string>
+    </property>
+    <addaction name="actionHistory_of_calls"/>
+    <addaction name="actionCardex_analysis"/>
+    <addaction name="actionReports_set"/>
+    <addaction name="actionStatistics"/>
+    <addaction name="actionMonthly_occupancy_percentages"/>
+    <addaction name="actionNaitonality_report_by_period"/>
+    <addaction name="actionGuest_by_nationality"/>
+   </widget>
+   <widget class="QMenu" name="menuOther_Reports">
+    <property name="title">
+     <string>Other Reports</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuRestaurant_2">
+    <property name="title">
+     <string>Restaurant</string>
+    </property>
+    <addaction name="actionRestaurant_online"/>
+    <addaction name="actionRestaurant"/>
+    <addaction name="actionEvent"/>
+    <addaction name="actionBreakfast_report"/>
+    <addaction name="actionOpen_breakfast"/>
+    <addaction name="actionSales_by_storages"/>
+    <addaction name="actionReport_by_payment"/>
+   </widget>
+   <widget class="QMenu" name="menuStorehouse">
+    <property name="title">
+     <string>Storehouse</string>
+    </property>
+    <addaction name="actionNew_store_document"/>
+    <addaction name="actionPartners_2"/>
+    <addaction name="actionDocuments_list"/>
+    <addaction name="actionStore_movement"/>
+    <addaction name="actionMaterials_in_the_store"/>
+    <addaction name="actionCalculate_output_of_restaurant"/>
+    <addaction name="actionPartners_debts"/>
+    <addaction name="actionPartner_payments"/>
+    <addaction name="actionStore_entries"/>
+    <addaction name="actionNew_store_checkpoint"/>
+   </widget>
+   <widget class="QMenu" name="menuDiscount_system">
+    <property name="title">
+     <string>Discount system</string>
+    </property>
+    <addaction name="actionCoupons"/>
+    <addaction name="actionCoupons_sales"/>
+    <addaction name="actionCoupons_seria"/>
+    <addaction name="actionCoupons_statistics"/>
+    <addaction name="actionDebts"/>
+    <addaction name="actionDiscount_report"/>
+    <addaction name="actionSales_report_by_cars"/>
+    <addaction name="actionDiscount_total"/>
+    <addaction name="actionCostumers"/>
+   </widget>
+   <addaction name="menuWorking"/>
+   <addaction name="menuReservation"/>
+   <addaction name="menuReception"/>
+   <addaction name="menuCachier"/>
+   <addaction name="menuCity_ledger_advance"/>
+   <addaction name="menuReports"/>
+   <addaction name="menuRestaurant_2"/>
+   <addaction name="menuAnalytics"/>
+   <addaction name="menuOther_Reports"/>
+   <addaction name="menuRestaurant"/>
+   <addaction name="menuDirectory"/>
+   <addaction name="menuApplication"/>
+   <addaction name="menuStorehouse"/>
+   <addaction name="menuDiscount_system"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLogin">
+   <property name="text">
+    <string>Login</string>
+   </property>
+  </action>
+  <action name="actionLogout">
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
+  <action name="actionLock">
+   <property name="text">
+    <string>Lock</string>
+   </property>
+  </action>
+  <action name="actionDatabases">
+   <property name="text">
+    <string>Databases</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionRoomChart">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/analytics.png</normaloff>:/images/analytics.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room chart</string>
+   </property>
+  </action>
+  <action name="actionRoom_list">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/room-key.png</normaloff>:/images/room-key.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room list</string>
+   </property>
+  </action>
+  <action name="actionDaily_movement">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Daily movement</string>
+   </property>
+  </action>
+  <action name="actionGuest_file">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guests</string>
+   </property>
+  </action>
+  <action name="actionReservatios">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reservations</string>
+   </property>
+  </action>
+  <action name="actionContacts">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/phone.png</normaloff>:/images/phone.png</iconset>
+   </property>
+   <property name="text">
+    <string>Contacts</string>
+   </property>
+  </action>
+  <action name="actionUsers">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/boy.png</normaloff>:/images/boy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Users</string>
+   </property>
+  </action>
+  <action name="actionUsers_groups">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+   </property>
+   <property name="text">
+    <string>Users groups</string>
+   </property>
+  </action>
+  <action name="actionRoom_view">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/window.png</normaloff>:/images/window.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room view</string>
+   </property>
+  </action>
+  <action name="actionInvoices">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
+   </property>
+   <property name="text">
+    <string>Checkout Invoices</string>
+   </property>
+  </action>
+  <action name="actionNew_reservation">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/room-key.png</normaloff>:/images/room-key.png</iconset>
+   </property>
+   <property name="text">
+    <string>New reservation</string>
+   </property>
+  </action>
+  <action name="actionPartners">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/partner.png</normaloff>:/images/partner.png</iconset>
+   </property>
+   <property name="text">
+    <string>Partners</string>
+   </property>
+  </action>
+  <action name="actionHakk">
+   <property name="text">
+    <string>Hall</string>
+   </property>
+  </action>
+  <action name="actionTables">
+   <property name="text">
+    <string>Tables</string>
+   </property>
+  </action>
+  <action name="actionNames_of_menu">
+   <property name="text">
+    <string>Names of menu</string>
+   </property>
+  </action>
+  <action name="actionMain_partitions_of_menu">
+   <property name="text">
+    <string>Main partitions of menu</string>
+   </property>
+  </action>
+  <action name="actionType_of_dishes">
+   <property name="text">
+    <string>Type of dishes</string>
+   </property>
+  </action>
+  <action name="actionDishes">
+   <property name="text">
+    <string>Dishes</string>
+   </property>
+  </action>
+  <action name="actionModifiers">
+   <property name="text">
+    <string>Modifiers</string>
+   </property>
+  </action>
+  <action name="actionStorages">
+   <property name="text">
+    <string>Storages</string>
+   </property>
+  </action>
+  <action name="actionMenu_review">
+   <property name="text">
+    <string>Menu review</string>
+   </property>
+  </action>
+  <action name="actionPrinters">
+   <property name="text">
+    <string>Printers</string>
+   </property>
+  </action>
+  <action name="actionTrack_changes">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/tracking.png</normaloff>:/images/tracking.png</iconset>
+   </property>
+   <property name="text">
+    <string>Track changes</string>
+   </property>
+  </action>
+  <action name="actionCredit_card">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/credit-card.png</normaloff>:/images/credit-card.png</iconset>
+   </property>
+   <property name="text">
+    <string>Credit cards</string>
+   </property>
+  </action>
+  <action name="actionCity_Ledger_balance">
+   <property name="text">
+    <string>Total balance</string>
+   </property>
+  </action>
+  <action name="actionChange_password">
+   <property name="text">
+    <string>Change password</string>
+   </property>
+  </action>
+  <action name="actionNew_advance_entry">
+   <property name="text">
+    <string>Advance voucher</string>
+   </property>
+  </action>
+  <action name="actionGlobal_config">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Global config</string>
+   </property>
+  </action>
+  <action name="actionComplex_dish">
+   <property name="text">
+    <string>Complex dish</string>
+   </property>
+  </action>
+  <action name="actionCategories">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/category.png</normaloff>:/images/category.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room categories</string>
+   </property>
+  </action>
+  <action name="actionType_of_bed">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Type of bed</string>
+   </property>
+  </action>
+  <action name="actionSynchronization">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export POS, Events, Single vauchers</string>
+   </property>
+  </action>
+  <action name="actionRestaurant">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/cutlery.png</normaloff>:/images/cutlery.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restaurant</string>
+   </property>
+  </action>
+  <action name="actionCategory_to_sell">
+   <property name="text">
+    <string>Category to sell</string>
+   </property>
+  </action>
+  <action name="actionCity_Ledger">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/partner.png</normaloff>:/images/partner.png</iconset>
+   </property>
+   <property name="text">
+    <string>City Ledger</string>
+   </property>
+  </action>
+  <action name="actionCurrencies">
+   <property name="text">
+    <string>Currencies</string>
+   </property>
+  </action>
+  <action name="actionForecast_Occupancy_Category">
+   <property name="text">
+    <string>Forecast Occupancy / Category</string>
+   </property>
+  </action>
+  <action name="actionMonthly_Report">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Monthly Report</string>
+   </property>
+  </action>
+  <action name="actionSetup_Tax_Printer">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/tax.png</normaloff>:/images/tax.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setup Tax And Hall</string>
+   </property>
+  </action>
+  <action name="actionInvoice_items">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/list.png</normaloff>:/images/list.png</iconset>
+   </property>
+   <property name="text">
+    <string>Invoice items</string>
+   </property>
+  </action>
+  <action name="actionIn_house_guest">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>In house guest</string>
+   </property>
+  </action>
+  <action name="actionExpected_arrivals">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/arrival.png</normaloff>:/images/arrival.png</iconset>
+   </property>
+   <property name="text">
+    <string>Expected arrivals / departures</string>
+   </property>
+  </action>
+  <action name="actionRecheckout">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/goto.png</normaloff>:/images/goto.png</iconset>
+   </property>
+   <property name="text">
+    <string>Recheckout</string>
+   </property>
+  </action>
+  <action name="actionPosting_charge">
+   <property name="text">
+    <string>Posting charge</string>
+   </property>
+  </action>
+  <action name="actionDiscount">
+   <property name="text">
+    <string>Discount</string>
+   </property>
+  </action>
+  <action name="actionRe_checkin">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Re-checkin</string>
+   </property>
+  </action>
+  <action name="actionTransfer_amount">
+   <property name="text">
+    <string>Transfer amount</string>
+   </property>
+  </action>
+  <action name="actionExpected_arrivals_simple">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/arrival.png</normaloff>:/images/arrival.png</iconset>
+   </property>
+   <property name="text">
+    <string>Expected arrivals / pax</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="actionCash_report_total">
+   <property name="text">
+    <string>Cash report / summary</string>
+   </property>
+  </action>
+  <action name="actionUpdate_program">
+   <property name="text">
+    <string>Update program</string>
+   </property>
+  </action>
+  <action name="actionReceipt_vaucher">
+   <property name="text">
+    <string>Receipt voucher</string>
+   </property>
+  </action>
+  <action name="actionCity_Ledger_detailed_balance">
+   <property name="text">
+    <string>Detailed balance</string>
+   </property>
+  </action>
+  <action name="actionCash_repoort_detailed">
+   <property name="text">
+    <string>Cash report / detailed</string>
+   </property>
+  </action>
+  <action name="actionVauchers">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/file.png</normaloff>:/images/file.png</iconset>
+   </property>
+   <property name="text">
+    <string>Vouchers history</string>
+   </property>
+  </action>
+  <action name="actionNotes">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/notepad.png</normaloff>:/images/notepad.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reminder</string>
+   </property>
+  </action>
+  <action name="actionCall_history">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/phone-call.png</normaloff>:/images/phone-call.png</iconset>
+   </property>
+   <property name="text">
+    <string>Call history</string>
+   </property>
+  </action>
+  <action name="actionEvent">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/banket.png</normaloff>:/images/banket.png</iconset>
+   </property>
+   <property name="text">
+    <string>Events</string>
+   </property>
+  </action>
+  <action name="actionDaily_financial_report">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Financial report</string>
+   </property>
+  </action>
+  <action name="actionBanquet_comment">
+   <property name="text">
+    <string>Banquet comment</string>
+   </property>
+  </action>
+  <action name="actionCity_ledger_balance_2">
+   <property name="text">
+    <string>Balance by period</string>
+   </property>
+  </action>
+  <action name="actionHistory_of_calls">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/phone-call.png</normaloff>:/images/phone-call.png</iconset>
+   </property>
+   <property name="text">
+    <string>History of calls</string>
+   </property>
+  </action>
+  <action name="actionCardex_analysis">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/partner.png</normaloff>:/images/partner.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cardex analysis</string>
+   </property>
+  </action>
+  <action name="actionExport_invoices">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export invoices</string>
+   </property>
+  </action>
+  <action name="actionComplimentary_comment">
+   <property name="text">
+    <string>Complimentary comment</string>
+   </property>
+  </action>
+  <action name="actionExport_active_reservations">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export active reservations</string>
+   </property>
+  </action>
+  <action name="actionReport_buillder">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Report buillder</string>
+   </property>
+  </action>
+  <action name="actionRemarks">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/remarks.png</normaloff>:/images/remarks.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remarks</string>
+   </property>
+  </action>
+  <action name="actionHotel_status">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/info.png</normaloff>:/images/info.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hotel status</string>
+   </property>
+  </action>
+  <action name="actionList_of_source_reservation">
+   <property name="text">
+    <string>List of source reservation</string>
+   </property>
+  </action>
+  <action name="actionYearly_financial_report">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Yearly financial report</string>
+   </property>
+  </action>
+  <action name="actionReports_set">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reports set</string>
+   </property>
+  </action>
+  <action name="actionStatistics">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Statistics</string>
+   </property>
+  </action>
+  <action name="actionUtils">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Utils</string>
+   </property>
+  </action>
+  <action name="actionExport_data">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export other</string>
+   </property>
+  </action>
+  <action name="actionAdvance_report">
+   <property name="text">
+    <string>Advance report</string>
+   </property>
+  </action>
+  <action name="actionRestaurant_online">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/openedorder.png</normaloff>:/images/openedorder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restaurant online</string>
+   </property>
+  </action>
+  <action name="actionReservation_groups">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reservation groups</string>
+   </property>
+  </action>
+  <action name="actionConfigure_Welcome_Page">
+   <property name="text">
+    <string>Configure Welcome Page</string>
+   </property>
+  </action>
+  <action name="actionPartners_group">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/partner.png</normaloff>:/images/partner.png</iconset>
+   </property>
+   <property name="text">
+    <string>Partners group</string>
+   </property>
+  </action>
+  <action name="actionGuest_titles">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guest titles</string>
+   </property>
+  </action>
+  <action name="actionNationality_file">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+   </property>
+   <property name="text">
+    <string>Nationality file</string>
+   </property>
+  </action>
+  <action name="actionCheckout_invoices_free_rooming">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
+   </property>
+   <property name="text">
+    <string>Checkout invoices (free rooming)</string>
+   </property>
+  </action>
+  <action name="actionNew_group_reservation">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/room-key.png</normaloff>:/images/room-key.png</iconset>
+   </property>
+   <property name="text">
+    <string>New group reservation</string>
+   </property>
+  </action>
+  <action name="actionChanges_of_states_of_room">
+   <property name="text">
+    <string>Changes of states of room</string>
+   </property>
+  </action>
+  <action name="actionCanceled_reservations">
+   <property name="text">
+    <string>Canceled reservations</string>
+   </property>
+  </action>
+  <action name="actionWeb">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/internet.png</normaloff>:/images/internet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Web</string>
+   </property>
+  </action>
+  <action name="actionStorehouse">
+   <property name="text">
+    <string>Storehouse</string>
+   </property>
+  </action>
+  <action name="actionNew_store_document">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/storage.png</normaloff>:/images/storage.png</iconset>
+   </property>
+   <property name="text">
+    <string>New store document</string>
+   </property>
+  </action>
+  <action name="actionMaterials_list">
+   <property name="text">
+    <string>Materials list</string>
+   </property>
+  </action>
+  <action name="actionReservations_by_date_created">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/bed.png</normaloff>:/images/bed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reservations by date created</string>
+   </property>
+  </action>
+  <action name="actionPartners_2">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/partner.png</normaloff>:/images/partner.png</iconset>
+   </property>
+   <property name="text">
+    <string>Partners</string>
+   </property>
+  </action>
+  <action name="actionDocuments_list">
+   <property name="text">
+    <string>Documents list</string>
+   </property>
+  </action>
+  <action name="actionMaterials_in_the_store">
+   <property name="text">
+    <string>Materials in the store</string>
+   </property>
+  </action>
+  <action name="actionStore_movement">
+   <property name="text">
+    <string>Store movement</string>
+   </property>
+  </action>
+  <action name="actionCoupons">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/discount.png</normaloff>:/images/discount.png</iconset>
+   </property>
+   <property name="text">
+    <string>Coupons</string>
+   </property>
+  </action>
+  <action name="actionCalculate_output_of_restaurant">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/calculator.png</normaloff>:/images/calculator.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calculate output of restaurant</string>
+   </property>
+  </action>
+  <action name="actionExport_back">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export back</string>
+   </property>
+  </action>
+  <action name="actionOpen_breakfast">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/dinner.png</normaloff>:/images/dinner.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open breakfast</string>
+   </property>
+  </action>
+  <action name="actionMonthly_occupancy_percentages">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Monthly occupancy percentages</string>
+   </property>
+  </action>
+  <action name="actionNaitonality_report_by_period">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Nationality by period</string>
+   </property>
+  </action>
+  <action name="actionCancelation_No_show_fees">
+   <property name="text">
+    <string>Cancelation/No show fees</string>
+   </property>
+  </action>
+  <action name="actionCancelation_No_show_fee">
+   <property name="text">
+    <string>Cancelation/No show fee</string>
+   </property>
+  </action>
+  <action name="actionSales_by_storages">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/storage.png</normaloff>:/images/storage.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sales by storages</string>
+   </property>
+  </action>
+  <action name="actionGuest_by_nationality">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/reports.png</normaloff>:/images/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guest by nationality</string>
+   </property>
+  </action>
+  <action name="actionModels_of_cars">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/car.png</normaloff>:/images/car.png</iconset>
+   </property>
+   <property name="text">
+    <string>Models of cars</string>
+   </property>
+  </action>
+  <action name="actionCostumers_cars">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/car.png</normaloff>:/images/car.png</iconset>
+   </property>
+   <property name="text">
+    <string>Costumers (cars)</string>
+   </property>
+  </action>
+  <action name="actionReport_by_payment">
+   <property name="text">
+    <string>Report by payment</string>
+   </property>
+  </action>
+  <action name="actionPartners_debts">
+   <property name="text">
+    <string>Partners debts</string>
+   </property>
+  </action>
+  <action name="actionCoupons_sales">
+   <property name="text">
+    <string>Coupons sales</string>
+   </property>
+  </action>
+  <action name="actionCoupons_seria">
+   <property name="text">
+    <string>Coupons seria</string>
+   </property>
+  </action>
+  <action name="actionAccounts">
+   <property name="text">
+    <string>Accounts</string>
+   </property>
+  </action>
+  <action name="actionAccounts_2">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/refund.png</normaloff>:/images/refund.png</iconset>
+   </property>
+   <property name="text">
+    <string>Accounts</string>
+   </property>
+  </action>
+  <action name="actionStore_entries">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/storeentry.png</normaloff>:/images/storeentry.png</iconset>
+   </property>
+   <property name="text">
+    <string>Store entries</string>
+   </property>
+  </action>
+  <action name="actionNew_store_checkpoint">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/storeentry.png</normaloff>:/images/storeentry.png</iconset>
+   </property>
+   <property name="text">
+    <string>New store checkpoint</string>
+   </property>
+  </action>
+  <action name="actionPartner_payments">
+   <property name="text">
+    <string>Partner payments</string>
+   </property>
+  </action>
+  <action name="actionCoupons_statistics">
+   <property name="text">
+    <string>Coupons statistics</string>
+   </property>
+  </action>
+  <action name="actionDebts">
+   <property name="text">
+    <string>Debts</string>
+   </property>
+  </action>
+  <action name="actionBreakfast_report">
+   <property name="text">
+    <string>Breakfast</string>
+   </property>
+  </action>
+  <action name="actionDiscount_report">
+   <property name="text">
+    <string>Discount report</string>
+   </property>
+  </action>
+  <action name="actionSales_report_by_cars">
+   <property name="text">
+    <string>Sales report by cars</string>
+   </property>
+  </action>
+  <action name="actionDiscount_total">
+   <property name="text">
+    <string>Discount, total</string>
+   </property>
+  </action>
+  <action name="actionCostumers">
+   <property name="text">
+    <string>Costumers</string>
+   </property>
+  </action>
+  <action name="actionRefund_voucher">
+   <property name="text">
+    <string>Refund voucher</string>
+   </property>
+  </action>
+  <action name="actionRoom_inventory">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/configure.png</normaloff>:/images/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room inventory</string>
+   </property>
+  </action>
+  <action name="actionCity_ledger_advance">
+   <property name="text">
+    <string>City ledger advance</string>
+   </property>
+  </action>
+  <action name="actionTransfer_CL_amount">
+   <property name="text">
+    <string>Transfer CL amount</string>
+   </property>
+  </action>
+  <action name="actionAvailable_amounts">
+   <property name="text">
+    <string>Available amounts</string>
+   </property>
+  </action>
+  <action name="actionGuest_Tray_Ledger">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Guest Tray Ledger</string>
+   </property>
+  </action>
+  <action name="actionIn_house_detailed_balance">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/graph.png</normaloff>:/images/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>In house detailed balance</string>
+   </property>
+  </action>
+  <action name="actionAvaiable_rooms">
+   <property name="text">
+    <string>Avaiable rooms</string>
+   </property>
+  </action>
+  <action name="actionRoom_inventory_2">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/configure.png</normaloff>:/images/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room inventory</string>
+   </property>
+  </action>
+  <action name="actionRoom_inventory_states">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/inventory.png</normaloff>:/images/inventory.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room inventory states</string>
+   </property>
+  </action>
+  <action name="actionList_of_checkin_guests">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+   </property>
+   <property name="text">
+    <string>List of checkin guests</string>
+   </property>
+  </action>
+  <action name="actionLenght_of_stay">
+   <property name="text">
+    <string>Lenght of stay</string>
+   </property>
+  </action>
+  <action name="actionExport_reservations">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export reservations</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

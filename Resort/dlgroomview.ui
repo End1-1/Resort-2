@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgRoomView</class>
+ <widget class="QDialog" name="DlgRoomView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>191</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Room view</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Short name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Description, AM</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="l">
+       <property name="text">
+        <string>Description, EN</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="EQLineEdit" name="leDescrAM">
+       <property name="Field" stdset="0">
+        <string>f_am</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="EQLineEdit" name="leCode">
+       <property name="PrimaryKey" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_id</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="EQLineEdit" name="leDescrEN">
+       <property name="Field" stdset="0">
+        <string>f_en</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="EQLineEdit" name="leShortName">
+       <property name="Field" stdset="0">
+        <string>f_short</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="EQLineEdit" name="leDescrRU">
+       <property name="Field" stdset="0">
+        <string>f_ru</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Description, RU</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>95</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnOk">
+        <property name="text">
+         <string>OK</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>95</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,1593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WGlobalDbConfig</class>
+ <widget class="QWidget" name="WGlobalDbConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>818</width>
+    <height>695</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Global config</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabApp">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Hotel</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSave">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>546</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="1">
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>Reservation</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="17" column="0">
+             <widget class="QLabel" name="label_40">
+              <property name="text">
+               <string>Minibar table id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0">
+             <widget class="QLabel" name="label_38">
+              <property name="text">
+               <string>Breakfast dish id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="0">
+             <widget class="QLabel" name="label_37">
+              <property name="text">
+               <string>Breakfast table id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_36">
+              <property name="text">
+               <string>Breakfast hall id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="0">
+             <widget class="QLabel" name="label_39">
+              <property name="text">
+               <string>Minibar hall id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="leManualTax"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Items for manual tax</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_22">
+              <property name="text">
+               <string>Rooming list</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="EQLineEdit" name="leRoomingList"/>
+            </item>
+            <item row="11" column="0">
+             <widget class="QLabel" name="label_31">
+              <property name="text">
+               <string>Restore halls for reception charges</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QLineEdit" name="leNoshowCode"/>
+            </item>
+            <item row="12" column="1">
+             <widget class="EQLineEdit" name="leRoomArrangement"/>
+            </item>
+            <item row="11" column="1">
+             <widget class="EQLineEdit" name="leRestHallForReception"/>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_32">
+              <property name="text">
+               <string>Default room arrangement</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="label_26">
+              <property name="text">
+               <string>No show fee code</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <widget class="QLineEdit" name="leCancelCode"/>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="text">
+               <string>Cancelation fee code</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Default cardex</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="EQLineEdit" name="leExtraBed"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="EQLineEdit" name="leDefaultCardex"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Airport pickup id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Late checkout</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Extra bed rate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="20" column="1">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Day use id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="EQLineEdit" name="leDayUse"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="EQLineEdit" name="leAirportPickupId"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Early checkin id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="EQLineEdit" name="leEarlyCheckinID"/>
+            </item>
+            <item row="14" column="1">
+             <widget class="EQLineEdit" name="leBreakfastTableId"/>
+            </item>
+            <item row="13" column="1">
+             <widget class="EQLineEdit" name="leBreakfastHallId"/>
+            </item>
+            <item row="15" column="1">
+             <widget class="EQLineEdit" name="leBreakfastDishId"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="EQLineEdit" name="leLateCheckoutID"/>
+            </item>
+            <item row="18" column="0">
+             <widget class="QLabel" name="label_41">
+              <property name="text">
+               <string>Minibar dish id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="1">
+             <widget class="EQLineEdit" name="leMinibarHallId"/>
+            </item>
+            <item row="17" column="1">
+             <widget class="EQLineEdit" name="leMinibarTableId"/>
+            </item>
+            <item row="18" column="1">
+             <widget class="EQLineEdit" name="leMinibarDishId"/>
+            </item>
+            <item row="19" column="1">
+             <widget class="QCheckBox" name="chPasswordRequired">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="19" column="0">
+             <widget class="QLabel" name="label_42">
+              <property name="text">
+               <string>Passport required</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="chNoTrackControl">
+           <property name="text">
+            <string>No tracking changes</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Application</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="3" column="1">
+             <widget class="EQTimeEdit" name="teLateCheckout"/>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Voucher invoice footer</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="EQTextEdit" name="teVoucherInvoiceFooter">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Vouchers right header</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="EQDateEdit" name="deWorkingDate"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Early checkin before</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Working date</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Slogan</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="EQTimeEdit" name="teEarlyCheckin"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="EQTextEdit" name="teSlogan">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Late checkout after</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="EQTextEdit" name="teVoucherRightText">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Vouchers digits</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="EQLineEdit" name="leVaucherDigits"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="chRestMode">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>Restaurant mode</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="EQCheckBox" name="chShowLogs">
+           <property name="text">
+            <string>Show logs</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_10">
+      <attribute name="title">
+       <string>Vouchers</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Room charge id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="EQLineEdit" name="leRoomChargeId"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Breakfast charge id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="leBrekfastChargeId"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Dicount charge id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="EQLineEdit" name="leDiscountId"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_33">
+         <property name="text">
+          <string>Receipt vaucher id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="EQLineEdit" name="leReceiptVaucherId"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_34">
+         <property name="text">
+          <string>Reservation voucher id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="EQLineEdit" name="leReservationVoucherId"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Refund id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="EQLineEdit" name="leRefundId"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Positive transfer charge id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="EQLineEdit" name="lePosTransferId"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lbNeg">
+         <property name="text">
+          <string>Negative transfer charge id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="EQLineEdit" name="leNegTransferId"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lbNeg_2">
+         <property name="text">
+          <string>Room rate change voucher id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="EQLineEdit" name="leRoomRateChangeId"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lbNeg_3">
+         <property name="text">
+          <string>Advance voucher id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="EQLineEdit" name="leAdvanceVoucherId"/>
+       </item>
+       <item row="10" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>370</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_9">
+      <attribute name="title">
+       <string>Application</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QWidget" name="widget_9" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSaveApplication">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>546</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_10" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>491</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Restaurant</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QWidget" name="widget_2" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSaveRestaurant">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>555</width>
+              <height>555</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRefreshReset">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>555</width>
+              <height>555</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRemoveRest">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>555</width>
+              <height>555</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>562</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_3" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QListWidget" name="lwHost">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_4" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="leHost">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_20">
+               <property name="text">
+                <string>Host name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_29">
+               <property name="text">
+                <string>Code for discount 20%</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1" colspan="2">
+              <widget class="EQLineEdit" name="leDisc20"/>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_30">
+               <property name="text">
+                <string>Code for discount card 50%</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="2">
+              <widget class="EQLineEdit" name="leDisc50"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_27">
+               <property name="text">
+                <string>First receipt check printer</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_28">
+               <property name="text">
+                <string>Second receipt check printer</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="EQLineEdit" name="leHallCode">
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="2">
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="6" column="1">
+              <widget class="QCheckBox" name="chOpenTableAfterRun">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="2">
+              <widget class="QLineEdit" name="leFirstReceiptPrinter"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="EQLineEdit" name="leHallName">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1" colspan="2">
+              <widget class="QLineEdit" name="leSecondReceiptPrinter"/>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_24">
+               <property name="text">
+                <string>Open table after run</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_21">
+               <property name="text">
+                <string>Default hall</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Access</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QWidget" name="widget_5" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSaveAccess">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRefresh">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRemoveStation">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>28</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>544</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="EQTableWidget" name="tblAccess">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Database list</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QWidget" name="widget_6" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSaveDatabases">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>544</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="EQTableWidget" name="tblDatabases">
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Host</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Databases</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Username</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Password</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Reports</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QWidget" name="widget_7" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnSaveReports">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>580</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget_2">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab_6">
+          <attribute name="title">
+           <string>Monthly</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="EQTableWidget" name="tblMonthly">
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <column>
+              <property name="text">
+               <string>#</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Items</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_7">
+          <attribute name="title">
+           <string>Cardex analysis</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="EQTableWidget" name="tblCardexAnalysis">
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <column>
+              <property name="text">
+               <string>#</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Items</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_11">
+          <attribute name="title">
+           <string>Daily</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <widget class="QLabel" name="label_35">
+             <property name="text">
+              <string>Hint: groups separator - ';', separator for items in the group - ','</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Subtotals position</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QRadioButton" name="rbDailySubtotalUp">
+                <property name="text">
+                 <string>Up</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="rbDailySubtotalDown">
+                <property name="text">
+                 <string>Down</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_10">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>504</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="teDailyMovement"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_8">
+      <attribute name="title">
+       <string>Tax print</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QWidget" name="widget_8" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btnRefreshTax">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_8">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>546</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="EQTableWidget" name="tblTax">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Computer</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Active</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Host</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Port</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Password</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+   <slots>
+    <signal>customButtonClicked(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header location="global">eqdateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTimeEdit</class>
+   <extends>QTimeEdit</extends>
+   <header location="global">eqtimeedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header location="global">eqtextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header location="global">eqtablewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>chRestMode</tabstop>
+  <tabstop>deWorkingDate</tabstop>
+  <tabstop>teEarlyCheckin</tabstop>
+  <tabstop>teLateCheckout</tabstop>
+  <tabstop>teSlogan</tabstop>
+  <tabstop>leVaucherDigits</tabstop>
+  <tabstop>teVoucherRightText</tabstop>
+  <tabstop>teVoucherInvoiceFooter</tabstop>
+  <tabstop>leExtraBed</tabstop>
+  <tabstop>leDefaultCardex</tabstop>
+  <tabstop>leDayUse</tabstop>
+  <tabstop>leEarlyCheckinID</tabstop>
+  <tabstop>leLateCheckoutID</tabstop>
+  <tabstop>leAirportPickupId</tabstop>
+  <tabstop>leManualTax</tabstop>
+  <tabstop>leRoomingList</tabstop>
+  <tabstop>leCancelCode</tabstop>
+  <tabstop>leNoshowCode</tabstop>
+  <tabstop>leRestHallForReception</tabstop>
+  <tabstop>leRoomArrangement</tabstop>
+  <tabstop>leBreakfastHallId</tabstop>
+  <tabstop>leBreakfastTableId</tabstop>
+  <tabstop>leBreakfastDishId</tabstop>
+  <tabstop>leMinibarHallId</tabstop>
+  <tabstop>leMinibarTableId</tabstop>
+  <tabstop>leMinibarDishId</tabstop>
+  <tabstop>leRoomChargeId</tabstop>
+  <tabstop>leBrekfastChargeId</tabstop>
+  <tabstop>leDiscountId</tabstop>
+  <tabstop>leReceiptVaucherId</tabstop>
+  <tabstop>leReservationVoucherId</tabstop>
+  <tabstop>leRefundId</tabstop>
+  <tabstop>lePosTransferId</tabstop>
+  <tabstop>leNegTransferId</tabstop>
+  <tabstop>leRoomRateChangeId</tabstop>
+  <tabstop>leAdvanceVoucherId</tabstop>
+  <tabstop>leHost</tabstop>
+  <tabstop>leHallName</tabstop>
+  <tabstop>leHallCode</tabstop>
+  <tabstop>leFirstReceiptPrinter</tabstop>
+  <tabstop>leSecondReceiptPrinter</tabstop>
+  <tabstop>leDisc20</tabstop>
+  <tabstop>leDisc50</tabstop>
+  <tabstop>chOpenTableAfterRun</tabstop>
+  <tabstop>btnRemoveRest</tabstop>
+  <tabstop>lwHost</tabstop>
+  <tabstop>btnSaveAccess</tabstop>
+  <tabstop>btnRefresh</tabstop>
+  <tabstop>btnRemoveStation</tabstop>
+  <tabstop>tblAccess</tabstop>
+  <tabstop>btnSaveDatabases</tabstop>
+  <tabstop>tblDatabases</tabstop>
+  <tabstop>btnSaveReports</tabstop>
+  <tabstop>tabWidget_2</tabstop>
+  <tabstop>tblMonthly</tabstop>
+  <tabstop>tblCardexAnalysis</tabstop>
+  <tabstop>rbDailySubtotalUp</tabstop>
+  <tabstop>rbDailySubtotalDown</tabstop>
+  <tabstop>teDailyMovement</tabstop>
+  <tabstop>btnRefreshTax</tabstop>
+  <tabstop>tblTax</tabstop>
+  <tabstop>tabApp</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>chNoTrackControl</tabstop>
+  <tabstop>btnRefreshReset</tabstop>
+  <tabstop>btnSaveApplication</tabstop>
+  <tabstop>btnSaveRestaurant</tabstop>
+ </tabstops>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

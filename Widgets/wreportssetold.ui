@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WReportsSetOld</class>
+ <widget class="QWidget" name="WReportsSetOld">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>905</width>
+    <height>470</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Reports List</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Year</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="cbYear">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>2017</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2018</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="btnGo">
+            <property name="maximumSize">
+             <size>
+              <width>39</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../Resort/res.qrc">
+              <normaloff>:/images/goto.png</normaloff>:/images/goto.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QWidget" name="widget_2" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>2</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background:rgb(200, 200, 200)</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="1" column="1">
+              <widget class="ERadioButton" name="rbFebrary">
+               <property name="text">
+                <string>February</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="ERadioButton" name="rbJanuary">
+               <property name="text">
+                <string>January</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="4">
+              <widget class="ERadioButton" name="rbNovember">
+               <property name="text">
+                <string>November</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="ERadioButton" name="rbApril">
+               <property name="text">
+                <string>April</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="ERadioButton" name="rbJune">
+               <property name="text">
+                <string>June</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="ERadioButton" name="rbMay">
+               <property name="text">
+                <string>May</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="ERadioButton" name="rbJuly">
+               <property name="text">
+                <string>July</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="ERadioButton" name="rbAugust">
+               <property name="text">
+                <string>August</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="ERadioButton" name="rbOctober">
+               <property name="text">
+                <string>October</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="ERadioButton" name="rbSeptember">
+               <property name="text">
+                <string>September</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="ERadioButton" name="rbMarch">
+               <property name="text">
+                <string>March</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="5">
+              <widget class="ERadioButton" name="rbDecember">
+               <property name="text">
+                <string>December</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="ERadioButton" name="rbYear">
+               <property name="text">
+                <string>Yearly</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_3" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="1" rowspan="2">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Nationality</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="ERadioButton" name="rbrNationality">
+               <property name="text">
+                <string>Nationality</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrNatYearly">
+               <property name="text">
+                <string>Nationality Yearly</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrNationalityPax">
+               <property name="text">
+                <string>Nationaliy / Pax</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0" rowspan="2">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Category</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="ERadioButton" name="rbrCategory">
+               <property name="text">
+                <string>Category</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrCategoryYearly">
+               <property name="text">
+                <string>Category/Yearly</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrOccupancyCategory">
+               <property name="text">
+                <string>Occupancy/Category</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>17</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="title">
+             <string>Cardex</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="ERadioButton" name="rbrCardex">
+               <property name="text">
+                <string>Cardex</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrCardexYearly">
+               <property name="text">
+                <string>Cardex / Yearly</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>51</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QGroupBox" name="groupBox_6">
+            <property name="title">
+             <string>Other</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="ERadioButton" name="rbrArrangement">
+               <property name="text">
+                <string>Arrangement</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrPax">
+               <property name="text">
+                <string>Pax</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>51</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="2" rowspan="2">
+           <widget class="QGroupBox" name="groupBox_5">
+            <property name="title">
+             <string>Market sigment</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="ERadioButton" name="rbrMarketSigment">
+               <property name="text">
+                <string>Market Sigment</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrMarketSigmentYearly">
+               <property name="text">
+                <string>Market sigment / Yearly</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>63</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string>Salesman</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="ERadioButton" name="rbrSalesMan">
+               <property name="text">
+                <string>Saleman</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ERadioButton" name="rbrSalesManYearly">
+               <property name="text">
+                <string>Salesman / Yearly</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>51</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QWidget" name="wdtFilter" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="hlFilter"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ERadioButton</class>
+   <extends>QRadioButton</extends>
+   <header location="global">eradiobutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../Resort/res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>rbrCategory</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>72</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>47</x>
+     <y>468</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrCategoryYearly</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>153</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrOccupancyCategory</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>237</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrNationality</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrNatYearly</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>382</x>
+     <y>466</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrNationalityPax</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>338</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>102</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrCardex</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrCardexYearly</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>367</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrSalesMan</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>348</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>412</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrSalesManYearly</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>381</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrMarketSigment</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>654</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>382</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrMarketSigmentYearly</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>620</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrArrangement</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>637</x>
+     <y>347</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbrPax</sender>
+   <signal>clicked()</signal>
+   <receiver>WReportsSetOld</receiver>
+   <slot>rbClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>628</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>rbClicked()</slot>
+ </slots>
+</ui>
