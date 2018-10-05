@@ -57,6 +57,7 @@ private slots:
     void on_leTotal_textChanged(const QString &arg1);
     void on_leComments_textChanged(const QString &arg1);
     void on_btnPrintDoc_clicked();
+    void on_btnExcel_clicked();
 };
 
 #endif // STOREDOC_H

@@ -1,4 +1,5 @@
 #include "wstoreentry.h"
+#include "excel.h"
 #include "ui_wstoreentry.h"
 #include "pprintstoreentry.h"
 
@@ -441,4 +442,47 @@ void WStoreEntry::on_leSearch_textChanged(const QString &arg1)
         }
         ui->tblData->setRowHidden(i, hidden);
     }
+}
+
+void WStoreEntry::on_btnExcel_clicked()
+{
+    DatabaseResult dr;
+    fDbBind[":f_doc"] = ui->leDocNum->text();
+    dr.select(fDb, "select st.f_goods, g.f_en, st.f_qty, u.f_name as unitName, st.f_amount from st_body st "
+                   "left join r_dish g on g.f_id=st.f_goods "
+                    "left join r_unit u on u.f_id=g.f_unit "
+                    "where f_doc=:f_doc", fDbBind);
+
+    int colCount = 4;
+    int rowCount = dr.rowCount();
+    if (colCount == 0 || rowCount == 0) {
+        message_error_tr("Empty report!");
+        return;
+    }
+    QList<int> cols;
+    cols << 100 << 300 << 100 << 100 << 100;
+    QStringList colName;
+    colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Amount");
+    Excel e;
+    for (int i = 0; i < colCount; i++) {
+        e.setValue(colName[i], 2, i + 1);
+        e.setColumnWidth(i + 1, cols[i] / 7);
+    }
+    QColor color = QColor::fromRgb(200, 200, 250);
+    e.setBackground(e.address(1, 0), e.address(1, colCount - 1),
+                     color.red(), color.green(), color.blue());
+    e.setFontBold(e.address(0, 0), e.address(0, colCount - 1));
+    e.setHorizontalAlignment(e.address(0, 0), e.address(0, colCount - 1), Excel::hCenter);
+
+    e.setValue(ui->leDocNum->text(), 1, 1);
+    e.setValue(ui->deDate->text(), 1, 2);
+
+    for (int j = 0; j < rowCount; j++) {
+        for (int i = 0; i < colCount; i++) {
+            e.setValue(dr.value(j, i).toString(), j + 3, i + 1);
+        }
+    }
+
+    e.setFontSize(e.address(0, 0), e.address(rowCount , colCount ), 10);
+    e.show();
 }

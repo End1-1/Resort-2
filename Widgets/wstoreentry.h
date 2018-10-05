@@ -38,6 +38,7 @@ private slots:
     void on_btnCalculate_clicked();
     void on_btnPrint_clicked();
     void on_leSearch_textChanged(const QString &arg1);
+    void on_btnExcel_clicked();
 };
 
 #endif // WSTOREENTRY_H

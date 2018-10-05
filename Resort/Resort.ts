@@ -14320,27 +14320,39 @@ deviation</source>
     </message>
     <message>
         <source>Invalid document number</source>
-        <translation type="unfinished">Սխալ փասթաթղթի համար</translation>
+        <translation>Սխալ փասթաթղթի համար</translation>
     </message>
     <message>
         <source>Program error. Please, contact with developer. Message: CI_Dish==0, loadDoc</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Code not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Ապրանքի կոդը բացակայում է</translation>
     </message>
     <message>
         <source>Saved</source>
-        <translation type="unfinished">Պահպանված է</translation>
+        <translation>Պահպանված է</translation>
     </message>
     <message>
         <source>Draft saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Սևագիրը պահպանված է</translation>
     </message>
     <message>
         <source>Unit</source>
-        <translation type="unfinished">Չափման միավոր</translation>
+        <translation>Չափման միավոր</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation>Կոդ</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Անվանում</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Գումար</translation>
     </message>
 </context>
 <context>
@@ -17251,6 +17263,18 @@ commission</source>
     <message>
         <source>Search name</source>
         <translation>Փնտրել անունով</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation>Կոդ</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Անվանում</translation>
+    </message>
+    <message>
+        <source>Unit</source>
+        <translation>Չափման միավոր</translation>
     </message>
 </context>
 <context>
