@@ -11,6 +11,7 @@ wwelcomerest::wwelcomerest(QWidget *parent) :
 {
     ui->setupUi(this);
     fMainWindow->hideMenu();
+    fMainWindow->showMaximized();
 }
 
 wwelcomerest::~wwelcomerest()

@@ -447,7 +447,7 @@ void WStoreEntry::on_leSearch_textChanged(const QString &arg1)
 
 void WStoreEntry::on_btnExcel_clicked()
 {
-    int colCount = 4;
+    int colCount = 6;
     int rowCount = ui->tblData->rowCount();
     if (colCount == 0 || rowCount == 0) {
         message_error_tr("Empty report!");

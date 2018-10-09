@@ -567,20 +567,8 @@ void StoreDoc::on_btnPrintDoc_clicked()
 
 void StoreDoc::on_btnExcel_clicked()
 {
-    DatabaseResult dr;
-    QString add;
-    if (ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
-        add = "and b.f_sign=1";
-    }
-    fDbBind[":f_doc"] = ui->leDocNumber->text();
-    dr.select(fDb, "select b.f_material, m.f_en, b.f_qty, u.f_name as f_unitName, b.f_price, b.f_total "
-              "from r_body b "
-              "left join r_dish m on m.f_id=b.f_material "
-              "left join r_unit u on u.f_id=m.f_unit "
-              "where b.f_doc=:f_doc " + add, fDbBind);
-
     int colCount = 6;
-    int rowCount = dr.rowCount();
+    int rowCount = ui->tblGoods->rowCount();
     if (colCount == 0 || rowCount == 0) {
         message_error_tr("Empty report!");
         return;
@@ -604,11 +592,14 @@ void StoreDoc::on_btnExcel_clicked()
     e.setValue(ui->deDate->text(), 1, 2);
 
     for (int j = 0; j < rowCount; j++) {
-        for (int i = 0; i < colCount; i++) {
-            e.setValue(dr.value(j, i).toString(), j + 3, i + 1);
-        }
+        e.setValue(ui->tblGoods->item(j, 0)->text(), j + 3, 1);
+        e.setValue(ui->tblGoods->item(j, 2)->text(), j + 3, 2);
+        e.setValue(ui->tblGoods->lineEdit(j, 3)->text(), j + 3, 3);
+        e.setValue(ui->tblGoods->item(j, 4)->text(), j + 3, 4);
+        e.setValue(ui->tblGoods->lineEdit(j, 5)->text(), j + 3, 5);
+        e.setValue(ui->tblGoods->lineEdit(j, 6)->text(), j + 3, 6);
     }
 
-    e.setFontSize(e.address(0, 0), e.address(rowCount , colCount ), 10);
+    e.setFontSize(e.address(0, 0), e.address(rowCount + 2, colCount ), 10);
     e.show();
 }
