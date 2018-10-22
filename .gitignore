@@ -1,8 +1,9 @@
 *.[oa]
 build/
 Restaurant/bin/
-Resort/bin
-Server/bin
-ATS/bin
-Updater/bin
-Tester/bin
+Restaurant2/bin/
+Resort/bin/
+Server/bin/
+ATS/bin/
+Updater/bin/
+Tester/bin/

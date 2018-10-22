@@ -22,6 +22,8 @@ INCLUDEPATH += $$PWD/../Print
 INCLUDEPATH += $$PWD/../Resort
 INCLUDEPATH += $$PWD/../Selector
 INCLUDEPATH += /Qt/projects/NewTax
+INCLUDEPATH += /OpenSSL-Win32.0/include
+INCLUDEPATH += /OpenSSL-Win32.0/include/openssl
 
 SOURCES += main.cpp\
     rface.cpp \
@@ -33,7 +35,6 @@ SOURCES += main.cpp\
     ../Base/database.cpp \
     ../Base/defines.cpp \
     ../Base/preferences.cpp \
-    baseextendeddialog.cpp \
     ../Base/user.cpp \
     hall.cpp \
     rdesk.cpp \
@@ -98,7 +99,6 @@ SOURCES += main.cpp\
     ../Print/ptextrect.cpp \
     ../Base/logging.cpp \
     reportprint.cpp \
-    ../Print/printtax.cpp \
     ../Controls/eqcombobox.cpp \
     ../Cache/cachsex.cpp \
     ../Cache/cachereminderstate.cpp \
@@ -135,7 +135,12 @@ SOURCES += main.cpp\
     dlgsalary.cpp \
     ../Cache/cacheroominventory.cpp \
     ../Cache/cacheroominventorystate.cpp \
-    ../Base/appconfig.cpp
+    ../Base/appconfig.cpp \
+    ../Resort/dlgprinttaxsm.cpp \
+    ../Resort/message.cpp \
+    baseextendeddialog.cpp \
+    ../Print/printtax.cpp \
+    ../../NewTax/printtaxn.cpp
 
 HEADERS  += rface.h \
     rlogin.h \
@@ -148,7 +153,6 @@ HEADERS  += rface.h \
     ../Base/utils.h \
     ../Base/user.h \
     hall.h \
-    baseextendeddialog.h \
     rdesk.h \
     dishestable.h \
     splash.h \
@@ -212,7 +216,6 @@ HEADERS  += rface.h \
     ../Print/ptextrect.h \
     ../Base/logging.h \
     reportprint.h \
-    ../Print/printtax.h \
     ../Controls/eqcombobox.h \
     ../Cache/cachsex.h \
     ../Cache/cachereminderstate.h \
@@ -250,7 +253,12 @@ HEADERS  += rface.h \
     dlgsalary.h \
     ../Cache/cacheroominventory.h \
     ../Cache/cacheroominventorystate.h \
-    ../Base/appconfig.h
+    ../Base/appconfig.h \
+    ../Resort/dlgprinttaxsm.h \
+    ../Resort/message.h \
+    baseextendeddialog.h \
+    ../Print/printtax.h \
+    ../../NewTax/printtaxn.h
 
 FORMS    += rface.ui \
     rlogin.ui \
@@ -271,7 +279,6 @@ FORMS    += rface.ui \
     dlgreservation.ui \
     dlgcomplexdish.ui \
     ../Print/pprintpreview.ui \
-    ../Print/printtax.ui \
     dlgselecttaxcashmode.ui \
     dlgbreakfast.ui \
     dlgbanket.ui \
@@ -287,9 +294,16 @@ FORMS    += rface.ui \
     dlgpayment.ui \
     dlgdeptholder.ui \
     dlgprinttaxnew.ui \
-    dlgsalary.ui
+    dlgsalary.ui \
+    ../Resort/dlgprinttaxsm.ui \
+    ../Resort/message.ui \
+    ../Print/printtax.ui
 
 LIBS += -lVersion
+LIBS += -LC:/OpenSSL-Win32/lib
+LIBS += -lopenssl
+LIBS += -llibcrypto
+LIBS +=  -lwsock32
 
 RESOURCES += \
     res.qrc

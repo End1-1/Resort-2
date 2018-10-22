@@ -12,6 +12,7 @@
 
 class BaseExtendedDialog : public BaseDialog
 {
+    Q_OBJECT
 public:
     BaseExtendedDialog(QWidget *parent = 0);
     ~BaseExtendedDialog();

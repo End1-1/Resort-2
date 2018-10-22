@@ -1,1 +1,0 @@
-select f_address, f_port, f_password, f_adg, f_hall, f_menu from s_tax_print where upper(f_comp)=upper('comp-2')

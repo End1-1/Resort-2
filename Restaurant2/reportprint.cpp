@@ -225,6 +225,11 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
               "where h.f_state=:f_state and h.f_dateCash=:f_dateCash ", rp.fDbBind);;
 
     th.setTextAlignment(Qt::AlignCenter);
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     top += ps->addTextRect(10, top, 680, rowHeight, tr("Total Finally"), &th)->textHeight();
     ps->addTextRect(10, top, 680, rowHeight, tr("Total"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble()
@@ -232,6 +237,11 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                                                                +drFinalWash.value("f_debt").toDouble()
                                                                +drFinalWash.value("f_coupon").toDouble()
                                                                , 2), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Card"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_card").toDouble(), 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
@@ -269,7 +279,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     printer.setPrinterName(prn);
     QMatrix m;
 #ifdef QT_DEBUG
-    m.scale(0.5, 0.5);
+    m.scale(3, 3);
 #else
     m.scale(3, 3);
 #endif

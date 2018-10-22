@@ -11,3 +11,12 @@ BaseExtendedDialog::BaseExtendedDialog(QWidget *parent) :
 {
 
 }
+
+BaseExtendedDialog::~BaseExtendedDialog() {
+
+}
+
+bool BaseExtendedDialog::event(QEvent *event)
+{
+    return BaseDialog::event(event);
+}
