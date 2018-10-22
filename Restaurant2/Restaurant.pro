@@ -12,6 +12,7 @@ TARGET = Restaurant
 TEMPLATE = app
 
 DEFINES += _WASH_
+DEFINES += _RESTAURANT_
 
 RC_FILE = res.rc
 

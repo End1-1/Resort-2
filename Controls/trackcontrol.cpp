@@ -98,6 +98,9 @@ bool TrackControl::hasChanges()
 
 void TrackControl::saveChanges()
 {
+#ifdef _RESTAURANT_
+    return;
+#endif
     if (Base::fPreferences.getDb(def_no_tracking_changes).toBool()) {
         return;
     }
@@ -166,6 +169,9 @@ void TrackControl::insertMessage(const QString &msg, const QString &v1, const QS
 
 void TrackControl::insert(const QString &action, const QVariant &value1, const QVariant &value2)
 {
+#ifdef _RESTAURANT_
+    return;
+#endif
     if (!fDb->open()) {
         QMessageBox::critical(0, tr("TrackControl error"), fDb->lastError().databaseText());
         return;
@@ -199,6 +205,9 @@ void TrackControl::insert(const QString &action, const QVariant &value1, const Q
 
 void TrackControl::insert(int table, const QString &action, const QVariant &value1, const QVariant &value2, const QString &record, const QString &invoice, const QString &reservation)
 {
+#ifdef _RESTAURANT_
+    return;
+#endif
     TrackControl tc(table);
     tc.fRecord = record;
     tc.fInvoice = invoice;
