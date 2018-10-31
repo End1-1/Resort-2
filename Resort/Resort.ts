@@ -7459,6 +7459,10 @@ ee</source>
         <source>Phone</source>
         <translation>Հեռախոս</translation>
     </message>
+    <message>
+        <source>Gov. num</source>
+        <translation>Պետ․ համարանիշ</translation>
+    </message>
 </context>
 <context>
     <name>FEvents</name>

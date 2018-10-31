@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
     Preferences p;
     p.initFromConfig();
 
-    /*
+
     QTranslator t;
     t.load(":/Resort.qm");
     a.installTranslator(&t);
-    */
+
 
     a.setStyle(QStyleFactory::create("fusion"));
 

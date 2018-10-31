@@ -1059,6 +1059,50 @@ And Save</source>
     </message>
 </context>
 <context>
+    <name>DlgPrintTaxSM</name>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.ui" line="14"/>
+        <source>Print tax</source>
+        <translation type="unfinished">Տպել ՀԴՄ</translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.ui" line="90"/>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.ui" line="113"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Հրաժարվել</translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="69"/>
+        <source>Printing advance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="82"/>
+        <source>Tax back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="192"/>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="202"/>
+        <source>The given tax number not exists in databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="200"/>
+        <source>Crn is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/dlgprinttaxsm.cpp" line="249"/>
+        <source>Retry printing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DlgReservation</name>
     <message>
         <location filename="dlgreservation.ui" line="14"/>
@@ -1473,6 +1517,19 @@ And Save</source>
         <location filename="../Print/printtax.ui" line="390"/>
         <source>Cancel</source>
         <translation type="unfinished">Հրաժարվել</translation>
+    </message>
+</context>
+<context>
+    <name>PrintTaxN</name>
+    <message>
+        <location filename="../../NewTax/printtaxn.cpp" line="65"/>
+        <source>Socket read error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../NewTax/printtaxn.cpp" line="73"/>
+        <source>Data read timeout</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2735,20 +2792,20 @@ removed items</source>
     <name>ReportPrint</name>
     <message>
         <location filename="reportprint.cpp" line="32"/>
-        <location filename="reportprint.cpp" line="304"/>
+        <location filename="reportprint.cpp" line="314"/>
         <source>CASH TOTAL REPORT</source>
         <translation>ԴՐԱՄԱՐԿՂԻ ՀԱՇՎԵՏՎՈՒԹՅՈՒՆ</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="35"/>
-        <location filename="reportprint.cpp" line="307"/>
+        <location filename="reportprint.cpp" line="317"/>
         <source>Printed by </source>
         <oldsource>Printed by</oldsource>
         <translation>Տպված</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="36"/>
-        <location filename="reportprint.cpp" line="308"/>
+        <location filename="reportprint.cpp" line="318"/>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
@@ -2775,8 +2832,8 @@ removed items</source>
     </message>
     <message>
         <location filename="reportprint.cpp" line="180"/>
-        <location filename="reportprint.cpp" line="235"/>
-        <location filename="reportprint.cpp" line="383"/>
+        <location filename="reportprint.cpp" line="245"/>
+        <location filename="reportprint.cpp" line="393"/>
         <source>Card</source>
         <translation>Քարտ</translation>
     </message>
@@ -2787,8 +2844,8 @@ removed items</source>
     </message>
     <message>
         <location filename="reportprint.cpp" line="184"/>
-        <location filename="reportprint.cpp" line="242"/>
-        <location filename="reportprint.cpp" line="390"/>
+        <location filename="reportprint.cpp" line="252"/>
+        <location filename="reportprint.cpp" line="400"/>
         <source>Debt</source>
         <translation>Պարտք</translation>
     </message>
@@ -2799,28 +2856,28 @@ removed items</source>
     </message>
     <message>
         <location filename="reportprint.cpp" line="193"/>
-        <location filename="reportprint.cpp" line="249"/>
-        <location filename="reportprint.cpp" line="341"/>
-        <location filename="reportprint.cpp" line="397"/>
+        <location filename="reportprint.cpp" line="259"/>
+        <location filename="reportprint.cpp" line="351"/>
+        <location filename="reportprint.cpp" line="407"/>
         <source>Salary</source>
         <translation>Աշխատավարձ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="228"/>
-        <location filename="reportprint.cpp" line="376"/>
+        <location filename="reportprint.cpp" line="233"/>
+        <location filename="reportprint.cpp" line="386"/>
         <source>Total Finally</source>
         <oldsource>Finally, wash</oldsource>
         <translation>ՎԵՐՋՆԱՀԱՇՎԱՐԿ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="229"/>
-        <location filename="reportprint.cpp" line="377"/>
+        <location filename="reportprint.cpp" line="234"/>
+        <location filename="reportprint.cpp" line="387"/>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="257"/>
-        <location filename="reportprint.cpp" line="405"/>
+        <location filename="reportprint.cpp" line="267"/>
+        <location filename="reportprint.cpp" line="415"/>
         <source>Finally</source>
         <translation>Մնացորդ</translation>
     </message>
@@ -2836,11 +2893,50 @@ removed items</source>
 <context>
     <name>TrackControl</name>
     <message>
-        <location filename="../Controls/trackcontrol.cpp" line="170"/>
-        <location filename="../Controls/trackcontrol.cpp" line="175"/>
-        <location filename="../Controls/trackcontrol.cpp" line="192"/>
+        <location filename="../Controls/trackcontrol.cpp" line="176"/>
+        <location filename="../Controls/trackcontrol.cpp" line="181"/>
+        <location filename="../Controls/trackcontrol.cpp" line="198"/>
         <source>TrackControl error</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>message</name>
+    <message>
+        <location filename="../Resort/message.ui" line="25"/>
+        <source>&lt;html&gt;&lt;body style=&quot;background-color:green&quot;&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/images/app.png&quot;&gt;&lt;/p&gt;
+    &lt;p align=&quot;center&quot; style=&quot;font-size:12px; color:black;&quot;&gt;This is a river&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="54"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ընդունել</translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="61"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="68"/>
+        <source>Yes</source>
+        <translation type="unfinished">Այո</translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="75"/>
+        <source>No</source>
+        <translation type="unfinished">Ոչ</translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="82"/>
+        <source>No all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Resort/message.ui" line="89"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Հրաժարվել</translation>
     </message>
 </context>
 </TS>

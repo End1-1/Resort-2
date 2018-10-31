@@ -33,11 +33,12 @@ void FDiscountTotal::apply(WReportGrid *rg)
     rg->fModel->clearColumns();
     rg->fModel->setColumn(0, "", tr("Costumer"))
             .setColumn(300, "", tr("Costumer"))
-            .setColumn(120, "", tr("Phone"))
-            .setColumn(200, "", tr("Numbers"))
+            .setColumn(200, "", tr("Gov. num"))
+            .setColumn(120, "", tr("Phone"))            
             .setColumn(80, "", tr("Qty"))
-            .setColumn(80, "", tr("Amount"));
-    QString sql = "select oc.f_costumer, dh.f_name, dh.f_info, g.f_gov, count(h.f_id), sum(h.f_total) "
+            .setColumn(80, "", tr("Amount"))
+            .setColumn(200, "", tr("Numbers"));
+    QString sql = "select oc.f_costumer, dh.f_name, oc.f_govNumber, dh.f_info, count(h.f_id), sum(h.f_total), g.f_gov "
                   " from o_car oc "
                   "left join o_debt_holder dh on dh.f_id=oc.f_costumer "
                   "left join (select f_holder, group_concat(f_govNumber) as f_gov from o_debt_holder_car group by 1) g on g.f_holder=dh.f_id "
