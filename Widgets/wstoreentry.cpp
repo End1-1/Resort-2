@@ -385,8 +385,8 @@ void WStoreEntry::on_btnCalculate_clicked()
     for (int i = 0; i < ui->tblData->rowCount(); i++) {
         double amount = ui->tblData->lineEdit(i, 3)->asDouble() * price[ui->tblData->toInt(i, 1)];
         total += amount;
-        ui->tblData->lineEdit(i, 5)->setDouble(amount);
-        ui->tblData->lineEdit(i, 4)->setDouble(price[ui->tblData->toInt(i, 1)]);
+        ui->tblData->lineEdit(i, 6)->setDouble(amount);
+        ui->tblData->lineEdit(i, 5)->setDouble(price[ui->tblData->toInt(i, 1)]);
         fDbBind[":f_amount"] = amount;
         fDb.update("st_body", fDbBind, where_id(ui->tblData->toInt(i, 0)));
     }
