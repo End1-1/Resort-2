@@ -40,14 +40,15 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     ReportPrint rp;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
-    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD) "
+    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber "
                   "from o_Header oh "
                   "inner join r_hall h on h.f_id=oh.f_hall "
                   "inner join r_table t on t.f_id=oh.f_table "
                   "inner join o_dish d on d.f_header=oh.f_id "
+                  "left join o_car oc on oc.f_order=oh.f_id "
                   "where oh.f_state=:f_state and d.f_state=1 "
                   "and oh.f_dateCash=:f_dateCash "
-                  "group by 1, 2, 3, 4, 5 "
+                  "group by 1, 2, 3, 4, 5, 8 "
                   "order by 1, 2, oh.f_id ",
                   rp.fDbBind, rp.fDbRows);
     QString currHall = "";
@@ -102,7 +103,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         total += row.at(5).toDouble();
         total2 += row.at(6).toDouble();
         count++;
-        ps->addTextRect(10, top, 250, rowHeight, row.at(2).toString(), &th);
+        ps->addTextRect(10, top, 250, rowHeight, row.at(2).toString() + "/" + row.at(7).toString(), &th);
         ps->addTextRect(255, top, 195, rowHeight, row.at(3).toString(), &th);
         double s1 = row.at(5).toDouble();
         double s2 = row.at(6).toDouble();
