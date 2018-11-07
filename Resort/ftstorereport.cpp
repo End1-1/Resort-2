@@ -69,6 +69,8 @@ void FTStoreReport::apply(WReportGrid *rg)
             .setColumn(80, "", tr("Begin, amount"))
             .setColumn(80, "", tr("Input, qty"))
             .setColumn(80, "", tr("Input, amount"))
+            .setColumn(80, "", tr("Auto input, qty"))
+            .setColumn(80, "", tr("Auto input, amount"))
             .setColumn(80, "", tr("Output, qty"))
             .setColumn(80, "", tr("Output, amount"))
             .setColumn(80, "", tr("Final, qty"))
@@ -82,6 +84,8 @@ void FTStoreReport::apply(WReportGrid *rg)
         dateMap[d1.addDays(i)] = i;
         QList<QVariant> row;
         row << d1.addDays(i)
+            << 0
+            << 0
             << 0
             << 0
             << 0
@@ -104,8 +108,9 @@ void FTStoreReport::apply(WReportGrid *rg)
     if (!ui->lePartner->isEmpty()) {
         where += " and d.f_partner in (" + ui->lePartner->fHiddenText + ") ";
     }
+    //input, auto input, out
     QString query = "select d.f_date, "
-            "b.f_material as matcode, m.f_en as f_material, b.f_qty, b.f_price, b.f_total, b.f_sign "
+            "b.f_material as matcode, m.f_en as f_material, b.f_qty, b.f_price, b.f_total, b.f_sign, d.f_remarks "
             "from r_body b "
             "left join r_docs d on d.f_id=b.f_doc "
             "left join r_partners pn on pn.f_id=d.f_partner "
@@ -119,9 +124,13 @@ void FTStoreReport::apply(WReportGrid *rg)
         r = dateMap[fDbRows.at(i).at(0).toDate()];
         int col;
         if (fDbRows.at(i).at(6).toInt() == 1) {
-            col = 3;
+            if (fDbRows.at(i).at(7).toString() == "AUTO INPUT") {
+                col = 5;
+            } else {
+                col = 3;
+            }
         } else {
-            col = 5;
+            col = 7;
         }
         rg->fModel->setData(r, col, rg->fModel->data(r, col).toDouble() + fDbRows.at(i).at(3).toDouble());
         rg->fModel->setData(r, col + 1, rg->fModel->data(r, col + 1).toDouble() + fDbRows.at(i).at(5).toDouble());
@@ -134,6 +143,7 @@ void FTStoreReport::apply(WReportGrid *rg)
     if (!ui->leGoods->isEmpty()) {
         where += " and b.f_material in (" + ui->leGoods->fHiddenText + ") ";
     }
+    //begin
     query = "select sum(b.f_qty*b.f_sign) as f_qty, "
             "sum(b.f_total)/sum(b.f_qty) as f_price, sum(b.f_total*b.f_sign) as f_total "
             "from r_body b "
@@ -149,32 +159,34 @@ void FTStoreReport::apply(WReportGrid *rg)
     }
 
     for (int i = 0; i < rg->fModel->rowCount(); i++) {
-        rg->fModel->setData(i, 7, rg->fModel->data(i, 1, Qt::EditRole).toDouble()
+        rg->fModel->setData(i, 9, rg->fModel->data(i, 1, Qt::EditRole).toDouble()
                             + rg->fModel->data(i, 3, Qt::EditRole).toDouble()
-                            - rg->fModel->data(i, 5, Qt::EditRole).toDouble());
-        rg->fModel->setData(i, 8, rg->fModel->data(i, 2, Qt::EditRole).toDouble()
+                            + rg->fModel->data(i, 5, Qt::EditRole).toDouble()
+                            - rg->fModel->data(i, 7, Qt::EditRole).toDouble());
+        rg->fModel->setData(i, 10, rg->fModel->data(i, 2, Qt::EditRole).toDouble()
                             + rg->fModel->data(i, 4, Qt::EditRole).toDouble()
-                            - rg->fModel->data(i, 6, Qt::EditRole).toDouble());
+                            + rg->fModel->data(i, 6, Qt::EditRole).toDouble()
+                            - rg->fModel->data(i, 8, Qt::EditRole).toDouble());
         if (i < rg->fModel->rowCount() - 1) {
-            rg->fModel->setData(i + 1, 1, rg->fModel->data(i, 7, Qt::EditRole));
-            rg->fModel->setData(i + 1, 2, rg->fModel->data(i, 8, Qt::EditRole));
+            rg->fModel->setData(i + 1, 1, rg->fModel->data(i, 9, Qt::EditRole));
+            rg->fModel->setData(i + 1, 2, rg->fModel->data(i, 10, Qt::EditRole));
         }
     }
 
     QList<int> cols;
-    cols << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8;
+    cols << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10;
     QList<double> vals;
     rg->fModel->sumOfColumns(cols, vals);
     if (vals.count() > 0 && rg->fModel->rowCount() > 0) {
         vals[0] = rg->fModel->data(0, 1, Qt::EditRole).toDouble();
         vals[1] = rg->fModel->data(0, 2, Qt::EditRole).toDouble();
-        vals[6] = vals[0] + vals[2] - vals[4];
-        vals[7] = vals[1] + vals[3] - vals[5];
+        vals[7] = vals[0] + vals[2] + vals[4] - vals[6];
+        vals[8] = vals[1] + vals[3] + vals[5] - vals[7];
         rg->setTblTotalData(cols, vals);
     }
 
     for (int i = rg->fModel->rowCount() - 1; i > -1; i--) {
-        if (rg->fModel->data(i, 3, Qt::EditRole).toDouble() < 0.001 && rg->fModel->data(i, 5, Qt::EditRole).toDouble() < 0.001) {
+        if (rg->fModel->data(i, 3, Qt::EditRole).toDouble() < 0.001 && rg->fModel->data(i, 5, Qt::EditRole).toDouble() < 0.001 && rg->fModel->data(i, 7, Qt::EditRole).toDouble() < 0.001) {
             rg->fModel->removeRow(i);
         }
     }

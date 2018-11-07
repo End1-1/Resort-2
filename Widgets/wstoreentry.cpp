@@ -343,88 +343,102 @@ void WStoreEntry::on_btnCalculate_clicked()
         return;
     }
 
-    QString docId = uuid("ST", fAirDb);
-    fDbBind[":f_id"] = docId;
-    fDb.insertWithoutId("r_docs", fDbBind);
-    fDbBind[":f_date"] = ui->deDate->date();
-    fDbBind[":f_type"] = 3;
-    fDbBind[":f_state"] = 1;
-    fDbBind[":f_partner"] = 0;
-    fDbBind[":f_inv"] = "";
-    //fDbBind[":f_invDate"] = ui->leInvoiceNo->isEmpty() ? QVariant() : QVariant(ui->deInvoiceDate->date());
-    fDbBind[":f_amount"] = 0;
-    fDbBind[":f_remarks"] = "AUTO OUT";
-    fDbBind[":f_op"] = WORKING_USERID;
-    fDbBind[":f_fullDate"] = QDateTime::currentDateTime();
-    fDbBind[":f_payment"] = 1;
-    fDb.update("r_docs", fDbBind, where_id(ap(docId)));
-
     double total = 0;
-    for (QMap<int, double>::const_iterator it = qty.begin(); it != qty.end(); it++) {
-        if (it.value() == 0) {
-            continue;
+    for (int i = 0; i < 2; i++) {
+        total = 0;
+        bool doccreated = false;
+        QString docId;
+        for (QMap<int, double>::const_iterator it = qty.begin(); it != qty.end(); it++) {
+            if (it.value() == 0) {
+                continue;
+            }
+            qDebug() << "value" << it.value();
+            if (i == 0) {
+                if (it.value() < 0) {
+                    continue;
+                }
+            } else if (it.value() > 0) {
+                continue;
+            }
+            if (!doccreated) {
+                docId = uuid("ST", fAirDb);
+                fDbBind[":f_id"] = docId;
+                fDb.insertWithoutId("r_docs", fDbBind);
+                fDbBind[":f_date"] = ui->deDate->date();
+                fDbBind[":f_type"] = i == 0 ? 3 : 1;
+                fDbBind[":f_state"] = 1;
+                fDbBind[":f_partner"] = 0;
+                fDbBind[":f_inv"] = "";
+                //fDbBind[":f_invDate"] = ui->leInvoiceNo->isEmpty() ? QVariant() : QVariant(ui->deInvoiceDate->date());
+                fDbBind[":f_amount"] = 0;
+                fDbBind[":f_remarks"] = i == 0 ? "AUTO OUT" : "AUTO INPUT";
+                fDbBind[":f_op"] = WORKING_USERID;
+                fDbBind[":f_fullDate"] = QDateTime::currentDateTime();
+                fDbBind[":f_payment"] = 1;
+                fDb.update("r_docs", fDbBind, where_id(ap(docId)));
+                doccreated = true;
+            }
+            fDbBind[":f_id"] = 0;
+            int newid = fDb.insert("r_body", fDbBind);
+            fDbBind[":f_doc"] = docId;
+            fDbBind[":f_store"] = ui->leStore->asInt();
+            fDbBind[":f_material"] = it.key();
+            fDbBind[":f_sign"] = i == 0 ? -1 : 1;
+            fDbBind[":f_qty"] = abs(it.value());
+            fDbBind[":f_price"] = price[it.key()];
+            fDbBind[":f_total"] =  price[it.key()] * abs(it.value());
+            total += price[it.key()] * abs(it.value());
+            fDb.update("r_body", fDbBind, where_id(newid));
         }
-        fDbBind[":f_id"] = 0;
-        int newid = fDb.insert("r_body", fDbBind);
-        fDbBind[":f_doc"] = docId;
+
+        fDbBind[":f_amount"] = total;
+        fDb.update("r_docs", fDbBind, where_id(ap(docId)));
+    }
+
+        total = 0;
+        for (int i = 0; i < ui->tblData->rowCount(); i++) {
+            double amount = ui->tblData->lineEdit(i, 3)->asDouble() * price[ui->tblData->toInt(i, 1)];
+            total += amount;
+            ui->tblData->lineEdit(i, 6)->setDouble(amount);
+            ui->tblData->lineEdit(i, 5)->setDouble(price[ui->tblData->toInt(i, 1)]);
+            fDbBind[":f_amount"] = amount;
+            fDb.update("st_body", fDbBind, where_id(ui->tblData->toInt(i, 0)));
+        }
+
+        fDbBind[":f_amount"] = total;
+        fDb.update("st_header", fDbBind, where_id(ui->leDocNum->asInt()));
+
+        /* missing prices from &*/
+        for (QMap<int, A>::const_iterator it = goodsList.begin(); it != goodsList.end(); it++) {
+            if (it.value().qty > 0.001) {
+                price[it.key()] =  it.value().total / it.value().qty;
+            } else {
+                price[it.key()] =  0;
+            }
+        }
+        /* ------------------- */
+
+        fDbBind[":date2"]  = ui->deDate->date();
+        fDbBind[":date1"] = ui->deLastDate->date();
         fDbBind[":f_store"] = ui->leStore->asInt();
-        fDbBind[":f_material"] = it.key();
-        fDbBind[":f_sign"] = -1;
-        fDbBind[":f_qty"] = it.value();
-        fDbBind[":f_price"] = price[it.key()];
-        fDbBind[":f_total"] =  price[it.key()] * it.value();
-        total += price[it.key()] * it.value();
-        QMap<QString, QVariant> b = fDbBind;
-        fDb.update("r_body", fDbBind, where_id(newid));
-    }
-
-    fDbBind[":f_amount"] = total;
-    fDb.update("r_docs", fDbBind, where_id(ap(docId)));
-
-    total = 0;
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        double amount = ui->tblData->lineEdit(i, 3)->asDouble() * price[ui->tblData->toInt(i, 1)];
-        total += amount;
-        ui->tblData->lineEdit(i, 6)->setDouble(amount);
-        ui->tblData->lineEdit(i, 5)->setDouble(price[ui->tblData->toInt(i, 1)]);
-        fDbBind[":f_amount"] = amount;
-        fDb.update("st_body", fDbBind, where_id(ui->tblData->toInt(i, 0)));
-    }
-
-    fDbBind[":f_amount"] = total;
-    fDb.update("st_header", fDbBind, where_id(ui->leDocNum->asInt()));
-
-    /* missing prices from &*/
-    for (QMap<int, A>::const_iterator it = goodsList.begin(); it != goodsList.end(); it++) {
-        if (it.value().qty > 0.001) {
-            price[it.key()] =  it.value().total / it.value().qty;
-        } else {
-            price[it.key()] =  0;
+        dr.select(fDb, "select b.f_id, b.f_material from r_body b left join r_docs d on d.f_id=b.f_doc "
+                  "where d.f_type in (2, 3) and d.f_state=1 and d.f_date between :date1 and :date2 and f_store=:f_store ", fDbBind);
+        for (int i = 0; i < dr.rowCount(); i++) {
+            fDbBind[":f_id"] = dr.value(i, "f_id");
+            fDbBind[":f_price"] = price[dr.value(i, "f_material").toInt()];
+            fDb.select("update r_body set f_price=:f_price where f_id=:f_id", fDbBind, fDbRows);
+            fDbBind[":f_id"] = dr.value(i, "f_id");
+            fDb.select("update r_body set f_total=f_price*f_qty where f_id=:f_id", fDbBind, fDbRows);
         }
-    }
-    /* ------------------- */
 
-    fDbBind[":date2"]  = ui->deDate->date();
-    fDbBind[":date1"] = ui->deLastDate->date();
-    fDbBind[":f_store"] = ui->leStore->asInt();
-    dr.select(fDb, "select b.f_id, b.f_material from r_body b left join r_docs d on d.f_id=b.f_doc "
-              "where d.f_type in (2, 3) and d.f_state=1 and d.f_date between :date1 and :date2 and f_store=:f_store ", fDbBind);
-    for (int i = 0; i < dr.rowCount(); i++) {
-        fDbBind[":f_id"] = dr.value(i, "f_id");
-        fDbBind[":f_price"] = price[dr.value(i, "f_material").toInt()];
-        fDb.select("update r_body set f_price=:f_price where f_id=:f_id", fDbBind, fDbRows);
-        fDbBind[":f_id"] = dr.value(i, "f_id");
-        fDb.select("update r_body set f_total=f_price*f_qty where f_id=:f_id", fDbBind, fDbRows);
-    }
-
-    fDbBind[":date2"]  = ui->deDate->date();
-    fDbBind[":date1"] = ui->deLastDate->date();
-    dr.select(fDb, "select b.f_doc, sum(b.f_total) as f_total from r_body b left join r_docs d on d.f_id=b.f_doc "
-              "where ((d.f_type in (2) and d.f_state=1 and b.f_sign=1) or (d.f_type in (3) and d.f_state=1 and b.f_sign=-1)) and d.f_date between :date1 and :date2 group by 1", fDbBind);
-    for (int i = 0; i < dr.rowCount(); i++) {
-        fDbBind[":f_amount"] = dr.value(i, "f_total");
-        fDb.update("r_docs", fDbBind, where_id(ap(dr.value(i, "f_doc").toString())));
-    }
+        fDbBind[":date2"]  = ui->deDate->date();
+        fDbBind[":date1"] = ui->deLastDate->date();
+        dr.select(fDb, "select b.f_doc, sum(b.f_total) as f_total from r_body b left join r_docs d on d.f_id=b.f_doc "
+                  "where ((d.f_type in (2) and d.f_state=1 and b.f_sign=1) or (d.f_type in (3) and d.f_state=1 and b.f_sign=-1)) and d.f_date between :date1 and :date2 group by 1", fDbBind);
+        for (int i = 0; i < dr.rowCount(); i++) {
+            fDbBind[":f_amount"] = dr.value(i, "f_total");
+            fDb.update("r_docs", fDbBind, where_id(ap(dr.value(i, "f_doc").toString())));
+        }
 
     message_info(tr("Saved"));
 }

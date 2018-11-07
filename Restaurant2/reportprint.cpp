@@ -40,8 +40,9 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     ReportPrint rp;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
-    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber "
+    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber, hp.f_discountcard "
                   "from o_Header oh "
+                  "left join o_header_payment hp on hp.f_id=oh.f_id "
                   "inner join r_hall h on h.f_id=oh.f_hall "
                   "inner join r_table t on t.f_id=oh.f_table "
                   "inner join o_dish d on d.f_header=oh.f_id "
@@ -108,13 +109,32 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         double s1 = row.at(5).toDouble();
         double s2 = row.at(6).toDouble();
         QString s3 = float_str(s1, 0);
+        bool addline = false;
+        DatabaseResult drcard;
         if (s1 < s2) {
             s3 = QString("%1 [%2]").arg(float_str(s1, 0)).arg(float_str(s2, 0));
+            qDebug() << row;
+            rp.fDbBind[":f_card"] = row.at(8);
+            drcard.select(rp.fDb, "select f_name from d_car_client where f_card=:f_card", rp.fDbBind);
+            if (drcard.rowCount() > 0) {
+                addline = true;
+            }
+
         }
         top += ps->addTextRect(new PTextRect(460, top, 200, rowHeight,  s3, &th, f))->textHeight();
         if ( row.at(4).toString().length() > 0) {
             top += ps->addTextRect(10, top, 680, rowHeight, row.at(4).toString(), &th)->textHeight();
             top += 5;
+        }
+        if (addline) {
+            /*
+            top += ps->addTextRect(0, top, 680, rowHeight, drcard.value(0).toString(), &th)->textHeight();
+            if (top > sizePortrait.height() - 200) {
+                top = 10;
+                ps = new PPrintScene(Portrait);
+                lps.append(ps);
+            }
+            */
         }
         ps->addLine(10, top, 680, top, dotPen);
         if (top > sizePortrait.height() - 200) {
@@ -250,6 +270,25 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         ps = new PPrintScene(Portrait);
         lps.append(ps);
     }
+
+    /* i dont know why */
+    rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_dateCash"] = date;
+    rp.fDb.select(QString("select hp.f_id,  '%1' as bb "
+                  "from o_Header oh "
+                  "left join o_header_payment hp on hp.f_id=oh.f_id "
+                  "where oh.f_state=:f_state and oh.f_dateCash=:f_dateCash and hp.f_discountcard like '555%' ")
+                  .arg(QString::fromUtf8("Նվեր քարդ")),
+                  rp.fDbBind, rp.fDbRows);
+    foreach (QList<QVariant> row, rp.fDbRows) {
+        top += ps->addTextRect(0, top, 680, rowHeight, row.at(0).toString() + " " + row.at(1).toString(), &th)->textHeight();
+        if (top > sizePortrait.height() - 200) {
+            top = 10;
+            ps = new PPrintScene(Portrait);
+            lps.append(ps);
+        }
+    }
+
     ps->addTextRect(10, top, 680, rowHeight, tr("Debt"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_debt").toDouble(), 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
@@ -280,7 +319,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     printer.setPrinterName(prn);
     QMatrix m;
 #ifdef QT_DEBUG
-    m.scale(3, 3);
+    m.scale(1, 1);
 #else
     m.scale(3, 3);
 #endif

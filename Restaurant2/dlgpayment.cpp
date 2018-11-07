@@ -257,11 +257,12 @@ void DlgPayment::on_leDiscount_returnPressed()
     ui->leDiscount->setText(code);
     DatabaseResult dr;
     fDbBind[":f_card"] = code;
-    dr.select(fDb, "select f_id, f_name, f_mode from d_car_client where f_card=:f_card", fDbBind);
+    dr.select(fDb, "select f_id, f_name, f_mode, f_model from d_car_client where f_card=:f_card", fDbBind);
     if (dr.rowCount() == 0) {
         message_error(tr("Invalid card"));
         return;
     }
+    int m = dr.value("f_model").toInt();
     ui->leCardHolder->setText(dr.value("f_name").toString());
     ui->leCardHolder->fHiddenText = dr.value("f_id").toString();
     QStringList mode = dr.value("f_mode").toString().split(";", QString::SkipEmptyParts);
@@ -277,8 +278,10 @@ void DlgPayment::on_leDiscount_returnPressed()
     QString value = mode.at(2);
     QStringList items = mode.at(3).split(",", QString::SkipEmptyParts);
     bool disc = false;
-    switch (mode.at(0).toInt()) {
-    case 1: {
+    double totalDisc = 0;
+    switch (m) {
+    case 1:
+    case 2: {
         DatabaseResult drv;
         fDbBind[":f_costumer"] = dr.value("f_id");
         fDbBind[":f_state"] = ORDER_STATE_CLOSED;
@@ -293,27 +296,59 @@ void DlgPayment::on_leDiscount_returnPressed()
         if ((dr.value("visits").toInt() > 0) && (cur == 0)) {
             disc = true;
         }
+        if (disc) {
+        for (int i = 0; i < dri.rowCount(); i++) {
+                if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
+                    double newPrice = dri.value(i, "f_price").toDouble() - (dri.value(i, "f_price").toDouble() * (value.toDouble() / 100));
+                    totalDisc += dri.value(i, "f_total").toDouble() - (dri.value(i, "f_qty").toDouble() * newPrice);
+                    fDbBind[":f_price"] = newPrice;
+                    fDbBind[":f_total"] = newPrice * dri.value(i, "f_qty").toDouble();
+                    //fDbBind[":f_totalUSD"] = newPrice * def_usd;
+                    fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
+                }
+            }
+        }
         break;
     }
-    case 2:
-        break;
-    case 3:
+    case 3: {
+        if (value.toDouble() < 0.001) {
+            disc = false;
+            return;
+        }
+        disc = true;
+        double balance = value.toDouble();
+        if (disc) {
+            for (int i = 0; i < dri.rowCount(); i++) {
+                if (balance < 0.01) {
+                    continue;
+                }
+                if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
+                    double itemTotal = dri.value(i, "f_qty").toDouble() * dri.value(i, "f_price").toDouble();
+                    if (balance >= itemTotal) {
+                        balance -= itemTotal;
+                        totalDisc += itemTotal;
+                        itemTotal = 0;
+                    } else {
+                        itemTotal -= balance;
+                        totalDisc += balance;
+                        balance = 0;
+                    }
+                    fDbBind[":f_price"] = itemTotal / dri.value(i, "f_qty").toDouble();
+                    fDbBind[":f_total"] = itemTotal;
+                    //fDbBind[":f_totalUSD"] = newPrice * def_usd;
+                    fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
+                }
+            }
+            fDbBind[":f_mode"] = QString("%1;%2;%3;%4;").arg("1").arg("0").arg(QString::number(balance,'f', 0)).arg(items.at(0));
+            fDb.update("d_car_client", fDbBind, where_id(dr.value(0).toInt()));
+        }
+    }
         break;
     }
     if (!disc) {
         return;
     }
-    double totalDisc = 0;
-    for (int i = 0; i < dri.rowCount(); i++) {
-        if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
-            double newPrice = dri.value(i, "f_price").toDouble() - (dri.value(i, "f_price").toDouble() * (value.toDouble() / 100));
-            totalDisc += dri.value(i, "f_total").toDouble() - (dri.value(i, "f_qty").toDouble() * newPrice);
-            fDbBind[":f_price"] = newPrice;
-            fDbBind[":f_total"] = newPrice * dri.value(i, "f_qty").toDouble();
-            //fDbBind[":f_totalUSD"] = newPrice * def_usd;
-            fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
-        }
-    }
+
     fDbBind[":f_total"] = totalDisc;
     fDbBind[":f_id"] = fOrder;
     fDb.select("update o_header set f_total=f_total-:f_total where f_id=:f_id", fDbBind, fDbRows);
