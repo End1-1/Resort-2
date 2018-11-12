@@ -171,3 +171,9 @@ void RTools::on_btnVisitStat_clicked()
     accept();
     fDesk->visitStat();
 }
+
+void RTools::on_btnCheckCard_clicked()
+{
+    accept();
+    fDesk->checkCardAmount();
+}

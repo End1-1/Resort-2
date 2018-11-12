@@ -46,6 +46,7 @@
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QScrollBar>
+#include <QInputDialog>
 
 QMap<int, DishStruct*> RDesk::fQuickDish;
 
@@ -1066,6 +1067,27 @@ void RDesk::visitStat()
     }
 
     message_info(msg);
+}
+
+void RDesk::checkCardAmount()
+{
+    QString code = QInputDialog::getText(this, tr("Check card balance"), tr("Card number"), QLineEdit::Password);
+    if (code.isEmpty()) {
+        return;
+    }
+    DatabaseResult dr;
+    fDbBind[":f_card"] = code;
+    dr.select(fDb, "select f_mode from d_car_client where f_card=:f_card", fDbBind);
+    if (dr.rowCount() == 0) {
+        message_error(tr("Invalid card code"));
+        return;
+    }
+    QStringList l = dr.value(0).toString().split(";");
+    if (l.count() < 0) {
+        message_error(tr("Card error"));
+        return;
+    }
+    message_info(tr("Balance") + "<br>" + l.at(2));
 }
 
 void RDesk::cardStat()

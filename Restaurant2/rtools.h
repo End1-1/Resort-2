@@ -64,6 +64,8 @@ private slots:
 
     void on_btnVisitStat_clicked();
 
+    void on_btnCheckCard_clicked();
+
 private:
     Ui::RTools *ui;
     RDesk *fDesk;

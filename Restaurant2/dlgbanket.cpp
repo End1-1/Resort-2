@@ -209,7 +209,7 @@ void DlgBanket::printTax()
 
 }
 
-bool DlgBanket::isCorrect()
+bool DlgBanket::isCorrect(bool draft)
 {
     if (ui->leService->fHiddenText.toInt() == 0) {
         message_error(tr("Service was not selected"));
@@ -223,13 +223,17 @@ bool DlgBanket::isCorrect()
         message_error(tr("Incorrect price"));
         return false;
     }
-    if (ui->leModeOfPayment->fHiddenText.toInt() == 0) {
-        message_error(tr("Mode of payment was not selected"));
-        return false;
+    if (!draft) {
+        if (ui->leModeOfPayment->fHiddenText.toInt() == 0) {
+            message_error(tr("Mode of payment was not selected"));
+            return false;
+        }
     }
-    if (ui->leHall->fHiddenText.toInt() == 0) {
-        message_error(tr("Hall was not selected"));
-        return false;
+    if (!draft) {
+        if (ui->leHall->fHiddenText.toInt() == 0) {
+            message_error(tr("Hall was not selected"));
+            return false;
+        }
     }
 
     if (message_question(tr("Really save?")) != QDialog::Accepted) {
@@ -359,7 +363,7 @@ void DlgBanket::on_btnPrintReceipt_clicked()
 
 void DlgBanket::on_btnSave_clicked()
 {
-    if (!isCorrect()) {
+    if (!isCorrect(false)) {
         return;
     }
 
@@ -474,7 +478,7 @@ void DlgBanket::on_btnComment_clicked()
 
 void DlgBanket::on_btnDraft_clicked()
 {
-    if (!isCorrect()) {
+    if (!isCorrect(true)) {
         return;
     }
 

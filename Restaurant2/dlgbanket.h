@@ -51,7 +51,7 @@ private:
     int fFiscal;
     QString fDoc;
     User *fUser;
-    bool isCorrect();
+    bool isCorrect(bool draft);
 };
 
 #endif // DLGBANKET_H

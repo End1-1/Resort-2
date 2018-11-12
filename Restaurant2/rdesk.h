@@ -55,6 +55,7 @@ public:
     void closeDay();
     void salary();
     void visitStat();
+    void checkCardAmount();
     void cardStat();
 protected:
     virtual void closeEvent(QCloseEvent *e);
