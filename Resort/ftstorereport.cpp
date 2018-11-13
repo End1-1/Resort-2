@@ -5,6 +5,7 @@
 #include "dwselectorreststore.h"
 #include "dwselectordish.h"
 #include "dwselectorstorepartners.h"
+#include "storedoc.h"
 
 #define SEL_DISH 1
 #define SEL_PARTNER 2
@@ -18,6 +19,8 @@ FTStoreReport::FTStoreReport(QWidget *parent) :
     connect(ui->wd, &WDate2::changed, [this]() {
         apply(fReportGrid);
     });
+
+    connect(fReportGrid, SIGNAL(doubleClickOnRow2(int,int,QList<QVariant>)), this, SLOT(doubleClickOnRow(int,int,QList<QVariant>)));
 
     DWSelectorRestStore *dockStore = new DWSelectorRestStore(this);
     dockStore->configure();
@@ -215,4 +218,41 @@ void FTStoreReport::setParams(const QString &store, const QString &goods)
     ui->leGoods->fHiddenText = goods;
     dockResponse<CI_Dish, CacheDish>(ui->leGoods, 0);
     apply(fReportGrid);
+}
+
+void FTStoreReport::doubleClickOnRow(int row, int column, const QList<QVariant> &values)
+{
+    Q_UNUSED(row);
+    if (ui->leGoods->fHiddenText.isEmpty()) {
+        return;
+    }
+    QString addAnd;
+    switch (column) {
+    case 3:
+    case 4:
+        addAnd += " and d.f_id in (select f_doc from r_body where f_sign=1 and f_material=:f_material) ";
+        break;
+    case 5:
+    case 6:
+        addAnd += " and d.f_id in (select f_doc from r_body where f_sign=1 and f_material=:f_material) and d.f_remarks='AUTO INPUT' ";
+        break;
+    case 7:
+    case 8:
+        addAnd += " and d.f_id in (select f_doc from r_body where f_sign=-1 and f_material=:f_material) ";
+        break;
+    default:
+        return;
+    }
+    DatabaseResult dr;
+    fDbBind[":f_date"] = values.at(0).toDate();
+    fDbBind[":f_material"] = ui->leGoods->fHiddenText.toInt();
+    dr.select(fDb, "select d.f_id from r_docs d "
+              "where d.f_state=1 and d.f_date=:f_date " + addAnd, fDbBind);
+    if (dr.rowCount() == 0) {
+        return;
+    }
+    for (int i = 0; i < dr.rowCount(); i++) {
+        StoreDoc *d = addTab<StoreDoc>();
+        d->loadDoc(dr.value(0).toString());
+    }
 }

@@ -157,6 +157,7 @@ private:
 
 signals:
     void doubleClickOnRow(const QList<QVariant> &values);
+    void doubleClickOnRow2(int row, int column, const QList<QVariant> &values);
     void clickOnRow(int row);
     void newBtn();
 };

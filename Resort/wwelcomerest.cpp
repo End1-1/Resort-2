@@ -4,6 +4,7 @@
 #include "recarclient.h"
 #include "ftstorereport.h"
 #include "wreportgrid.h"
+#include "fbalanceoncard.h"
 
 wwelcomerest::wwelcomerest(QWidget *parent) :
     BaseWidget(parent),
@@ -248,4 +249,9 @@ void wwelcomerest::on_btnCustomers_3_clicked()
 void wwelcomerest::on_btnTStore_clicked()
 {
     FTStoreReport::openFilterReport<FTStoreReport, WReportGrid>();
+}
+
+void wwelcomerest::on_btnCardBalances_clicked()
+{
+    FBalanceOnCard::openFilterReport<FBalanceOnCard, WReportGrid>();
 }

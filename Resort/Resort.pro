@@ -436,7 +436,8 @@ SOURCES += main.cpp\
     ../Filter/fdiscountfullstat.cpp \
     ../Cache/cacheunit.cpp \
     ../Selector/dwselectorunit.cpp \
-    ftstorereport.cpp
+    ftstorereport.cpp \
+    ../Filter/fbalanceoncard.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
@@ -860,7 +861,8 @@ HEADERS  += mainwindow.h \
     ../Filter/fdiscountfullstat.h \
     ../Cache/cacheunit.h \
     ../Selector/dwselectorunit.h \
-    ftstorereport.h
+    ftstorereport.h \
+    ../Filter/fbalanceoncard.h
 
 FORMS    += mainwindow.ui \
     login.ui \
@@ -1080,7 +1082,8 @@ FORMS    += mainwindow.ui \
     ../Filter/fexportreservation.ui \
     dlgreservationguests.ui \
     ../Filter/fdiscountfullstat.ui \
-    ftstorereport.ui
+    ftstorereport.ui \
+    ../Filter/fbalanceoncard.ui
 
 RESOURCES += \
     res.qrc

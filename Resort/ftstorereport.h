@@ -21,6 +21,9 @@ public:
     void setParams(const QString &store, const QString &goods);
 private:
     Ui::FTStoreReport *ui;
+
+private slots:
+    void doubleClickOnRow(int row, int column, const QList<QVariant> &values);
 };
 
 #endif // FTSTOREREPORT_H

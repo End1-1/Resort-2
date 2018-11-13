@@ -6096,6 +6096,29 @@ ee</source>
     </message>
 </context>
 <context>
+    <name>FBalanceOnCard</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Balances on the card</source>
+        <translation>Քարտերի բալանս</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Անվանում</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Տեղեկություններ</translation>
+    </message>
+    <message>
+        <source>Balance</source>
+        <translation>Բալանս</translation>
+    </message>
+</context>
+<context>
     <name>FBreakfast</name>
     <message>
         <source>Form</source>
@@ -9489,11 +9512,11 @@ ledger</source>
     </message>
     <message>
         <source>Invoice</source>
-        <translation>ՀԱ</translation>
+        <translation type="vanished">ՀԱ</translation>
     </message>
     <message>
         <source>Invoice date</source>
-        <translation>ՀԱ ամսաթիվ</translation>
+        <translation type="vanished">ՀԱ ամսաթիվ</translation>
     </message>
     <message>
         <source>Operator</source>
@@ -9687,6 +9710,14 @@ ledger</source>
     <message>
         <source>Final, amount</source>
         <translation>Գումար, մնացորդ</translation>
+    </message>
+    <message>
+        <source>Auto input, qty</source>
+        <translation>Ավտոմուտք, քնկ</translation>
+    </message>
+    <message>
+        <source>Auto input, amount</source>
+        <translation>Ավտոմուտք, գումար</translation>
     </message>
 </context>
 <context>
@@ -18407,6 +18438,12 @@ cards, present</source>
     <message>
         <source>T Report</source>
         <translation>T-հաշիվ</translation>
+    </message>
+    <message>
+        <source>Balances
+on the cards</source>
+        <translation>Քարտերի
+բալանս</translation>
     </message>
 </context>
 </TS>

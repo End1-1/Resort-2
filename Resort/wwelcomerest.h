@@ -106,6 +106,8 @@ private slots:
 
     void on_btnTStore_clicked();
 
+    void on_btnCardBalances_clicked();
+
 private:
     Ui::wwelcomerest *ui;
 };

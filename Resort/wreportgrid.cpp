@@ -221,6 +221,7 @@ void WReportGrid::on_tblMain_doubleClicked(const QModelIndex &index)
     } else {
         fillRowValues(index.row());
         processValues(index.row(), false);
+        emit doubleClickOnRow2(index.row(), index.column(), fRowValues);
     }
 }
 
