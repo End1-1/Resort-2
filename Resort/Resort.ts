@@ -498,7 +498,7 @@
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
 </context>
 <context>
@@ -1053,7 +1053,7 @@ name</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>f_amountUSD</source>
@@ -3107,7 +3107,7 @@ rooms</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Tax code</source>
@@ -3448,7 +3448,7 @@ rooms</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Paid by company</source>
@@ -4188,7 +4188,7 @@ for this operation</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Amount, AMD</source>
@@ -4323,7 +4323,7 @@ for this operation</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Payment mode was not selected</source>
@@ -4549,7 +4549,7 @@ for this operation</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
 </context>
 <context>
@@ -7673,7 +7673,7 @@ ee</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>RS</source>
@@ -8015,7 +8015,7 @@ ee</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Free</source>
@@ -11387,7 +11387,7 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Total amount</source>
@@ -11638,7 +11638,7 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Total amount</source>
@@ -14616,7 +14616,7 @@ time</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>New amount</source>
@@ -17456,7 +17456,7 @@ commission</source>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Բալանս</translation>
     </message>
     <message>
         <source>Export invoices</source>

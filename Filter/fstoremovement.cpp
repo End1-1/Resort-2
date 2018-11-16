@@ -119,7 +119,7 @@ void FStoreMovement::apply(WReportGrid *rg)
     rg->fModel->setSqlQuery(query);
     rg->fModel->apply(rg);
     QList<int> col;
-    col << 5 << 7;
+    col << 7 << 9;
     QList<double> val;
     rg->fModel->sumOfColumns(col, val);
     rg->setTblTotalData(col, val);

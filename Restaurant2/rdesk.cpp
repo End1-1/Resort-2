@@ -21,6 +21,7 @@
 #include "pprintreceipt.h"
 #include "ptextrect.h"
 #include "pimage.h"
+#include "c5printing.h"
 #include "pprintscene.h"
 #include "dlgcomplexdish.h"
 #include "cacheinvoiceitem.h"
@@ -1071,12 +1072,13 @@ void RDesk::visitStat()
 
 void RDesk::checkCardAmount()
 {
-    QString code = QInputDialog::getText(this, tr("Check card balance"), tr("Card number"), QLineEdit::Password);
-    if (code.isEmpty()) {
+    QString name;
+    QVariant result;
+    if (!DlgList::getValue(tr("Card holder"), name, result, "select f_card, right(f_card, 5) from d_car_client where f_model=3")) {
         return;
     }
     DatabaseResult dr;
-    fDbBind[":f_card"] = code;
+    fDbBind[":f_card"] = result;
     dr.select(fDb, "select f_mode from d_car_client where f_card=:f_card", fDbBind);
     if (dr.rowCount() == 0) {
         message_error(tr("Invalid card code"));
@@ -1111,6 +1113,85 @@ void RDesk::cardStat()
         msg += dr.value(i, "card").toString() + ": " + dr.value(i, "qty").toString() + "/" + float_str(dr.value(i, "amount").toDouble(), 2) + "<br>";
     }
     message_info(msg);
+}
+
+void RDesk::saledItem()
+{
+    int trackUser;
+    if (!right(cr__print_reports_any_day, trackUser)) {
+        return;
+    }
+    QDate date;
+    if (!DlgDate::getDate(date)) {
+        return;
+    }
+    C5Printing p;
+    p.setSceneParams(700, 2800, QPrinter::Portrait);
+    p.setFont(qApp->font());
+    p.setFontSize(20);
+
+    p.ctext(tr("Daily sale"));
+    p.br();
+    p.ctext(tr("Goods"));
+    p.br();
+    p.ctext(date.toString("dd/MM/yyyy"));
+    p.br();
+
+    fDbBind[":f_datecash"] = date;
+    fDbBind[":f_ostate"] = ORDER_STATE_CLOSED;
+    fDbBind[":f_dstate"] = DISH_STATE_READY;
+    DatabaseResult dr;
+    dr.select(fDb, "select d.f_en, od.f_store, sum(od.f_qty) as f_qty, sum(od.f_total) as f_total "
+              "from o_dish od "
+              "inner join o_header oh on oh.f_Id=od.f_header "
+              "inner join r_dish d on d.f_id=od.f_dish "
+              "where oh.f_state=:f_ostate and od.f_state=:f_dstate "
+              "and oh.f_datecash=:f_datecash "
+              "group by 1, 2 "
+              "order by od.f_store ", fDbBind);
+    if (dr.rowCount() == 0) {
+        return;
+    }
+    double total = 0.0;
+    int store = 0;
+    for (int i = 0; i < dr.rowCount(); i++) {
+        if (store != dr.value(i, "f_store").toInt()) {
+            if (total > 0.01) {
+                p.br();
+                p.ltext(tr("Total"), 0);
+                p.rtext(float_str(total, 2));
+                p.br();
+                p.br();
+            }
+            store = dr.value(i, "f_store").toInt();
+            DatabaseResult dr2;
+            fDbBind[":f_id"] = store;
+            dr2.select(fDb, "select f_name from r_store where f_id=:f_id", fDbBind);
+            if (dr2.rowCount() > 0) {
+                p.br();
+                p.br();
+                p.ctext(dr2.value("f_name").toString());
+                p.br();
+                p.line();
+                p.br(2);
+            }
+        }
+        total += dr.value(i, "f_total").toDouble();
+        p.br(2);
+        p.ltext(dr.value(i, "f_en").toString(), 0);
+        p.br();
+        p.ltext(dr.value(i, "f_qty").toString(), 0);
+        p.ltext(dr.value(i, "f_total").toString(), 150);
+        p.br();
+        p.line();
+        p.br(2);
+    }
+    if (total > 0.01) {
+        p.br();
+        p.ltext(tr("Total"), 0);
+        p.rtext(float_str(total, 2));
+    }
+    p.print("local", QPrinter::Custom);
 }
 
 void RDesk::closeEvent(QCloseEvent *e)

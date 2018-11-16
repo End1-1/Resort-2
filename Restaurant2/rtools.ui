@@ -266,6 +266,20 @@ amount</string>
           </property>
          </widget>
         </item>
+        <item row="5" column="1">
+         <widget class="QToolButton" name="btnPrintDailySales">
+          <property name="text">
+           <string>Saled item</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/list.png</normaloff>:/images/list.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>

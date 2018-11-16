@@ -22,6 +22,7 @@ INCLUDEPATH += $$PWD/../Cache
 INCLUDEPATH += $$PWD/../Print
 INCLUDEPATH += $$PWD/../Resort
 INCLUDEPATH += $$PWD/../Selector
+INCLUDEPATH += $$PWD/../../Cafe5/Classes
 INCLUDEPATH += /Qt/projects/NewTax
 INCLUDEPATH += /OpenSSL-Win32.0/include
 INCLUDEPATH += /OpenSSL-Win32.0/include/openssl
@@ -141,7 +142,8 @@ SOURCES += main.cpp\
     ../Resort/message.cpp \
     baseextendeddialog.cpp \
     ../Print/printtax.cpp \
-    ../../NewTax/printtaxn.cpp
+    ../../NewTax/printtaxn.cpp \
+    ../../Cafe5/Classes/c5printing.cpp
 
 HEADERS  += rface.h \
     rlogin.h \
@@ -259,7 +261,8 @@ HEADERS  += rface.h \
     ../Resort/message.h \
     baseextendeddialog.h \
     ../Print/printtax.h \
-    ../../NewTax/printtaxn.h
+    ../../NewTax/printtaxn.h \
+    ../../Cafe5/Classes/c5printing.h
 
 FORMS    += rface.ui \
     rlogin.ui \

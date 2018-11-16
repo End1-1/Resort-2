@@ -57,6 +57,7 @@ public:
     void visitStat();
     void checkCardAmount();
     void cardStat();
+    void saledItem();
 protected:
     virtual void closeEvent(QCloseEvent *e);
 private slots:

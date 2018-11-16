@@ -177,3 +177,9 @@ void RTools::on_btnCheckCard_clicked()
     accept();
     fDesk->checkCardAmount();
 }
+
+void RTools::on_btnPrintDailySales_clicked()
+{
+    accept();
+    fDesk->saledItem();
+}
