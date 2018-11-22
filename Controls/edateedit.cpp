@@ -9,6 +9,7 @@ EDateEdit::EDateEdit(QWidget *parent) :
     setDate(EDateEditFirstDate);
     setDate(QDate::currentDate());
     connect(this, SIGNAL(textChanged(QString)), this, SLOT(newText(QString)));
+    setMinimumWidth(100);
     setMaximumWidth(100);
     fRow = 0;
     fColumn = 0;

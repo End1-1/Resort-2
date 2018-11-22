@@ -430,7 +430,6 @@ void TableModel::removeRow(int row)
     }
     fRows.removeAt(row);
     fDD.fDbRows.removeAt(r);
-    endRemoveRows();
 }
 
 void TableModel::updateRowValues(int row, const QList<QVariant> &values)

@@ -78,6 +78,7 @@ void FTStoreReport::apply(WReportGrid *rg)
             .setColumn(80, "", tr("Output, amount"))
             .setColumn(80, "", tr("Final, qty"))
             .setColumn(80, "", tr("Final, amount"))
+            .setColumn(80, "", tr("Check inv"))
             ;
     QDate d1 = ui->wd->d1();
     QDate d2 = ui->wd->d2();
@@ -87,6 +88,7 @@ void FTStoreReport::apply(WReportGrid *rg)
         dateMap[d1.addDays(i)] = i;
         QList<QVariant> row;
         row << d1.addDays(i)
+            << 0
             << 0
             << 0
             << 0
@@ -177,7 +179,7 @@ void FTStoreReport::apply(WReportGrid *rg)
     }
 
     QList<int> cols;
-    cols << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10;
+    cols << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11;
     QList<double> vals;
     rg->fModel->sumOfColumns(cols, vals);
     if (vals.count() > 0 && rg->fModel->rowCount() > 0) {
@@ -188,9 +190,45 @@ void FTStoreReport::apply(WReportGrid *rg)
         rg->setTblTotalData(cols, vals);
     }
 
+    if (ui->leStore->fHiddenText.toInt() > 0 && ui->leGoods->fHiddenText.toInt() > 0) {
+        QDate d1 = ui->wd->d1();
+        QDate d2 = ui->wd->d2();
+        while (d1 < d2.addDays(1)) {
+            if (d1.day() == d1.daysInMonth()) {
+                fDbBind[":f_date"] = d1;
+                fDbBind[":f_store"] = ui->leStore->fHiddenText.toInt();
+                fDbBind[":f_goods"] = ui->leGoods->fHiddenText.toInt();
+                DatabaseResult drs;
+                drs.select(fDb, "select h.f_date, sum(b.f_qty) as f_qty from st_body b "
+                           "inner join st_header h on h.f_id=b.f_doc "
+                           "where h.f_date=:f_date and h.f_store=:f_store and b.f_goods=:f_goods "
+                           "group by 1 ", fDbBind);
+                if (drs.rowCount() > 0) {
+                    int rr = dateMap[drs.value(0).toDate()];
+                    rg->fModel->setData(rr, 11, drs.value("f_qty"));
+                }
+            }
+            d1 = d1.addDays(1);
+        }
+    }
+
     for (int i = rg->fModel->rowCount() - 1; i > -1; i--) {
+        QDate d1 = rg->fModel->data(i, 0, Qt::EditRole).toDate();
+        if (d1.day() == d1.daysInMonth()) {
+            continue;
+        }
         if (rg->fModel->data(i, 3, Qt::EditRole).toDouble() < 0.001 && rg->fModel->data(i, 5, Qt::EditRole).toDouble() < 0.001 && rg->fModel->data(i, 7, Qt::EditRole).toDouble() < 0.001) {
             rg->fModel->removeRow(i);
+        }
+    }
+
+    for (int i = rg->fModel->rowCount() - 1; i > -1; i--) {
+        QDate d1 = rg->fModel->data(i, 0, Qt::EditRole).toDate();
+        if (d1.day() != d1.daysInMonth()) {
+            continue;
+        }
+        if (rg->fModel->data(i, 11, Qt::EditRole).toDouble() != rg->fModel->data(i, 9, Qt::EditRole).toDouble()) {
+            rg->fModel->setBackgroundColor(i, Qt::red);
         }
     }
 }

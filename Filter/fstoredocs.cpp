@@ -62,17 +62,20 @@ void FStoreDocs::apply(WReportGrid *rg)
             .setColumn(120, "", tr("Date"))
             .setColumn(220, "", tr("Type"))
             .setColumn(120, "", tr("State"))
+            .setColumn(120, "", tr("Store"))
             .setColumn(100, "", tr("Amount"))
             .setColumn(100, "", tr("Partner"))
             .setColumn(150, "", tr("Operator"))
             .setColumn(150, "", tr("Registered"))
             .setColumn(400, "", tr("Comment"));
     QString query = "select distinct(d.f_id) as f_id, d.f_date, dt.f_name, ds.f_name, "
-            "d.f_amount, p.f_name, u.f_username, d.f_fullDate, d.f_remarks "
+            "st.f_name, d.f_amount, p.f_name, u.f_username, d.f_fullDate, d.f_remarks "
             "from r_docs d "
             "left join r_doc_type dt on dt.f_id=d.f_type "
             "left join r_doc_state ds on ds.f_id=d.f_state "
             "left join r_partners p on p.f_id=d.f_partner "
+            "left join r_body b on b.f_doc=d.f_id "
+            "left join r_store st on st.f_id=b.f_store "
             "left join users u on u.f_id=d.f_op ";
     QString where = "where d.f_date between " + ui->deStart->dateMySql() + " and " + ui->deEnd->dateMySql();
     if (!ui->leDocType->isEmpty()) {
@@ -86,7 +89,6 @@ void FStoreDocs::apply(WReportGrid *rg)
     }
     if (!ui->leStore->isEmpty()) {
         where += " and b.f_store in (" + ui->leStore->fHiddenText + ") ";
-        query += " left join r_body b on b.f_doc=d.f_id ";
     }
     rg->fModel->setSqlQuery(query + where);
     rg->fModel->apply(rg);

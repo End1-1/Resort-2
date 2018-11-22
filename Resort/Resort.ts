@@ -9538,6 +9538,10 @@ ledger</source>
         <source>Copy</source>
         <translation>Պատճե</translation>
     </message>
+    <message>
+        <source>Store</source>
+        <translation>Պահեստ</translation>
+    </message>
 </context>
 <context>
     <name>FStoreEntry</name>
@@ -9718,6 +9722,10 @@ ledger</source>
     <message>
         <source>Auto input, amount</source>
         <translation>Ավտոմուտք, գումար</translation>
+    </message>
+    <message>
+        <source>Check inv</source>
+        <translation>Փասթ․</translation>
     </message>
 </context>
 <context>
