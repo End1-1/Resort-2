@@ -93,7 +93,7 @@ void FStoreDocs::apply(WReportGrid *rg)
     rg->fModel->setSqlQuery(query + where);
     rg->fModel->apply(rg);
     QList<int> col;
-    col << 4;
+    col << 5;
     QList<double> val;
     rg->fModel->sumOfColumns(col, val);
     rg->setTblTotalData(col, val);

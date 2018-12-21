@@ -6,6 +6,7 @@
 #include "dwselectorreststore.h"
 #include "dwselectordishmod.h"
 #include "dwselectordishtype.h"
+#include "dwselectorreststore.h"
 #include "dwselectordish.h"
 
 namespace Ui {
@@ -33,6 +34,7 @@ private slots:
     void printLineEditFocusOut();
     void printer(CI_RestPrinter *p);
     void store(CI_RestStore *s);
+    void store2(CI_RestStore *s);
     void dishMod(CI_RestDishMod *m);
     void dishType(CI_RestDishType *c);
     void storeLineEditFocusIn();
@@ -51,6 +53,8 @@ private slots:
     void on_btnTrack_clicked();
     void on_leReadScancode_returnPressed();
 
+    void on_btnRemove_clicked();
+
 private:
     Ui::RERestDish *ui;
     bool fImageChanged;
@@ -61,6 +65,7 @@ private:
     DWSelectorDishMod *fDockMod;
     DWSelectorDish *fDockDish;
     QStringList fRemovedModifiers;
+    DWSelectorRestStore *fRestStore;
     EQLineEdit *createLineEdit(int row, int column);
     inline QString cellValue(int row, int column);
     inline void setCellValue(int row, int column, const QString &value);

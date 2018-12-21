@@ -901,6 +901,7 @@ void MainWindow::on_actionDishes_triggered()
 {
     QList<int> widths;
     widths << 100
+           << 0
            << 120
            << 0
            << 120
@@ -920,7 +921,8 @@ void MainWindow::on_actionDishes_triggered()
            << 80   ;
     QStringList fields;
     fields << "f_id"
-           << "f_part"
+           << "f_defstore"
+           << "f_defstorename"
            << "f_type"
            << "f_type_name"
            << "f_am"
@@ -941,6 +943,7 @@ void MainWindow::on_actionDishes_triggered()
     QStringList titles;
     titles << tr("Code")
            << tr("Part")
+           << tr("Store")
            << tr("Type code")
            << tr("Type")
            << tr("Name, am")
@@ -960,13 +963,14 @@ void MainWindow::on_actionDishes_triggered()
               ;
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
-    QString query = "select d.f_id, p.f_" + def_lang + ", d.f_type, t.f_" + def_lang +", "
+    QString query = "select d.f_id, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_" + def_lang +", "
             "d.f_am, d.f_en, d.f_ru, d.f_text_am, d.f_text_en, d.f_text_ru, "
             "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName "
             "from r_dish d "
             "inner join r_dish_type t on t.f_id=d.f_type "
             "inner join r_dish_part p on p.f_id=t.f_part "
             "inner join r_unit u on u.f_id=d.f_unit "
+            "left join r_store st on st.f_id=d.f_defstore "
             "order by p.f_" + def_lang + ", t.f_" + def_lang + ", d.f_queue";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);

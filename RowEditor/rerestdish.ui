@@ -26,10 +26,38 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_8">
+         <item row="1" column="2">
+          <widget class="EQLineEdit" name="leDefStoreName">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Description, en</string>
+            <string>Name, am</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Code</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Text color</string>
            </property>
           </widget>
          </item>
@@ -40,14 +68,27 @@
            </property>
           </widget>
          </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="label_10">
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Background color</string>
+            <string>Description, ru</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2" colspan="3">
+         <item row="2" column="2" colspan="2">
+          <widget class="EQLineEdit" name="leTypeName">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
           <widget class="EQLineEdit" name="leCode">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -63,63 +104,28 @@
            </property>
           </widget>
          </item>
-         <item row="11" column="4">
-          <widget class="QPushButton" name="btnTextColor">
-           <property name="minimumSize">
-            <size>
-             <width>25</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_10">
            <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../Resort/res.qrc">
-             <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
+            <string>Background color</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="2" colspan="3">
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Description, en</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1" colspan="3">
           <widget class="EQLineEdit" name="leNameEn">
            <property name="Field" stdset="0">
             <string>f_en</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="2" colspan="3">
-          <widget class="EQLineEdit" name="lePart">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3" colspan="2">
-          <widget class="EQLineEdit" name="leTypeName">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="4">
+         <item row="10" column="3">
           <widget class="QPushButton" name="btnBgColor">
            <property name="minimumSize">
             <size>
@@ -145,7 +151,40 @@
            </property>
           </widget>
          </item>
-         <item row="11" column="2" colspan="2">
+         <item row="11" column="3">
+          <widget class="QPushButton" name="btnTextColor">
+           <property name="minimumSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../Resort/res.qrc">
+             <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leNameAm">
+           <property name="Field" stdset="0">
+            <string>f_am</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="1" colspan="2">
           <widget class="EColorLineEdit" name="leTextColor">
            <property name="readOnly">
             <bool>true</bool>
@@ -155,10 +194,17 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="2" colspan="3">
-          <widget class="EQLineEdit" name="leNameAm">
+         <item row="16" column="1">
+          <widget class="QCheckBox" name="chAutoPrintTax">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leNameRu">
            <property name="Field" stdset="0">
-            <string>f_am</string>
+            <string>f_ru</string>
            </property>
           </widget>
          </item>
@@ -169,21 +215,7 @@
            </property>
           </widget>
          </item>
-         <item row="16" column="2">
-          <widget class="QCheckBox" name="chAutoPrintTax">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="2" colspan="3">
-          <widget class="EQLineEdit" name="leNameRu">
-           <property name="Field" stdset="0">
-            <string>f_ru</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="2" colspan="2">
+         <item row="10" column="1" colspan="2">
           <widget class="EColorLineEdit" name="leBgColor">
            <property name="readOnly">
             <bool>true</bool>
@@ -193,14 +225,52 @@
            </property>
           </widget>
          </item>
-         <item row="12" column="2" colspan="3">
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Name, ru</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="EQLineEdit" name="leUnitCode">
+           <property name="maximumSize">
+            <size>
+             <width>70</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2" colspan="2">
+          <widget class="EQLineEdit" name="leUnitName">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Unit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Description, am</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="1" colspan="3">
           <widget class="EQLineEdit" name="leQueue">
            <property name="Field" stdset="0">
             <string>f_queue</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="2" colspan="3">
+         <item row="7" column="1" colspan="3">
           <widget class="EQTextEdit" name="teAm">
            <property name="maximumSize">
             <size>
@@ -213,7 +283,7 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="2" colspan="3">
+         <item row="8" column="1" colspan="3">
           <widget class="EQTextEdit" name="teEn">
            <property name="maximumSize">
             <size>
@@ -226,13 +296,6 @@
            </property>
           </widget>
          </item>
-         <item row="13" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>ADGT</string>
-           </property>
-          </widget>
-         </item>
          <item row="14" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
@@ -240,7 +303,14 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="2" colspan="3">
+         <item row="13" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>ADGT</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1" colspan="3">
           <widget class="EQTextEdit" name="teRu">
            <property name="maximumSize">
             <size>
@@ -253,17 +323,17 @@
            </property>
           </widget>
          </item>
-         <item row="15" column="2" colspan="3">
-          <widget class="EQLineEdit" name="leLastPrice"/>
-         </item>
-         <item row="15" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Last input price</string>
+         <item row="14" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leArmSoft">
+           <property name="Field" stdset="0">
+            <string>f_as</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
+         <item row="15" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leLastPrice"/>
+         </item>
+         <item row="2" column="1">
           <widget class="EQLineEdit" name="leTypeCode">
            <property name="maximumSize">
             <size>
@@ -279,31 +349,17 @@
            </property>
           </widget>
          </item>
-         <item row="13" column="2" colspan="3">
+         <item row="13" column="1" colspan="3">
           <widget class="EQLineEdit" name="leADGT">
            <property name="Field" stdset="0">
             <string>f_adgt</string>
            </property>
           </widget>
          </item>
-         <item row="14" column="2" colspan="3">
-          <widget class="EQLineEdit" name="leArmSoft">
-           <property name="Field" stdset="0">
-            <string>f_as</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_4">
+         <item row="15" column="0">
+          <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>Name, am</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Type</string>
+            <string>Last input price</string>
            </property>
           </widget>
          </item>
@@ -315,68 +371,19 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>Part</string>
+            <string>Default store</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Code</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Description, ru</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>Text color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Description, am</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Name, ru</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>Unit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="EQLineEdit" name="leUnitCode">
+         <item row="1" column="1">
+          <widget class="EQLineEdit" name="leDefStore">
            <property name="maximumSize">
             <size>
-             <width>70</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="3" colspan="2">
-          <widget class="EQLineEdit" name="leUnitName">
-           <property name="enabled">
-            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -718,6 +725,13 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QPushButton" name="btnRemove">
+        <property name="text">
+         <string>Remove</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -799,7 +813,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lePart</tabstop>
   <tabstop>leTypeCode</tabstop>
   <tabstop>leNameAm</tabstop>
   <tabstop>leNameEn</tabstop>

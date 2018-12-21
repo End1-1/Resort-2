@@ -4,7 +4,6 @@
 #include "storedoc.h"
 #include "dwselectorreststore.h"
 #include "dwselectorstoredoctype.h"
-#include "dwselectordish.h"
 #include "dwselectorstorepartners.h"
 
 #define SEL_DOC_TYPE 1
@@ -24,17 +23,22 @@ FStoreMovement::FStoreMovement(QWidget *parent) :
     dt->setSelector(ui->leAction);
     dt->setDialog(this, SEL_DOC_TYPE);
 
+    fDockDish = new DWSelectorDish(this);
+    fDockDish->configure();
+    fDockDish->setSelector(ui->leMaterial);
+    fDockDish->setDialog(this, SEL_DISH);
+
     DWSelectorRestStore *fDockStore = new DWSelectorRestStore(this);
     fDockStore->configure();
     fDockStore->setSelector(ui->leStore);
     connect(fDockStore, &DWSelectorRestStore::store, [this](CI_RestStore *c) {
        dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, c);
+       if (c) {
+           QMap<int, QString> colFilter;
+           colFilter[3] = c->fCode;
+           fDockDish->setFilterColumn(colFilter);
+       }
     });
-
-    DWSelectorDish *dd = new DWSelectorDish(this);
-    dd->configure();
-    dd->setSelector(ui->leMaterial);
-    dd->setDialog(this, SEL_DISH);
 
     DWSelectorStorePartners *dp = new DWSelectorStorePartners(this);
     dp->configure();

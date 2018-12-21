@@ -7,6 +7,7 @@
 
 typedef struct : CI_Base {
     QString fUnitName;
+    QString fStore;
 } CI_Dish;
 Q_DECLARE_METATYPE(CI_Dish*)
 

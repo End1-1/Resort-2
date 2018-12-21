@@ -1030,22 +1030,22 @@ And Save</source>
         <translation>Այս պատվերում կտրոն չի օգտագործվում</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="249"/>
+        <location filename="dlgpayment.cpp" line="350"/>
         <source>Discount already used</source>
         <translation type="unfinished">Զեղչը արդեն կիռարված է</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="253"/>
+        <location filename="dlgpayment.cpp" line="246"/>
         <source>Cannot discount with coupon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="262"/>
+        <location filename="dlgpayment.cpp" line="255"/>
         <source>Invalid card</source>
         <translation>Անհայտ քարտ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="270"/>
+        <location filename="dlgpayment.cpp" line="263"/>
         <source>Card params is not defined</source>
         <translation type="unfinished"></translation>
     </message>

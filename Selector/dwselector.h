@@ -25,6 +25,7 @@ public:
     EQLineEdit *selector();
     void setFilterValue(const QString &text);
     void setFilterList(const QStringList &filters);
+    void setFilterColumn(const QMap<int, QString> &filter);
     int fCurrentRow;
 protected:
     QTableWidget *fTable;
@@ -73,8 +74,10 @@ protected:
         fTable->setRowCount(row);
     }
     QStringList fFilterList;
+    QMap<int, QString> fColumnFilter;
 public slots:
     void thisShow(bool v);
+    void on_lineEdit_textEdited(const QString &arg1);
 protected:
     EQLineEdit *fLineSelector;
 protected slots:
@@ -84,7 +87,6 @@ private:
     Ui::DWSelector *ui;
 private slots:
     void thisChangeVisibility(bool v);
-    void on_lineEdit_textEdited(const QString &arg1);
     void on_tblData_doubleClicked(const QModelIndex &index);
     void on_btnRefresh_clicked();
 

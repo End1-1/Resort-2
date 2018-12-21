@@ -9,12 +9,12 @@ DWSelectorDish::DWSelectorDish(QWidget *parent) :
 void DWSelectorDish::configure()
 {
     CacheDish *c = CacheDish::instance();
-    fTable->setColumnCount(3);
+    fTable->setColumnCount(4);
     fTable->setRowCount(c->elementsCount());
     Utils::tableSetColumnWidths(fTable, fTable->columnCount(),
-                                80, 300, 80);
+                                80, 300, 80, 20);
     Utils::tableSetHeaderCaptions(fTable, fTable->columnCount(),
-                                  tr("Code"), tr("Name"), tr("Unit"));
+                                  tr("Code"), tr("Name"), tr("Unit"), tr("Store"));
     adjustWidth();
     QMapIterator<QString, CI_Dish*> i = c->it();
     int row = 0;
@@ -27,6 +27,7 @@ void DWSelectorDish::configure()
         fTable->setItem(row, 0, new QTableWidgetItem(v->fCode));
         fTable->setItem(row, 1, new QTableWidgetItem(v->fName));
         fTable->setItem(row, 2, new QTableWidgetItem(v->fUnitName));
+        fTable->setItem(row, 3, new QTableWidgetItem(v->fStore));
         fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(v));
         row++;
     }

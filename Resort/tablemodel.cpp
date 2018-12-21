@@ -275,6 +275,7 @@ void TableModel::clearData()
     beginRemoveRows(QModelIndex(), 0, rowCount(QModelIndex()));
     fRows.clear();
     fDD.fDbRows.clear();
+    fBackgroundColors.clear();
     endRemoveRows();
 }
 

@@ -52,6 +52,11 @@ void DWSelector::setFilterList(const QStringList &filters)
     fFilterList = filters;
 }
 
+void DWSelector::setFilterColumn(const QMap<int, QString> &filter)
+{
+    fColumnFilter = filter;
+}
+
 void DWSelector::onShow()
 {
     if (CacheBase<CI_Base>::isEmpty(fCacheId)) {
@@ -132,8 +137,20 @@ void DWSelector::cacheUpdated(const QString &id)
 
 void DWSelector::on_lineEdit_textEdited(const QString &arg1)
 {
+    QList<int> cols;
+    for (int i = 0; i < fTable->columnCount(); i++) {
+        cols << i;
+    }
     for (int i = 0, rowCount = fTable->rowCount(); i < rowCount; i++) {
-        for (int j = 0, colCount = fTable->columnCount(); j < colCount; j++) {
+        if (fColumnFilter.count() > 0) {
+            for (QMap<int, QString>::const_iterator it = fColumnFilter.begin(); it != fColumnFilter.end(); it++) {
+                if (!fTable->item(i, it.key())->text().contains(it.value(), Qt::CaseInsensitive)) {
+                    fTable->setRowHidden(i, true);
+                    goto mark;
+                }
+            }
+        }
+        foreach (int j, cols) {
             if (fTable->item(i, j)->text().contains(arg1, Qt::CaseInsensitive)) {
                 fTable->setRowHidden(i, false);
                 goto mark;

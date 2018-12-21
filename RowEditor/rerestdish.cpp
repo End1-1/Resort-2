@@ -17,7 +17,8 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     ui->setupUi(this);
     ui->leTextColor->setText("-16777216");
     addWidget(ui->leCode, "Code");
-    addWidget(ui->lePart, "Part");
+    addWidget(ui->leDefStore, "Store code");
+    addWidget(ui->leDefStoreName, "Store name");
     addWidget(ui->leTypeCode, "");
     addWidget(ui->leTypeName, "Type");
     addWidget(ui->leNameAm, "Name, am");
@@ -33,7 +34,9 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->leArmSoft, "ArmSoft code");
     addWidget(ui->leLastPrice, "Last input price");
     addWidget(ui->leUnitCode, "Unit code");
-    addWidget(ui->leUnitName, "Unit name");
+    addWidget(ui->leUnitName, "Unit name");/*
+    addWidget(ui->leDefStore, "Def store name");
+    addWidget(ui->leDefStoreName, "Def store name");*/
     fTable = "r_dish";
     ui->leQueue->setValidator(new QIntValidator());
     Utils::tableSetColumnWidths(ui->tblMenu, ui->tblMenu->columnCount(),
@@ -114,6 +117,10 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     fDockUnit->setSelector(ui->leUnitCode);
     fDockUnit->setDialog(this, SEL_UNIT);
 
+    fRestStore = new DWSelectorRestStore(this);
+    fRestStore->configure();
+    fRestStore->setSelector(ui->leDefStore);
+    connect(fRestStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store2(CI_RestStore*)));
 }
 
 RERestDish::~RERestDish()
@@ -229,8 +236,10 @@ void RERestDish::valuesToWidgets()
     dockResponse<CI_Unit, CacheUnit>(ui->leUnitCode, ui->leUnitName, cu);
     DatabaseResult dr;
     fDbBind[":f_id"] = ui->leCode->asInt();
-    dr.select(fDb, "select f_tax from r_dish where f_id=:f_id", fDbBind);
+    dr.select(fDb, "select f_tax, f_defstore from r_dish where f_id=:f_id", fDbBind);
     ui->chAutoPrintTax->setChecked(dr.value("f_tax").toBool());
+    ui->leDefStore->setText(dr.value("f_defstore").toString());
+    dockResponse<CI_RestStore, CacheRestStore>(ui->leDefStore, ui->leDefStoreName, 0);
     fTrackControl->resetChanges();
 }
 
@@ -331,6 +340,7 @@ void RERestDish::save()
         fDb.insert("r_dish_scancode", fDbBind);
     }
     fDbBind[":f_tax"] = ui->chAutoPrintTax->isChecked();
+    fDbBind[":f_defstore"] = ui->leDefStore->asInt();
     fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
 }
 
@@ -396,6 +406,11 @@ void RERestDish::store(CI_RestStore *s)
         l->setText(s->fName);
         setCellValue(l->fRow, l->fColumn - 1, s->fCode);
     }
+}
+
+void RERestDish::store2(CI_RestStore *s)
+{
+    dockResponse<CI_RestStore, CacheRestStore>(ui->leDefStore, ui->leDefStoreName, s);
 }
 
 void RERestDish::dishMod(CI_RestDishMod *m)
@@ -580,4 +595,36 @@ void RERestDish::on_leReadScancode_returnPressed()
     item->setText(ui->leReadScancode->text());
     ui->lstScancodes->addItem(item);
     ui->leReadScancode->clear();
+}
+
+void RERestDish::on_btnRemove_clicked()
+{
+    QString err;
+    fDbBind[":f_material"] = ui->leCode->asInt();
+    DatabaseResult dr;
+    dr.select("select * from r_body where f_material=:f_material", fDbBind);
+    if (dr.rowCount() > 0) {
+        err += tr("This code used in store") + "<BR>";
+    }
+    fDbBind[":f_goods"] = ui->leCode->asInt();
+    dr.select("select * from r_body where f_goods=:f_goods", fDbBind);
+    if (dr.rowCount() > 0) {
+        err += tr("This code used in store entry") + "<BR>";
+    }
+    fDbBind[":f_dish"] = ui->leCode->asInt();
+    dr.select("select * from o_dish where f_dish=:f_dish", fDbBind);
+    if (dr.rowCount() > 0) {
+        err += tr("This code used in sales") + "<BR>";
+    }
+    if (!err.isEmpty()) {
+        message_error(err);
+        return;
+    }
+    if (message_confirm(tr("Confirm to remove")) != QDialog::Accepted) {
+        return;
+    }
+    fDbBind[":f_id"] = ui->leCode->asInt();
+    dr.select("delete from r_dish where f_id=:f_id", fDbBind);
+    message_info(tr("Deleted"));
+    reject();
 }

@@ -109,6 +109,8 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(od.f_total)"] = true;
     fReportGrid->fIncludes["count(oh.f_id)"] = false;
     fReportGrid->fIncludes["sum(oh.f_total)"] = false;
+    fReportGrid->fIncludes["op.f_discountcard"] = false;
+    fReportGrid->fIncludes["op.f_discount"] = false;
 }
 
 FRestaurantTotal::~FRestaurantTotal()
@@ -163,6 +165,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << 80 // count of orders
            << 80 // sum qty
            << 80 // sum total
+           << 100 // discount card
+           << 80 // discount amount
               ;
     rg->fFields.clear();
     rg->fFields << "oh.f_id"
@@ -191,7 +195,10 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "oh.f_tax"
            << "oh.f_paymentMode"
            << "pm.f_" + def_lang
-           << "oh.f_paymentModeComment";
+           << "oh.f_paymentModeComment"
+           << "op.f_discountcard"
+           << "op.f_discount"
+              ;
     if (countAmount) {
         rg->fFields
                 << "count(oh.f_id)"
@@ -229,8 +236,11 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << tr("Payment mode code")
            << tr("P/M")
            << tr("P/M comment")
+           << tr("Discount card")
+           << tr("Discount amount")
            << tr("Qty")
-           << tr("Total");
+           << tr("Total")
+              ;
 
     rg->fTables.clear();
     rg->fTables << "o_header oh"
@@ -244,7 +254,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "users u"
            << "f_city_ledger cl"
            << "f_payment_type pm"
-           << "o_dish_state ds";
+           << "o_dish_state ds"
+           << "o_header_payment op";
     rg->fJoins.clear();
     rg->fJoins << "from" //od
           << "inner" //oh
@@ -258,6 +269,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
           << "left" //cl
           << "inner" //pm
           << "left" //ds
+          << "left" //op
              ;
     rg->fJoinConds.clear();
     rg->fJoinConds << ""
@@ -272,6 +284,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
               << "cl.f_id=oh.f_cityLedger"
               << "pm.f_id=oh.f_paymentMode"
               << "ds.f_id=od.f_state"
+              << "op.f_id=od.f_header"
                  ;
 
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
@@ -800,4 +813,13 @@ void FRestaurantTotal::on_btnNextDate_clicked()
     ui->deStart->setDate(ui->deStart->date().addDays(1));
     ui->deEnd->setDate(ui->deEnd->date().addDays(1));
     apply(fReportGrid);
+}
+
+void FRestaurantTotal::on_chShowDiscount_clicked(bool checked)
+{
+    fReportGrid->fIncludes["op.f_discountcard"] = checked;
+    fReportGrid->fIncludes["op.f_discount"] = checked;
+    if (checked) {
+        ui->chOrderNum->setChecked(true);
+    }
 }

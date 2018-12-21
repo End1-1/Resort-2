@@ -19,6 +19,7 @@ void CacheDish::load()
         ci->fCode = q->value(0).toString();
         ci->fName = q->value(1).toString();
         ci->fUnitName = q->value(2).toString();
+        ci->fStore = q->value(3).toString();
         fStaticCache[fCacheId][ci->fCode] = ci;
     }
     closeDb(q);
@@ -26,7 +27,7 @@ void CacheDish::load()
 
 CacheDish::CacheDish()
 {
-    fQuery = "select d.f_id, f_" + def_lang + ", u.f_name from r_dish d left join r_unit u on u.f_id=d.f_unit ";
+    fQuery = "select d.f_id, f_" + def_lang + ", u.f_name, d.f_defstore from r_dish d left join r_unit u on u.f_id=d.f_unit ";
     fCacheId = cid_dish;
     if (!fStaticCache.contains(fCacheId)) {
         load();

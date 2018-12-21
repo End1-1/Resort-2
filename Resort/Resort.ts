@@ -32,14 +32,14 @@
     <name>BroadcastThread</name>
     <message>
         <source>Broadcast socket error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>ChSample</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Տեսակ</translation>
+        <translation>Տեսակ</translation>
     </message>
 </context>
 <context>
@@ -312,15 +312,19 @@
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
+        <translation>Կոդ</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
+        <translation>Անվանում</translation>
     </message>
     <message>
         <source>Unit</source>
-        <translation type="unfinished">Չափման միավոր</translation>
+        <translation>Չափման միավոր</translation>
+    </message>
+    <message>
+        <source>Store</source>
+        <translation>Պահեստ</translation>
     </message>
 </context>
 <context>
@@ -379,7 +383,7 @@
     <name>DWSelectorGroupReservation</name>
     <message>
         <source>Group reservations</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -9304,23 +9308,39 @@ ledger</source>
     </message>
     <message>
         <source>Order id must be included in the query</source>
-        <translation type="unfinished"></translation>
+        <translation>Պատվերի համարը պետքէ ընդգրկված լինի հաշվետվության մեչ</translation>
     </message>
     <message>
         <source>Nothing was selected</source>
-        <translation type="unfinished">Ոչինչ նշված չէ</translation>
+        <translation>Ոչինչ նշված չէ</translation>
     </message>
     <message>
         <source>Order number must be checked</source>
-        <translation type="unfinished"></translation>
+        <translation>Պատվերի համարը պետքէ ընդգրկված լինի հաշվետվության մեչ</translation>
     </message>
     <message>
         <source>Order number checkbox must be checked</source>
-        <translation type="unfinished"></translation>
+        <translation>Պատվերի համարը պետքէ ընդգրկված լինի հաշվետվության մեչ</translation>
     </message>
     <message>
         <source>Nothing is selected</source>
-        <translation type="unfinished">Ոչինչ նշված չէ</translation>
+        <translation>Ոչինչ նշված չէ</translation>
+    </message>
+    <message>
+        <source>op.f_discount;op.f_discountcard</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Discount info</source>
+        <translation>Զեղչի տվյալները</translation>
+    </message>
+    <message>
+        <source>Discount card</source>
+        <translation>Զեղչի քարտ</translation>
+    </message>
+    <message>
+        <source>Discount amount</source>
+        <translation>Զեղչ․ գումար</translation>
     </message>
 </context>
 <context>
@@ -9588,6 +9608,10 @@ ledger</source>
     <message>
         <source>Document was removed. Please, refresh report</source>
         <translation>Հեռացված է, թարմացրեք հաշվետվությունը</translation>
+    </message>
+    <message>
+        <source>Storage</source>
+        <translation type="unfinished">Պահեստ</translation>
     </message>
 </context>
 <context>
@@ -12961,7 +12985,7 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Part</source>
-        <translation>Բաժին</translation>
+        <translation type="vanished">Բաժին</translation>
     </message>
     <message>
         <source>Code</source>
@@ -13166,6 +13190,34 @@ or contact to administrator</source>
     <message>
         <source>Unit must be defined</source>
         <translation>Չափման միավորը նշել պարտադիր է</translation>
+    </message>
+    <message>
+        <source>Default store</source>
+        <translation>Պահեստի ֆիլտր</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Հեռացնել</translation>
+    </message>
+    <message>
+        <source>This code used in store</source>
+        <translation>Այս կոդը օգտագործվում է պահեստում</translation>
+    </message>
+    <message>
+        <source>This code used in store entry</source>
+        <translation>Այս կոդը օգտագործվում է պահեստի մնացորդներում</translation>
+    </message>
+    <message>
+        <source>This code used in sales</source>
+        <translation>Այս կոդը օգտագործվում է վաճառքներում</translation>
+    </message>
+    <message>
+        <source>Confirm to remove</source>
+        <translation>Հաստատեք փասթաթղթի հեռացումը</translation>
+    </message>
+    <message>
+        <source>Deleted</source>
+        <translation>Հեռացված է</translation>
     </message>
 </context>
 <context>

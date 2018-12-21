@@ -57,6 +57,7 @@ private slots:
     void doubleClick(const QList<QVariant> &row);
     void on_btnPrevDate_clicked();
     void on_btnNextDate_clicked();
+    void on_chShowDiscount_clicked(bool checked);
 };
 
 #endif // FRESTAURANTTOTAL_H

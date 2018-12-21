@@ -11,6 +11,10 @@ FStoreEntry::FStoreEntry(QWidget *parent) :
     fReportGrid->setupTabTextAndIcon(tr("Store entries"), ":/images/storeentry.png");
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClickOnRow(QList<QVariant>)));
     fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeDoc()), this)->setFocusPolicy(Qt::NoFocus);
+    fDockStore = new DWSelectorRestStore(this);
+    fDockStore->configure();
+    fDockStore->setSelector(ui->leStore);
+    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
 }
 
 FStoreEntry::~FStoreEntry()
@@ -29,6 +33,11 @@ QWidget *FStoreEntry::firstElement()
     return this;
 }
 
+void FStoreEntry::store(CI_RestStore *c)
+{
+    dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, c);
+}
+
 void FStoreEntry::apply(WReportGrid *rg)
 {
     rg->fModel->clearColumns();
@@ -39,7 +48,13 @@ void FStoreEntry::apply(WReportGrid *rg)
     QString query = "select e.f_id, e.f_date, s.f_name, e.f_amount "
                     "from st_header e "
                     "left join r_store s on s.f_id=e.f_store "
+                    "where e.f_date between " + ui->deStart->dateMySql() + " and " + ui->deEnd->dateMySql() + " :store "
                     "order by 2, 3 ";
+    if (!ui->leStore->fHiddenText.isEmpty()) {
+        query.replace(":store", " and e.f_store=" + ui->leStore->fHiddenText + " ");
+    } else {
+        query.replace(":store", "");
+    }
     rg->fModel->setSqlQuery(query);
     rg->fModel->apply(rg);
 }

@@ -79,6 +79,7 @@ void FMaterialsInStore::selector(int selectorNumber, const QVariant &value)
     switch (selectorNumber) {
     case SEL_DISH: {
         dockResponse<CI_Dish, CacheDish>(ui->leMaterial, value.value<CI_Dish*>());
+
         break;
     }
     }
@@ -87,6 +88,11 @@ void FMaterialsInStore::selector(int selectorNumber, const QVariant &value)
 void FMaterialsInStore::store(CI_RestStore *c)
 {
     dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, c);
+    if (c) {
+        QMap<int, QString> colFilter;
+        colFilter[3] = c->fCode;
+        fDockDish->setFilterColumn(colFilter);
+    }
 }
 
 void FMaterialsInStore::doubleClickOnRow(const QList<QVariant> &row)

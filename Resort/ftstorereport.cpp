@@ -3,7 +3,6 @@
 #include "wreportgrid.h"
 
 #include "dwselectorreststore.h"
-#include "dwselectordish.h"
 #include "dwselectorstorepartners.h"
 #include "storedoc.h"
 
@@ -22,17 +21,23 @@ FTStoreReport::FTStoreReport(QWidget *parent) :
 
     connect(fReportGrid, SIGNAL(doubleClickOnRow2(int,int,QList<QVariant>)), this, SLOT(doubleClickOnRow(int,int,QList<QVariant>)));
 
+    fDockDish = new DWSelectorDish(this);
+    fDockDish->configure();
+    fDockDish->setSelector(ui->leGoods);
+    fDockDish->setDialog(this, SEL_DISH);
+
     DWSelectorRestStore *dockStore = new DWSelectorRestStore(this);
     dockStore->configure();
     dockStore->setSelector(ui->leStore);
     connect(dockStore, &DWSelectorRestStore::store, [this](CI_RestStore *ci) {
         dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, ci);
+        if (ci) {
+            fStore = ci->fCode;
+            QMap<int, QString> colFilter;
+            colFilter[3] = fStore;
+            fDockDish->setFilterColumn(colFilter);
+        }
     });
-
-    DWSelectorDish *dockDish = new DWSelectorDish(this);
-    dockDish->configure();
-    dockDish->setSelector(ui->leGoods);
-    dockDish->setDialog(this, SEL_DISH);
 
     DWSelectorStorePartners *dockPartner = new DWSelectorStorePartners(this);
     dockPartner->configure();
@@ -155,7 +160,7 @@ void FTStoreReport::apply(WReportGrid *rg)
             "left join r_store s on s.f_id=b.f_store "
             "left join r_dish d on d.f_id=b.f_material "
             "left join r_docs bd on bd.f_id=b.f_doc "
-            "where bd.f_date<=" + ui->wd->ds1() + " and bd.f_state=1 " + where ;
+            "where bd.f_date<" + ui->wd->ds1() + " and bd.f_state=1 " + where ;
 
     fDb.select(query, fDbBind, fDbRows);
     if (rg->fModel->rowCount() > 0) {

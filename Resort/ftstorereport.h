@@ -2,6 +2,7 @@
 #define FTSTOREREPORT_H
 
 #include "wfilterbase.h"
+#include "dwselectordish.h"
 
 namespace Ui {
 class FTStoreReport;
@@ -21,6 +22,8 @@ public:
     void setParams(const QString &store, const QString &goods);
 private:
     Ui::FTStoreReport *ui;
+    DWSelectorDish *fDockDish;
+    QString fStore;
 
 private slots:
     void doubleClickOnRow(int row, int column, const QList<QVariant> &values);

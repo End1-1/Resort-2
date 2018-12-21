@@ -241,14 +241,7 @@ void DlgPayment::on_btnPrintTax_clicked()
 
 void DlgPayment::on_leDiscount_returnPressed()
 {
-    DatabaseResult drDisc;
-    fDbBind[":f_id"] = fOrder;
-    drDisc.select(fDb, "select * from o_temp_disc where f_id=:f_id", fDbBind);
-    if (drDisc.rowCount() > 0) {
-        ui->leDiscount->clear();
-        message_error(tr("Discount already used"));
-        return;
-    }
+
     if (ui->leCouponNumber->asInt() > 0) {
         message_error(tr("Cannot discount with coupon"));
         return;
@@ -347,6 +340,16 @@ void DlgPayment::on_leDiscount_returnPressed()
     }
     if (!disc) {
         return;
+    } else {
+
+            DatabaseResult drDisc;
+            fDbBind[":f_id"] = fOrder;
+            drDisc.select(fDb, "select * from o_temp_disc where f_id=:f_id", fDbBind);
+            if (drDisc.rowCount() > 0) {
+                ui->leDiscount->clear();
+                message_error(tr("Discount already used"));
+                return;
+            }
     }
 
     fDbBind[":f_total"] = totalDisc;

@@ -480,7 +480,19 @@ void StoreDoc::newGoods(CI_Dish *c)
 
 void StoreDoc::on_btnAddMaterial_clicked()
 {
+    QMap<int, QString> colFilter;
+    switch (ui->leAction->fHiddenText.toInt()) {
+    case STORE_DOC_IN:
+        colFilter[3] = ui->leStore->fHiddenText;
+        break;
+        colFilter[3] = ui->leStoreout->fHiddenText;
+        break;
+    }
+    fDockDish->setFilterColumn(colFilter);
+    fDockDish->on_lineEdit_textEdited("");
     fDockDish->show();
+    fDockDish->activateWindow();
+    fDockDish->raise();
 }
 
 void StoreDoc::on_btnDraftDoc_clicked()

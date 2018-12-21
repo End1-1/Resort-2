@@ -2,6 +2,7 @@
 #define FSTOREENTRY_H
 
 #include "wfilterbase.h"
+#include "dwselectorreststore.h"
 
 namespace Ui {
 class FStoreEntry;
@@ -19,9 +20,11 @@ public:
     virtual void apply(WReportGrid *rg);
 private:
     Ui::FStoreEntry *ui;
+    DWSelectorRestStore *fDockStore;
 private slots:
     void doubleClickOnRow(const QList<QVariant> &row);
     void removeDoc();
+    void store(CI_RestStore *c);
 };
 
 #endif // FSTOREENTRY_H
