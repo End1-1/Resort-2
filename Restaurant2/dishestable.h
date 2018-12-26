@@ -74,7 +74,7 @@ typedef struct {
 } OrderDishStruct;
 Q_DECLARE_METATYPE(OrderDishStruct*)
 
-typedef struct {
+struct DishComplexStruct{
     QString fRecId;
     int fId;
     QMap<QString, QString> fName;
@@ -85,7 +85,27 @@ typedef struct {
     QString fAdgt;
     double fPriceDeviation;
     QList<DishStruct*> fDishes;
-} DishComplexStruct;
+    DishComplexStruct &operator= (const DishComplexStruct &d) {
+        if (this == &d) {
+            return *this;
+        }
+        fRecId = d.fRecId;
+        fId = d.fId;
+        fName = d.fName;
+        fStart = d.fStart;
+        fEnd = d.fEnd;
+        fQty = d.fQty;
+        fPrice = d.fPrice;
+        fAdgt = d.fAdgt;
+        fPriceDeviation = d.fPriceDeviation;
+        foreach (DishStruct *ds, d.fDishes) {
+            DishStruct *dn = new DishStruct();
+            *dn = *ds;
+            fDishes << dn;
+        }
+        return *this;
+    }
+} ;
 Q_DECLARE_METATYPE(DishComplexStruct*)
 
 typedef struct {

@@ -23,7 +23,8 @@ DishComplexStruct *DlgComplexDish::complex(QWidget *parent)
     DlgComplexDish *d = new DlgComplexDish(parent);
     d->setup();
     if (d->exec() == QDialog::Accepted) {
-        dc = d->fResult;
+        dc = new DishComplexStruct();
+        *dc = *(d->fResult);
     }
     delete d;
     return dc;
@@ -87,6 +88,9 @@ void DlgComplexDish::on_tblData_clicked(const QModelIndex &index)
     switch (fMode) {
     case 0:
         fResult = index.data(Qt::UserRole).value<DishComplexStruct*>();
+        if (!fResult) {
+            return;
+        }
         ui->lbTitle->setText(QString("%1 %2")
                              .arg(tr("Select dishes for "))
                              .arg(fResult->fName[def_lang]));

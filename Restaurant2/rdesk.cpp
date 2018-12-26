@@ -1543,10 +1543,16 @@ double RDesk::countTotal()
         }
         total += dc->fPrice * dc->fQty;
     }
+
     double grandTotal = total ;
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 0));
     fDbBind[":f_total"] = grandTotal;
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
+    fDbBind[":f_cash"] = grandTotal;
+    fDbBind[":f_card"] = 0;
+    fDbBind[":f_debt"] = 0;
+    fDbBind[":f_coupon"] = 0;
+    fDb.update("o_header_payment", fDbBind, where_id(ap(fTable->fOrder)));
     fTable->fAmount = float_str(grandTotal, 0);
     updateTableInfo();
     return grandTotal;
@@ -2471,6 +2477,19 @@ void RDesk::manualdisc(double val, int costumer)
         od->fPrice = od->fPrice - disc;
         od->fTotal = od->fQty * od->fPrice;
         updateDish(od);
+    }
+    for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
+        DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
+        if (!dc) {
+            message_error("Application error. Contact to developer. Message: dc == 0, countTotal");
+            return;
+        }
+        dc->fPrice -= dc->fPrice * val;
+        fDbBind[":f_price"] = dc->fPrice;
+        fDbBind[":f_total"] = dc->fPrice * dc->fQty;
+        fDbBind[":f_totalusd"] = dc->fPrice * dc->fQty;
+        fDb.update("o_dish", fDbBind, where_id(ap(dc->fRecId)));
+
     }
     fDbBind[":f_id"] = fTable->fOrder;
     fDbBind[":f_costumer"] = costumer;
