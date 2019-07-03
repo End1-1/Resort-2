@@ -17,16 +17,6 @@ int main(int argc, char *argv[])
     logEnabled = true;
     QApplication a(argc, argv);
 
-//    QSettings ss("Microsoft", "Office36");
-//    if (ss.value("Dir").toInt() > 0) {
-//        return -1;
-//    }
-
-//    if (QDate::currentDate() > QDate::fromString("08.05.2018", "dd.MM.yyyy")) {
-//        ss.setValue("Dir", 1);
-//        return -1;
-//    }
-
     QTranslator t;
     t.load(":/Restaurant.am.qm");
     a.installTranslator(&t);
@@ -52,7 +42,7 @@ int main(int argc, char *argv[])
 
     QFile styleSheet(":/files/stylesheet.qss");
     if (!styleSheet.exists()) {
-        QMessageBox::warning(0, "Stylesheet", "Missing stylesheet\r\n" + styleSheet.fileName());
+        QMessageBox::warning(nullptr, "Stylesheet", "Missing stylesheet\r\n" + styleSheet.fileName());
     }
     styleSheet.open(QIODevice::ReadOnly);
     a.setStyleSheet(styleSheet.readAll());
@@ -68,25 +58,25 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    User *u = 0;
+    User *u = nullptr;
     DefRest der(QHostInfo::localHostName().toUpper());
     if (der.v(dr_open_table_after_run).toInt() != 0)
     {
         QString login;
-        if (RLogin::getLogin(login, QObject::tr("Login"), 0)) {
+        if (RLogin::getLogin(login, QObject::tr("Login"), nullptr)) {
             u = new User(login, 0);
             if (!u->isValid()) {
                 delete u;
                 u = 0;
-                RMessage::showError(QObject::tr("Access denied"), 0);
+                RMessage::showError(QObject::tr("Access denied"), nullptr);
                 return 0;
             }
         } else {
             return 0;
         }
 
-        TableStruct *t = 0;
-        RDesk *rd = new RDesk(0);
+        TableStruct *t = nullptr;
+        RDesk *rd = new RDesk(nullptr);
         rd->prepareToShow();
         rd->setStaff(u);
         t = rd->loadHall(1);

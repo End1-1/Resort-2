@@ -1084,7 +1084,7 @@ void RDesk::checkCardAmount()
         message_error(tr("Invalid card code"));
         return;
     }
-    QStringList l = dr.value(0).toString().split(";");
+    QStringList l = dr.value(0, 0).toString().split(";");
     if (l.count() < 0) {
         message_error(tr("Card error"));
         return;
@@ -1108,9 +1108,11 @@ void RDesk::cardStat()
                    "left join o_header h on h.f_id=hp.f_id "
                    "where hp.f_costumer = :f_costumer and h.f_state=2  "
                    "group by 1", fDbBind);
-    msg += "<br>" + tr("Cards") + "  ";
+    msg += "<br>" + tr("Cards") + "<br>";
+    msg += QString("%1 / %2 / %3 / %4<br>").arg(tr("Card")).arg(tr("Total qty")).arg(tr("Total amount")).arg(tr("Current visits"));
     for (int i = 0; i < dr.rowCount(); i++) {
-        msg += dr.value(i, "card").toString() + ": " + dr.value(i, "qty").toString() + "/" + float_str(dr.value(i, "amount").toDouble(), 2) + "<br>";
+        msg += dr.value(i, "card").toString() + ": " + dr.value(i, "qty").toString() + "/" + float_str(dr.value(i, "amount").toDouble(), 2) + "/";
+        msg += QString("%1<br>").arg(dr.value(i, "qty").toInt() % 11);
     }
     message_info(msg);
 }

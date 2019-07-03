@@ -275,5 +275,9 @@ void Preferences::setUser(const QString &connName, const QString &key, const QSt
 
 QString Preferences::hostUsername()
 {
-    return "Unknown";
+    QString name = getenv("USER");
+    if (name.isEmpty()) {
+        name = getenv("USERNAME");
+    }
+    return name;
 }

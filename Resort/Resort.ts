@@ -11910,17 +11910,6 @@ or contact to administrator</source>
     </message>
 </context>
 <context>
-    <name>PrintTaxN</name>
-    <message>
-        <source>Socket read error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Data read timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>MINUS </source>

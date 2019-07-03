@@ -14,7 +14,7 @@ class DlgConnectToServer : public BaseExtendedDialog
     Q_OBJECT
 
 public:
-    explicit DlgConnectToServer(QWidget *parent = 0);
+    explicit DlgConnectToServer(QWidget *parent = nullptr);
     ~DlgConnectToServer();
 
 private:
