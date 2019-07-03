@@ -3,7 +3,7 @@
 BaseExtendedDialog::BaseExtendedDialog(QWidget *parent) :
     BaseDialog(parent)
 {
-    fTrackControl = 0;
+    fTrackControl = nullptr;
 }
 
 BaseExtendedDialog::~BaseExtendedDialog()

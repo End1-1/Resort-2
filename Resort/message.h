@@ -28,21 +28,20 @@ class message : public QDialog, public Base
     Q_OBJECT
 
 public:
-    explicit message(QWidget *parent = 0);
+    explicit message(QWidget *parent = nullptr);
     ~message();
     static void error(const QString &text);
     static void error(const QStringList &text);
     static int confirm(const QString &text);
     static void info(const QString &text);
     static int yesnocancel(const QString &text);
+
 private slots:
     void on_btnCancel_clicked();
     void on_btnOk_clicked();
     void on_btnNo_clicked();
     void on_btnYes_clicked();
-
     void on_btnCopy_clicked();
-
     void on_btnNoAll_clicked();
 
 private:

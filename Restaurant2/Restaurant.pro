@@ -16,18 +16,21 @@ DEFINES += _RESTAURANT_
 
 RC_FILE = res.rc
 
-INCLUDEPATH += $$PWD/../Base
-INCLUDEPATH += $$PWD/../Controls
-INCLUDEPATH += $$PWD/../Cache
-INCLUDEPATH += $$PWD/../Print
-INCLUDEPATH += $$PWD/../Resort
-INCLUDEPATH += $$PWD/../Selector
-INCLUDEPATH += $$PWD/../../Cafe5/Classes
-INCLUDEPATH += /Qt/projects/NewTax
-INCLUDEPATH += /OpenSSL-Win32.0/include
-INCLUDEPATH += /OpenSSL-Win32.0/include/openssl
+INCLUDEPATH += c:/projects/resort2/Base
+INCLUDEPATH += c:/projects/resort2/Controls
+INCLUDEPATH += c:/projects/resort2/Cache
+INCLUDEPATH += c:/projects/resort2/Print
+INCLUDEPATH += c:/projects/resort2/Resort
+INCLUDEPATH += c:/projects/resort2/Selector
+INCLUDEPATH += c:/projects/Cafe5/Classes
+INCLUDEPATH += C:/Projects/NewTax/Src/
+INCLUDEPATH += c:/OpenSSL-Win32/include
+INCLUDEPATH += c:/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
+    ../Print/printtax.cpp \
+    ../Resort/message.cpp \
+    dlgprinttaxsm.cpp \
     rface.cpp \
     rlogin.cpp \
     rmessage.cpp \
@@ -139,13 +142,13 @@ SOURCES += main.cpp\
     ../Cache/cacheroominventorystate.cpp \
     ../Base/appconfig.cpp \
     ../Resort/dlgprinttaxsm.cpp \
-    ../Resort/message.cpp \
     baseextendeddialog.cpp \
-    ../Print/printtax.cpp \
-    ../../NewTax/printtaxn.cpp \
+    c:/projects/NewTax/Src/printtaxn.cpp \
     ../../Cafe5/Classes/c5printing.cpp
 
 HEADERS  += rface.h \
+    c:/projects/NewTax/Src/printtaxn.h \
+    dlgprinttaxsm.h \
     rlogin.h \
     rmessage.h \
     ../Base/base.h \
@@ -257,14 +260,13 @@ HEADERS  += rface.h \
     ../Cache/cacheroominventory.h \
     ../Cache/cacheroominventorystate.h \
     ../Base/appconfig.h \
-    ../Resort/dlgprinttaxsm.h \
     ../Resort/message.h \
     baseextendeddialog.h \
     ../Print/printtax.h \
-    ../../NewTax/printtaxn.h \
-    ../../Cafe5/Classes/c5printing.h
+     c:/projects/Cafe5/Classes/c5printing.h
 
 FORMS    += rface.ui \
+    dlgprinttaxsm.ui \
     rlogin.ui \
     rmessage.ui \
     rdesk.ui \

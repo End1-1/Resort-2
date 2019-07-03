@@ -82,11 +82,7 @@ void setupTableFullColumnWidth(QTableWidget *tw, int colWidth, int elements)
 
 QString hostName()
 {
-    wchar_t userName[100];
-    DWORD userNameSize = sizeof(userName);
-    memset(&userName[0], 0, userNameSize);
-    GetUserName(userName, &userNameSize);
-    return QString::fromWCharArray(userName);
+    return "unknown";
 }
 
 void fillTableWithData(QTableWidget *tw, QList<QList<QVariant> > &data, bool append)

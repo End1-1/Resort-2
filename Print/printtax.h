@@ -12,7 +12,7 @@ class PrintTax : public BaseExtendedDialog
     Q_OBJECT
 
 public:
-    explicit PrintTax(QWidget *parent = 0);
+    explicit PrintTax(QWidget *parent = nullptr);
     ~PrintTax();
     QString fAmountPre;
     QString fAmountCash;
@@ -30,23 +30,16 @@ public:
     void build();
     bool print();
     static void printAdvance(double amount, int paymentMode, const QString &doc);
+
 private slots:
     void on_btnCancel_clicked();
-
     void on_btnPrint_clicked();
-
     void on_tblData_clicked(const QModelIndex &index);
-
     void on_leCard_textEdited(const QString &arg1);
-
     void on_leCash_textEdited(const QString &arg1);
-
     void on_lePre_textEdited(const QString &arg1);
-
     void on_chCheckUncheckAll_clicked(bool checked);
-
     void on_tblFilter_clicked(const QModelIndex &index);
-
     void on_btnClearFilter_clicked();
 
 private:

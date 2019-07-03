@@ -1,5 +1,6 @@
 #include "dlgprinttaxsm.h"
 #include "ui_dlgprinttaxsm.h"
+#include "message.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 
