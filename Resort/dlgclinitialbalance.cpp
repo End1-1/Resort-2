@@ -72,7 +72,7 @@ void DlgCLInitialBalance::on_btnOk_clicked()
     }
     fDb.fDb.transaction();
     if (ui->leVaucher->isEmpty()) {
-        QString rid = uuid("CR", fAirDb);
+        QString rid = uuuid("CR", fAirDb);
         fDb.insertId("m_register", rid);
         ui->leVaucher->setText(rid);
         fDbBind[":f_source"] = source;

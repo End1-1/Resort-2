@@ -14,7 +14,7 @@ protected:
     virtual void select(const QVariant &value);
     virtual void selectorFocusOut();
 signals:
-    roomCategory(CI_RoomCategory *c);
+    void roomCategory(CI_RoomCategory *c);
 };
 
 #endif // DWSELECTORROOMCATEGORY_H

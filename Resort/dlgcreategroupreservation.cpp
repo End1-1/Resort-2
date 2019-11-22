@@ -1,6 +1,5 @@
 #include "dlgcreategroupreservation.h"
 #include "ui_dlgcreategroupreservation.h"
-#include "wgroupreserverect.h"
 #include "wreservation.h"
 #include "wreservationroomtab.h"
 #include "cacheroomcategory.h"
@@ -73,41 +72,7 @@ DlgCreateGroupReservation::~DlgCreateGroupReservation()
 
 void DlgCreateGroupReservation::loadRooms()
 {
-    fDb.select("select f_id, f_floor, f_short, f_rate from f_room order by f_id", fDbBind, fDbRows);
-    int floor = 0;
-    int row = 0;
-    int col = 0;
-    QStringList floors;
-    foreach_rows {
-        if (floor != it->at(1).toInt()) {
-            floor = it->at(1).toInt();
-            floors << QString::number(floor);
-            row = ui->tblData->rowCount();
-            ui->tblData->setRowCount(row + 1);
-            col = 0;
-        }
-        WGroupReserveRect *w = new WGroupReserveRect();
-        connect(w, SIGNAL(checkClicked(bool)), this, SLOT(singleHandle(bool)));
-        QString s = it->at(2).toString().remove(0, 4);
-        w->setRoomName(it->at(0).toString(), it->at(0).toString() + "\n" + s);
-        ui->tblData->setCellWidget(row, col, w);
-        col++;
-        if (col > ui->tblData->columnCount() - 1) {
-            floors << QString::number(floor);
-            row = ui->tblData->rowCount();
-            ui->tblData->setRowCount(row + 1);
-            col = 0;
-        }
-    }
-    ui->tblData->setVerticalHeaderLabels(floors);
-    QSize size(ui->tblData->size());
-    size.setWidth((ui->tblData->columnCount() * ui->tblData->horizontalHeader()->defaultSectionSize()) + 20);
-    size.setHeight((floors.count() * ui->tblData->verticalHeader()->defaultSectionSize()) + 25);
-    ui->tblData->setMinimumHeight(size.height());
-    ui->tblData->setMaximumHeight(size.height());
-    adjustSize();
-    makeRooms();
-}
+   }
 
 void DlgCreateGroupReservation::setSingleMode(bool mode)
 {
@@ -144,21 +109,7 @@ void DlgCreateGroupReservation::singleHandle(bool v)
     if (!v) {
         return;
     }
-    WGroupReserveRect *gro = static_cast<WGroupReserveRect*>(sender());
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        for (int j = 0; j < ui->tblData->columnCount(); j++) {
-            if (ui->tblData->cellWidget(i, j)) {
-                WGroupReserveRect *gr = static_cast<WGroupReserveRect*>(ui->tblData->cellWidget(i, j));
-                if (gr->isEnabled()) {
-                    if (gr->checked()) {
-                        if (gr != gro) {
-                            gr->uncheck();
-                        }
-                    }
-                }
-            }
-        }
-    }
+
 }
 
 void DlgCreateGroupReservation::guest(CI_Guest *c)
@@ -195,126 +146,18 @@ void DlgCreateGroupReservation::makeRooms()
     if (selSmoke.count() > 0) {
         smoke = selSmoke.at(0).column();
     }
-    QSet<int> excluded;
-    CacheReservation::instance()->exludeList(ui->deArrival->date(), ui->deDeparture->date(), excluded);
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        for (int j = 0; j < ui->tblData->columnCount(); j++) {
-            if (ui->tblData->cellWidget(i, j)) {
-                WGroupReserveRect *gr = static_cast<WGroupReserveRect*>(ui->tblData->cellWidget(i, j));
-                CI_Room *room = CacheRoom::instance()->get(gr->code());
-                bool enabled = !excluded.contains(room->fCode.toInt());
-                if (lstCat.count() > 0) {
-                    enabled = enabled && lstCat.contains(room->fCategoryShort);
-                }
-                if (lstFloor.count() > 0) {
-                    enabled = enabled && lstFloor.contains(QString::number(room->fFloor));
-                }
-                if (lstBed.count() > 0) {
-                    enabled = enabled && lstBed.contains(room->fBed);
-                }
-                if (smoke > 0) {
-                    enabled = enabled && room->fSmoke == (smoke == 1 ? 1 : 0);
-                }
-                gr->setEnabled(enabled);
-            }
-        }
-    }
+
     countSelected();
 }
 
 void DlgCreateGroupReservation::countSelected()
 {
-    QMap<QString, int> total;
-    QMap<QString, int> available;
-    QMap<QString, int> selected;
-    QMap<QString, double> price;
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        for (int j = 0; j < ui->tblData->columnCount(); j++) {
-            if (ui->tblData->cellWidget(i, j)) {
-                WGroupReserveRect *gr = static_cast<WGroupReserveRect*>(ui->tblData->cellWidget(i, j));
-                CI_Room *r = CacheRoom::instance()->get(gr->code());
-                total[r->fCategoryShort] = total[r->fCategoryShort] + 1;
-                price[r->fCategoryShort] = r->fPrice.toDouble();
-                if (gr->isEnabled()) {
-                    available[r->fCategoryShort] = available[r->fCategoryShort] + 1;
-                    if (gr->checked()) {
-                        selected[r->fCategoryShort] = selected[r->fCategoryShort] + 1;
-                    }
-                }
-            }
-        }
-    }
-    ui->tblCount->clearContents();
-    ui->tblCount->setRowCount(0);
-    for (QMap<QString, int>::const_iterator it = total.begin(); it != total.end(); it++) {
-        int row = ui->tblCount->rowCount();
-        ui->tblCount->setRowCount(row + 1);
-        ui->tblCount->setItem(row, 0, Utils::tableItem(it.key()));
-        ui->tblCount->setItem(row, 1, Utils::tableItem(it.value()));
-        ui->tblCount->setItem(row, 2, Utils::tableItem(available[it.key()]));
-        ui->tblCount->setItem(row, 3, Utils::tableItem(selected[it.key()]));
-        ui->tblCount->setItem(row, 4, Utils::tableItem(price[it.key()]));
-        EQLineEdit *e = new EQLineEdit();
-        e->fRow = row;
-        ui->tblCount->setCellWidget(row, 4, e);
-        connect(e, SIGNAL(textChanged(QString)), this, SLOT(groupPriceChanged(QString)));
-        e->setText(float_str(price[it.key()], 2));
-        ui->tblCount->setItem(row, 5, Utils::tableItem(ui->tblCount->toDouble(row, 3) * ui->tblCount->toDouble(row, 4)));
-    }
+
 }
 
 void DlgCreateGroupReservation::on_btnCreate_clicked()
 {
-    bool noReservation = true;
-    if (!fSingleMode) {
-        WReservation *w = addTab<WReservation>();
-        int groupId = 0;
-        for (int i = 0; i < ui->tblData->rowCount(); i++) {
-            for (int j = 0; j < ui->tblData->columnCount(); j++) {
-                if (ui->tblData->cellWidget(i, j)) {
-                    WGroupReserveRect *gr = static_cast<WGroupReserveRect*>(ui->tblData->cellWidget(i, j));
-                    if (gr->checked()) {
-                        if (groupId == 0) {
-                            fDbBind[":f_date"] = WORKING_DATE;
-                            fDbBind[":f_time"] = QTime::currentTime();
-                            groupId = fDb.insert("f_reservation_group", fDbBind);
-                            w->setGroup(groupId);
-                        }
-                        WReservationRoomTab *rt = w->newRoomTab();
-                        rt->setBaseData(ui->deArrival->date(), ui->deDeparture->date(), CacheRoom::instance()->get(gr->code()));
-                        rt->setTimes(ui->teArrival->time(), ui->teDeparture->time());
-                        rt->setCardex(CacheCardex::instance()->get(ui->leCardexCode->text()));
-                        rt->setGuest(ui->leGuest->fHiddenText.toInt());
-                        rt->setArrangement(ui->cbArrangement->currentData().toInt());
-                        rt->setRoomPrice(fPrice[CacheRoom::instance()->get(gr->code())->fCategoryShort]);
-                        noReservation = false;
-                    }
-                }
-            }
-        }
-    } else {
-        noReservation = false;
-        QString code;
-        for (int i = 0; i < ui->tblData->rowCount(); i++) {
-            for (int j = 0; j < ui->tblData->columnCount(); j++) {
-                if (ui->tblData->cellWidget(i, j)) {
-                    WGroupReserveRect *gr = static_cast<WGroupReserveRect*>(ui->tblData->cellWidget(i, j));
-                    if (gr->isEnabled()) {
-                        if (gr->checked()) {
-                            code = gr->code();
-                        }
-                    }
-                }
-            }
-        }
-        fTab->setBaseData(ui->deArrival->date(), ui->deDeparture->date(), CacheRoom::instance()->get(code));
-        fTab->setGuest(ui->leGuest->fHiddenText.toInt());
-    }
-    if (noReservation) {
-        message_error_tr("Nothing was selected");
-        return;
-    }
-    accept();
+
 }
 
 void DlgCreateGroupReservation::on_btnAddGuest_clicked()

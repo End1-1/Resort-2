@@ -28,8 +28,10 @@ INCLUDEPATH += c:/OpenSSL-Win32/include
 INCLUDEPATH += c:/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
+    ../../Cafe5/Classes/notificationwidget.cpp \
     ../Print/printtax.cpp \
     ../Resort/message.cpp \
+    dlgcheckcard.cpp \
     dlgprinttaxsm.cpp \
     rface.cpp \
     rlogin.cpp \
@@ -147,7 +149,9 @@ SOURCES += main.cpp\
     ../../Cafe5/Classes/c5printing.cpp
 
 HEADERS  += rface.h \
+    ../../Cafe5/Classes/notificationwidget.h \
     c:/projects/NewTax/Src/printtaxn.h \
+    dlgcheckcard.h \
     dlgprinttaxsm.h \
     rlogin.h \
     rmessage.h \
@@ -266,6 +270,8 @@ HEADERS  += rface.h \
      c:/projects/Cafe5/Classes/c5printing.h
 
 FORMS    += rface.ui \
+    ../../Cafe5/Classes/notificationwidget.ui \
+    dlgcheckcard.ui \
     dlgprinttaxsm.ui \
     rlogin.ui \
     rmessage.ui \

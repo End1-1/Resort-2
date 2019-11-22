@@ -29,6 +29,17 @@ int main(int argc, char *argv[])
     }
     delete d;
 
+    QStringList params;
+    for (int i = 0; i < argc; i++) {
+        params << argv[i];
+    }
+    /*
+    if (params.contains("noversion")) {
+        QMessageBox::information(nullptr, "No version", "No check version mode");
+        DO_NOT_CHECK_VERSION = true;
+    }
+    */
+
     QFile file(p.getString(def_home_path) + "/lock.pid");
     file.remove();
     QLockFile lockFile(p.getString(def_home_path) + "/lock.pid");

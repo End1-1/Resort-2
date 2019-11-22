@@ -290,7 +290,7 @@ void StoreDoc::saveDoc(int docState)
     }
     bool isNew = false;
     if (ui->leDocNumber->isEmpty()) {
-        ui->leDocNumber->setText(uuid("ST", fAirDb));
+        ui->leDocNumber->setText(uuuid("ST", fAirDb));
         isNew = true;
     }
     fDb.fDb.transaction();

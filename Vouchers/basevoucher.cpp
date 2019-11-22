@@ -46,7 +46,7 @@ QVariant BaseVoucher::getA(const QString &field)
 
 QString BaseVoucher::genId(const QString &source)
 {
-    QString id = uuid(source, fAirDb);
+    QString id = uuuid(source, fAirDb);
     set("f_id", id);
     set("f_source", source);
     fNeedInsert = true;

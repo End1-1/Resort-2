@@ -84,7 +84,7 @@ void DlgEndOfDay::on_btnOk_clicked()
         }
 
         QString invoice = ui->tblCharges->item(i, 0)->data(Qt::EditRole).toString();
-        QString rid = uuid(VAUCHER_ROOMING_N, fAirDb);
+        QString rid = uuuid(VAUCHER_ROOMING_N, fAirDb);
         result = fDb.insertId("m_register", rid);
         if (!result) {
             break;

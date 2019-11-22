@@ -108,6 +108,8 @@ private slots:
 
     void on_btnCardBalances_clicked();
 
+    void on_btnSalary_clicked();
+
 private:
     Ui::wwelcomerest *ui;
 };

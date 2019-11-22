@@ -112,7 +112,7 @@ void DlgCalculateOutputOfRestaurant::calculateForStore(int store, const QDate &d
         return;
     }
 
-    QString docId = uuid("ST", fAirDb);
+    QString docId = uuuid("ST", fAirDb);
     fDbBind[":f_id"] = docId;
     fDb.insertWithoutId("r_docs", fDbBind);
     fDbBind[":f_date"] = date;

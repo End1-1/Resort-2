@@ -58,8 +58,12 @@ public:
     void checkCardAmount();
     void cardStat();
     void saledItem();
+    void checkCardRegistration();
+    void employesOfDay();
+
 protected:
     virtual void closeEvent(QCloseEvent *e);
+
 private slots:
     void onBtnQtyClicked();
     void timeout();
@@ -77,39 +81,22 @@ private slots:
     void on_btnTools_clicked();
     void on_btnCheckout_clicked();
     void on_btnTransfer_clicked();
-
     void on_btnTypeUp_clicked();
-
     void on_btnTypeDown_clicked();
-
     void on_btnDishUp_clicked();
-
     void on_btnDishDown_clicked();
-
     void on_btnOrdDown_clicked();
-
     void on_btnOrdUp_clicked();
-
     void on_btnSetRoom_clicked();
-
     void on_btnComplex_clicked();
-
     void on_tblTables_itemClicked(QTableWidgetItem *item);
-
     void on_btnPayment_2_clicked();
-
     void on_btnSetCar_clicked();
-
     void on_btnDiscount_clicked();
-
     void on_btnPackage_clicked();
-
     void on_btnHallWash_clicked();
-
     void on_btnHallCafe_clicked();
-
     void on_btnExit_2_clicked();
-
     void on_btnDiss50_clicked();
 
 

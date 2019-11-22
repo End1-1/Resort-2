@@ -1,6 +1,5 @@
 #include "dlgpretax.h"
 #include "ui_dlgpretax.h"
-#include "printtax.h"
 
 DlgPreTax::DlgPreTax(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -50,20 +49,7 @@ void DlgPreTax::on_tblData_clicked(const QModelIndex &index)
 
 void DlgPreTax::on_btnOk_clicked()
 {
-    for (int  i = 0; i < ui->tblData->rowCount(); i++) {
-        QTableWidgetItem *item = ui->tblData->item(i, 3);
-        if (item->checkState() == Qt::Checked) {
-            PrintTax::printAdvance(ui->tblData->toDouble(i, 2), ui->tblData->toInt(i, 4), QString("AV%1%2").arg(112233).arg(i));
-            fDbBind[":f_fiscal"] = 1;
-            fDb.update("m_register", fDbBind, where_id(ui->tblData->toInt(i, 0)));
-            if (fInvoice > 0) {
-                fDbBind[":f_amount"] = ui->tblData->toDouble(i, 2);
-                fDbBind[":f_id"] = fInvoice;
-                fDb.select("update m_v_invoice set f_prepaid=f_prepaid+:f_amount where f_id=:f_id", fDbBind, fDbRows);
-            }
-        }
-    }
-    accept();
+
 }
 
 void DlgPreTax::on_btnCancel_clicked()

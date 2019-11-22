@@ -183,3 +183,15 @@ void RTools::on_btnPrintDailySales_clicked()
     accept();
     fDesk->saledItem();
 }
+
+void RTools::on_btnCheckCardReg_clicked()
+{
+    accept();
+    fDesk->checkCardRegistration();
+}
+
+void RTools::on_btnSalary_2_clicked()
+{
+    accept();
+    fDesk->employesOfDay();
+}

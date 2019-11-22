@@ -18,6 +18,7 @@ DEFINES += _HOTEL_
 #DEFINES += _WASH_
 
 SOURCES += main.cpp\
+    ../Filter/wsalary.cpp \
         mainwindow.cpp \
     login.cpp \
     loginsettings.cpp \
@@ -193,7 +194,6 @@ SOURCES += main.cpp\
     ../RoomChart/reservewidgetaction.cpp \
     ../Selector/dwselectorreservestate.cpp \
     ../Print/pimage.cpp \
-    wgroupreserverect.cpp \
     dlgdiscount.cpp \
     ../Print/pprintinvoice.cpp \
     ../Filter/fcategorytosell.cpp \
@@ -215,7 +215,6 @@ SOURCES += main.cpp\
     ../Base/logging.cpp \
     ../Print/pprintheader.cpp \
     dlgtaxprintsetup.cpp \
-    ../Print/printtax.cpp \
     dlginvoiceprintoption.cpp \
     ../RowEditor/reinvoiceitem.cpp \
     ../Cache/cacheinvoiceitemgroup.cpp \
@@ -381,8 +380,6 @@ SOURCES += main.cpp\
     ../Filter/fsalary.cpp \
     ../Filter/fdiscountreport.cpp \
     ../Filter/fsalesbycar.cpp \
-    ../../NewTax/printtaxn.cpp \
-    dlgprinttaxsm.cpp \
     ../Filter/fdiscounttotal.cpp \
     dlgtaxback2.cpp \
     ../Filter/fdebtholders.cpp \
@@ -440,6 +437,7 @@ SOURCES += main.cpp\
     ../Filter/fbalanceoncard.cpp
 
 HEADERS  += mainwindow.h \
+    ../Filter/wsalary.h \
     login.h \
     loginsettings.h \
     message.h \
@@ -615,7 +613,6 @@ HEADERS  += mainwindow.h \
     ../RoomChart/reservewidgetaction.h \
     ../Selector/dwselectorreservestate.h \
     ../Print/pimage.h \
-    wgroupreserverect.h \
     dlgdiscount.h \
     ../Print/pprintinvoice.h \
     ../Filter/fcategorytosell.h \
@@ -637,7 +634,6 @@ HEADERS  += mainwindow.h \
     ../Base/logging.h \
     ../Print/pprintheader.h \
     dlgtaxprintsetup.h \
-    ../Print/printtax.h \
     dlginvoiceprintoption.h \
     ../RowEditor/reinvoiceitem.h \
     ../Cache/cacheinvoiceitemgroup.h \
@@ -805,8 +801,6 @@ HEADERS  += mainwindow.h \
     ../Filter/fsalary.h \
     ../Filter/fdiscountreport.h \
     ../Filter/fsalesbycar.h \
-    ../../NewTax/printtaxn.h \
-    dlgprinttaxsm.h \
     ../Filter/fdiscounttotal.h \
     dlgtaxback2.h \
     ../Filter/fdebtholders.h \
@@ -865,6 +859,7 @@ HEADERS  += mainwindow.h \
     ../Filter/fbalanceoncard.h
 
 FORMS    += mainwindow.ui \
+    ../Filter/wsalary.ui \
     login.ui \
     loginsettings.ui \
     message.ui \
@@ -931,7 +926,6 @@ FORMS    += mainwindow.ui \
     ../Filter/fdailymovement.ui \
     ../Filter/freservationscommon.ui \
     ../RoomChart/reservewidgetaction.ui \
-    wgroupreserverect.ui \
     dlgdiscount.ui \
     ../Filter/fcategorytosell.ui \
     ../RowEditor/recurrency.ui \
@@ -940,7 +934,6 @@ FORMS    += mainwindow.ui \
     dlgtransferinvoiceamount.ui \
     ../Print/dlgprintreservation.ui \
     dlgtaxprintsetup.ui \
-    ../Print/printtax.ui \
     dlginvoiceprintoption.ui \
     ../RowEditor/reinvoiceitem.ui \
     ../Filter/finhouseguest.ui \
@@ -1055,7 +1048,6 @@ FORMS    += mainwindow.ui \
     ../Filter/fsalary.ui \
     ../Filter/fdiscountreport.ui \
     ../Filter/fsalesbycar.ui \
-    dlgprinttaxsm.ui \
     ../Filter/fdiscounttotal.ui \
     dlgtaxback2.ui \
     ../Filter/fdebtholders.ui \
@@ -1109,10 +1101,9 @@ INCLUDEPATH += $$PWD/../Widgets
 INCLUDEPATH += $$PWD/../RGDoubleClick
 INCLUDEPATH += $$PWD/../GridOptionWidgets
 INCLUDEPATH += $$PWD/../Vouchers
-INCLUDEPATH += /OpenSSL-Win32.0/include
-INCLUDEPATH += /OpenSSL-Win32.0/include/openssl
-INCLUDEPATH += /Qt/projects/NewTax
-QMAKE_CXXFLAGS += -Werror
+INCLUDEPATH += /OpenSSL-Win32/include
+INCLUDEPATH += /OpenSSL-Win32/include/openssl
+INCLUDEPATH += /Projects/NewTax
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
 DEFINES += _APPLICATION_=\\\"SmartHotel\\\"

@@ -365,7 +365,7 @@ void WStoreEntry::on_btnCalculate_clicked()
                 continue;
             }
             if (!doccreated) {
-                docId = uuid("ST", fAirDb);
+                docId = uuuid("ST", fAirDb);
                 fDbBind[":f_id"] = docId;
                 fDb.insertWithoutId("r_docs", fDbBind);
                 fDbBind[":f_date"] = ui->deDate->date();

@@ -58,7 +58,7 @@ void ReserveWidget::createService()
         deleteLater();
         return;
     }
-    QString invId = uuid(VAUCHER_INVOICE_N, fAirDb);
+    QString invId = uuuid(VAUCHER_INVOICE_N, fAirDb);
     fDbBind[":f_state"] = RESERVE_SERVICE;
     fDbBind[":f_reserveState"] = CONFIRM_BLOCK;
     fDbBind[":f_room"] = fRoom->fCode;
@@ -72,7 +72,7 @@ void ReserveWidget::createService()
     fDbBind[":f_endDate"] = fDateEnd;
     fDbBind[":f_author"] = WORKING_USERID;
     fDbBind[":f_invoice"] = invId;
-    fId = uuid("RS", fAirDb);
+    fId = uuuid("RS", fAirDb);
     fDb.insertId("f_reservation", fId);
     fDbBind[":f_id"] = fId;
     fDb.update("f_reservation", fDbBind, where_id(ap(fId)));

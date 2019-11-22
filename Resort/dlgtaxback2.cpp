@@ -1,6 +1,5 @@
 #include "dlgtaxback2.h"
 #include "ui_dlgtaxback2.h"
-#include "dlgprinttaxsm.h"
 
 DlgTaxBack2::DlgTaxBack2(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -42,24 +41,7 @@ void DlgTaxBack2::on_btnCancel_clicked()
 
 void DlgTaxBack2::on_btnOK_clicked()
 {
-    QSet<int> ch;
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        if (ui->tblData->item(i, 5)->checkState() == Qt::Checked) {
-            ch << ui->tblData->toInt(i, 3);
-        }
-    }
-    foreach (int n, ch) {
-        int taxCode = 0;
-        if (DlgPrintTaxSM::printTaxback(n, fInvoice, taxCode) == TAX_OK) {
-            for (int i = 0; i < ui->tblData->rowCount(); i++) {
-                if (ui->tblData->toInt(i, 3) == n) {
-                    fDbBind[":f_id"] = ui->tblData->toString(i, 0);
-                    fDb.select("update m_register set f_fiscal=0 where f_id=" + ap(ui->tblData->toString(i, 0)));
-                }
-            }
-        }
-    }
-    accept();
+
 }
 
 void DlgTaxBack2::load(const QString &ids)

@@ -22,6 +22,7 @@ public:
     ~RFace();
     bool setup();
     bool fIsConfigured;
+
 private slots:
     void timeout();
     void socketReadyRead();
@@ -34,9 +35,7 @@ private slots:
     void on_btnDown_clicked();
     void on_btnChangeHall_clicked();
     void on_btnBreakFast_clicked();
-
     void on_btnBanket_clicked();
-
     void on_btnTools_clicked();
 
 private:

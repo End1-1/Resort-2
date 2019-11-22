@@ -77,7 +77,7 @@ void RoomState::on_btnOk_clicked()
     QString add = ui->leRoomCode->text();
     if (ui->leNewState->asInt() == ROOM_STATE_OUTOF) {
         QString fId;
-        QString invId = uuid(VAUCHER_INVOICE_N, fAirDb);
+        QString invId = uuuid(VAUCHER_INVOICE_N, fAirDb);
         add += QString(" %1 - %2")
                 .arg(ui->deStart->text(), ui->deEnd->text());
         fDbBind[":f_state"] = RESERVE_OUTOFROOM;
@@ -94,7 +94,7 @@ void RoomState::on_btnOk_clicked()
         fDbBind[":f_author"] = WORKING_USERID;
         fDbBind[":f_invoice"] = invId;
         fDbBind[":f_remarks"] = ui->teRemarks->toPlainText();
-        fId = uuid("RS", fAirDb);
+        fId = uuuid("RS", fAirDb);
         fDb.insertId("f_reservation", fId);
         fDbBind[":f_id"] = fId;
         fDb.update("f_reservation", fDbBind, where_id(ap(fId)));

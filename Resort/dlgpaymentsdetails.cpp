@@ -7,7 +7,6 @@
 #include "cacheinvoiceitem.h"
 #include "pprintheader.h"
 #include "pprintvaucher.h"
-#include "printtax.h"
 #include "paymentmode.h"
 #include "vauchers.h"
 #include <QInputDialog>
@@ -564,7 +563,7 @@ bool DlgPaymentsDetails::savePayment(QTableWidget *t, int side, QList<int> &prin
             }
 
             fDb.fDb.transaction();
-            QString rid = uuid(t->item(i, 10)->text(), fAirDb);
+            QString rid = uuuid(t->item(i, 10)->text(), fAirDb);
             fDb.insertId("m_register", rid);
             fDbBind[":f_source"] = t->item(i, 10)->text();
             fDbBind[":f_res"] = ui->leReservation->text();
@@ -604,12 +603,7 @@ bool DlgPaymentsDetails::savePayment(QTableWidget *t, int side, QList<int> &prin
 
             if (t->item(i, 10)->text() == "AV") {
                 if (message_confirm(QString::fromUtf8("Տպել կանխավճարի ՀԴՄ՞ ") + lineEdit(t, i, 5)->text() + " AMD") == QDialog::Accepted) {
-                    PrintTax::printAdvance(lineEdit(t, i, 5)->text().toDouble(), lineEdit(t, i, 2)->asInt(), rid);
-                    fDbBind[":f_prepaid"] = lineEdit(t, i, 5)->text().toDouble();
-                    fDbBind[":f_id"] = ui->leInvoice->text();
-                    fDb.select("update m_v_invoice set f_prepaid=f_prepaid+:f_prepaid where f_id=:f_id", fDbBind, fDbRows);
-                    fDbBind[":f_fiscal"] = 1;
-                    fDb.update("m_register", fDbBind, where_id(ap(rid)));
+
                 }
             }
             t->removeCellWidget(i, 8);
@@ -685,7 +679,7 @@ void DlgPaymentsDetails::on_btnSave_clicked()
         if (ui->tblRefund->toString(i, 0).isEmpty()) {
             printRefundRow << i;
             fDb.fDb.transaction();
-            QString rid = uuid(VAUCHER_REFUND_N, fAirDb);
+            QString rid = uuuid(VAUCHER_REFUND_N, fAirDb);
             fDb.insertId("m_register", rid);
             fDbBind[":f_source"] = VAUCHER_REFUND_N;
             fDbBind[":f_wdate"] = WORKING_DATE;

@@ -5,6 +5,7 @@
 #include "ftstorereport.h"
 #include "wreportgrid.h"
 #include "fbalanceoncard.h"
+#include "wsalary.h"
 
 wwelcomerest::wwelcomerest(QWidget *parent) :
     BaseWidget(parent),
@@ -254,4 +255,9 @@ void wwelcomerest::on_btnTStore_clicked()
 void wwelcomerest::on_btnCardBalances_clicked()
 {
     FBalanceOnCard::openFilterReport<FBalanceOnCard, WReportGrid>();
+}
+
+void wwelcomerest::on_btnSalary_clicked()
+{
+    WSalary::openFilterReport<WSalary, WReportGrid>();
 }

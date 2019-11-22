@@ -2,7 +2,6 @@
 #include "ui_dlgpostbreakfast.h"
 #include "vauchers.h"
 #include "dwselectorpaymentmode.h"
-#include "dlgprinttaxsm.h"
 #include "dwselectorinvoiceitem.h"
 #include "dwselectorhall.h"
 #include "cachereststore.h"
@@ -221,7 +220,7 @@ void DlgPostBreakfast::on_btnSave_clicked()
     fDb.fDb.transaction();
     if (ui->leVoucher->isEmpty()) {
         isNew = true;
-        QString rid = uuid(VAUCHER_POINT_SALE_N, fAirDb);
+        QString rid = uuuid(VAUCHER_POINT_SALE_N, fAirDb);
         fDb.insertId("m_register", rid);
         ui->leVoucher->setText(rid);
     }
@@ -282,7 +281,7 @@ void DlgPostBreakfast::on_btnSave_clicked()
     fDb.update("o_header", fDbBind, where_id(ap(headerId)));
 
     CI_RestFullMenu *rf = CacheRestFullMenu::instance()->get(ui->leDish->text());
-    QString dishId = uuid("DR", fAirDb);
+    QString dishId = uuuid("DR", fAirDb);
     fDbBind[":f_id"] = dishId;
     fDb.insertWithoutId("o_dish", fDbBind);
     fDbBind[":f_header"] = headerId;
@@ -310,7 +309,7 @@ void DlgPostBreakfast::on_btnSave_clicked()
     fDb.update("o_dish", fDbBind, where_id(ap(dishId)));
 
     if (ui->lePMCode->asInt() == PAYMENT_CASH || ui->lePMCode->asInt() == PAYMENT_CARD) {
-        QString voucherPay = uuid(VAUCHER_RECEIPT_N, fAirDb);
+        QString voucherPay = uuuid(VAUCHER_RECEIPT_N, fAirDb);
         fDb.insertId("m_register", voucherPay);
         if (isNew) {
             fDbBind[":f_wdate"] = ui->deDate->date();
@@ -357,46 +356,7 @@ void DlgPostBreakfast::on_btnSave_clicked()
 
 void DlgPostBreakfast::on_btnPrintTax_clicked()
 {
-    if (ui->leTax->asInt() > 0) {
-        message_error(tr("Tax already printed"));
-        return;
-    }
-    CI_InvoiceItem *ii = CacheInvoiceItem::instance()->get(fPreferences.getDb(def_auto_breakfast_id).toInt());
-    if (!ii) {
-        message_error(tr("Application error. Contact to developer. Message DlgPostBreakfast invoice item = 0"));
-        return;
-    }
 
-    DlgPrintTaxSM dpt;
-    dpt.addGoods(ii->fVatDept,
-                 ii->fAdgt,
-                 ii->fCode,
-                 ii->fTaxName,
-                 ui->lePrice->asDouble(),
-                 ui->leQty->asDouble());
-    dpt.fOrder = ui->leVoucher->text();
-    dpt.fCardAmount = 0;
-    dpt.fPrepaid = 0;
-
-    int result = dpt.exec();
-    if (result == TAX_OK) {
-        fDbBind[":f_fiscal"] = dpt.fTaxCode;
-        fDb.update("m_register", fDbBind, where_id(ap(ui->leVoucher->text())));
-        ui->leTax->setInt(dpt.fTaxCode);
-
-        fDbBind[":f_vaucher"] = ui->leVoucher->text();
-        fDbBind[":f_invoice"] = ui->leInvoice->text();
-        fDbBind[":f_date"] = QDate::currentDate();
-        fDbBind[":f_time"] = QTime::currentTime();
-        fDbBind[":f_name"] = ii->fName;
-        fDbBind[":f_amountCash"] = ui->leAmount->asDouble();
-        fDbBind[":f_amountCard"] = 0;
-        fDbBind[":f_amountPrepaid"] = 0;
-        fDbBind[":f_user"] = WORKING_USERID;
-        fDbBind[":f_comp"] = HOSTNAME;
-        fDb.insert("m_tax_history", fDbBind);
-        return;
-    }
 }
 
 void DlgPostBreakfast::on_leQty_textChanged(const QString &arg1)

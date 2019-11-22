@@ -689,7 +689,7 @@ void DlgGroupReservationFuck::save()
             fDbBind[":f_author"] = WORKING_USERID;
             fDbBind[":f_createTime"] = QDateTime::currentDateTime();
             fDbBind[":f_created"] = QDate::currentDate();
-            invId = uuid("IN", fAirDb);
+            invId = uuuid("IN", fAirDb);
             fDbBind[":f_invoice"] = invId;
         }
         fDbBind[":f_state"] = RESERVE_RESERVE;
@@ -742,7 +742,7 @@ void DlgGroupReservationFuck::save()
         fDbBind[":f_pickup"] = 0;
         fDbBind[":f_lastEdit"] = WORKING_USERID;
         if (ui->tblRoom->toString(i, 0).isEmpty()) {
-            QString rsId = uuid(VAUCHER_RESERVATION_N, fAirDb);
+            QString rsId = uuuid(VAUCHER_RESERVATION_N, fAirDb);
             fDb.insertId("f_reservation", rsId);
             ui->tblRoom->setItemWithValue(i, 0, rsId);
             fTrackControl->resetChanges();

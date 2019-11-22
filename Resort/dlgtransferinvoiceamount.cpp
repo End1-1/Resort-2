@@ -98,7 +98,7 @@ void DlgTransferInvoiceAmount::on_btnSave_clicked()
     int sign = (itemGroup == IG_NEGATIVE_BALANCE ? 1 : -1);
     bool result = true;
 
-    QString rid1 = uuid(VAUCHER_TRANSFER_AMOUNT_N, fAirDb);
+    QString rid1 = uuuid(VAUCHER_TRANSFER_AMOUNT_N, fAirDb);
     fDb.insertId("m_register", rid1);
     fDbBind[":f_source"] = VAUCHER_TRANSFER_AMOUNT_N;
     fDbBind[":f_wdate"] = WORKING_DATE;
@@ -130,7 +130,7 @@ void DlgTransferInvoiceAmount::on_btnSave_clicked()
     fDb.update("m_register", fDbBind, where_id(ap(rid1)));
 
     sign *= -1;
-    QString rid2 = uuid(VAUCHER_TRANSFER_AMOUNT_N, fAirDb);
+    QString rid2 = uuuid(VAUCHER_TRANSFER_AMOUNT_N, fAirDb);
     fDb.insertId("m_register", rid2);
     fDbBind[":f_source"] = VAUCHER_TRANSFER_AMOUNT_N;
     fDbBind[":f_wdate"] = WORKING_DATE;

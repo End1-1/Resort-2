@@ -13,6 +13,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QDateTime>
+#include <QHeaderView>
 
 class Base
 {

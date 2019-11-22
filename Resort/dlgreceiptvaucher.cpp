@@ -6,7 +6,6 @@
 #include "cachepaymentmode.h"
 #include "vauchers.h"
 #include "pimage.h"
-#include "printtax.h"
 #include "paymentmode.h"
 #include "pprintvaucher.h"
 #include "cacheusers.h"
@@ -302,7 +301,7 @@ void DlgReceiptVaucher::saveRoom()
     fDb.fDb.transaction();
     if (ui->leVaucher->isEmpty()) {
         isNew = true;
-        ui->leVaucher->setText(uuid(VAUCHER_RECEIPT_N, fAirDb));
+        ui->leVaucher->setText(uuuid(VAUCHER_RECEIPT_N, fAirDb));
         fDb.insertId("m_register", ui->leVaucher->text());
     }
     fDbBind[":f_source"] = VAUCHER_RECEIPT_N;

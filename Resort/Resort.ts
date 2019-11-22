@@ -3106,10 +3106,6 @@ rooms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No tax department defined for </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Balance</source>
         <translation type="unfinished">Բալանս</translation>
     </message>
@@ -3127,18 +3123,6 @@ rooms</source>
     </message>
     <message>
         <source>Amount cannot be 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancelation fee tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No show fee tax</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3578,14 +3562,6 @@ rooms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tax already printed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Application error. Contact to developer. Message DlgPostBreakfast invoice item = 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Credit card</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3715,18 +3691,6 @@ rooms</source>
     <message>
         <source>Tax code</source>
         <translation type="unfinished">ՀՎՀՀ</translation>
-    </message>
-    <message>
-        <source>Save first</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Already printed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Application error. Contact to developer. Message DlgPostCharge invoice item = 0</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Payment mode</source>
@@ -4073,36 +4037,8 @@ rooms</source>
 <context>
     <name>DlgPrintTaxSM</name>
     <message>
-        <source>Print tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Printing advance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Retry printing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax back</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The given tax number not exists in databases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crn is empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -11833,80 +11769,40 @@ or contact to administrator</source>
 <context>
     <name>PrintTax</name>
     <message>
-        <source>Print tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available prepaid amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check/Uncheck all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>RecId</source>
-        <translation type="unfinished">Գրանցման համար</translation>
+        <translation type="obsolete">Գրանցման համար</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
+        <translation type="obsolete">Կոդ</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
+        <translation type="obsolete">Անվանում</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
+        <translation type="obsolete">Գումար</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished">Տպել</translation>
-    </message>
-    <message>
-        <source>Adgt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Տպել</translation>
     </message>
     <message>
         <source>Card</source>
-        <translation type="unfinished">Քարտ</translation>
+        <translation type="obsolete">Քարտ</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Կանխիկ</translation>
+        <translation type="obsolete">Կանխիկ</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Prepaid</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ընդամենը</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
+        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -14676,10 +14572,6 @@ time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tax department undefined for </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Edit
 Reserve</source>
         <translation type="unfinished"></translation>
@@ -15318,18 +15210,6 @@ Reserve</source>
     </message>
 </context>
 <context>
-    <name>WGroupReserveRect</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>#101
-CS CV L</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>WGuest</name>
     <message>
         <source>Guest info</source>
@@ -15963,10 +15843,6 @@ operator</source>
     </message>
     <message>
         <source>CHECKOUT C/L </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax department undefined for </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17263,6 +17139,33 @@ commission</source>
     </message>
 </context>
 <context>
+    <name>WSalary</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Date range</source>
+        <translation>Ժամանակաշրջան</translation>
+    </message>
+    <message>
+        <source>Version 1</source>
+        <translation>Տարբերակ 1</translation>
+    </message>
+    <message>
+        <source>Version 2</source>
+        <translation>Տարբերակ 2</translation>
+    </message>
+    <message>
+        <source>Group by names</source>
+        <translation>Խմբավորել ըստ աննուների</translation>
+    </message>
+    <message>
+        <source>Salary</source>
+        <translation>Աշխատավարձ</translation>
+    </message>
+</context>
+<context>
     <name>WStoreEntry</name>
     <message>
         <source>Form</source>
@@ -18493,6 +18396,10 @@ cards, present</source>
 on the cards</source>
         <translation>Քարտերի
 բալանս</translation>
+    </message>
+    <message>
+        <source>Salary</source>
+        <translation>Աշխատավարձ</translation>
     </message>
 </context>
 </TS>

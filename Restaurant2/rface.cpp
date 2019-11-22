@@ -293,8 +293,8 @@ void RFace::on_tblTables_clicked(const QModelIndex &index)
         RDesk *d = new RDesk(this);
         d->prepareToShow();
         d->setStaff(user);
-        t = d->loadHall(1);
-        if (d->setup(t)) {
+        t = d->loadHall(fPreferences.getDb(def_default_hall).toInt());
+        if (t && d->setup(t)) {
             d->exec();
             fHall.refresh();
             ui->tblTables->viewport()->update();

@@ -361,7 +361,7 @@ void WVaucherEditor::on_btnSave_clicked()
         return;
     }
     if (fFlagNew) {
-        ui->leCode->setText(uuid(ui->leSourceCode->text(), fAirDb));
+        ui->leCode->setText(uuuid(ui->leSourceCode->text(), fAirDb));
         fDbBind[":f_id"] = ui->leCode->text();
         fDb.insertWithoutId("m_register", fDbBind);
     }

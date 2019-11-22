@@ -1,12 +1,10 @@
 #include "dlgpostingcharges.h"
 #include "ui_dlgpostingcharges.h"
-#include "printtax.h"
 #include "pprintscene.h"
 #include "pprintpreview.h"
 #include "ptextrect.h"
 #include "pimage.h"
 #include "vauchers.h"
-#include "dlgprinttaxsm.h"
 #include "pprintvaucher.h"
 #include "cacheroomarrangment.h"
 #include "dwselectorpaymentmode.h"
@@ -285,7 +283,7 @@ void DlgPostingCharges::on_btnOk_clicked()
     fDb.fDb.transaction();
     if (ui->leVaucherId->isEmpty()) {
         isNew = true;
-        QString rid = uuid(ui->leVaucher->text(), fAirDb);
+        QString rid = uuuid(ui->leVaucher->text(), fAirDb);
         fDb.insertId("m_register", rid);
         if (ui->leVaucher->text() == VAUCHER_ROOMING_N) {
             switch (message_yesnocancel(tr("The date will append to the name.<br>Click YES to use current working date<br>Click NO - to use previouse working date"))) {
@@ -491,51 +489,51 @@ void DlgPostingCharges::on_btnPrint_clicked()
 
 void DlgPostingCharges::on_btnPrintTax_clicked()
 {
-    if (ui->leVaucherId->text().isEmpty()) {
-        message_error(tr("Save first"));
-        return;
-    }
-    if (ui->leTaxCode->asInt() > 0) {
-        message_error(tr("Already printed"));
-        return;
-    }
-    CI_InvoiceItem *ii = CacheInvoiceItem::instance()->get(ui->leItemCode->text());
-    if (!ii) {
-        message_error(tr("Application error. Contact to developer. Message DlgPostCharge invoice item = 0"));
-        return;
-    }
-    DlgPrintTaxSM dpt;
-    dpt.addGoods(ii->fVatDept,
-                 ii->fAdgt,
-                 ii->fCode,
-                 ii->fTaxName,
-                 ui->leAmount->asDouble(),
-                 1);
-    dpt.fOrder = ui->leVaucherId->text();
-    dpt.fCardAmount = ui->leTaxCard->asDouble();
-    dpt.fPrepaid = ui->leTaxPre->asDouble();
+//    if (ui->leVaucherId->text().isEmpty()) {
+//        message_error(tr("Save first"));
+//        return;
+//    }
+//    if (ui->leTaxCode->asInt() > 0) {
+//        message_error(tr("Already printed"));
+//        return;
+//    }
+//    CI_InvoiceItem *ii = CacheInvoiceItem::instance()->get(ui->leItemCode->text());
+//    if (!ii) {
+//        message_error(tr("Application error. Contact to developer. Message DlgPostCharge invoice item = 0"));
+//        return;
+//    }
+//    DlgPrintTaxSM dpt;
+//    dpt.addGoods(ii->fVatDept,
+//                 ii->fAdgt,
+//                 ii->fCode,
+//                 ii->fTaxName,
+//                 ui->leAmount->asDouble(),
+//                 1);
+//    dpt.fOrder = ui->leVaucherId->text();
+//    dpt.fCardAmount = ui->leTaxCard->asDouble();
+//    dpt.fPrepaid = ui->leTaxPre->asDouble();
 
-    int result = dpt.exec();
-    if (result == TAX_OK) {
-        fDbBind[":f_fiscal"] = dpt.fTaxCode;
-        fDb.update("m_register", fDbBind, where_id(ap(ui->leVaucherId->text())));
-        ui->leTaxCode->setInt(dpt.fTaxCode);
+//    int result = dpt.exec();
+//    if (result == TAX_OK) {
+//        fDbBind[":f_fiscal"] = dpt.fTaxCode;
+//        fDb.update("m_register", fDbBind, where_id(ap(ui->leVaucherId->text())));
+//        ui->leTaxCode->setInt(dpt.fTaxCode);
 
-        fDbBind[":f_vaucher"] = ui->leVaucherId->text();
-        fDbBind[":f_invoice"] = ui->leInvoice->text();
-        fDbBind[":f_date"] = QDate::currentDate();
-        fDbBind[":f_time"] = QTime::currentTime();
-        fDbBind[":f_name"] = ui->leItemName->text();
-        fDbBind[":f_amountCash"] = ui->leTaxCash->asDouble();
-        fDbBind[":f_amountCard"] = ui->leTaxCard->asDouble();
-        fDbBind[":f_amountPrepaid"] = ui->leTaxPre->asDouble();
-        fDbBind[":f_user"] = WORKING_USERID;
-        fDbBind[":f_comp"] = HOSTNAME;
-        fDb.insert("m_tax_history", fDbBind);
+//        fDbBind[":f_vaucher"] = ui->leVaucherId->text();
+//        fDbBind[":f_invoice"] = ui->leInvoice->text();
+//        fDbBind[":f_date"] = QDate::currentDate();
+//        fDbBind[":f_time"] = QTime::currentTime();
+//        fDbBind[":f_name"] = ui->leItemName->text();
+//        fDbBind[":f_amountCash"] = ui->leTaxCash->asDouble();
+//        fDbBind[":f_amountCard"] = ui->leTaxCard->asDouble();
+//        fDbBind[":f_amountPrepaid"] = ui->leTaxPre->asDouble();
+//        fDbBind[":f_user"] = WORKING_USERID;
+//        fDbBind[":f_comp"] = HOSTNAME;
+//        fDb.insert("m_tax_history", fDbBind);
 
-        fTrackControl->insert(TRACK_RESERVATION, "Tax printed", ui->leVaucher->text(), ui->leAmount->text());
-        return;
-    }
+//        fTrackControl->insert(TRACK_RESERVATION, "Tax printed", ui->leVaucher->text(), ui->leAmount->text());
+//        return;
+//    }
 }
 
 void DlgPostingCharges::on_leTaxCash_textChanged(const QString &arg1)

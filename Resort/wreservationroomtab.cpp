@@ -278,7 +278,7 @@ bool WReservationRoomTab::save()
             /* ------------------- BEGIN CHANGE ROOM RATE -----------------*/
 
             QString vid = ui->leReservId->text();
-            QString rid = uuid(VAUCHER_ROOM_RATE_N, fAirDb);
+            QString rid = uuuid(VAUCHER_ROOM_RATE_N, fAirDb);
             fDb.insertId("m_register", rid);
             fDbBind[":f_source"] = VAUCHER_ROOM_RATE_N;
             fDbBind[":f_wdate"] = WORKING_DATE;
@@ -361,11 +361,11 @@ bool WReservationRoomTab::save()
     fDbBind[":f_lastEdit"] = WORKING_USERID;
     if (result) {
         if (ui->leReservId->isEmpty()) {
-            QString rsId = uuid(VAUCHER_RESERVATION_N, fAirDb);
+            QString rsId = uuuid(VAUCHER_RESERVATION_N, fAirDb);
             result = fDb.insertId("f_reservation", rsId);
             fDbBind[":f_author"] = WORKING_USERID;
             ui->leReservId->setText(rsId);
-            QString invId = uuid("IN", fAirDb);
+            QString invId = uuuid("IN", fAirDb);
             ui->leInvoice->setText(invId);
             fDbBind[":f_invoice"] = invId;
             fTrackControl->fReservation = rsId;

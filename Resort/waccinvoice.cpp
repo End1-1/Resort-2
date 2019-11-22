@@ -9,7 +9,6 @@
 #include "cachevatmode.h"
 #include "dlgprinttaxsideoption.h"
 #include "dlgsearchinvoice.h"
-#include "printtax.h"
 #include "cachetaxmap.h"
 #include "dlgtaxback.h"
 #include "dlgviewinvoicecorrections.h"
@@ -441,96 +440,7 @@ void WAccInvoice::on_btnTaxPrint_clicked()
     if (fPreferences.getDb(def_tax_port).toInt() == 0) {
         message_error_tr("Setup tax printer first");
     }
-    PrintTax *pt =  new PrintTax(this);
-    pt->fInvoice = ui->leInvoice->text();
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        if (!isTaxPay(ui->tblData->toString(i, 10))) {
-            continue;
-        }
 
-        if (ui->tblData->itemChecked(i, 8)) {
-            continue;
-        }
-        if (ui->tblData->toString(i, 9) != side) {
-            continue;
-        }
-        //HOTEL SOURCE
-        if (ui->tblData->toString(i, 10) != VAUCHER_POINT_SALE_N ) {
-            CI_InvoiceItem *c = CacheInvoiceItem::instance()->get(ui->tblData->toString(i, 3));
-            if (!c) {
-                message_error_tr("Error in tax print. c == 0, case 1.");
-                continue;
-            }
-            CI_TaxMap *ci = CacheTaxMap::instance()->get(c->fCode);
-            if (!ci) {
-                message_error(tr("Tax department undefined for ") + c->fName);
-                return;
-            }
-            QString qty = "1";
-            QString price = QString::number(ui->tblData->toDouble(i, 5), 'f', 2);
-            if (c->fCode == fPreferences.getDb(def_auto_breakfast_id).toString()) {
-                DatabaseResult drb;
-                fDbBind[":f_id"] = ui->tblData->toString(i, 0);
-                drb.select(fDb, "select * from o_breakfast where f_id=:f_id", fDbBind);
-                if (drb.rowCount() == 0) {
-                    message_error_tr("Cannot find breakfast record. Contact to application developer.");
-                    continue;
-                }
-                qty = drb.value("f_pax").toString();
-                price = drb.value("f_price").toString();
-            }
-            pt->fDept.append(ui->leVATMode->fHiddenText.toInt() == VAT_INCLUDED ? ci->fName : c->fNoVatDept);
-            pt->fRecList.append(ui->tblData->toString(i, 0));
-            pt->fCodeList.append(c->fCode);
-            pt->fNameList.append(c->fTaxName);
-            pt->fPriceList.append(price);
-            pt->fQtyList.append(qty);
-            pt->fAdgCode.append(c->fAdgt);
-            pt->fTaxNameList.append(c->fTaxName);
-        } else if (ui->tblData->toString(i, 10) == VAUCHER_POINT_SALE_N ) {
-            //RESTAURANT SOURCE
-            QString orderId = ui->tblData->toString(i, 11);
-            CI_InvoiceItem *c = CacheInvoiceItem::instance()->get(ui->tblData->toString(i, 3));
-            if (!c) {
-                message_error_tr("Error in tax print. c == 0, case 2.");
-                continue;
-            }
-            CI_TaxMap *ci = CacheTaxMap::instance()->get(c->fCode);
-            if (!ci) {
-                message_error(tr("Tax department undefined for ") + c->fName);
-                return;
-            }
-            fDbBind[":f_header"] = orderId;
-            fDbBind[":f_state"] = DISH_STATE_READY;
-            fDb.select("select d.f_id, d.f_am, d.f_adgt, od.f_qty, od.f_price "
-                       "from o_dish od "
-                       "inner join r_dish d on d.f_id=od.f_dish "
-                       "where od.f_header=:f_header and od.f_state=:f_state "
-                       "and (od.f_complex=0 or (od.f_complex>0 and od.f_complexId>0)) ", fDbBind, fDbRows);
-            foreach_rows {
-                QString vatReception = c->fVatDept;
-                if (!c->fVatReception.isEmpty()) {
-                    vatReception = c->fVatReception;
-                }
-                pt->fDept.append(ui->leVATMode->fHiddenText.toInt() == VAT_INCLUDED ? ci->fName : c->fNoVatDept);
-                pt->fRecList.append(ui->tblData->toString(i, 0));
-                pt->fCodeList.append(it->at(0).toString());
-                pt->fNameList.append(it->at(1).toString());
-                pt->fPriceList.append(it->at(4).toString());
-                pt->fQtyList.append(it->at(3).toString());
-                pt->fAdgCode.append(it->at(2).toString());
-                pt->fTaxNameList.append(it->at(1).toString());
-            }
-        }
-    }
-
-    pt->build();
-    if (pt->fRecList.count() > 0) {
-        pt->exec();
-    } else {
-        message_info_tr("Nothing to print");
-    }
-    delete pt;
     load(ui->leInvoice->text());
 }
 

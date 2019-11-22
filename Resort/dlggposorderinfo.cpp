@@ -2,7 +2,6 @@
 #include "ui_dlggposorderinfo.h"
 #include "cacherights.h"
 #include "pprintreceipt.h"
-#include "printtax.h"
 #include "dlgdishhistory.h"
 #include "databaseresult.h"
 #include "cachepaymentmode.h"
@@ -169,41 +168,7 @@ void DlgGPOSOrderInfo::on_btnPrintTax_clicked()
         message_error(tr("Setup tax printer first"));
         return;
     }
-    PrintTax *pt = new PrintTax(this);
-    double total = 0;
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
-        if (ui->tblData->toInt(i, 8) == 1) {
-            continue;
-        }
-        total += ui->tblData->toDouble(i, 2);
-        pt->fRecList.append(ui->tblData->toString(i, 3));
-        pt->fDept.append(taxDept);
-        pt->fAdgCode.append(ui->tblData->toString(i, 4));
-        pt->fCodeList.append(ui->tblData->toString(i, 5));
-        pt->fNameList.append(ui->tblData->toString(i, 0));
-        pt->fQtyList.append(ui->tblData->toString(i, 1));
-        pt->fPriceList.append(ui->tblData->toString(i, 6));
-        pt->fTaxNameList.append(ui->tblData->toString(i, 0));
-    }
-    fDbBind[":f_tax"] = 1;
-    fDb.update("o_header", fDbBind, where_id(ap(ui->leOrder->text())));
-    fDbBind[":f_fiscal"] = 1;
-    fDbBind[":f_id"] = ui->leOrder->text();
-    fDb.select("update m_register set f_fiscal=1 where f_id=:f_id", fDbBind, fDbRows);
-    pt->fInvoice = ui->leOrder->text();
-    pt->build();
-    switch (dbh.value("f_paymentMode").toInt()) {
-    case PAYMENT_CASH:
-        pt->fAmountCash = float_str(total, 2);
-        pt->fAmountCard = "0";
-        break;
-    default:
-        pt->fAmountCard = float_str(total, 2);
-        pt->fAmountCash = "0";
-        break;
-    }
-    pt->print();
-    delete pt;
+
 }
 
 void DlgGPOSOrderInfo::on_btnTracking_clicked()

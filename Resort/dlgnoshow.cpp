@@ -10,7 +10,6 @@
 #include "dwselectorredreservation.h"
 #include "paymentmode.h"
 #include "cachetaxmap.h"
-#include "dlgprinttaxsm.h"
 #include <QProcess>
 #include <QDir>
 
@@ -171,7 +170,7 @@ void DlgNoShow::on_btnSave_clicked()
         return;
     }
     if (ui->leCode->isEmpty()) {
-        ui->leCode->setText(uuid("CH", fAirDb));
+        ui->leCode->setText(uuuid("CH", fAirDb));
         fDbBind[":f_id"] = ui->leCode->text();
         fDbBind[":f_source"] = VAUCHER_POSTCHARGE_N;
         fDb.insertWithoutId("m_register", fDbBind);
@@ -214,95 +213,7 @@ void DlgNoShow::on_btnSave_clicked()
 
 void DlgNoShow::on_btnPrintTax_clicked()
 {
-    if (ui->leCode->isEmpty()) {
-        message_error(tr("Save first"));
-        return;
-    }
-//    if (ui->lePaymentMode->asInt() != PAYMENT_CASH || ui->lePaymentMode->asInt() != PAYMENT_CARD) {
 
-//    }
-    QString itemCode = ui->rbCancelation->isChecked() ? fPreferences.getDb(def_cancelfee_code).toString() : fPreferences.getDb(def_noshowfee_code).toString();
-    CI_InvoiceItem *ii = CacheInvoiceItem::instance()->get(itemCode);
-    if (!ii) {
-        return;
-    }
-    CI_TaxMap *tm = CacheTaxMap::instance()->get(itemCode);
-    if (!tm) {
-        message_error(tr("No tax department defined for ") + ii->fName);
-        return;
-    }
-    int pm = ui->lePaymentMode->asInt();
-//    double cash = pm == PAYMENT_CASH ? ui->leAmount->asDouble() : 0;
-    double card = pm == PAYMENT_CARD ? ui->leAmount->asDouble() : 0;
-    double prepaid = pm == PAYMENT_ADVANCE ? ui->leAmount->asDouble() : 0;
-    DlgPrintTaxSM dpt;
-    dpt.addGoods(ii->fVatDept,
-                 ii->fAdgt,
-                 ii->fCode,
-                 ii->fTaxName,
-                 ui->leAmount->asDouble(),
-                 1);
-    dpt.fOrder = ui->leCode->text();
-    dpt.fCardAmount = card;
-    dpt.fPrepaid = prepaid;
-    int result = dpt.exec();
-    if (result == TAX_OK) {
-        fDbBind[":f_fiscal"] = dpt.fTaxCode;
-        fDb.update("m_register", fDbBind, where_id(ap(ui->leCode->text())));
-        ui->leTaxCode->setInt(dpt.fTaxCode);
-
-        fDbBind[":f_vaucher"] = ui->leCode->text();
-        fDbBind[":f_invoice"] = ui->leInvoice->text();
-        fDbBind[":f_date"] = QDate::currentDate();
-        fDbBind[":f_time"] = QTime::currentTime();
-        fDbBind[":f_name"] = (ui->rbCancelation->isChecked() ? tr("Cancelation fee") + " " + ui->leReserve->text()
-                                                             : tr("No show fee") + " " + ui->leReserve->text() );
-        fDbBind[":f_amountCash"] = pm == PAYMENT_CASH ? ui->leAmount->asDouble() : 0;
-        fDbBind[":f_amountCard"] = pm == PAYMENT_CARD ? ui->leAmount->asDouble() : 0;
-        fDbBind[":f_amountPrepaid"] = pm == PAYMENT_ADVANCE ? ui->leAmount->asDouble() : 0;
-        fDbBind[":f_user"] = WORKING_USERID;
-        fDbBind[":f_comp"] = HOSTNAME;
-        fDb.insert("m_tax_history", fDbBind);
-
-        TrackControl::insert(TRACK_RESERVATION, ui->rbCancelation->isChecked() ? tr("Cancelation fee tax") : tr("No show fee tax"),
-                      ui->leTaxCode->text(), ui->leCode->text(), ui->leCode->text(), ui->leInvoice->text(), ui->leReserve->text());
-        message_info_tr("Tax printed");
-    }
-    //dpt.fPrepaid = ui->leTaxPre->asDouble();
-    /*
-    QDir d;
-    QString fileName = QString("tax_%1.json").arg(ui->leInvoice->text());
-    QFile f(d.currentPath() + "/" + fileName);
-    if (f.open(QIODevice::WriteOnly)) {
-        f.write(QString("{\"seq\":1,\"paidAmount\":%1, \"paidAmountCard\":%2, \"partialAmount\":0, "
-                        "\"prePaymentAmount\":%3, \"useExtPOS\":true, \"mode\":2,\"items\":[")
-                 .arg(float_str(pm == PAYMENT_CASH ? ui->leAmount->asDouble() : 0, 2))
-                 .arg(float_str(pm == PAYMENT_CASH ? 0 : ui->leAmount->asDouble(), 2))
-                 .arg(float_str(0, 2)).toUtf8());
-
-            f.write(QString("{\"dep\":%1,\"qty\":%2,\"price\":%3, \"totalPrice\":%4, "
-                            "\"productCode\":\"%5\",\"productName\":\"%6\",\"adgCode\":\"%7\", \"unit\":\"%8\"}")
-                    .arg(ui->leVATCode->asInt() == VAT_INCLUDED ? tm->fName : ii->fNoVatDept)
-                    .arg("1")
-                    .arg(ui->leAmount->text())
-                    .arg(ui->leAmount->text())
-                    .arg(ii->fCode)
-                    .arg(ii->fTaxName)
-                    .arg(ii->fAdgt)
-                    .arg(QString::fromUtf8("հատ"))
-                    .toUtf8());
-
-        f.write("]}");
-        f.close();
-    }
-    QStringList args;
-    args << fPreferences.getDb(def_tax_address).toString()
-         << fPreferences.getDb(def_tax_port).toString()
-         << fPreferences.getDb(def_tax_password).toString()
-         << fileName;
-    QProcess *p = new QProcess();
-    p->start(d.currentPath() + "/printtax.exe", args);
-    */
 }
 
 void DlgNoShow::getBalance()

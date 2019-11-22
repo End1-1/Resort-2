@@ -62,7 +62,7 @@ void DlgRefundVaucher::on_btnSave_clicked()
         return;
     }
     if (ui->leVaucher->isEmpty()) {
-        ui->leVaucher->setText(uuid("RF", fAirDb));
+        ui->leVaucher->setText(uuuid("RF", fAirDb));
         fDbBind[":f_id"] = ui->leVaucher->text();
         fDbBind[":f_source"] = VAUCHER_REFUND_N;
         fDb.insertWithoutId("m_register", fDbBind);

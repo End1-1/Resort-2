@@ -25,6 +25,7 @@
 #include "pprintscene.h"
 #include "dlgcomplexdish.h"
 #include "cacheinvoiceitem.h"
+#include "dlgcheckcard.h"
 #include "logging.h"
 #include "cacherights.h"
 #include "dlgpayment.h"
@@ -1194,6 +1195,18 @@ void RDesk::saledItem()
         p.rtext(float_str(total, 2));
     }
     p.print("local", QPrinter::Custom);
+}
+
+void RDesk::checkCardRegistration()
+{
+    DlgCheckCard *d = new DlgCheckCard(this);
+    d->exec();
+    delete d;
+}
+
+void RDesk::employesOfDay()
+{
+    DlgSalary::salary2();
 }
 
 void RDesk::closeEvent(QCloseEvent *e)
@@ -2525,7 +2538,12 @@ TableStruct *RDesk::loadHall(int hall)
         }
     }
 
-    fMenu = Hall::fHallMap[hall]->fDefaultMenu;
+    HallStruct *hs = Hall::getHallById(hall);
+    if (hs == nullptr) {
+        message_error(tr("Hall is empty"));
+        return nullptr;
+    }
+    fMenu = hs->fDefaultMenu;
     setupType(0);
     TableStruct *ts = ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct*>();
     setTable(ts);

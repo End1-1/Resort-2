@@ -41,7 +41,7 @@ void DlgChangeExportVaucher::on_btnCancel_clicked()
 
 void DlgChangeExportVaucher::on_btnOK_clicked()
 {
-    QString newId = uuid(ui->leSource->text(), fAirDb);
+    QString newId = uuuid(ui->leSource->text(), fAirDb);
     fDr.setValue(fIndex, "f_id", newId);
     fDr.setValue(fIndex, "f_wdate", ui->deDate->date());
     fDr.setValue(fIndex, "f_rdate", ui->deDate->date());

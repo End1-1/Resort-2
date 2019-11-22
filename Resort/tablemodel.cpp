@@ -296,7 +296,10 @@ void TableModel::setDataFromSource(const QList<QList<QVariant> > &dataSource)
 
 void TableModel::clearProxyRows()
 {
-    beginRemoveRows(QModelIndex(), 0, rowCount(QModelIndex()));
+    if (fRows.count() == 0) {
+        return;
+    }
+    beginRemoveRows(QModelIndex(), 0, rowCount(QModelIndex()) - 1);
     fRows.clear();
     endRemoveRows();
 }
@@ -459,7 +462,7 @@ void TableModel::sumOfColumns(const QList<int> columns, QList<double> &out)
 {
     out.clear();
     int count = columns.count();
-    double values[count];
+    double *values = new double[count];
     for (int i = 0; i < count; i++) {
         values[i] = 0.000;
     }
@@ -473,6 +476,7 @@ void TableModel::sumOfColumns(const QList<int> columns, QList<double> &out)
     }
     fSumColumns  = columns;
     fSumValues = out;
+    delete [] values;
 }
 
 void TableModel::insertSubTotals(int colName, const QList<int> &totalCols)
@@ -484,7 +488,7 @@ void TableModel::insertSubTotals(int colName, const QList<int> &totalCols)
     for (int i = 0; i < columnCount(); i++) {
         emptyRow << QVariant();
     }
-    double totals[totalCols.count()];
+    double *totals = new double[totalCols.count()];
     for (int i = 0; i < totalCols.count(); i++) {
         totals[i] = 0.000;
     }
@@ -526,6 +530,7 @@ void TableModel::insertSubTotals(int colName, const QList<int> &totalCols)
         insertRow(r, newrow);
         fTableView->setSpan(r, 0, 1, totalCols[0]);
     }
+    delete [] totals;
 }
 
 Column::Column(int width, const QString &fieldName, const QString &title)

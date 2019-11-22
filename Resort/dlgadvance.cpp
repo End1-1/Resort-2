@@ -1,7 +1,6 @@
 #include "dlgadvance.h"
 #include "ui_dlgadvance.h"
 #include "vauchers.h"
-#include "dlgprinttaxsm.h"
 #include "pprintvaucher.h"
 #include "paymentmode.h"
 
@@ -162,7 +161,7 @@ void DlgAdvance::on_btnSave_clicked()
     bool isNew = false;
     if (ui->leVaucher->isEmpty()) {
         isNew = true;
-        ui->leVaucher->setText(uuid(VAUCHER_ADVANCE_N, fAirDb));
+        ui->leVaucher->setText(uuuid(VAUCHER_ADVANCE_N, fAirDb));
         fDb.insertId("m_register", ui->leVaucher->text());
     }
     fDbBind[":f_source"] = VAUCHER_ADVANCE_N;
@@ -231,9 +230,9 @@ void DlgAdvance::on_btnPrintTax_clicked()
     double cash = ui->lePaymentCode->asInt() == PAYMENT_CASH ? ui->leAmount->asDouble() : 0;
     double card = ui->lePaymentCode->asInt() == PAYMENT_CARD ? ui->leAmount->asDouble() : 0;
     int taxCode;
-    if (!DlgPrintTaxSM::printAdvance(cash, card, ui->leVaucher->text(), taxCode)) {
-        return;
-    }
+//    if (!DlgPrintTaxSM::printAdvance(cash, card, ui->leVaucher->text(), taxCode)) {
+//        return;
+//    }
     //PrintTax::printAdvance(ui->leAmount->asDouble(), ui->lePaymentCode->asInt(), QString("AV%1").arg(ui->leVaucher->text()));
     ui->leTax->setInt(taxCode);
 

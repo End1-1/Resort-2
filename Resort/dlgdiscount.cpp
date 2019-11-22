@@ -205,7 +205,7 @@ void DlgDiscount::on_btnOk_clicked()
     }
     bool isNew = true;
     fDb.fDb.transaction();
-    QString rid = uuid(VAUCHER_DISCOUNT_N, fAirDb);
+    QString rid = uuuid(VAUCHER_DISCOUNT_N, fAirDb);
     fDb.insertId("m_register", rid);
     ui->leVaucher->setText(rid);
     fDbBind[":f_source"] = VAUCHER_DISCOUNT_N;
