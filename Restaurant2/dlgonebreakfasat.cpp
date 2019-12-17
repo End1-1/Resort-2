@@ -344,47 +344,6 @@ void DlgOneBreakfasat::on_btnPayment_clicked()
 
 void DlgOneBreakfasat::on_btnPrintTax_clicked()
 {
-    //Print tax
-    if (fPreferences.getDb(def_tax_port).toInt() == 0) {
-        message_error(tr("Setup tax printer first"));
-        return;
-    }
-
-    Preferences p;
-    CI_InvoiceItem *i = CacheInvoiceItem::instance()->get(p.getDb(def_auto_breakfast_id).toString());
-    PrintTax *pt = new PrintTax(this);
-    double total = ui->leTotal->asDouble();
-    pt->fRecList.append(i->fCode);
-    pt->fDept.append(i->fVatDept);
-    pt->fAdgCode.append(i->fAdgt);
-    pt->fCodeList.append(i->fCode);
-    pt->fNameList.append(i->fName);
-    pt->fQtyList.append("1");
-    pt->fPriceList.append(ui->lePrice->text());
-    pt->fTaxNameList.append(i->fTaxName);
-
-
-    switch (ui->lePayment->fHiddenText.toInt()) {
-    case PAYMENT_CASH:
-        pt->fAmountCash = float_str(total, 2);
-        pt->fAmountCard = "0";
-        break;
-    case PAYMENT_CARD:
-        pt->fAmountCard = float_str(total, 2);
-        pt->fAmountCash = "0";
-        break;
-    default:
-        delete pt;
-        message_error(tr("Printing fiscal receipt is not available for selected payment mode"));
-        return;
-    }
-    fDbBind[":f_tax"] = 1;
-    fDb.update("m_register", fDbBind, where_id(fBreakfastId));
-    pt->fInvoice = fBreakfastId;
-
-    pt->build();
-    pt->print();
-    delete pt;
 
 }
 
@@ -451,7 +410,7 @@ void DlgOneBreakfasat::on_btnPrePrint_clicked()
     fDbBind[":f_cityLedger"] = ui->leCityLedger->fHiddenText.toInt();
     fDbBind[":f_room"] = ui->leRoom->text().toInt();
 
-    fBreakfastId = uuid(cb->fVaucher, fDb);
+    fBreakfastId = uuuid(cb->fVaucher, fDb);
     fDb.insertId("o_breakfast", fBreakfastId);
     fDb.update("o_breakfast", fDbBind, where_id(ap(fBreakfastId)));
 

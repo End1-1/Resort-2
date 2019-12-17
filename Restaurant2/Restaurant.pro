@@ -29,10 +29,8 @@ INCLUDEPATH += c:/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
     ../../Cafe5/Classes/notificationwidget.cpp \
-    ../Print/printtax.cpp \
     ../Resort/message.cpp \
     dlgcheckcard.cpp \
-    dlgprinttaxsm.cpp \
     rface.cpp \
     rlogin.cpp \
     rmessage.cpp \
@@ -143,7 +141,6 @@ SOURCES += main.cpp\
     ../Cache/cacheroominventory.cpp \
     ../Cache/cacheroominventorystate.cpp \
     ../Base/appconfig.cpp \
-    ../Resort/dlgprinttaxsm.cpp \
     baseextendeddialog.cpp \
     c:/projects/NewTax/Src/printtaxn.cpp \
     ../../Cafe5/Classes/c5printing.cpp
@@ -152,7 +149,6 @@ HEADERS  += rface.h \
     ../../Cafe5/Classes/notificationwidget.h \
     c:/projects/NewTax/Src/printtaxn.h \
     dlgcheckcard.h \
-    dlgprinttaxsm.h \
     rlogin.h \
     rmessage.h \
     ../Base/base.h \
@@ -266,13 +262,11 @@ HEADERS  += rface.h \
     ../Base/appconfig.h \
     ../Resort/message.h \
     baseextendeddialog.h \
-    ../Print/printtax.h \
      c:/projects/Cafe5/Classes/c5printing.h
 
 FORMS    += rface.ui \
     ../../Cafe5/Classes/notificationwidget.ui \
     dlgcheckcard.ui \
-    dlgprinttaxsm.ui \
     rlogin.ui \
     rmessage.ui \
     rdesk.ui \
@@ -307,9 +301,7 @@ FORMS    += rface.ui \
     dlgdeptholder.ui \
     dlgprinttaxnew.ui \
     dlgsalary.ui \
-    ../Resort/dlgprinttaxsm.ui \
     ../Resort/message.ui \
-    ../Print/printtax.ui
 
 LIBS += -lVersion
 LIBS += -LC:/OpenSSL-Win32/lib

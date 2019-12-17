@@ -17,6 +17,7 @@ public:
     explicit RTools(QWidget *parent = 0);
     void setNoTable();
     ~RTools();
+
 private slots:
     void on_btnExit_clicked();
     void on_btnShowHideRemovedItems_clicked();
@@ -28,41 +29,23 @@ private slots:
     void on_btnInitCash_clicked();
     void on_btnComplex_clicked();
     void on_btnTotalReport_clicked();
-
     void on_btnTotalYesterday_clicked();
-
     void on_btnCompimentary_clicked();
-
     void on_btnTax_clicked();
-
     void on_btnChangePassword_clicked();
-
     void on_btnRecover_clicked();
-
     void on_btnTotalReportAnyDay_clicked();
-
     void on_btnPrintAnyReport_clicked();
-
     void on_btnVoidBack_clicked();
-
     void on_btnPrintVoid_clicked();
-
     void on_btnCloseDay_clicked();
-
     void on_btnSalary_clicked();
-
     void on_btnTotalShort_clicked();
-
     void on_btnCardStat_clicked();
-
     void on_btnVisitStat_clicked();
-
     void on_btnCheckCard_clicked();
-
     void on_btnPrintDailySales_clicked();
-
     void on_btnCheckCardReg_clicked();
-
     void on_btnSalary_2_clicked();
 
 private:

@@ -158,55 +158,6 @@ void DlgBanket::on_btnPayment_clicked()
 
 void DlgBanket::printTax()
 {
-    //Print tax
-    if (fPreferences.getDb(def_tax_port).toInt() == 0) {
-        message_error(tr("Setup tax printer first"));
-        return;
-    }
-
-    HallStruct *h = Hall::fHallMap[ui->leHall->fHiddenText.toInt()];
-    if (!h) {
-        message_error(tr("No hall selected"));
-        return;
-    }
-
-    CI_InvoiceItem *i = CacheInvoiceItem::instance()->get(ui->leService->fHiddenText);
-    PrintTax *pt = new PrintTax(this);
-    double total = ui->lePrice->asDouble();
-    pt->fRecList.append(i->fCode);
-    pt->fDept.append(h->fVatDept);
-    pt->fAdgCode.append(i->fAdgt);
-    pt->fCodeList.append(i->fCode);
-    pt->fNameList.append(i->fName);
-    pt->fQtyList.append("1");
-    pt->fPriceList.append(ui->lePrice->text());
-    pt->fTaxNameList.append(i->fTaxName);
-
-
-    switch (ui->leModeOfPayment->fHiddenText.toInt()) {
-    case PAYMENT_CASH:
-        pt->fAmountCash = float_str(total, 2);
-        pt->fAmountCard = "0";
-        break;
-    case PAYMENT_CARD:
-        pt->fAmountCard = float_str(total, 2);
-        pt->fAmountCash = "0";
-        break;
-    default:
-        delete pt;
-        message_error(tr("Printing fiscal receipt is not available for selected payment mode"));
-        return;
-    }
-    fDbBind[":f_tax"] = 1;
-    fDb.update("o_event", fDbBind, where_id(ap(fDoc)));
-    fDbBind[":f_fiscal"] = 1;
-    fDb.update("m_register", fDbBind, where_id(ap(fDoc)));
-    pt->fInvoice = fDoc;
-
-    pt->build();
-    pt->print();
-    delete pt;
-
 }
 
 bool DlgBanket::isCorrect(bool draft)
@@ -397,7 +348,7 @@ void DlgBanket::on_btnSave_clicked()
     fDbBind[":f_cityLedger"] = cityLedger;
     fDbBind[":f_paymentDetails"] = ui->lePaymentComment->text();
     if (fDoc.isEmpty()) {
-        fDoc = uuid(VAUCHER_EVENT_N, fDb);
+        fDoc = uuuid(VAUCHER_EVENT_N, fDb);
         fDb.insertId("o_event", fDoc);
     }
     fDb.insertId("m_register", fDoc);
@@ -510,7 +461,7 @@ void DlgBanket::on_btnDraft_clicked()
     fDbBind[":f_cityLedger"] = cityLedger;
     fDbBind[":f_prepayment"] = ui->lePrepayment->asDouble();
     if (fDoc.isEmpty()) {
-        fDoc = uuid(VAUCHER_EVENT_N, fDb);
+        fDoc = uuuid(VAUCHER_EVENT_N, fDb);
         fDb.insertId("o_event", fDoc);
     }
     fDb.update("o_event", fDbBind, where_id(ap(fDoc)));

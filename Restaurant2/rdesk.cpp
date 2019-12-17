@@ -539,7 +539,7 @@ void RDesk::recover()
     fDb.update("r_table", fDbBind, where_id(table));
     fDbBind[":f_state"] = ORDER_STATE_OPENED;
     fDb.update("o_header", fDbBind, where_id(ap(ordNum)));
-    QString rrId = uuid(VAUCHER_RECOVER_N, fDb);
+    QString rrId = uuuid(VAUCHER_RECOVER_N, fDb);
     fDbBind[":f_id1"] = rrId;
     fDbBind[":f_source1"] = VAUCHER_RECOVER_N;
     fDbBind[":f_itemCode"] = 41;
@@ -600,7 +600,7 @@ void RDesk::setComplexMode()
         fDbBind[":f_complex"] = dc->fId;
         fDbBind[":f_complexId"] = dc->fId;
         fDbBind[":f_adgt"] = dc->fAdgt;
-        dc->fRecId = uuid("DR", fDb);
+        dc->fRecId = uuuid("DR", fDb);
         fDb.insertId("o_dish", dc->fRecId);
         if (dc->fRecId.isEmpty()) {
             message_error("Application will quit due an program error.");
@@ -702,107 +702,7 @@ void RDesk::printTotalAnyDay()
 
 void RDesk::printTax(int cashMode)
 {
-    //Print tax
-    if (fPreferences.getDb(def_tax_port).toInt() == 0) {
-        message_error(tr("Setup tax printer first"));
-        return;
-    }
-    PrintTax *pt = new PrintTax(this);
-    double total = 0;
-    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-        if (!od) {
-            continue;
-        }
-        if (od->fState != DISH_STATE_READY) {
-            continue;
-        }
-        if (od->fComplex > 0) {
-            continue;
-        }
-        total += od->fTotal;
-        pt->fRecList.append(QString::number(i));
-        pt->fDept.append(fHall->fVatDept);
-        pt->fAdgCode.append(od->fAdgt);
-        pt->fCodeList.append(QString::number(od->fDishId));
-        pt->fNameList.append(od->fName["am"]);
-        pt->fQtyList.append(float_str(od->fQty, 1));
-        pt->fPriceList.append(float_str(od->fPrice, 2));
-        pt->fTaxNameList.append(od->fName["am"]);
-    }
-    for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
-        DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
-        if (!dc) {
-            message_error("Application error. Contact to developer. Message: dc ==0, print tax");
-            return;
-        }
-        total += dc->fPrice * dc->fQty;
-        pt->fRecList.append(dc->fRecId);
-        pt->fDept.append(fHall->fVatDept);
-        pt->fAdgCode.append(dc->fAdgt);
-        pt->fCodeList.append(QString::number(dc->fId));
-        pt->fNameList.append(dc->fName["am"]);
-        pt->fQtyList.append(float_str(dc->fQty, 1));
-        pt->fPriceList.append(float_str(dc->fPrice, 2));
-        pt->fTaxNameList.append(dc->fName["am"]);
-    }
-    fTable->fTaxPrint = 1;
-    fDbBind[":f_tax"] = 1;
-    fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
-    pt->fInvoice = fTable->fOrder;
-    pt->build();
-    switch (cashMode) {
-    case tax_mode_cash:
-        pt->fAmountCash = float_str(total, 2);
-        pt->fAmountCard = "0";
-        break;
-    case tax_mode_card:
-        pt->fAmountCard = float_str(total, 2);
-        pt->fAmountCash = "0";
-        break;
-    }
-    pt->print();
-    delete pt;
 
-    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-        if (!od) {
-            continue;
-        }
-        if (od->fState != DISH_STATE_READY) {
-            continue;
-        }
-        if (od->fComplex > 0) {
-            continue;
-        }
-        fDbBind[":f_vaucher"] = fTable->fOrder;
-        fDbBind[":f_invoice"] = "";
-        fDbBind[":f_date"] = QDate::currentDate();
-        fDbBind[":f_time"] = QTime::currentTime();
-        fDbBind[":f_name"] = od->fName["en"];
-        fDbBind[":f_amountCash"] = cashMode == tax_mode_cash ? total : 0;
-        fDbBind[":f_amountCard"] = cashMode == tax_mode_cash ? 0 : total;
-        fDbBind[":f_amountPrepaid"] = 0;
-        fDbBind[":f_user"] = fStaff->fId;
-        fDb.insert("m_tax_history", fDbBind);
-    }
-    for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
-        DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
-        if (!dc) {
-            message_error("Application error. Contact to developer. Message: dc ==0, print tax");
-            return;
-        }
-        fDbBind[":f_vaucher"] = fTable->fOrder;
-        fDbBind[":f_invoice"] = 0;
-        fDbBind[":f_date"] = QDate::currentDate();
-        fDbBind[":f_time"] = QTime::currentTime();
-        fDbBind[":f_name"] = dc->fName["en"];
-        fDbBind[":f_amountCash"] = cashMode == tax_mode_cash ? total : 0;
-        fDbBind[":f_amountCard"] = cashMode == tax_mode_cash ? 0 : total;
-        fDbBind[":f_amountPrepaid"] = 0;
-        fDbBind[":f_user"] = fStaff->fId;
-        fDb.insert("m_tax_history", fDbBind);
-    }
 }
 
 void RDesk::printTaxDialog()
@@ -1194,7 +1094,7 @@ void RDesk::saledItem()
         p.ltext(tr("Total"), 0);
         p.rtext(float_str(total, 2));
     }
-    p.print("local", QPrinter::Custom);
+    p.print("p1", QPrinter::Custom);
 }
 
 void RDesk::checkCardRegistration()
@@ -1490,7 +1390,7 @@ void RDesk::addDishToOrder(DishStruct *d)
     fDbBind[":f_complexId"] = 0;
     fDbBind[":f_adgt"] = od->fAdgt;
     fDbBind[":f_complexRec"] = od->fComplexRecId;
-    od->fRecId = uuid("DR", fDb);
+    od->fRecId = uuuid("DR", fDb);
     fDb.insertId("o_dish", od->fRecId);
     fDb.update("o_dish", fDbBind, where_id(ap(od->fRecId)));
     updateDishQtyHistory(od);
@@ -1662,7 +1562,7 @@ void RDesk::checkOrderHeader(TableStruct *t)
         QString query = QString("select f_id from r_table where f_id='%1' for update")
                 .arg(t->fId);
         fDb.queryDirect(query);
-        t->fOrder = uuid(VAUCHER_POINT_SALE_N, fDb);
+        t->fOrder = uuuid(VAUCHER_POINT_SALE_N, fDb);
         fDb.insertId("o_header", t->fOrder);
         fDbBind[":f_state"] = ORDER_STATE_OPENED;
         fDbBind[":f_table"] = t->fId;
@@ -2651,7 +2551,7 @@ void RDesk::on_btnTrash_clicked()
                             r->fState = reason.toInt();
                             r->fQty = num;
                             r->fQtyPrint = num;
-                            r->fRecId = uuid("DR", fDb);
+                            r->fRecId = uuuid("DR", fDb);
                             fDb.insertId("o_dish", r->fRecId);
                             fDbBind[":f_header"] = fTable->fOrder;
                             fDbBind[":f_state"] = r->fState;
@@ -2925,7 +2825,7 @@ void RDesk::on_btnTransfer_clicked()
         fDbBind[":f_complexId"] = 0;
         fDbBind[":f_adgt"] = od.fAdgt;
         fDbBind[":f_complexRec"] = od.fComplexRecId;
-        od.fRecId = uuid("DR", fDb);
+        od.fRecId = uuuid("DR", fDb);
         fDbBind[":f_id"] = od.fRecId;
         fDb.insertWithoutId("o_dish", fDbBind);
         if (od.fRecId.isEmpty()) {
