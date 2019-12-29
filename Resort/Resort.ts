@@ -7931,35 +7931,23 @@ ee</source>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Համար</translation>
+        <translation type="obsolete">Համար</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ամսաթիվ</translation>
     </message>
     <message>
         <source>Debit</source>
-        <translation type="unfinished">Դեբետ</translation>
+        <translation type="obsolete">Դեբետ</translation>
     </message>
     <message>
         <source>Credit</source>
-        <translation type="unfinished">Կրեդիտ</translation>
+        <translation type="obsolete">Կրեդիտ</translation>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished">Բալանս</translation>
-    </message>
-    <message>
-        <source>Free</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Բալանս</translation>
     </message>
 </context>
 <context>
@@ -9011,10 +8999,6 @@ ledger</source>
         <translation></translation>
     </message>
     <message>
-        <source>oh.f_paymentMode;pm.f_</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Date end</source>
         <translation>Վերջ</translation>
     </message>
@@ -9277,6 +9261,30 @@ ledger</source>
     <message>
         <source>Discount amount</source>
         <translation>Զեղչ․ գումար</translation>
+    </message>
+    <message>
+        <source>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cash</source>
+        <translation>Կանխիկ</translation>
+    </message>
+    <message>
+        <source>Card</source>
+        <translation>Քարտ</translation>
+    </message>
+    <message>
+        <source>Debt</source>
+        <translation>Պարտք</translation>
+    </message>
+    <message>
+        <source>Discount</source>
+        <translation>Զեղչ</translation>
+    </message>
+    <message>
+        <source>Coupon</source>
+        <translation>Կտրոն</translation>
     </message>
 </context>
 <context>
@@ -10807,39 +10815,31 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Table code</source>
-        <translation>Սեղանի կոդ</translation>
+        <translation type="vanished">Սեղանի կոդ</translation>
     </message>
     <message>
         <source>Table</source>
-        <translation>Սեղան</translation>
+        <translation type="vanished">Սեղան</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="unfinished">Համակարգիչ</translation>
+        <translation type="obsolete">Համակարգիչ</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
+        <translation type="obsolete">Ամսաթիվ</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Ժամ</translation>
+        <translation type="obsolete">Ժամ</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished">Օգտգործող</translation>
-    </message>
-    <message>
-        <source>Field</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Old</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Օգտգործող</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Նոր</translation>
+        <translation type="obsolete">Նոր</translation>
     </message>
     <message>
         <source>Start time</source>
@@ -10862,71 +10862,15 @@ or contact to administrator</source>
         <translation type="unfinished">Նկարագրություն</translation>
     </message>
     <message>
-        <source>Author code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>State code</source>
-        <translation type="unfinished">Վիճակի կոդ</translation>
+        <translation type="obsolete">Վիճակի կոդ</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrangement code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrangement</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nights</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Վիճակ</translation>
     </message>
     <message>
         <source>Rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cardex code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cardex mame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Booking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Grand total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10966,60 +10910,8 @@ or contact to administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Childs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acc.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrival date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departure date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nationality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extra bed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Meal plan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>VAT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cardex</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Operator</source>
-        <translation type="unfinished">Օպերատոր</translation>
-    </message>
-    <message>
-        <source>In house guests</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Օպերատոր</translation>
     </message>
     <message>
         <source>Input price</source>
@@ -11166,16 +11058,8 @@ or contact to administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Rec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invoice</source>
-        <translation type="unfinished">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Tracking</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">ՀԱ</translation>
     </message>
     <message>
         <source>City ledger advance</source>
@@ -17163,6 +17047,18 @@ commission</source>
     <message>
         <source>Salary</source>
         <translation>Աշխատավարձ</translation>
+    </message>
+    <message>
+        <source>Employee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished">Գումար</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Ամսաթիվ</translation>
     </message>
 </context>
 <context>

@@ -62,76 +62,7 @@ QCheckBox *FInvoices::chFreeRooming()
 
 void FInvoices::openReport(bool free)
 {
-    QList<int> widths;
-    widths << 80
-           << 120
-           << 80
-           << 300
-           << 100
-           << 100
-           << 100
-           << 100
-              ;
-    QStringList fields;
-    fields << "r.f_invoice"
-           << "r.f_endDate"
-           << "r.f_room"
-           << "concat(g.f_title,' ',g.f_firstName,' ',g.f_lastName) as f_guest"
-           << "coalesce(c.amount,0) as f_credit"
-           << "coalesce(d.amount,0) as f_debet"
-           << "coalesce(b.amount,0) as f_balance"
-           << "coalesce(f.f, 0) as f";
-    QStringList titles;
-    titles << tr("Number")
-           << tr("Date")
-           << tr("Room")
-           << tr("Guest")
-           << tr("Debit")
-           << tr("Credit")
-           << tr("Balance")
-           << tr("Free");
-    QMap<QString, bool> includes;
-    includes["r.f_invoice"] = true;
-    includes["r.f_endDate"] = true;
-    includes["r.f_room"] = true;
-    includes["concat(g.f_title,' ',g.f_firstName,' ',g.f_lastName) as f_guest"] = true;
-    includes["coalesce(c.amount,0) as f_credit"] = true;
-    includes["coalesce(d.amount,0) as f_debet"] = true;
-    includes["coalesce(b.amount,0) as f_balance"] = true;
-    includes["coalesce(f.f, 0) as f"] = true;
-    QStringList tables;
-    tables << "f_reservation r"
-           << "f_guests g"
-           << "(select f_inv, sum(f_amountAmd) as amount from m_register where f_sign=1 and f_finance=1  and f_canceled=0 group by 1) c"
-           << "(select f_inv, sum(f_amountAmd) as amount from m_register where f_sign=-1 and f_finance=1 and f_canceled=0 group by 1) d"
-           << "(select f_inv, sum(f_amountAmd*f_sign) as amount from m_register where f_canceled=0 and f_finance=1 group by 1) b"
-           << QString("(select f_inv, count(f_id) as f from m_register where f_canceled=0 and f_finance=1 and f_itemCode in (%1) and f_amountAmd<1 group by 1) f")
-              .arg(fPreferences.getDb("rooming_list").toString());
-    QStringList joins;
-    joins << "from"
-          << "left"
-          << "left"
-          << "left"
-          << "left"
-          << "left"
-          << "left";
-    QStringList joinConds;
-    joinConds << ""
-              << "g.f_id=r.f_guest"
-              << "c.f_inv=r.f_invoice"
-              << "d.f_inv=r.f_invoice"
-              << "b.f_inv=r.f_invoice"
-              << "f.f_inv=r.f_invoice"
-                 ;
-    QString title = tr("Invoices");
-    QString icon = ":/images/invoice.png";
-    WReportGrid *rg = addTab<WReportGrid>();
-    rg->setQueryModel<FInvoices>(widths, fields, titles, includes, tables, joins, joinConds, title, icon);
-    WAccInvoice *ai = new WAccInvoice(rg);
-    FInvoices *v = static_cast<FInvoices*>(rg->fFilter);
-    v->chFreeRooming()->setChecked(free);
-    v->apply(rg);
-    Q_UNUSED(ai)
+
 }
 
 void FInvoices::removeInvoiceWithAllReference()

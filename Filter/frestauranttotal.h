@@ -32,8 +32,10 @@ public:
     virtual QWidget *firstElement();
     QString reportTitle();
     static void open();
+
 protected:
     virtual void selector(int selectorNumber, const QVariant &value);
+
 private:
     Ui::FRestaurantTotal *ui;
     DWSelectorHall *fDockHall;
@@ -43,6 +45,7 @@ private:
     DWSelectorDishType *fDockDishType;
     DWSelectorPaymentMode *fDockPay;
     void printNewPage(int &top, int &left, int &page, PPrintPreview *pp, PPrintScene *&ps, int nextHeight = 0);
+
 private slots:
     void printReceipt();
     void removeOrder();

@@ -465,7 +465,7 @@ void WReportGrid::on_btnClearQuickSearch_clicked()
 void WReportGrid::on_btnPrint_clicked()
 {
     if (fFilter) {
-        if (fFilter->handlePrint() > 0) {
+        if (fFilter->handlePrint()) {
             return;
         }
     }

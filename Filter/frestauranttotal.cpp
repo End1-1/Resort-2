@@ -81,15 +81,15 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["oh.f_id"] = false;
     fReportGrid->fIncludes["oh.f_state"] = false;
     fReportGrid->fIncludes["os.f_" + def_lang] = false;
-    fReportGrid->fIncludes["oh.f_dateCash"] = false;
-    fReportGrid->fIncludes["oh.f_dateOpen"] = false;
-    fReportGrid->fIncludes["oh.f_dateClose"] = false;
+    fReportGrid->fIncludes["oh.f_datecash"] = false;
+    fReportGrid->fIncludes["oh.f_dateopen"] = false;
+    fReportGrid->fIncludes["oh.f_dateclose"] = false;
     fReportGrid->fIncludes["oh.f_hall"] = false;
     fReportGrid->fIncludes["h.f_name"] = false;
     fReportGrid->fIncludes["oh.f_table"] = false;
     fReportGrid->fIncludes["t.f_name"] = false;
     fReportGrid->fIncludes["oh.f_staff"] = false;
-    fReportGrid->fIncludes["concat(u.f_firstName,' ',u.f_lastName)"] = false;
+    fReportGrid->fIncludes["concat(u.f_firstname,' ',u.f_lastname)"] = false;
     fReportGrid->fIncludes["oh.f_cityLedger"] = false;
     fReportGrid->fIncludes["cl.f_name"] = false;
     fReportGrid->fIncludes["od.f_store"] = false;
@@ -110,7 +110,11 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["count(oh.f_id)"] = false;
     fReportGrid->fIncludes["sum(oh.f_total)"] = false;
     fReportGrid->fIncludes["op.f_discountcard"] = false;
-    fReportGrid->fIncludes["op.f_discount"] = false;
+    fReportGrid->fIncludes["sum(op.f_cash)"] = false;
+    fReportGrid->fIncludes["sum(op.f_card)"] = false;
+    fReportGrid->fIncludes["sum(op.f_discount)"] = false;
+    fReportGrid->fIncludes["sum(op.f_debt)"] = false;
+    fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
 }
 
 FRestaurantTotal::~FRestaurantTotal()
@@ -130,58 +134,75 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             && ui->leDishType->text().isEmpty()
             && ui->leArmSoft->text().isEmpty()
             && ui->chArmSoft->isChecked();
+    if (ui->chPaymentMode->isChecked()) {
+        countAmount = true;
+    }
     fReportGrid->fIncludes["sum(od.f_total)"] = !countAmount;
     fReportGrid->fIncludes["sum(od.f_qty)"] = !countAmount;
     fReportGrid->fIncludes["count(oh.f_id)"] = countAmount;
     fReportGrid->fIncludes["sum(oh.f_total)"] = countAmount;
+    if (countAmount && ui->chPaymentMode->isChecked()) {
+        fReportGrid->fIncludes["sum(oh.f_total)"] = false;
+        fReportGrid->fIncludes["sum(op.f_cash)"] = true;
+        fReportGrid->fIncludes["sum(op.f_card)"] = true;
+        fReportGrid->fIncludes["sum(op.f_discount)"] = true;
+        fReportGrid->fIncludes["sum(op.f_debt)"] = true;
+        fReportGrid->fIncludes["sum(op.f_coupon)"] = true;
+    }
     rg->fFieldsWidths.clear();
-    rg->fFieldsWidths << 100 //f_id
-           << 0 // oh_fstate
-           << 80 //state name
-           << 100 //date_cash
-           << 110 // date open
-           << 110 // date close
-           << 0 //hall code
-           << 80 //hall name
-           << 0 // table code
-           << 50 // table name
-           << 0 //oh.f_staff
-           << 150 //staff name
-           << 0 // cl code
-           << 150 // cl
-           << 0 // store code
-           << 100 // store name
-           << 0 // dish state code
-           << 80 //dish_ state
-           << 0 // dish type code
-           << 200 // dish type name
-           << 0 //dish code
-           << 200 //dish name
-           << 50 // armsoft
-           << 100 // tax
-           << 0 // payment mode
-           << 150 //payment mode name
-           << 80 // payment mode comment
-           << 80 // count of orders
-           << 80 // sum qty
-           << 80 // sum total
-           << 100 // discount card
-           << 80 // discount amount
+
+    rg->fFieldsWidths[tr("Order #")] = 100;
+    rg->fFieldsWidths[tr("State code")] = 0;
+    rg->fFieldsWidths[tr("State")] = 80;
+    rg->fFieldsWidths[tr("Date")] = 100;
+    rg->fFieldsWidths[tr("Opened")] = 120;
+    rg->fFieldsWidths[tr("Closed")] = 120;
+    rg->fFieldsWidths[tr("Hall code")] = 0;
+    rg->fFieldsWidths[tr("Hall")] = 100;
+    rg->fFieldsWidths[tr("Table code")] = 0;
+    rg->fFieldsWidths[tr("Table")] = 50;
+    rg->fFieldsWidths[tr("Staff code")] = 0;
+    rg->fFieldsWidths[tr("Staff")] = 150;
+    rg->fFieldsWidths[tr("City ledger code")] = 0;
+    rg->fFieldsWidths[tr("City ledger")] = 150;
+    rg->fFieldsWidths[tr("Store code")] = 0;
+    rg->fFieldsWidths[tr("Store")] = 100;
+    rg->fFieldsWidths[tr("Dish state code")] = 0;
+    rg->fFieldsWidths[tr("Dish state")] = 100;
+    rg->fFieldsWidths[tr("Dish type code")] = 0;
+    rg->fFieldsWidths[tr("Dish type")] = 150;
+    rg->fFieldsWidths[tr("Dish code")] = 80;
+    rg->fFieldsWidths[tr("Dish")] = 200;
+    rg->fFieldsWidths[tr("ArmSoft")] = 50;
+    rg->fFieldsWidths[tr("Tax")] = 80;
+    rg->fFieldsWidths[tr("Payment mode code")] = 0;
+    rg->fFieldsWidths[tr("P/M")] = 150;
+    rg->fFieldsWidths[tr("P/M comment")] = 100;
+    rg->fFieldsWidths[tr("Discount card")] = 100;
+    rg->fFieldsWidths[tr("Discount amount")] = 80;
+    rg->fFieldsWidths[tr("Qty")] = 80;
+    rg->fFieldsWidths[tr("Total")] = 80;
+    rg->fFieldsWidths[tr("Cash")] = 80;
+    rg->fFieldsWidths[tr("Card")] = 80;
+    rg->fFieldsWidths[tr("Debt")] = 80;
+    rg->fFieldsWidths[tr("Discount")] = 80;
+    rg->fFieldsWidths[tr("Coupon")] = 80;
               ;
+
     rg->fFields.clear();
     rg->fFields << "oh.f_id"
            << "oh.f_state"
            << "os.f_" + def_lang
-           << "oh.f_dateCash"
-           << "oh.f_dateOpen"
-           << "oh.f_dateClose"
+           << "oh.f_datecash"
+           << "oh.f_dateopen"
+           << "oh.f_dateclose"
            << "oh.f_hall"
            << "h.f_name"
            << "oh.f_table"
            << "t.f_name"
            << "oh.f_staff"
            << "concat(u.f_firstName,' ',u.f_lastName)"
-           << "oh.f_cityLedger"
+           << "oh.f_cityledger"
            << "cl.f_name"
            << "od.f_store"
            << "od.f_state"
@@ -197,50 +218,64 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "pm.f_" + def_lang
            << "oh.f_paymentModeComment"
            << "op.f_discountcard"
-           << "op.f_discount"
               ;
     if (countAmount) {
-        rg->fFields
-                << "count(oh.f_id)"
-                << "sum(oh.f_total)";
+        if (!ui->chPaymentMode->isChecked()) {
+            rg->fFields
+                    << "count(oh.f_id)"
+                    << "sum(oh.f_total)";
+        } else {
+            rg->fFields << "count(oh.f_id)"
+                        << "sum(op.f_cash)"
+                        << "sum(op.f_card)"
+                        << "sum(op.f_debt)"
+                        << "sum(op.f_discount)"
+                        << "sum(op.f_coupon)";
+        }
     } else {
         rg->fFields
            << "sum(od.f_qty)"
            << "sum(od.f_total)";
     }
     rg->fFieldTitles.clear();
-    rg->fFieldTitles << tr("Order #")
-           << tr("State code")
-           << tr("State")
-           << tr("Date")
-           << tr("Opened")
-           << tr("Closed")
-           << tr("Hall code")
-           << tr("Hall")
-           << tr("Table code")
-           << tr("Table")
-           << tr("Staff code")
-           << tr("Staff")
-           << tr("City ledger code")
-           << tr("City ledger")
-           << tr("Store code")
-           << tr("Store")
-           << tr("Dish state code")
-           << tr("Dish state")
-           << tr("Dish type code")
-           << tr("Dish type")
-           << tr("Dish code")
-           << tr("Dish")
-           << tr("ArmSoft")
-           << tr("Tax")
-           << tr("Payment mode code")
-           << tr("P/M")
-           << tr("P/M comment")
-           << tr("Discount card")
-           << tr("Discount amount")
-           << tr("Qty")
-           << tr("Total")
-              ;
+    rg->fFieldTitles["oh.f_id"] = tr("Order #");
+    rg->fFieldTitles["oh.f_state"] = tr("State code");
+    rg->fFieldTitles["os.f_" + def_lang] = tr("State");
+    rg->fFieldTitles["oh.f_datecash"] = tr("Date");
+    rg->fFieldTitles["oh.f_dateopen"] = tr("Opened");
+    rg->fFieldTitles["oh.f_dateclose"] = tr("Closed");
+    rg->fFieldTitles["oh.f_hall"] = tr("Hall code");
+    rg->fFieldTitles["h.f_name"] = tr("Hall");
+    rg->fFieldTitles["oh.f_table"] = tr("Table code");
+    rg->fFieldTitles["t.f_name"] = tr("Table");
+    rg->fFieldTitles["oh.f_staff"] = tr("Staff code");
+    rg->fFieldTitles["concat(u.f_firstname,' ',u.f_lastname)"] = tr("Staff");
+    rg->fFieldTitles["oh.f_cityledger"] = tr("City ledger code");
+    rg->fFieldTitles["cl.f_name"] = tr("City ledger");
+    rg->fFieldTitles["od.f_store"] = tr("Store code");
+    rg->fFieldTitles["s.f_name"] = tr("Store");
+    rg->fFieldTitles["od.f_state"] = tr("Dish state code");
+    rg->fFieldTitles["ds.f_en"] = tr("Dish state");
+    rg->fFieldTitles["d.f_type"] = tr("Dish type code");
+    rg->fFieldTitles["dt.f_" + def_lang] = tr("Dish type");
+    rg->fFieldTitles["od.f_dish"] = tr("Dish code");
+    rg->fFieldTitles["d.f_" + def_lang] = tr("Dish");
+    rg->fFieldTitles["d.f_as"] = tr("ArmSoft");
+    rg->fFieldTitles["oh.f_tax"] = tr("Tax");
+    rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
+    rg->fFieldTitles["pm.f_" + def_lang] = tr("P/M");
+    rg->fFieldTitles["oh.f_paymentModeComment"] = tr("P/M comment");
+    rg->fFieldTitles["op.f_discountcard"] = tr("Discount card");
+    rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount amount");
+    rg->fFieldTitles["count(oh.f_id)"] = tr("Qty");
+    rg->fFieldTitles["sum(oh.f_total)"] = tr("Total");
+    rg->fFieldTitles["sum(od.f_qty)"] = tr("Qty");
+    rg->fFieldTitles["sum(od.f_total)"] = tr("Total");
+    rg->fFieldTitles["sum(op.f_cash)"] = tr("Cash");
+    rg->fFieldTitles["sum(op.f_card)"] = tr("Card");
+    rg->fFieldTitles["sum(op.f_debt)"] = tr("Debt");
+    rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount");
+    rg->fFieldTitles["sum(op.f_coupon)"] = tr("Coupon");
 
     rg->fTables.clear();
     rg->fTables << "o_header oh"
@@ -373,7 +408,18 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     where += order;
     buildQuery(rg, where);
     QList<int> colsTotal;
-    colsTotal << rg->fModel->columnIndex(tr("Qty")) << rg->fModel->columnIndex(tr("Total"));
+    if (!ui->chPaymentMode->isChecked()) {
+        colsTotal << rg->fModel->columnIndex(tr("Qty"))
+              << rg->fModel->columnIndex(tr("Total"))
+                 ;
+    } else {
+        colsTotal << rg->fModel->columnIndex(tr("Qty"))
+              << rg->fModel->columnIndex(tr("Cash"))
+              << rg->fModel->columnIndex(tr("Card"))
+              << rg->fModel->columnIndex(tr("Debt"))
+              << rg->fModel->columnIndex(tr("Discount"))
+              << rg->fModel->columnIndex(tr("Coupon"));
+    }
     QList<double> valsTotal;
     rg->fModel->sumOfColumns(colsTotal, valsTotal);
     rg->setTblTotalData(colsTotal, valsTotal);

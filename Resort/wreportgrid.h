@@ -50,7 +50,7 @@ public:
     }
 
     template<class T>
-    void setQueryModel(const QList<int> &widhts, const QStringList &fields, const QStringList &titles,
+    void setQueryModel(const QMap<QString,int> &widhts, const QStringList &fields, const QMap<QString, QString> &titles,
                        const QMap<QString,bool> &includes, const QStringList &tables, const QStringList &joins,
                        const QStringList &joinConds, const QString &title, const QString &iconName) {
         fFieldsWidths = widhts;
@@ -101,9 +101,9 @@ public:
     QString fStaticQuery;
     WFilterBase *fFilter;
     RGDoubleClickDelegate *fRgDoubleClick;
-    QList<int> fFieldsWidths;
+    QMap<QString, int> fFieldsWidths;
     QStringList fFields;
-    QStringList fFieldTitles;
+    QMap<QString, QString> fFieldTitles;
     QStringList fTables;
     QStringList fJoins;
     QStringList fJoinConds;

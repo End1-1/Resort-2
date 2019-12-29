@@ -55,9 +55,9 @@ void WFilterBase::buildQuery(WReportGrid *rg, const QString &where)
         if (!rg->fIncludes[rg->fFields.at(i)]) {
             continue;
         }
-        rg->fModel->setColumn(rg->fFieldsWidths.at(i),
+        rg->fModel->setColumn(rg->fFieldsWidths[rg->fFieldTitles[rg->fFields.at(i)]],
                               rg->fFields.at(i),
-                              rg->fFieldTitles.at(i));
+                              rg->fFieldTitles[rg->fFields.at(i)]);
         if (firstSelect) {
             firstSelect = false;
         } else {

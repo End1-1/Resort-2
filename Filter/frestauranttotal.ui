@@ -267,7 +267,7 @@ ledger</string>
       <number>5</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_staff;concat(u.f_firstName,' ',u.f_lastName)</string>
+      <string>oh.f_staff;concat(u.f_firstname,' ',u.f_lastname)</string>
      </property>
     </widget>
    </item>
@@ -283,7 +283,7 @@ ledger</string>
       <number>12</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_cityLedger;cl.f_name</string>
+      <string>oh.f_cityledger;cl.f_name</string>
      </property>
     </widget>
    </item>
@@ -405,10 +405,10 @@ ledger</string>
       <number>9</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_paymentMode;pm.f_</string>
+      <string>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon</string>
      </property>
      <property name="RequireLang" stdset="0">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -519,7 +519,7 @@ ledger</string>
       <number>1</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_dateCash</string>
+      <string>oh.f_datecash</string>
      </property>
     </widget>
    </item>
@@ -568,7 +568,7 @@ ledger</string>
       <string>Show open and close date</string>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_dateOpen;oh.f_dateClose</string>
+      <string>oh.f_dateopen;oh.f_dateclose</string>
      </property>
     </widget>
    </item>
@@ -745,17 +745,17 @@ ledger</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EDateEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">edateedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>EQLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">eqlineedit.h</header>
    <slots>
     <signal>customButtonClicked(bool)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
   </customwidget>
   <customwidget>
    <class>EQCheckBox</class>
