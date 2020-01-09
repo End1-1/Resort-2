@@ -19,6 +19,7 @@ public:
     virtual void setup();
     virtual void selector(int selectorNumber, const QVariant &value);
     static void openDoc(int doc);
+
 private:
     Ui::WStoreEntry *ui;
     DWSelectorDish *fDockDish;
@@ -26,6 +27,7 @@ private:
     void load(int doc);
     void newGoods(CI_Dish *c);
     void countTotal();
+
 private slots:
     void qtyChange(const QString &arg1);
     void priceChange(const QString &arg1);

@@ -103,14 +103,14 @@ void WStoreEntry::newGoods(CI_Dish *c)
     ui->tblData->setItemWithValue(row, 2, c->fName);
     EQLineEdit *l = ui->tblData->addLineEdit(row, 3, false);
     l->setValidator(new QDoubleValidator(0, 10000, 4));
-    connect(l, SIGNAL(textChanged(QString)), this, SLOT(qtyChange(QString)));
+    connect(l, SIGNAL(textEdited(QString)), this, SLOT(qtyChange(QString)));
     ui->tblData->setItemWithValue(row, 4, c->fUnitName);
     l = ui->tblData->addLineEdit(row, 5, false);
     l->setValidator(new QDoubleValidator(0, 1000000000, 2));
-    connect(l, SIGNAL(textChanged(QString)), this, SLOT(priceChange(QString)));
+    connect(l, SIGNAL(textEdited(QString)), this, SLOT(priceChange(QString)));
     l = ui->tblData->addLineEdit(row, 6, false);
     l->setValidator(new QDoubleValidator(0, 1000000000, 2));
-    connect(l, SIGNAL(textChanged(QString)), this, SLOT(totalChange(QString)));
+    connect(l, SIGNAL(textEdited(QString)), this, SLOT(totalChange(QString)));
     ui->tblData->lineEdit(row, 3)->setFocus();
 
 }
@@ -210,7 +210,7 @@ void WStoreEntry::on_btnSave_clicked()
         fDbBind[":f_doc"] = ui->leDocNum->asInt();
         fDbBind[":f_goods"] = ui->tblData->toInt(i, 1);
         fDbBind[":f_qty"] = ui->tblData->lineEdit(i, 3)->asDouble();
-        fDbBind[":f_amount"] = ui->tblData->lineEdit(i, 5)->asDouble();
+        fDbBind[":f_amount"] = ui->tblData->lineEdit(i, 6)->asDouble();
         ui->tblData->setItemWithValue(i, 0, fDb.insert("st_body", fDbBind));
     }
     message_info(tr("Saved"));

@@ -196,16 +196,47 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     PTextRect trr(th, "");
     trr.setTextAlignment(Qt::AlignRight);
     top += ps->addTextRect(10, top, 680, rowHeight, tr("Common"), &th)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Cash"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_cash").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Card"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_card").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Coupon"), &trl);
+
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_coupon").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Debt"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_debt").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     ps->addTextRect(10, top, 680, rowHeight, tr("Discount"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_discount").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
     top += 20;
 
     ps->addLine(10, top, 680, top, dotPen);
@@ -220,6 +251,12 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     DatabaseResult drsal;
     rp.fDbBind[":f_date"] = date;
     drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
+//    drsal.select(rp.fDb, "select ug.f_en, sum(s2.f_amount) as f_amount from "
+//                 "salary2 s2 "
+//                 "inner join users u on u.f_id=s2.f_employee "
+//                 "inner join users_groups ug on ug.f_id=u.f_group "
+//                 "where s2.f_date=:f_date "
+//                 "group by 1 ", rp.fDbBind);
 
     double totalSalary = 0;
     for (int i = 0; i < drsal.rowCount(); i++) {
@@ -305,7 +342,8 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     }
 
     ps->addTextRect(10, top, 680, rowHeight, tr("Finally"), &trl);
-    top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble() - totalSalary, 2), &trr)->textHeight();
+    //top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble() - totalSalary, 2), &trr)->textHeight();
+    top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble(), 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
         top = 10;
         ps = new PPrintScene(Portrait);
@@ -453,7 +491,8 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     }
 
     ps->addTextRect(10, top, 680, rowHeight, tr("Finally"), &trl);
-    top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble() - totalSalary, 2), &trr)->textHeight();
+    //top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble() - totalSalary, 2), &trr)->textHeight();
+    top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble(), 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
         top = 10;
         ps = new PPrintScene(Portrait);
