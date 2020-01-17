@@ -423,8 +423,11 @@
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
      <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
+      <number>21</number>
      </attribute>
     </widget>
    </item>

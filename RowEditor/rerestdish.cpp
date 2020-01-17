@@ -3,6 +3,7 @@
 #include "dlgtracking.h"
 #include "eqcheckbox.h"
 #include "dwselectorunit.h"
+#include "cachedish.h"
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QBuffer>
@@ -121,6 +122,7 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     fRestStore->configure();
     fRestStore->setSelector(ui->leDefStore);
     connect(fRestStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store2(CI_RestStore*)));
+    fCacheId = cid_dish;
 }
 
 RERestDish::~RERestDish()

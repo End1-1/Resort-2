@@ -14651,7 +14651,7 @@ Reserve</source>
     </message>
     <message>
         <source>Cash out</source>
-        <translation>Ելա դրամարկղից</translation>
+        <translation>Ելք դրամարկղից</translation>
     </message>
     <message>
         <source>Cash move</source>
@@ -14659,35 +14659,35 @@ Reserve</source>
     </message>
     <message>
         <source>Cash operation is not defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Գործողությունը նշված չէ</translation>
     </message>
     <message>
         <source>Cash in is not defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Դրամարկղը նշված չէ</translation>
     </message>
     <message>
         <source>Purpose is not defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Նպատակը նշված չէ</translation>
     </message>
     <message>
         <source>Document type was not selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Փասթաթղթի տեսակը նշված չէ</translation>
     </message>
     <message>
         <source>Amount must be greater than 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Գումարը պետք է մեծ լինի զրոից</translation>
     </message>
     <message>
         <source>Invalid document number</source>
-        <translation type="unfinished">Սխալ փասթաթղթի համար</translation>
+        <translation>Սխալ փասթաթղթի համար</translation>
     </message>
     <message>
         <source>Error in cash movement document</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Saved</source>
-        <translation type="unfinished">Պահպանված է</translation>
+        <translation>Պահպանված է</translation>
     </message>
 </context>
 <context>
@@ -18204,7 +18204,7 @@ cashdesk</source>
     <message>
         <source>New store
 checkpoint</source>
-        <translation>Նոր ահեստի
+        <translation>Նոր պահեստի
 մնացորդ</translation>
     </message>
     <message>

@@ -577,6 +577,12 @@ void RDesk::initialCash()
 
 void RDesk::setComplexMode()
 {
+    if (fTable) {
+        if (fTable->fHall != 1) {
+            message_error(tr("This action is prohabited on this hall"));
+            return;
+        }
+    }
     DishComplexStruct *dc = DlgComplexDish::complex(this);
     if (dc) {
         checkOrderHeader(fTable);
