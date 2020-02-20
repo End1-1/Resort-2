@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
+    <width>1020</width>
     <height>567</height>
    </rect>
   </property>
@@ -85,6 +85,25 @@
         </property>
         <property name="text">
          <string>CAFE</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnHallVIP">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>VIP</string>
         </property>
        </widget>
       </item>

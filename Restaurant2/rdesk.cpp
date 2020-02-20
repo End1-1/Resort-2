@@ -1498,6 +1498,13 @@ bool RDesk::setTable(TableStruct *t)
             return true;
         }
     }
+    if (fTable) {
+        //unlock previous table
+        checkEmpty();
+        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_id=%1")
+                .arg(fTable->fId);
+        fDb.queryDirect(query);
+    }
     if (t == 0) {
         clearOrder();
         return false;
@@ -1507,13 +1514,6 @@ bool RDesk::setTable(TableStruct *t)
     ui->lbCar->clear();
     Splash s(this);
     s.show();
-    if (fTable) {
-        //unlock previous table
-        checkEmpty();
-        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_id=%1")
-                .arg(fTable->fId);
-        fDb.queryDirect(query);
-    }
     fTable = t;
     s.setText(tr("Opening table ") + t->fName);
     ui->tblTotal->item(0, 1)->setText(t->fName);
@@ -1544,20 +1544,53 @@ bool RDesk::setTable(TableStruct *t)
             }
         }
     }
-    clearOrder();
-    fTable->fOrder = fDbRows.at(0).at(2).toString();
-    QString query = QString("update r_table set f_lockTime=%1, f_lockHost='%2' where f_id=%3")
-            .arg(QDateTime::currentDateTime().toTime_t())
-            .arg(Utils::hostName())
-            .arg(fTable->fId);
-    fDb.queryDirect(query);
-    fDb.fDb.commit();
-    if (!fTable->fOrder.isEmpty()) {
-        loadOrder();
+
+    if (fTable) {
+        fTable->fOrder = fDbRows.at(0).at(2).toString();
+        QString query = QString("update r_table set f_lockTime=%1, f_lockHost='%2' where f_id=%3")
+                .arg(QDateTime::currentDateTime().toTime_t())
+                .arg(Utils::hostName())
+                .arg(fTable->fId);
+        fDb.queryDirect(query);
+        fDb.fDb.commit();
+        if (!fTable->fOrder.isEmpty()) {
+            loadOrder();
+        }
+        fHall = Hall::getHallById(fTable->fHall);
+        ui->lbCar->setText(fCarModel + " " + fCarGovNum);
+        s.close();
+
+        if (fTable->fHall == 3) {
+            OrderDishStruct *od = nullptr;
+            for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+                OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+                if (!od) {
+                    continue;
+                }
+                if (od->fDishId == 487) {
+                    break;
+                }
+            }
+            if (od == nullptr) {
+                if (message_question(tr("Open new VIP Table?")) == QDialog::Accepted) {
+                    DishStruct *d = nullptr;
+                    for (int i = 0; i < fDishTable.fDish.count(); i++) {
+                        if (fDishTable.fDish.at(i)->fId == 487) {
+                            d = fDishTable.fDish.at(i);
+                        }
+                    }
+                    if (!d) {
+                        setTable(nullptr);
+                        return false;
+                    }
+                    addDishToOrder(d);
+                } else {
+                    setTable(nullptr);
+                    return false;
+                }
+            }
+        }
     }
-    fHall = Hall::getHallById(fTable->fHall);
-    ui->lbCar->setText(fCarModel + " " + fCarGovNum);
-    s.close();
     return true;
 }
 
@@ -1619,6 +1652,7 @@ void RDesk::clearOrder()
     fCostumerId = 0;
     fCarId = 0;
     countTotal();
+    fTable = nullptr;
 }
 
 void RDesk::loadOrder()
@@ -2451,7 +2485,7 @@ TableStruct *RDesk::loadHall(int hall)
     }
     fMenu = hs->fDefaultMenu;
     setupType(0);
-    TableStruct *ts = ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct*>();
+    TableStruct *ts = nullptr; //ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct*>();
     setTable(ts);
     ui->tblTables->viewport()->update();
     return ts;
@@ -2484,6 +2518,10 @@ void RDesk::on_tblType_clicked(const QModelIndex &index)
 void RDesk::on_tblDish_clicked(const QModelIndex &index)
 {
     if (!index.isValid()) {
+        return;
+    }
+    if (fTable == nullptr) {
+        message_error(tr("Please, select table"));
         return;
     }
     DishStruct *d = index.data(Qt::UserRole).value<DishStruct*>();
@@ -2655,7 +2693,9 @@ void RDesk::on_btnPayment_clicked()
     }
     printReceipt(true);
     closeOrder();
-    fTable->fAmount = "";
+    if (fTable) {
+        fTable->fAmount = "";
+    }
     changeBtnState();
 }
 
@@ -2952,6 +2992,10 @@ void RDesk::on_btnPayment_2_clicked()
 
 void RDesk::on_btnSetCar_clicked()
 {
+    if (!fTable) {
+        message_error(tr("Please, select table"));
+        return;
+    }
     if (fTable->fOrder.isEmpty()) {
         message_error(tr("Emtpy order"));
         return;
@@ -3020,4 +3064,9 @@ void RDesk::on_btnExit_2_clicked()
 void RDesk::on_btnDiss50_clicked()
 {
     manualdisc(0.5, defrest(dr_discount_50).toInt());
+}
+
+void RDesk::on_btnHallVIP_clicked()
+{
+    loadHall(3);
 }

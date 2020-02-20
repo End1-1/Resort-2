@@ -8975,14 +8975,6 @@ ledger</source>
         <translation>Սպասարկող</translation>
     </message>
     <message>
-        <source>oh.f_staff;concat(u.f_firstName,&apos; &apos;,u.f_lastName)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>oh.f_cityLedger;cl.f_name</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>oh.f_table;t.f_name</source>
         <translation></translation>
     </message>
@@ -9023,10 +9015,6 @@ ledger</source>
         <translation>Պահեստ</translation>
     </message>
     <message>
-        <source>oh.f_dateCash</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Order state</source>
         <translation>Պատվերի վիճակ</translation>
     </message>
@@ -9041,10 +9029,6 @@ ledger</source>
     <message>
         <source>Show open and close date</source>
         <translation>Ցուցադրել բացման և փակման ամսաթիվը</translation>
-    </message>
-    <message>
-        <source>oh.f_dateOpen;oh.f_dateClose</source>
-        <translation></translation>
     </message>
     <message>
         <source>Dish type</source>
@@ -9285,6 +9269,22 @@ ledger</source>
     <message>
         <source>Coupon</source>
         <translation>Կտրոն</translation>
+    </message>
+    <message>
+        <source>oh.f_staff;concat(u.f_firstname,&apos; &apos;,u.f_lastname)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oh.f_cityledger;cl.f_name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oh.f_datecash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oh.f_dateopen;oh.f_dateclose</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16907,27 +16907,27 @@ commission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reservation not saved
+        <source>Reservation not saved<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Room is not selected
+        <source>Room is not selected<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date of entry is not equal to working date
+        <source>Date of entry is not equal to working date<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reservatin state should be &apos;Reserved&apos;
+        <source>Reservatin state should be &apos;Reserved&apos;<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Room state is not vacant ready
+        <source>Room state is not vacant ready<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>

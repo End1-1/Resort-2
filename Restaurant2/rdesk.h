@@ -98,7 +98,7 @@ private slots:
     void on_btnHallCafe_clicked();
     void on_btnExit_2_clicked();
     void on_btnDiss50_clicked();
-
+    void on_btnHallVIP_clicked();
 
 private:
     Ui::RDesk *ui;

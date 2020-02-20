@@ -15,7 +15,7 @@ BEGIN
             VALUE "FileDescription", "Restaurant\0"
             VALUE "FileVersion", _FILE_VERSION_STR
             VALUE "InternalName", "Restaurant\0"
-            VALUE "LegalCopyright", "(C)2017, Kudryashov Vasili\0"
+            VALUE "LegalCopyright", "(C)2017-2020, Kudryashov Vasili\0"
             VALUE "OriginalFilename", "Restaurant.exe\0"
             VALUE "Email", "end1_1@yahoo.com\0"
             VALUE "ProductName", "SmartHotel\0"
