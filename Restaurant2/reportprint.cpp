@@ -50,7 +50,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                   "where oh.f_state=:f_state and d.f_state=1 "
                   "and oh.f_dateCash=:f_dateCash "
                   "group by 1, 2, 3, 4, 5, 8 "
-                  "order by 1, 2, oh.f_id ",
+                  "order by h.f_id, 2, oh.f_id ",
                   rp.fDbBind, rp.fDbRows);
     QString currHall = "";
     QString currPayment = "";

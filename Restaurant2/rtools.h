@@ -22,7 +22,6 @@ private slots:
     void on_btnExit_clicked();
     void on_btnShowHideRemovedItems_clicked();
     void on_btnOrderComment_clicked();
-    void on_btnMoveTable_clicked();
     void on_btnRemoveOrder_clicked();
     void on_btnShowTableOrders_clicked();
     void on_btnShowNyTotal_clicked();

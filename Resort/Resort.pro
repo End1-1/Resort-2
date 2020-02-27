@@ -335,7 +335,6 @@ SOURCES += main.cpp\
     fonlinebreakfast.cpp \
     ../Filter/fmonthlyoccperc.cpp \
     fnatbyperiod.cpp \
-    dlgcl.cpp \
     dlgpaymentmode.cpp \
     dlgchangeclofvaucher.cpp \
     dlgnoshow.cpp \
@@ -756,7 +755,6 @@ HEADERS  += mainwindow.h \
     fonlinebreakfast.h \
     ../Filter/fmonthlyoccperc.h \
     fnatbyperiod.h \
-    dlgcl.h \
     dlgpaymentmode.h \
     dlgchangeclofvaucher.h \
     dlgnoshow.h \
@@ -867,9 +865,7 @@ FORMS    += mainwindow.ui \
     databaseconnection.ui \
     databasepasswordchange.ui \
     wmaindesk.ui \
-    wreservation.ui \
     wguest.ui \
-    winvoice.ui \
     wreportgrid.ui \
     wwelcome.ui \
     dlgcontact.ui \
@@ -960,7 +956,6 @@ FORMS    += mainwindow.ui \
     ../Filter/fcallhistory.ui \
     dlgtaxback.ui \
     ../Filter/fcardexsales.ui \
-    dlgadvance.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
     dlgtaxreference.ui \
@@ -1016,7 +1011,6 @@ FORMS    += mainwindow.ui \
     fonlinebreakfast.ui \
     ../Filter/fmonthlyoccperc.ui \
     fnatbyperiod.ui \
-    dlgcl.ui \
     dlgpaymentmode.ui \
     dlgchangeclofvaucher.ui \
     dlgnoshow.ui \

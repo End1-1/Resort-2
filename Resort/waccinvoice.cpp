@@ -17,7 +17,6 @@
 #include "dlgchartdaterange.h"
 #include "dlgreservationguests.h"
 #include "dlgpostingcharges.h"
-#include "dlgcl.h"
 #include "wreservation.h"
 #include "dlgremotinvoices.h"
 #include "dlgreserveshortinfo.h"
@@ -661,15 +660,6 @@ void WAccInvoice::on_btnChangeCL_clicked()
     if (!cl) {
         message_error_tr("Wrong cityledger code. Contact with application developer.");
         return;
-    }
-    QString code, name;
-    if (DlgCL::getCL(code, name)) {
-        fDbBind[":f_finalName"] = "C/L " + name;
-        fDbBind[":f_cityLedger"] = code.toInt();
-        fDb.update("m_register", fDbBind, where_id(ap(ui->tblData->toString(row, 0))));
-        fTrackControl->insert("CL Changed for  " + ui->tblData->toString(row, 0),
-                                  oldCL + "/" + cl->fName, code + "/" + name);
-        load(ui->leInvoice->text());
     }
 }
 

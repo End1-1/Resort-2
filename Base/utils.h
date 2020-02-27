@@ -8,7 +8,7 @@
 #include <QDate>
 #include <QSettings>
 
-#define float_str(value, f) QString::number(value, 'f', f).remove(QRegExp("\\.0+$")).remove(QRegExp("\\.$"))
+#define float_str(value, f) QLocale().toString(value, 'f', f).remove(QRegExp("(?!\\d[\\.\\,][1-9]+)0+$")).remove(QRegExp("[\\.\\,]$"))
 #define float_equal(value1, value2) (abs(value1 - value2) < 0.01 ? true : false)
 #define float_greaterOrEqual(value1, value2) (value1 - value2 >= 0.01 ? true : false)
 #define float_printout(x) QLocale().toString(x, 'f', 2)

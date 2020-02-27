@@ -1642,7 +1642,7 @@ And Save</source>
     </message>
     <message>
         <location filename="rdesk.ui" line="120"/>
-        <location filename="rdesk.cpp" line="2013"/>
+        <location filename="rdesk.cpp" line="2001"/>
         <source>Car</source>
         <translation>Մեքենա</translation>
     </message>
@@ -1742,16 +1742,16 @@ And Save</source>
     <message>
         <location filename="rdesk.ui" line="1173"/>
         <location filename="rdesk.ui" line="1197"/>
-        <location filename="rdesk.cpp" line="1812"/>
-        <location filename="rdesk.cpp" line="2034"/>
+        <location filename="rdesk.cpp" line="1800"/>
+        <location filename="rdesk.cpp" line="2022"/>
         <source>Qty</source>
         <translation>Քնկ</translation>
     </message>
     <message>
         <location filename="rdesk.ui" line="1178"/>
         <location filename="rdesk.ui" line="1202"/>
-        <location filename="rdesk.cpp" line="953"/>
-        <location filename="rdesk.cpp" line="2036"/>
+        <location filename="rdesk.cpp" line="898"/>
+        <location filename="rdesk.cpp" line="2024"/>
         <source>Amount</source>
         <translation>Գումար</translation>
     </message>
@@ -1777,9 +1777,9 @@ And Save</source>
     </message>
     <message>
         <location filename="rdesk.ui" line="1258"/>
-        <location filename="rdesk.cpp" line="1805"/>
-        <location filename="rdesk.cpp" line="1906"/>
-        <location filename="rdesk.cpp" line="2010"/>
+        <location filename="rdesk.cpp" line="1793"/>
+        <location filename="rdesk.cpp" line="1894"/>
+        <location filename="rdesk.cpp" line="1998"/>
         <source>Table</source>
         <translation>Սեղան</translation>
     </message>
@@ -1790,8 +1790,8 @@ And Save</source>
     </message>
     <message>
         <location filename="rdesk.ui" line="1268"/>
-        <location filename="rdesk.cpp" line="1070"/>
-        <location filename="rdesk.cpp" line="1100"/>
+        <location filename="rdesk.cpp" line="1015"/>
+        <location filename="rdesk.cpp" line="1045"/>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
@@ -1805,46 +1805,45 @@ And Save</source>
         <translation type="vanished">Գործիքներ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="388"/>
-        <location filename="rdesk.cpp" line="2818"/>
+        <location filename="rdesk.cpp" line="2795"/>
         <source>Destination table is not empty, continue with merge?</source>
         <translation>Նշված սեղանը զբաղված է,
 շարունակել՞</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="434"/>
+        <location filename="rdesk.cpp" line="376"/>
         <source>Confirm remove whole order</source>
         <translation>Հաստատեք ամբողջ
 պատվերի հեռացումը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="439"/>
+        <location filename="rdesk.cpp" line="381"/>
         <source>STORE OPTION</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="510"/>
-        <location filename="rdesk.cpp" line="523"/>
+        <location filename="rdesk.cpp" line="452"/>
+        <location filename="rdesk.cpp" line="465"/>
         <source>Invalid order id</source>
         <translation>Անհայտ պատվեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="514"/>
+        <location filename="rdesk.cpp" line="456"/>
         <source>Order is not in current working date</source>
         <translation>Պավերի ամսաթիվը փոքր է աշխատանքային ամսաթվից</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="528"/>
+        <location filename="rdesk.cpp" line="470"/>
         <source>Table is busy, try again later</source>
         <translation>Սեղանը արգելափակված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="546"/>
+        <location filename="rdesk.cpp" line="488"/>
         <source>RECOVER FOR </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="558"/>
+        <location filename="rdesk.cpp" line="500"/>
         <source>Table was successful recovered</source>
         <translation>Սեղանը բացված է</translation>
     </message>
@@ -1853,167 +1852,162 @@ And Save</source>
         <translation type="vanished">ԿԱՐԳԱՎՈՐԵՔ ՀԴՄ ՍԱՐՔԻ ՊԱՐԱՄԵՏՐԵՐԸ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="798"/>
+        <location filename="rdesk.cpp" line="743"/>
         <source>VOID REPORT</source>
         <translation>ՉԵՂԱՐԿՎԱԾ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="802"/>
+        <location filename="rdesk.cpp" line="747"/>
         <source>Printed by </source>
         <oldsource>Printed by</oldsource>
         <translation>Տպված</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="823"/>
+        <location filename="rdesk.cpp" line="768"/>
         <source>Type: </source>
         <translation>Տեսակ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="824"/>
+        <location filename="rdesk.cpp" line="769"/>
         <source>Manager</source>
         <translation>Մենեջեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="864"/>
+        <location filename="rdesk.cpp" line="809"/>
         <source>Complimentary comment</source>
         <translation>Հյուրասիրության մեկնաբանություն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="879"/>
+        <location filename="rdesk.cpp" line="824"/>
         <source>Login</source>
         <translation>Մուտք</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="887"/>
+        <location filename="rdesk.cpp" line="832"/>
         <source>Your password was changed</source>
         <translation>Ձեր գախտնաբառը փոխված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="950"/>
+        <location filename="rdesk.cpp" line="895"/>
         <source>Total visits</source>
         <translation>Ընդհանուր այցելություններ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="951"/>
+        <location filename="rdesk.cpp" line="896"/>
         <source>Visits</source>
         <translation>Այց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="991"/>
+        <location filename="rdesk.cpp" line="936"/>
         <source>Invalid card code</source>
         <translation>Անհայտ քարտ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="999"/>
+        <location filename="rdesk.cpp" line="944"/>
         <source>Balance</source>
         <translation>Բալանս</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="984"/>
-        <location filename="rdesk.cpp" line="1006"/>
+        <location filename="rdesk.cpp" line="929"/>
+        <location filename="rdesk.cpp" line="951"/>
         <source>Card holder</source>
         <translation>Քարտապահ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="582"/>
+        <location filename="rdesk.cpp" line="524"/>
         <source>This action is prohabited on this hall</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="996"/>
+        <location filename="rdesk.cpp" line="941"/>
         <source>Card error</source>
         <translation>Քարտի սխալ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1018"/>
+        <location filename="rdesk.cpp" line="963"/>
         <source>Cards</source>
         <translation>Քարտեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1019"/>
+        <location filename="rdesk.cpp" line="964"/>
         <source>Total qty</source>
         <translation>Ընդ․ քնկ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1019"/>
+        <location filename="rdesk.cpp" line="964"/>
         <source>Total amount</source>
         <translation>Ընդ․ գումար</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1019"/>
+        <location filename="rdesk.cpp" line="964"/>
         <source>Current visits</source>
         <translation>Ընդ․ այց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1042"/>
+        <location filename="rdesk.cpp" line="987"/>
         <source>Daily sale</source>
         <translation>Օրվա վաճառք</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1044"/>
+        <location filename="rdesk.cpp" line="989"/>
         <source>Goods</source>
         <translation>Ապրանքներ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1149"/>
+        <location filename="rdesk.cpp" line="1094"/>
         <source>You cannot edit the quantity of selected item</source>
         <translation>Դուք չեկ կարող փոփոխել նշված տողը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1252"/>
+        <location filename="rdesk.cpp" line="1198"/>
         <source>Confirm to close application</source>
         <translation>Հաստատեք ծրարից դուրս գալը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1259"/>
-        <source>Cannot close current table, try later</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="1293"/>
+        <location filename="rdesk.cpp" line="1239"/>
         <source>Default menu is not set</source>
         <oldsource>Menu is not set</oldsource>
         <translation>Ճաշացանկը նշված չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2004"/>
+        <location filename="rdesk.cpp" line="1992"/>
         <source>Receipt S/N </source>
         <translation>Պատվերի համար</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2062"/>
+        <location filename="rdesk.cpp" line="2050"/>
         <source>Present</source>
         <translation>Նվեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2140"/>
+        <location filename="rdesk.cpp" line="2128"/>
         <source>Error while printing receipt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2144"/>
+        <location filename="rdesk.cpp" line="2132"/>
         <source>Cash</source>
         <translation>Կանխիկ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1019"/>
-        <location filename="rdesk.cpp" line="2150"/>
+        <location filename="rdesk.cpp" line="964"/>
+        <location filename="rdesk.cpp" line="2138"/>
         <source>Card</source>
         <translation>Քարտ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2156"/>
+        <location filename="rdesk.cpp" line="2144"/>
         <source>Coupon</source>
         <translation>Կտրոն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="973"/>
-        <location filename="rdesk.cpp" line="2169"/>
+        <location filename="rdesk.cpp" line="918"/>
+        <location filename="rdesk.cpp" line="2157"/>
         <source>Debt</source>
         <translation>Պարտք</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2180"/>
+        <location filename="rdesk.cpp" line="2168"/>
         <source>Discount</source>
         <translation>Զեղչ</translation>
     </message>
@@ -2022,64 +2016,62 @@ And Save</source>
         <translation type="vanished">Մեքենաի մակնիշը նշված չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2857"/>
+        <location filename="rdesk.cpp" line="2834"/>
         <source>Cannot insert new dish. Please reopen application</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2975"/>
+        <location filename="rdesk.cpp" line="3000"/>
         <source>Emtpy order</source>
         <translation>Պատվերը դատարկ է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3016"/>
+        <location filename="rdesk.cpp" line="3041"/>
         <source>No discount mechanism</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1518"/>
+        <location filename="rdesk.cpp" line="1466"/>
         <source>Opening table </source>
         <translation>Սեղանը բացվում է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1527"/>
-        <location filename="rdesk.cpp" line="1540"/>
         <source>Table in editing mode</source>
-        <translation>Սեղանը խմբագրվում է ուրիշի կողմից</translation>
+        <translation type="vanished">Սեղանը խմբագրվում է ուրիշի կողմից</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1655"/>
+        <location filename="rdesk.cpp" line="1636"/>
         <source>Table opened by</source>
         <oldsource>fTable opened by</oldsource>
         <translation>Սեղանը բացվել է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1781"/>
+        <location filename="rdesk.cpp" line="1769"/>
         <source>The printer with name not exists on the system</source>
         <translation>Տպիչը բացակայում է համակարգում</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1859"/>
+        <location filename="rdesk.cpp" line="1847"/>
         <source>Printer: </source>
         <translation>Տպիչ՝</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1909"/>
+        <location filename="rdesk.cpp" line="1897"/>
         <source>User</source>
         <translation>Սպասարկող</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2026"/>
+        <location filename="rdesk.cpp" line="2014"/>
         <source>Opened</source>
         <translation>Բացվեց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2028"/>
+        <location filename="rdesk.cpp" line="2016"/>
         <source>Closed</source>
         <translation>Փակվեց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2128"/>
+        <location filename="rdesk.cpp" line="2116"/>
         <source>COMPLIMENTARY</source>
         <translation>Հյուրասիրություն</translation>
     </message>
@@ -2100,98 +2092,100 @@ And Save</source>
         <translation type="vanished">Սենյակի համար</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2196"/>
+        <location filename="rdesk.cpp" line="2184"/>
         <source>****VOID****</source>
         <translation>******ՉԵՂՅԱԼ********</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2218"/>
+        <location filename="rdesk.cpp" line="2206"/>
         <source>****MISTAKE****</source>
         <translation>******ՍԽԱԼ******</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2380"/>
+        <location filename="rdesk.cpp" line="2351"/>
         <source>Discount already used</source>
         <translation>Զեղչը արդեն կիռարված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2384"/>
+        <location filename="rdesk.cpp" line="2355"/>
         <source>Confirm to discount</source>
         <translation>Հաստատեք զեղչը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2450"/>
+        <location filename="rdesk.cpp" line="2435"/>
         <source>Hall is empty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2491"/>
+        <location filename="rdesk.cpp" line="528"/>
+        <location filename="rdesk.cpp" line="2476"/>
+        <location filename="rdesk.cpp" line="2996"/>
         <source>Please, select table</source>
         <translation>Ընտրեք սեհանը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2513"/>
+        <location filename="rdesk.cpp" line="2499"/>
         <source>Confirm to delete the selected item</source>
         <translation>Հաստատեք տողի հեռացումը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2534"/>
-        <location filename="rdesk.cpp" line="2613"/>
+        <location filename="rdesk.cpp" line="2520"/>
+        <location filename="rdesk.cpp" line="2599"/>
         <source>REMOVE OPTION</source>
         <translation>Հեռացման պատճառ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2608"/>
+        <location filename="rdesk.cpp" line="2594"/>
         <source>Are you sure remove whole complex?</source>
         <translation>Հեռացնել ամբողջ փաթեթը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2650"/>
+        <location filename="rdesk.cpp" line="2637"/>
         <source>Car model must be selected</source>
         <translation>Մեքենաի մակնիշը նշված չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2654"/>
+        <location filename="rdesk.cpp" line="2641"/>
         <source>Costumer must be selected</source>
         <translation>Հաճախորդի անունը պարտադիր է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2733"/>
+        <location filename="rdesk.cpp" line="1516"/>
         <source>Open new VIP Table?</source>
         <translation>Բացել՞ նոր սեղան</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2884"/>
+        <location filename="rdesk.cpp" line="2861"/>
         <source>Raise privileges</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="496"/>
-        <location filename="rdesk.cpp" line="2530"/>
-        <location filename="rdesk.cpp" line="2604"/>
-        <location filename="rdesk.cpp" line="2895"/>
+        <location filename="rdesk.cpp" line="438"/>
+        <location filename="rdesk.cpp" line="2516"/>
+        <location filename="rdesk.cpp" line="2590"/>
+        <location filename="rdesk.cpp" line="2872"/>
         <source>Access denied</source>
         <translation>Գործողությունը արգելված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="803"/>
-        <location filename="rdesk.cpp" line="2016"/>
+        <location filename="rdesk.cpp" line="748"/>
+        <location filename="rdesk.cpp" line="2004"/>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1813"/>
-        <location filename="rdesk.cpp" line="2035"/>
+        <location filename="rdesk.cpp" line="1801"/>
+        <location filename="rdesk.cpp" line="2023"/>
         <source>Description</source>
         <translation>Նկարագրություն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1898"/>
+        <location filename="rdesk.cpp" line="1886"/>
         <source>Cancelation check</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2099"/>
+        <location filename="rdesk.cpp" line="2087"/>
         <source>Total, AMD</source>
         <translation>Ընդամենը, դրամ</translation>
     </message>
@@ -2204,8 +2198,8 @@ And Save</source>
         <translation type="vanished">Վաճառք</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2117"/>
-        <location filename="rdesk.cpp" line="2175"/>
+        <location filename="rdesk.cpp" line="2105"/>
+        <location filename="rdesk.cpp" line="2163"/>
         <source>Signature</source>
         <translation>Ստորագրություն</translation>
     </message>
@@ -2214,36 +2208,36 @@ And Save</source>
         <translation type="vanished">Տպել ՀԴՄ՞</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2867"/>
+        <location filename="rdesk.cpp" line="2844"/>
         <source>New table</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1801"/>
+        <location filename="rdesk.cpp" line="1789"/>
         <source>Service check, order #</source>
         <translation>նոր պատվեր </translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1806"/>
-        <location filename="rdesk.cpp" line="1907"/>
-        <location filename="rdesk.cpp" line="2020"/>
+        <location filename="rdesk.cpp" line="1794"/>
+        <location filename="rdesk.cpp" line="1895"/>
+        <location filename="rdesk.cpp" line="2008"/>
         <source>Time</source>
         <translation>Ժամ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1808"/>
-        <location filename="rdesk.cpp" line="2023"/>
+        <location filename="rdesk.cpp" line="1796"/>
+        <location filename="rdesk.cpp" line="2011"/>
         <source>Waiter</source>
         <translation>Սպասարկող</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2187"/>
+        <location filename="rdesk.cpp" line="2175"/>
         <source>Unknown costumer</source>
         <translation>Անհայտ հաճախորդ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2760"/>
-        <location filename="rdesk.cpp" line="2765"/>
+        <location filename="rdesk.cpp" line="2737"/>
+        <location filename="rdesk.cpp" line="2742"/>
         <source>You cannot edit comment for this item</source>
         <translation>Դուք չեկ կարող փոփոխել նշված տողը</translation>
     </message>

@@ -23,6 +23,7 @@ class RDesk : public BaseExtendedDialog
     Q_OBJECT
     friend class RTools;
     friend class DishItemDelegate;
+
 public:
     explicit RDesk(QWidget *parent = 0);
     ~RDesk();
@@ -32,7 +33,6 @@ public:
     TableStruct *loadHall(int hall);
     void showHideRemovedItems();
     void setOrderComment();
-    void moveTable();
     void removeOrder();
     void showTableOrders();
     void showMyTotal();
@@ -109,6 +109,7 @@ private:
     User *fStaff;
     bool fCanClose;
     bool fShowRemoved;
+    int fCurrentHall;
     int fMenu;
     int fCloseTimeout;
     DishesTable fDishTable;
@@ -121,8 +122,8 @@ private:
     void setBtnMenuText();
     void setupType(int partId);
     void setupDish(int typeId);
-    void addDishToOrder(DishStruct* d);
-    void addDishToTable(OrderDishStruct *od);
+    void addDishToOrder(DishStruct* d, bool counttotal);
+    void addDishToTable(OrderDishStruct *od, bool counttotal);
     void updateDish(OrderDishStruct *od);
     double countTotal();
     void countDish(OrderDishStruct *d);
@@ -140,6 +141,8 @@ private:
     void updateDishQtyHistory(OrderDishStruct *od);
     void updateTableInfo();
     void manualdisc(double val, int costumer);
+    void logtime(const QString &msg, int elapsed);
+    void repaintTables();
 };
 
 #endif // RDESK_H

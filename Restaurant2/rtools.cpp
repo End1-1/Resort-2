@@ -44,12 +44,6 @@ void RTools::on_btnOrderComment_clicked()
     fDesk->setOrderComment();
 }
 
-void RTools::on_btnMoveTable_clicked()
-{
-    accept();
-    fDesk->moveTable();
-}
-
 void RTools::on_btnRemoveOrder_clicked()
 {
     accept();
