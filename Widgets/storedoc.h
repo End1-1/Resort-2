@@ -38,6 +38,7 @@ private:
     void prepareDoc();
     void countTotal();
     void saveDoc(int docState);
+
 private slots:
     void qtyChange(const QString &arg1);
     void priceChange(const QString &arg1);

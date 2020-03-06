@@ -317,9 +317,12 @@ void WStoreEntry::on_btnCalculate_clicked()
     drtm.select(fDb, query, fDbBind);
 
     for (int j = 0; j < ui->tblData->rowCount(); j++) {
+        int tid = ui->tblData->toInt(j, 1);
         bool f = false;
         for (QMap<int, A>::const_iterator it = goodsList.begin(); it != goodsList.end(); it++) {
-            if (it.key() == ui->tblData->toInt(j, 1)) {
+            A a = it.value();
+            int id = it.key();
+            if (id == tid) {
                 f = true;
                 if (it.value().qty > 0.001) {
                     price[it.key()] =  it.value().total / it.value().qty;
@@ -337,8 +340,8 @@ void WStoreEntry::on_btnCalculate_clicked()
             }
         }
         if (!f) {
-            qty[ui->tblData->toInt(j, 1)] = ui->tblData->lineEdit(j, 3)->asDouble() * -1;
-            price[ui->tblData->toInt(j, 1)] = 0;
+            qty[tid] = ui->tblData->lineEdit(j, 3)->asDouble() * -1;
+            price[tid] = 0;
         }
     }
 

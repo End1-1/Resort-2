@@ -197,12 +197,12 @@ void EQLineEdit::setHiddenTextValidator(const QString &v)
 
 int EQLineEdit::asInt()
 {
-    return text().toInt();
+    return QLocale().toInt(text());
 }
 
 double EQLineEdit::asDouble()
 {
-    return text().toDouble();
+    return QLocale().toDouble(text());
 }
 
 void EQLineEdit::setSelector(DWSelector *selector)

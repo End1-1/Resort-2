@@ -564,7 +564,7 @@ void StoreDoc::on_deDate_textChanged(const QString &arg1)
 
 void StoreDoc::on_leTotal_textChanged(const QString &arg1)
 {
-    ui->wAcc->amount(arg1.toDouble());
+    ui->wAcc->amount(QLocale().toDouble(arg1));
 }
 
 void StoreDoc::on_leComments_textChanged(const QString &arg1)

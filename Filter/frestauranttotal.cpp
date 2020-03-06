@@ -101,6 +101,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["d.f_as"] = false;
     fReportGrid->fIncludes["od.f_dish"] = false;
     fReportGrid->fIncludes["d.f_" + def_lang] = false;
+    fReportGrid->fIncludes["od.f_price"] = true;
     fReportGrid->fIncludes["oh.f_tax"] = false;
     fReportGrid->fIncludes["oh.f_paymentMode"] = false;
     fReportGrid->fIncludes["pm.f_" + def_lang] = false;
@@ -173,6 +174,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths[tr("Dish type")] = 150;
     rg->fFieldsWidths[tr("Dish code")] = 80;
     rg->fFieldsWidths[tr("Dish")] = 200;
+    rg->fFieldsWidths[tr("Price")] = 80;
     rg->fFieldsWidths[tr("ArmSoft")] = 50;
     rg->fFieldsWidths[tr("Tax")] = 80;
     rg->fFieldsWidths[tr("Payment mode code")] = 0;
@@ -212,6 +214,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "dt.f_" + def_lang
            << "od.f_dish"
            << "d.f_" + def_lang
+           << "od.f_price"
            << "d.f_as"
            << "oh.f_tax"
            << "oh.f_paymentMode"
@@ -260,6 +263,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["dt.f_" + def_lang] = tr("Dish type");
     rg->fFieldTitles["od.f_dish"] = tr("Dish code");
     rg->fFieldTitles["d.f_" + def_lang] = tr("Dish");
+    rg->fFieldTitles["od.f_price"] = tr("Price");
     rg->fFieldTitles["d.f_as"] = tr("ArmSoft");
     rg->fFieldTitles["oh.f_tax"] = tr("Tax");
     rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
