@@ -158,13 +158,6 @@ ledger</string>
      </layout>
     </widget>
    </item>
-   <item row="5" column="10">
-    <widget class="QLabel" name="label_18">
-     <property name="text">
-      <string>Discount info</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="8">
     <widget class="EQCheckBox" name="chTable">
      <property name="focusPolicy">
@@ -520,30 +513,6 @@ ledger</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="EQLineEdit" name="lePaymentMode">
-     <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
-     </property>
-     <property name="ShowButton" stdset="0">
-      <bool>true</bool>
-     </property>
-     <property name="EnableHiddenText" stdset="0">
-      <bool>true</bool>
-     </property>
-     <property name="RequireLang" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Payment
-mode</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="4">
     <widget class="EQCheckBox" name="chState">
      <property name="focusPolicy">
@@ -741,13 +710,6 @@ mode</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="10">
-    <widget class="QLabel" name="label_19">
-     <property name="text">
-      <string>Show price</string>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="12">
     <widget class="EQCheckBox" name="chShowPrice">
      <property name="text">
@@ -755,6 +717,39 @@ mode</string>
      </property>
      <property name="Field" stdset="0">
       <string>od.f_price</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Payment mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="11">
+    <widget class="QLabel" name="label_19">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Show price</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="11">
+    <widget class="QLabel" name="label_18">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Discount info</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -788,7 +783,6 @@ mode</string>
   <tabstop>deEnd</tabstop>
   <tabstop>leState</tabstop>
   <tabstop>chState</tabstop>
-  <tabstop>lePaymentMode</tabstop>
   <tabstop>chPaymentMode</tabstop>
   <tabstop>leHall</tabstop>
   <tabstop>chHall</tabstop>

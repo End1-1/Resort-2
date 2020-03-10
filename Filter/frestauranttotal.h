@@ -55,7 +55,6 @@ private slots:
     void cityLedger(CI_CityLedger *c);
     void store(CI_RestStore *c);
     void dishType(CI_RestDishType *c);
-    void payment(CI_PaymentMode *c);
     void on_btnOrdersSubtotal_clicked();
     void doubleClick(const QList<QVariant> &row);
     void on_btnPrevDate_clicked();

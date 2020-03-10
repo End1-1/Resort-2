@@ -8919,7 +8919,7 @@ ee</source>
     <message>
         <source>Payment
 mode</source>
-        <translation>Վճարման տեսակ</translation>
+        <translation type="vanished">Վճարման տեսակ</translation>
     </message>
     <message>
         <source>City
@@ -9253,6 +9253,10 @@ ledger</source>
     <message>
         <source>Price</source>
         <translation>Գին</translation>
+    </message>
+    <message>
+        <source>Payment mode</source>
+        <translation>Վճարման տեսակ</translation>
     </message>
 </context>
 <context>

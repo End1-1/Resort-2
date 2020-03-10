@@ -58,10 +58,6 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     dwDish->configure();
     dwDish->setSelector(ui->leDish);
     dwDish->setDialog(this, sn_dish);
-    fDockPay = new DWSelectorPaymentMode(this);
-    fDockPay->configure();
-    fDockPay->setSelector(ui->lePaymentMode);
-    connect(fDockPay, SIGNAL(paymentMode(CI_PaymentMode*)), this, SLOT(payment(CI_PaymentMode*)));
     DWSelectorDishState *dwDishState = new DWSelectorDishState(this);
     dwDishState->configure();
     dwDishState->setSelector(ui->leDishState);
@@ -101,7 +97,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["d.f_as"] = false;
     fReportGrid->fIncludes["od.f_dish"] = false;
     fReportGrid->fIncludes["d.f_" + def_lang] = false;
-    fReportGrid->fIncludes["od.f_price"] = true;
+    fReportGrid->fIncludes["od.f_price"] = false;
     fReportGrid->fIncludes["oh.f_tax"] = false;
     fReportGrid->fIncludes["oh.f_paymentMode"] = false;
     fReportGrid->fIncludes["pm.f_" + def_lang] = false;
@@ -323,7 +319,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
               << "cl.f_id=oh.f_cityLedger"
               << "pm.f_id=oh.f_paymentMode"
               << "ds.f_id=od.f_state"
-              << "op.f_id=od.f_header"
+              << "op.f_id=oh.f_id"
                  ;
 
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
@@ -360,22 +356,20 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if (!ui->leArmSoft->text().isEmpty()) {
         where += " and d.f_as in(" + ui->leArmSoft->text() + ") ";
     }
-    if (!ui->lePaymentMode->text().isEmpty()) {
-        where += " and oh.f_paymentMode in (" + ui->lePaymentMode->fHiddenText + ") ";
-    }
+
     if (!ui->lePMComment->text().isEmpty()) {
         where += " and upper(oh.f_paymentModeComment) like '" + ui->lePMComment->text() + "%' ";
     }
     if (!ui->leTax->text().isEmpty()) {
         where += " and oh.f_tax in (" + ui->leTax->text() + ") ";
     }
-    if (ui->rbNoShowComplex->isChecked()) {
+    if (ui->rbNoShowComplex->isChecked() && !countAmount) {
         where += " and (od.f_complex=0 or (od.f_complex>0 and od.f_complexId>0)) ";
     }
     if (ui->rbShowComplex->isChecked()) {
 
     }
-    if (ui->rbOnlycomplex->isChecked()) {
+    if (ui->rbOnlycomplex->isChecked() && !countAmount) {
         where += " and (od.f_complex>0 and od.f_complexId=0) ";
     }
 
@@ -399,6 +393,12 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                     group += def_lang;
                 }
             }
+        }
+    }
+    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon", "");
+    if (group.length() > 0) {
+        if (group.at(group.length() - 1) == ",") {
+            group.remove(group.length() - 1, 1);
         }
     }
     if (!group.isEmpty()) {
@@ -816,11 +816,6 @@ void FRestaurantTotal::store(CI_RestStore *c)
 void FRestaurantTotal::dishType(CI_RestDishType *c)
 {
     dockResponse<CI_RestDishType, CacheRestDishType>(ui->leDishType, c);
-}
-
-void FRestaurantTotal::payment(CI_PaymentMode *c)
-{
-    dockResponse<CI_PaymentMode, CachePaymentMode>(ui->lePaymentMode, c);
 }
 
 void FRestaurantTotal::on_btnOrdersSubtotal_clicked()
