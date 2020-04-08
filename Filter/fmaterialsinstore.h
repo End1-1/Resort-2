@@ -20,10 +20,12 @@ public:
     virtual QString reportTitle();
     virtual void apply(WReportGrid *rg);
     virtual void selector(int selectorNumber, const QVariant &value);
+
 private:
     Ui::FMaterialsInStore *ui;
     DWSelectorRestStore *fDockStore;
     DWSelectorDish *fDockDish;
+
 private slots:
     void store(CI_RestStore *c);
     void doubleClickOnRow(const QList<QVariant> &row);

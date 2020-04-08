@@ -31,7 +31,6 @@ WReportGrid::WReportGrid(QWidget *parent) :
     ui->btnNew->setVisible(false);
     fFilter = 0;
     fTitleWidget = 0;
-    fRgDoubleClick = 0;
     ui->wFilter->hide();
     ui->tblMain->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     fTableMenu = new QMenu();
@@ -216,13 +215,10 @@ void WReportGrid::on_tblMain_doubleClicked(const QModelIndex &index)
     if (!index.isValid()) {
         return;
     }
-    if (fRgDoubleClick) {
-        fRgDoubleClick->doubleClick(fModel, index.row());
-    } else {
-        fillRowValues(index.row());
-        processValues(index.row(), false);
-        emit doubleClickOnRow2(index.row(), index.column(), fRowValues);
-    }
+    fillRowValues(index.row());
+    processValues(index.row(), false);
+    emit doubleClickOnRow2(index.row(), index.column(), fRowValues);
+
 }
 
 void WReportGrid::on_btnNew_clicked()

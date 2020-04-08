@@ -7,10 +7,7 @@
 #include "pprintpreview.h"
 #include "databaseresult.h"
 #include "cachepaymentmode.h"
-#include "cacheroomarrangment.h"
 #include "cacheguest.h"
-#include "cachecardex.h"
-#include "cachecardexgroup.h"
 #include "defines.h"
 
 PPrintCheckin::PPrintCheckin() :
@@ -65,7 +62,7 @@ void PPrintCheckin::print(const QString &id)
         << float_str(dr.value("f_roomFee").toDouble(), 0)
         << float_str(dr.value("f_extraBedFee").toDouble(), 0)
         << QString::number(dr.value("f_man").toInt() + dr.value("f_woman").toInt() + dr.value("f_child").toInt())
-        << CacheRoomArrangment::instance()->get(dr.value("f_arrangement").toString())->fName
+
         << CachePaymentMode::instance()->get(dr.value("f_paymentType").toString())->fName;
     ps->addTableRow(top, 80, col, val, &trData);
     top += 10;
@@ -106,17 +103,7 @@ void PPrintCheckin::print(const QString &id)
     ps->addLine(1065, top + 80, 1600, top + 80, QPen(Qt::SolidPattern, 3));
     top += 80;
 
-    CI_Cardex *c = CacheCardex::instance()->get(dr.value("f_cardex").toString());
-    if (c) {
-        ps->addTextRect(20, top, 230, 80, tr("CARDEX"), &trData);
-        ps->addTextRect(235, top, 800, 80, c->fCode + c->fName, &trData);
-        CI_CardexGroup *cg = CacheCardexGroup::instance()->get(c->fGroup);
-        if (cg) {
-            ps->addTextRect(805, top, 300, 80, tr("MARKET SIGMENT"), &trData);
-            ps->addTextRect(1110, top, 600, 80, cg->fCode + " " + cg->fName, &trData);
-        }
-        top += 80;
-    }
+
     top += 5;
     ps->addLine(20, top, 2100, top, QPen(Qt::SolidPattern, 5));
     top += 10;

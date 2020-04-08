@@ -6,6 +6,8 @@
 #include "wreportgrid.h"
 #include "fbalanceoncard.h"
 #include "wsalary.h"
+#include "fdebtholders.h"
+#include "reinvoiceitem.h"
 
 wwelcomerest::wwelcomerest(QWidget *parent) :
     BaseWidget(parent),
@@ -202,11 +204,6 @@ void wwelcomerest::on_btnNewStoreCheckPoint_clicked()
     fMainWindow->on_actionNew_store_checkpoint_triggered();
 }
 
-void wwelcomerest::on_btnCashOps_clicked()
-{
-    fMainWindow->on_actionInvoice_items_triggered();
-}
-
 void wwelcomerest::on_btnDiscountCards_clicked()
 {
     fMainWindow->on_actionCoupons_statistics_triggered();
@@ -234,7 +231,7 @@ void wwelcomerest::on_btnDiscountTotal_clicked()
 
 void wwelcomerest::on_btnCostumers_clicked()
 {
-    fMainWindow->on_actionCostumers_triggered();
+    FDebtHolders::openFilterReport<FDebtHolders, WReportGrid>();
 }
 
 void wwelcomerest::on_btnCustomers_2_clicked()
@@ -260,4 +257,68 @@ void wwelcomerest::on_btnCardBalances_clicked()
 void wwelcomerest::on_btnSalary_clicked()
 {
     WSalary::openFilterReport<WSalary, WReportGrid>();
+}
+
+void wwelcomerest::on_btnCashOps_clicked()
+{
+        QList<int> widths;
+        widths << 80
+               << 0
+               << 0
+               << 150
+               << 200
+               << 200
+               << 200
+               << 80
+               << 200
+               << 80
+               << 80
+               << 80
+               << 30
+               << 30
+               << 0
+                  ;
+        QStringList fields;
+        fields << "i.f_id"
+               << "i.f_vaucher"
+               << "i.f_group"
+               << "g.f_" + def_lang
+               << "i.f_am"
+               << "i.f_en"
+               << "i.f_ru"
+               << "i.f_price"
+               << "i.f_taxName"
+               << "i.f_adgt"
+               << "i.f_vatDept"
+               << "i.f_noVatDept"
+               << "i.f_auto"
+               << "i.f_rest"
+               << "i.f_vatReception"
+                  ;
+        QStringList titles;
+        titles << tr("Code")
+               << tr("Voucher")
+               << tr("Group code")
+               << tr("Group")
+               << tr("Name, am")
+               << tr("Name, en")
+               << tr("Name, ru")
+               << tr("Price")
+               << tr("Tax name")
+               << tr("ADGT")
+               << tr("VAT Dept")
+               << tr("No VAT Dept")
+               << tr("Manual charge")
+               << tr("Restaurant")
+               << tr("Vat Reception")
+                  ;
+        QString title = tr("Invoice items");
+        QString icon = ":/images/list.png";
+        QString query = "select i.f_id, i.f_vaucher, i.f_group, g.f_" +def_lang + ", i.f_am, i.f_en, i.f_ru, i.f_price, "
+                "i.f_taxName, i.f_adgt, i.f_vatDept, i.f_noVatDept, i.f_auto, i.f_rest, i.f_vatReception "
+                "from f_invoice_item i "
+                "inner join f_invoice_item_group g on g.f_id=i.f_group ";
+        WReportGrid *r = addTab<WReportGrid>();
+        r->fullSetup<REInvoiceItem>(widths, fields, titles, title, icon, query);
+
 }

@@ -1,16 +1,6 @@
 #include "vauchers.h"
 #include "preferences.h"
-#include "dlgpostingcharges.h"
 #include "basewidget.h"
-#include "dlggposorderinfo.h"
-#include "dlgreceiptvaucher.h"
-#include "wreservation.h"
-#include "winvoice.h"
-#include "waccinvoice.h"
-#include "dlgadvance.h"
-#include "dlgclinitialbalance.h"
-#include "dlgdiscount.h"
-#include "dlgcityadvance.h"
 #include "paymentmode.h"
 
 QString vaucherPaymentName(int code, const QString &cardcode, const QString &clcode) {
@@ -26,9 +16,6 @@ QString vaucherPaymentName(int code, const QString &cardcode, const QString &clc
         break;
     case PAYMENT_BANK:
         payment = "BANK";
-        break;
-    case PAYMENT_CL:
-        payment = CacheCityLedger::instance()->get(clcode)->fName;
         break;
     case PAYMENT_CREDIT:
         payment = "CREDIT";
@@ -59,50 +46,6 @@ bool isTaxPrepay(const QString &code)
 {
     return code == VAUCHER_RECEIPT_N
             || VAUCHER_ADVANCE_N;
-}
-
-bool openVaucherInvoice(const QString &vaucherId) {
-    Database &db = fMainWindow->fDb;
-    QMap<QString, QVariant> &v = fMainWindow->fDbBind;
-    QList<QList<QVariant> > r = fMainWindow->fDbRows;
-    v[":f_id"] = vaucherId;
-    db.select("select f_inv from m_register where f_id=:f_id", v, r);
-    if (r.count() == 0) {
-        message_error_tr("Cannot open invoice");
-        return false;
-    }
-    openInvoiceWithId(r.at(0).at(0).toString());
-    return true;
-}
-
-void openVaucher(const QString &vaucher, const QString &id)
-{
-    if (vaucher == "RM" || vaucher == "CM" || vaucher == "CH" || vaucher == "PE") {
-        DlgPostingCharges *d = new DlgPostingCharges(fMainWindow->fPreferences.getDefaultParentForMessage());
-        d->loadVaucher(id);
-        d->exec();
-        delete d;
-    } else if (vaucher == "PS") {
-        DlgGPOSOrderInfo *d = new DlgGPOSOrderInfo(fMainWindow->fPreferences.getDefaultParentForMessage());
-        d->setVaucher(id);
-        d->exec();
-        delete d;
-    } else if (vaucher == "RV") {
-        DlgReceiptVaucher *d = new DlgReceiptVaucher(fMainWindow->fPreferences.getDefaultParentForMessage());
-        d->setVaucher(id);
-        d->exec();
-        delete d;
-    } else if (vaucher == "RS") {
-        WReservation::openVaucher(id);
-    } else if (vaucher == "AV") {
-        DlgAdvance::openAdvance(id);
-    } else if (vaucher == "CR") {
-        DlgCLInitialBalance::openVaucher(id);
-    } else if (vaucher == "DS") {
-        DlgDiscount::openVaucher(id);
-    } else if (vaucher == "TC") {
-        DlgCityAdvance::cityAdvance(id, "", 0);
-    }
 }
 
 bool removeVaucher(const QString &id, const QString &reason)
@@ -168,31 +111,5 @@ bool removeVaucher(const QString &id, const QString &reason)
                   .arg(doc)
                   .arg(name), "", id, f_inv);
     Q_UNUSED(rec)
-    return true;
-}
-
-bool openInvoiceWithId(const QString &invoice)
-{
-    Database &db = fMainWindow->fDb;
-    QMap<QString, QVariant> &v = fMainWindow->fDbBind;
-    QList<QList<QVariant> > r = fMainWindow->fDbRows;
-    v[":f_invoice"] = invoice;
-    db.select("select f_state from f_reservation where f_invoice=:f_invoice", v, r);
-    if (r.count() == 0) {
-        message_error_tr("Cannot open invoice");
-        return false;
-    }
-    int state = r.at(0).at(0).toInt();
-    switch (state) {
-    case RESERVE_CHECKIN:
-        WInvoice::openInvoiceWindow(invoice);
-        break;
-    case RESERVE_CHECKOUT:
-    case RESERVE_REMOVED: {
-        WAccInvoice *ai = addTab<WAccInvoice>();
-        ai->load(invoice);
-        break;
-    }
-    }
     return true;
 }

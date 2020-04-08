@@ -14,14 +14,7 @@ DlgPaymentMode::DlgPaymentMode(QWidget *parent) :
     connect(fDockPayment, &DWSelectorPaymentMode::paymentMode, [this](CI_PaymentMode *ci){
         paymentMode(ci);
     });
-    fDockCL = new DWSelectorCityLedger(this);
-    fDockCL->configure();
-    fDockCL->setSelector(ui->leCL);
-    connect(fDockCL, &DWSelectorCityLedger::cityLedger, [this](CI_CityLedger *ci) {
-       dockResponse<CI_CityLedger, CacheCityLedger>(ui->leCL, ci);
-    });
-    fDockCard = new DWSelectorCreditCard(this);
-    fDockCard->configure();
+
     fDockCard->setSelector(ui->leCardType);
     connect(fDockCard, &DWSelectorCreditCard::creditCard, [this](CI_CreditCard *ci){
        dockResponse<CI_CreditCard, CacheCreditCard>(ui->leCardType, ci);

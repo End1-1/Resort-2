@@ -24,6 +24,7 @@ public:
     virtual void setup();
     virtual void selector(int number, const QVariant &value);
     static void openStoreDocument(const QString &id);
+
 private:
     Ui::StoreDoc *ui;
     DWSelectorRestStore *fDockStore;

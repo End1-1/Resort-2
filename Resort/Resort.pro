@@ -15,9 +15,9 @@ RC_FILE = res.rc
 
 DEFINES += _RESORT_
 DEFINES += _HOTEL_
-#DEFINES += _WASH_
 
 SOURCES += main.cpp\
+    ../Base/base.cpp \
     ../Filter/wsalary.cpp \
         mainwindow.cpp \
     login.cpp \
@@ -26,26 +26,14 @@ SOURCES += main.cpp\
     databasesconnections.cpp \
     databaseconnection.cpp \
     databasepasswordchange.cpp \
-    wmaindesk.cpp \
-    wreservation.cpp \
-    wguest.cpp \
-    winvoice.cpp \
     wreportgrid.cpp \
-    wwelcome.cpp \
     wcontacts.cpp \
     tablemodel.cpp \
-    wreportroom.cpp \
     excel.cpp \
     dlgcontact.cpp \
-    wnotes.cpp \
     roweditordialog.cpp \
-    dlgnotes.cpp \
     about.cpp \
-    wguests.cpp \
-    wreservations.cpp \
     dlgfiltervalues.cpp \
-    dlgroom.cpp \
-    wreservationroomtab.cpp \
     dlgchartdaterange.cpp \
     basewidget.cpp \
     baseextendeddialog.cpp \
@@ -55,37 +43,23 @@ SOURCES += main.cpp\
     ../Base/defines.cpp \
     ../Base/preferences.cpp \
     ../Base/utils.cpp \
-    dlgtransferroom.cpp \
     wusers.cpp \
     wusersgroups.cpp \
     dlgusergroup.cpp \
     wroomview.cpp \
     dlgroomview.cpp \
-    dlgendofday.cpp \
-    wcardex.cpp \
-    dlgcardex.cpp \
-    dwmaindeskhint.cpp \
     ../Base/command.cpp \
     broadcastthread.cpp \
-    dwreservationitemsize.cpp \
-    dlgpostingcharges.cpp \
     ../Cache/cacheinvoiceitem.cpp \
     ../Selector/dwselector.cpp \
-    ../Cache/cacheactiveroom.cpp \
     ../Cache/cachebase.cpp \
-    dlgpaymentsdetails.cpp \
     ../Cache/cachepaymentmode.cpp \
     ../Controls/eqcheckbox.cpp \
     ../Cache/cachevatmode.cpp \
     ../Selector/dwselectorvatmode.cpp \
-    ../Selector/dwselectoractiveroom.cpp \
     ../Selector/dwselectorinvoiceitem.cpp \
     ../Cache/cacheguesttitle.cpp \
     ../Selector/dwselectorguesttitle.cpp \
-    ../Cache/cachecardex.cpp \
-    ../Selector/dwselectorcardex.cpp \
-    ../Cache/cachecityledger.cpp \
-    ../Selector/dwselectorcityledger.cpp \
     ../RowEditor/reresthall.cpp \
     ../Cache/cacheresthall.cpp \
     ../Selector/dwselectorhall.cpp \
@@ -112,29 +86,12 @@ SOURCES += main.cpp\
     ../RowEditor/rerestdishmod.cpp \
     ../RowEditor/rereststore.cpp \
     ../RowEditor/rerestprinter.cpp \
-    ../RoomChart/roomscene.cpp \
-    ../RoomChart/dayitemdelegate.cpp \
-    ../RoomChart/monthitemdelegate.cpp \
-    ../RoomChart/roomitemdelegate.cpp \
-    ../Cache/cacheroom.cpp \
     ../Cache/cacheone.cpp \
-    ../RoomChart/reserverect.cpp \
-    ../RoomChart/chardefaults.cpp \
-    ../RoomChart/reservewidget.cpp \
-    ../Cache/cachereservation.cpp \
-    ../RoomChart/reservationinfo.cpp \
-    ../RoomChart/dlgreservequickinfo.cpp \
     ../Controls/eqlineedit.cpp \
     ../Controls/trackcontrol.cpp \
     ../Controls/eqdateedit.cpp \
-    ../Cache/cachereservestate.cpp \
-    ../Cache/cachereservestatus.cpp \
-    ../Selector/dwselectorreservestatus.cpp \
-    ../Cache/cacheroomarrangment.cpp \
-    ../Selector/dwselectorroomarrangment.cpp \
     ../Controls/eqcombobox.cpp \
     ../Controls/cacheforcombobox.cpp \
-    ../Selector/dwselectorroom.cpp \
     ../Filter/wfilterbase.cpp \
     ../Filter/ftrackchanges.cpp \
     ../Controls/eqtimeedit.cpp \
@@ -155,15 +112,8 @@ SOURCES += main.cpp\
     ../Cache/cachecreditcard.cpp \
     ../Selector/dwselectorcreditcard.cpp \
     ../RowEditor/recreditcard.cpp \
-    ../Filter/fcityledgerbalance.cpp \
     dlguserpasswords.cpp \
-    dlgadvanceentry.cpp \
     ../Selector/dwselectorpaymentmode.cpp \
-    ../Cache/cacheredreservation.cpp \
-    ../Selector/dwselectorredreservation.cpp \
-    ../RoomChart/roomstate.cpp \
-    ../Cache/cacheroomstate.cpp \
-    ../Selector/dwselectorroomstate.cpp \
     ../Controls/eqtablewidget.cpp \
     dlginvoicecancelation.cpp \
     dlgraiseuser.cpp \
@@ -172,46 +122,21 @@ SOURCES += main.cpp\
     dlggposorderinfo.cpp \
     taxprint.cpp \
     ../RowEditor/rerestdishcomplex.cpp \
-    ../RowEditor/reroomcategory.cpp \
-    ../RowEditor/reroombed.cpp \
-    ../RowEditor/reroomcategoryrate.cpp \
     ../RowEditor/recustomaction.cpp \
-    reroomcategoryraterow.cpp \
-    ../Cache/cachebed.cpp \
-    ../Selector/dwselectorbed.cpp \
-    dlgtransfer.cpp \
-    ../Filter/finvoices.cpp \
-    waccinvoice.cpp \
     dlgtracking.cpp \
     ../Cache/cachemenudishes.cpp \
     ../Selector/deselectormenudishes.cpp \
     ../Controls/epushbutton.cpp \
     wsynchronize.cpp \
-    dlgcreategroupreservation.cpp \
     ../Filter/frestauranttotal.cpp \
-    ../Filter/fdailymovement.cpp \
-    ../Filter/freservationscommon.cpp \
-    ../RoomChart/reservewidgetaction.cpp \
-    ../Selector/dwselectorreservestate.cpp \
     ../Print/pimage.cpp \
-    dlgdiscount.cpp \
     ../Print/pprintinvoice.cpp \
     ../Filter/fcategorytosell.cpp \
     ../Cache/cachecurrencies.cpp \
     ../RowEditor/recurrency.cpp \
     ../Filter/fforecastoccupancycategory.cpp \
     ../Filter/faccmonthlyreport.cpp \
-    dlgtransferinvoiceamount.cpp \
-    timerblya.cpp \
-    ../Print/dlgprintreservation.cpp \
     ../Cache/cachsex.cpp \
-    ../Cache/cachenation.cpp \
-    ../Selector/dwselectornation.cpp \
-    ../Cache/cacheroomcategory.cpp \
-    ../Selector/dwselectorroomcategory.cpp \
-    ../Cache/cacheroomview.cpp \
-    ../Selector/dwselectorroomview.cpp \
-    ../Cache/cachereminderstate.cpp \
     ../Base/logging.cpp \
     ../Print/pprintheader.cpp \
     dlgtaxprintsetup.cpp \
@@ -220,27 +145,15 @@ SOURCES += main.cpp\
     ../Cache/cacheinvoiceitemgroup.cpp \
     ../Selector/dwselectorinvoiceitemgroup.cpp \
     ../Filter/finhouseguest.cpp \
-    ../Filter/fexpectedarrivals.cpp \
     ../Controls/edateedit.cpp \
-    ../Widgets/wrecheckin.cpp \
-    ../Filter/fexpectedarrivalsimple.cpp \
     ../Filter/fcashreportsummary.cpp \
-    dlgreceiptvaucher.cpp \
-    ../Filter/fcityledgerdetailedbalance.cpp \
-    ../RGDoubleClick/rgdoubleclickdelegate.cpp \
-    ../RGDoubleClick/rgcityledgerdetailedbalance.cpp \
     ../Filter/fcashreport.cpp \
-    ../Cache/cachecardexgroup.cpp \
-    ../Selector/dwselectorcardexgroup.cpp \
-    ../RowEditor/recityledger.cpp \
-    ../Filter/fvauchers.cpp \
     ../Base/vauchers.cpp \
     dlguserrights.cpp \
     ../Selector/dwselectorvaucher.cpp \
     ../Selector/dwtemplateselector.cpp \
     ../Cache/cachevaucher.cpp \
     ../Print/pprintvaucher.cpp \
-    ../Selector/dwselectorreservationcardex.cpp \
     dlgreservationremarks.cpp \
     ../Filter/fevents.cpp \
     ../Cache/cacheorderstate.cpp \
@@ -253,18 +166,13 @@ SOURCES += main.cpp\
     dlgpretax.cpp \
     dlgprinttaxsideoption.cpp \
     ../Filter/fdailymovementcommon.cpp \
-    ../Charts/chsample.cpp \
     dlgsearchinvoice.cpp \
     ../RowEditor/rebanquetcomment.cpp \
     ../Filter/fcityledgerbalanceextended.cpp \
     ../Filter/fcallhistory.cpp \
-    dlgtaxback.cpp \
-    ../Filter/fcardexsales.cpp \
-    dlgadvance.cpp \
     ../Filter/fcommonfilterbydate.cpp \
     dlgprintrandomtax.cpp \
     dlgtaxreference.cpp \
-    ../Widgets/wvauchereditor.cpp \
     ../Widgets/wsyncinvoices.cpp \
     ../RowEditor/recomplimentarycomment.cpp \
     ../Base/databaseresult.cpp \
@@ -276,8 +184,6 @@ SOURCES += main.cpp\
     ../Controls/efilterlineedit.cpp \
     ../Print/pprintreceipt.cpp \
     ../Widgets/whotelstatus.cpp \
-    dlgclinitialbalance.cpp \
-    ../Filter/flistsourcereserve.cpp \
     ../Filter/fyearlyfinancialreport.cpp \
     ../Widgets/wcustomreports.cpp \
     dlgreportbuildergroups.cpp \
@@ -293,28 +199,14 @@ SOURCES += main.cpp\
     ../Cache/cachecheckoutinvoice.cpp \
     ../Selector/dwselectorcheckoutinvoice.cpp \
     dlgremotinvoices.cpp \
-    dlggroupparams.cpp \
     dlgopengrouporsingle.cpp \
-    dlgexportother.cpp \
     dlgreserveconfirmstatus.cpp \
-    ../Filter/freservaionremarks.cpp \
     dlgchangeexportvaucher.cpp \
-    dlggroupreservationfuck.cpp \
-    dlgsimpleselectroom.cpp \
-    fnousedadvance.cpp \
-    ../RoomChart/dlgooroomprop.cpp \
     fonlinerest.cpp \
-    ../Cache/cachereservegroup.cpp \
-    ../Selector/dwselectorreservationgroup.cpp \
-    ../Filter/freservegroups.cpp \
-    ../RowEditor/recardexgroup.cpp \
     ../RowEditor/reguesttitle.cpp \
-    ../RowEditor/renationalityfile.cpp \
     dlghelp.cpp \
     ../Filter/froomstate.cpp \
-    ../Filter/fcanceledreservations.cpp \
     ../Widgets/wweb.cpp \
-    ../Filter/freservebycreate.cpp \
     ../Widgets/storedoc.cpp \
     ../RowEditor/restorepartner.cpp \
     ../Cache/cachestorepartners.cpp \
@@ -334,19 +226,12 @@ SOURCES += main.cpp\
     dlgback.cpp \
     fonlinebreakfast.cpp \
     ../Filter/fmonthlyoccperc.cpp \
-    fnatbyperiod.cpp \
     dlgpaymentmode.cpp \
-    dlgchangeclofvaucher.cpp \
-    dlgnoshow.cpp \
-    ../Filter/fnoshowcancelationfee.cpp \
     ../Filter/frestsalebystore.cpp \
-    dlgcheckadvancebeforecancel.cpp \
-    dlgrefundvaucher.cpp \
     dlgeditservtax.cpp \
     ../Cache/cachetaxmap.cpp \
     dlgreserveshortinfo.cpp \
     dlgnewvaucheroption.cpp \
-    ../Filter/fallguestindaterange.cpp \
     ../RowEditor/remodelofcars.cpp \
     ../RowEditor/recarclient.cpp \
     ../Cache/cachecar.cpp \
@@ -380,51 +265,28 @@ SOURCES += main.cpp\
     ../Filter/fdiscountreport.cpp \
     ../Filter/fsalesbycar.cpp \
     ../Filter/fdiscounttotal.cpp \
-    dlgtaxback2.cpp \
     ../Filter/fdebtholders.cpp \
     dlgpostbreakfast.cpp \
     ../Controls/eqdoubleedit.cpp \
     ../Cache/cacherestfullmenu.cpp \
     ../Selector/dwselectorrestfullmenu.cpp \
-    dlghouseitem.cpp \
     ../Filter/fhouseitems.cpp \
     dlgdebtpay.cpp \
-    dlgcityadvance.cpp \
     ../Vouchers/basevoucher.cpp \
-    ../Vouchers/voucher_tc.cpp \
-    ../Cache/cachecladvance.cpp \
-    ../Selector/dwselectorcladvance.cpp \
-    ../Filter/fcladvance.cpp \
     ../Print/pprintcheckin.cpp \
-    ../Filter/fcitytrayledger.cpp \
-    ../Filter/finhousedetailbalance.cpp \
-    ../Filter/favailablerooms.cpp \
     ../Widgets/wdate2.cpp \
     ../Base/paymentmode.cpp \
     dlgconfiggrid.cpp \
     ../Base/appconfig.cpp \
-    ../Cache/cacheroominventory.cpp \
-    ../Selector/dwselectorroominventory.cpp \
-    ../RowEditor/reroominventory.cpp \
-    ../RowEditor/reroominventorystate.cpp \
-    ../Cache/cacheroominventorystate.cpp \
     ../Print/pexportinvoicetoexcel.cpp \
-    dlggroupreserveoption.cpp \
-    ../Cache/cachegroupreservations.cpp \
-    ../Selector/dwselectorgroupreservation.cpp \
     ../GridOptionWidgets/gowidget.cpp \
     ../GridOptionWidgets/godaily.cpp \
     ../Base/demo.cpp \
-    ../Vouchers/voucher_av.cpp \
-    dlgexport.cpp \
-    goexpextedarrivals.cpp \
     smtp.cpp \
     dlgemail.cpp \
     ../Print/pprintstoredoc.cpp \
     ../Print/pprintstoreentry.cpp \
     ../Filter/guestcheckin.cpp \
-    ../Filter/flengthofstay.cpp \
-    ../Filter/fexportreservation.cpp \
     dlgreservationguests.cpp \
     ../Base/doubledatabase.cpp \
     ../Cache/cachediscounttype.cpp \
@@ -436,6 +298,7 @@ SOURCES += main.cpp\
     ../Filter/fbalanceoncard.cpp
 
 HEADERS  += mainwindow.h \
+    ../Base/base.h \
     ../Filter/wsalary.h \
     login.h \
     loginsettings.h \
@@ -443,27 +306,16 @@ HEADERS  += mainwindow.h \
     databasesconnections.h \
     databaseconnection.h \
     databasepasswordchange.h \
-    wmaindesk.h \
-    wreservation.h \
-    wguest.h \
-    winvoice.h \
     wreportgrid.h \
-    wwelcome.h \
     wcontacts.h \
     tablemodel.h \
-    wreportroom.h \
     excel.h \
     dlgcontact.h \
     wnotes.h \
     roweditordialog.h \
-    dlgnotes.h \
     about.h \
     rc.h \
-    wguests.h \
-    wreservations.h \
     dlgfiltervalues.h \
-    dlgroom.h \
-    wreservationroomtab.h \
     dlgchartdaterange.h \
     basewidget.h \
     baseextendeddialog.h \
@@ -478,31 +330,18 @@ HEADERS  += mainwindow.h \
     dlgusergroup.h \
     wroomview.h \
     dlgroomview.h \
-    dlgendofday.h \
-    wcardex.h \
-    dlgcardex.h \
-    dwmaindeskhint.h \
     ../Base/command.h \
     broadcastthread.h \
-    dwreservationitemsize.h \
-    dlgpostingcharges.h \
     ../Cache/cachebase.h \
     ../Cache/cacheinvoiceitem.h \
     ../Selector/dwselector.h \
-    ../Cache/cacheactiveroom.h \
-    dlgpaymentsdetails.h \
     ../Cache/cachepaymentmode.h \
     ../Controls/eqcheckbox.h \
     ../Cache/cachevatmode.h \
     ../Selector/dwselectorvatmode.h \
-    ../Selector/dwselectoractiveroom.h \
     ../Selector/dwselectorinvoiceitem.h \
     ../Cache/cacheguesttitle.h \
     ../Selector/dwselectorguesttitle.h \
-    ../Cache/cachecardex.h \
-    ../Selector/dwselectorcardex.h \
-    ../Cache/cachecityledger.h \
-    ../Selector/dwselectorcityledger.h \
     ../RowEditor/reresthall.h \
     ../Cache/cacheresthall.h \
     ../Selector/dwselectorhall.h \
@@ -529,29 +368,12 @@ HEADERS  += mainwindow.h \
     ../RowEditor/rerestdishmod.h \
     ../RowEditor/rereststore.h \
     ../RowEditor/rerestprinter.h \
-    ../RoomChart/roomscene.h \
-    ../RoomChart/dayitemdelegate.h \
-    ../RoomChart/chardefaults.h \
-    ../RoomChart/monthitemdelegate.h \
-    ../RoomChart/roomitemdelegate.h \
-    ../Cache/cacheroom.h \
     ../Cache/cacheone.h \
-    ../RoomChart/reserverect.h \
-    ../RoomChart/reservewidget.h \
-    ../Cache/cachereservation.h \
-    ../RoomChart/reservationinfo.h \
-    ../RoomChart/dlgreservequickinfo.h \
     ../Controls/eqlineedit.h \
     ../Controls/trackcontrol.h \
     ../Controls/eqdateedit.h \
-    ../Cache/cachereservestate.h \
-    ../Cache/cachereservestatus.h \
-    ../Selector/dwselectorreservestatus.h \
-    ../Cache/cacheroomarrangment.h \
-    ../Selector/dwselectorroomarrangment.h \
     ../Controls/eqcombobox.h \
     ../Controls/cacheforcombobox.h \
-    ../Selector/dwselectorroom.h \
     ../Filter/wfilterbase.h \
     ../Filter/ftrackchanges.h \
     ../Controls/eqtimeedit.h \
@@ -573,15 +395,8 @@ HEADERS  += mainwindow.h \
     ../Cache/cachecreditcard.h \
     ../Selector/dwselectorcreditcard.h \
     ../RowEditor/recreditcard.h \
-    ../Filter/fcityledgerbalance.h \
     dlguserpasswords.h \
-    dlgadvanceentry.h \
     ../Selector/dwselectorpaymentmode.h \
-    ../Cache/cacheredreservation.h \
-    ../Selector/dwselectorredreservation.h \
-    ../RoomChart/roomstate.h \
-    ../Cache/cacheroomstate.h \
-    ../Selector/dwselectorroomstate.h \
     ../Controls/eqtablewidget.h \
     dlginvoicecancelation.h \
     dlgraiseuser.h \
@@ -590,46 +405,21 @@ HEADERS  += mainwindow.h \
     dlggposorderinfo.h \
     taxprint.h \
     ../RowEditor/rerestdishcomplex.h \
-    ../RowEditor/reroomcategory.h \
-    ../RowEditor/reroombed.h \
-    ../RowEditor/reroomcategoryrate.h \
     ../RowEditor/recustomaction.h \
-    reroomcategoryraterow.h \
-    ../Cache/cachebed.h \
-    ../Selector/dwselectorbed.h \
-    dlgtransfer.h \
-    ../Filter/finvoices.h \
-    waccinvoice.h \
     dlgtracking.h \
     ../Cache/cachemenudishes.h \
     ../Selector/deselectormenudishes.h \
     ../Controls/epushbutton.h \
     wsynchronize.h \
-    dlgcreategroupreservation.h \
     ../Filter/frestauranttotal.h \
-    ../Filter/fdailymovement.h \
-    ../Filter/freservationscommon.h \
-    ../RoomChart/reservewidgetaction.h \
-    ../Selector/dwselectorreservestate.h \
     ../Print/pimage.h \
-    dlgdiscount.h \
     ../Print/pprintinvoice.h \
     ../Filter/fcategorytosell.h \
     ../Cache/cachecurrencies.h \
     ../RowEditor/recurrency.h \
     ../Filter/fforecastoccupancycategory.h \
     ../Filter/faccmonthlyreport.h \
-    dlgtransferinvoiceamount.h \
-    timerblya.h \
-    ../Print/dlgprintreservation.h \
     ../Cache/cachsex.h \
-    ../Cache/cachenation.h \
-    ../Selector/dwselectornation.h \
-    ../Cache/cacheroomcategory.h \
-    ../Selector/dwselectorroomcategory.h \
-    ../Cache/cacheroomview.h \
-    ../Selector/dwselectorroomview.h \
-    ../Cache/cachereminderstate.h \
     ../Base/logging.h \
     ../Print/pprintheader.h \
     dlgtaxprintsetup.h \
@@ -638,28 +428,15 @@ HEADERS  += mainwindow.h \
     ../Cache/cacheinvoiceitemgroup.h \
     ../Selector/dwselectorinvoiceitemgroup.h \
     ../Filter/finhouseguest.h \
-    ../Filter/fexpectedarrivals.h \
     ../Controls/edateedit.h \
-    ../Widgets/wrecheckin.h \
-    ../Filter/fexpectedarrivalsimple.h \
     ../Filter/fcashreportsummary.h \
-    dlgreceiptvaucher.h \
-    ../Filter/fcityledgerdetailedbalance.h \
-    ../RGDoubleClick/rgdoubleclickdelegate.h \
-    ../RGDoubleClick/rgcityledgerdetailedbalance.h \
     ../Filter/fcashreport.h \
-    ../Cache/cachecardexgroup.h \
-    ../Selector/dwselectorcardexgroup.h \
-    ../RowEditor/recityledger.h \
     ../Base/vauchers.h \
-    ../Filter/fvauchers.h \
-    dlgtransferroom.h \
     dlguserrights.h \
     ../Selector/dwselectorvaucher.h \
     ../Selector/dwtemplateselector.h \
     ../Cache/cachevaucher.h \
     ../Print/pprintvaucher.h \
-    ../Selector/dwselectorreservationcardex.h \
     dlgreservationremarks.h \
     ../Filter/fevents.h \
     ../Cache/cacheorderstate.h \
@@ -672,18 +449,13 @@ HEADERS  += mainwindow.h \
     dlgpretax.h \
     dlgprinttaxsideoption.h \
     ../Filter/fdailymovementcommon.h \
-    ../Charts/chsample.h \
     dlgsearchinvoice.h \
     ../RowEditor/rebanquetcomment.h \
     ../Filter/fcityledgerbalanceextended.h \
     ../Filter/fcallhistory.h \
-    dlgtaxback.h \
-    ../Filter/fcardexsales.h \
-    dlgadvance.h \
     ../Filter/fcommonfilterbydate.h \
     dlgprintrandomtax.h \
     dlgtaxreference.h \
-    ../Widgets/wvauchereditor.h \
     ../Widgets/wsyncinvoices.h \
     ../RowEditor/recomplimentarycomment.h \
     ../Base/databaseresult.h \
@@ -695,8 +467,6 @@ HEADERS  += mainwindow.h \
     ../Controls/efilterlineedit.h \
     ../Print/pprintreceipt.h \
     ../Widgets/whotelstatus.h \
-    dlgclinitialbalance.h \
-    ../Filter/flistsourcereserve.h \
     ../Filter/fyearlyfinancialreport.h \
     ../Widgets/wcustomreports.h \
     dlgreportbuildergroups.h \
@@ -712,28 +482,14 @@ HEADERS  += mainwindow.h \
     ../Cache/cachecheckoutinvoice.h \
     ../Selector/dwselectorcheckoutinvoice.h \
     dlgremotinvoices.h \
-    dlggroupparams.h \
     dlgopengrouporsingle.h \
-    dlgexportother.h \
     dlgreserveconfirmstatus.h \
-    ../Filter/freservaionremarks.h \
     dlgchangeexportvaucher.h \
-    dlggroupreservationfuck.h \
-    dlgsimpleselectroom.h \
-    fnousedadvance.h \
-    ../RoomChart/dlgooroomprop.h \
     fonlinerest.h \
-    ../Cache/cachereservegroup.h \
-    ../Selector/dwselectorreservationgroup.h \
-    ../Filter/freservegroups.h \
-    ../RowEditor/recardexgroup.h \
     ../RowEditor/reguesttitle.h \
-    ../RowEditor/renationalityfile.h \
     dlghelp.h \
     ../Filter/froomstate.h \
-    ../Filter/fcanceledreservations.h \
     ../Widgets/wweb.h \
-    ../Filter/freservebycreate.h \
     ../Widgets/storedoc.h \
     ../RowEditor/restorepartner.h \
     ../Cache/cachestorepartners.h \
@@ -756,17 +512,11 @@ HEADERS  += mainwindow.h \
     ../Filter/fmonthlyoccperc.h \
     fnatbyperiod.h \
     dlgpaymentmode.h \
-    dlgchangeclofvaucher.h \
-    dlgnoshow.h \
-    ../Filter/fnoshowcancelationfee.h \
     ../Filter/frestsalebystore.h \
-    dlgcheckadvancebeforecancel.h \
-    dlgrefundvaucher.h \
     dlgeditservtax.h \
     ../Cache/cachetaxmap.h \
     dlgreserveshortinfo.h \
     dlgnewvaucheroption.h \
-    ../Filter/fallguestindaterange.h \
     ../RowEditor/remodelofcars.h \
     ../RowEditor/recarclient.h \
     ../Cache/cachecar.h \
@@ -800,52 +550,28 @@ HEADERS  += mainwindow.h \
     ../Filter/fdiscountreport.h \
     ../Filter/fsalesbycar.h \
     ../Filter/fdiscounttotal.h \
-    dlgtaxback2.h \
     ../Filter/fdebtholders.h \
     dlgpostbreakfast.h \
     ../Controls/eqdoubleedit.h \
     ../Cache/cacherestfullmenu.h \
     ../Selector/dwselectorrestfullmenu.h \
-    dlghouseitem.h \
     ../Filter/fhouseitems.h \
     dlgdebtpay.h \
-    dlgcityadvance.h \
     ../Vouchers/basevoucher.h \
-    ../Vouchers/voucher_tc.h \
-    ../Cache/cachecladvance.h \
-    ../Selector/dwselectorcladvance.h \
-    ../Filter/fcladvance.h \
     ../Print/pprintcheckin.h \
-    ../Filter/fcitytrayledger.h \
-    ../Filter/finhousedetailbalance.h \
-    ../Filter/favailablerooms.h \
     ../Widgets/wdate2.h \
     ../Base/paymentmode.h \
     dlgconfiggrid.h \
     ../Base/appconfig.h \
-    ../Cache/cacheroominventory.h \
-    ../Selector/dwselectorroominventory.h \
-    ../RowEditor/reroominventory.h \
-    ../RowEditor/reroominventorystate.h \
-    ../Cache/cacheroominventorystate.h \
-    ../Cache/cacheroominventorystate.h \
     ../Print/pexportinvoicetoexcel.h \
-    dlggroupreserveoption.h \
-    ../Cache/cachegroupreservations.h \
-    ../Selector/dwselectorgroupreservation.h \
     ../GridOptionWidgets/gowidget.h \
     ../GridOptionWidgets/godaily.h \
     ../Base/demo.h \
-    ../Vouchers/voucher_av.h \
-    dlgexport.h \
-    goexpextedarrivals.h \
     smtp.h \
     dlgemail.h \
     ../Print/pprintstoredoc.h \
     ../Print/pprintstoreentry.h \
     ../Filter/guestcheckin.h \
-    ../Filter/flengthofstay.h \
-    ../Filter/fexportreservation.h \
     dlgreservationguests.h \
     ../Base/doubledatabase.h \
     ../Cache/cachediscounttype.h \
@@ -864,26 +590,14 @@ FORMS    += mainwindow.ui \
     databasesconnections.ui \
     databaseconnection.ui \
     databasepasswordchange.ui \
-    wmaindesk.ui \
-    wguest.ui \
     wreportgrid.ui \
-    wwelcome.ui \
     dlgcontact.ui \
-    dlgnotes.ui \
     about.ui \
     dlgfiltervalues.ui \
-    dlgroom.ui \
-    wreservationroomtab.ui \
     dlgchartdaterange.ui \
     dlgusergroup.ui \
     dlgroomview.ui \
-    dlgendofday.ui \
-    dlgcardex.ui \
-    dwmaindeskhint.ui \
-    dwreservationitemsize.ui \
-    dlgpostingcharges.ui \
     ../Selector/dwselector.ui \
-    dlgpaymentsdetails.ui \
     ../RowEditor/reresthall.ui \
     ../RowEditor/reresttable.ui \
     ../RowEditor/rerestmenunames.ui \
@@ -893,73 +607,42 @@ FORMS    += mainwindow.ui \
     ../RowEditor/rerestdishmod.ui \
     ../RowEditor/rereststore.ui \
     ../RowEditor/rerestprinter.ui \
-    ../RoomChart/reservewidget.ui \
-    ../RoomChart/dlgreservequickinfo.ui \
     ../Filter/ftrackchanges.ui \
     ../RowEditor/reusers.ui \
     ../Print/pprintpreview.ui \
     ../RowEditor/recreditcard.ui \
-    ../Filter/fcityledgerbalance.ui \
     dlguserpasswords.ui \
-    dlgadvanceentry.ui \
-    ../RoomChart/roomstate.ui \
     dlginvoicecancelation.ui \
     dlgraiseuser.ui \
     wglobaldbconfig.ui \
     dlggposorderinfo.ui \
     ../RowEditor/rerestdishcomplex.ui \
-    ../RowEditor/reroomcategory.ui \
-    ../RowEditor/reroombed.ui \
-    ../RowEditor/reroomcategoryrate.ui \
-    reroomcategoryraterow.ui \
-    dlgtransfer.ui \
-    ../Filter/finvoices.ui \
-    waccinvoice.ui \
     dlgtracking.ui \
     wsynchronize.ui \
-    dlgcreategroupreservation.ui \
     ../Filter/frestauranttotal.ui \
-    ../Filter/fdailymovement.ui \
-    ../Filter/freservationscommon.ui \
-    ../RoomChart/reservewidgetaction.ui \
-    dlgdiscount.ui \
     ../Filter/fcategorytosell.ui \
     ../RowEditor/recurrency.ui \
     ../Filter/fforecastoccupancycategory.ui \
     ../Filter/faccmonthlyreport.ui \
-    dlgtransferinvoiceamount.ui \
-    ../Print/dlgprintreservation.ui \
     dlgtaxprintsetup.ui \
     dlginvoiceprintoption.ui \
     ../RowEditor/reinvoiceitem.ui \
     ../Filter/finhouseguest.ui \
-    ../Filter/fexpectedarrivals.ui \
-    ../Widgets/wrecheckin.ui \
-    ../Filter/fexpectedarrivalsimple.ui \
     ../Filter/fcashreportsummary.ui \
-    dlgreceiptvaucher.ui \
-    ../Filter/fcityledgerdetailedbalance.ui \
     ../Filter/fcashreport.ui \
-    ../RowEditor/recityledger.ui \
-    ../Filter/fvauchers.ui \
-    dlgtransferroom.ui \
     dlguserrights.ui \
     dlgreservationremarks.ui \
     ../Filter/fevents.ui \
     dlgpretax.ui \
     dlgprinttaxsideoption.ui \
     ../Filter/fdailymovementcommon.ui \
-    ../Charts/chsample.ui \
     dlgsearchinvoice.ui \
     ../RowEditor/rebanquetcomment.ui \
     ../Filter/fcityledgerbalanceextended.ui \
     ../Filter/fcallhistory.ui \
-    dlgtaxback.ui \
-    ../Filter/fcardexsales.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
     dlgtaxreference.ui \
-    ../Widgets/wvauchereditor.ui \
     ../Widgets/wsyncinvoices.ui \
     ../RowEditor/recomplimentarycomment.ui \
     dlgexportsinglevaucher.ui \
@@ -967,8 +650,6 @@ FORMS    += mainwindow.ui \
     ../Widgets/wreportbuilder.ui \
     ../Controls/efilterlineedit.ui \
     ../Widgets/whotelstatus.ui \
-    dlgclinitialbalance.ui \
-    ../Filter/flistsourcereserve.ui \
     ../Filter/fyearlyfinancialreport.ui \
     ../Widgets/wcustomreports.ui \
     dlgreportbuildergroups.ui \
@@ -979,26 +660,14 @@ FORMS    += mainwindow.ui \
     dlgutils.ui \
     dlgdishhistory.ui \
     dlgremotinvoices.ui \
-    dlggroupparams.ui \
     dlgopengrouporsingle.ui \
-    dlgexportother.ui \
     dlgreserveconfirmstatus.ui \
-    ../Filter/freservaionremarks.ui \
     dlgchangeexportvaucher.ui \
-    dlggroupreservationfuck.ui \
-    dlgsimpleselectroom.ui \
-    fnousedadvance.ui \
-    ../RoomChart/dlgooroomprop.ui \
     fonlinerest.ui \
-    ../Filter/freservegroups.ui \
-    ../RowEditor/recardexgroup.ui \
     ../RowEditor/reguesttitle.ui \
-    ../RowEditor/renationalityfile.ui \
     dlghelp.ui \
     ../Filter/froomstate.ui \
-    ../Filter/fcanceledreservations.ui \
     ../Widgets/wweb.ui \
-    ../Filter/freservebycreate.ui \
     ../Widgets/storedoc.ui \
     ../RowEditor/restorepartner.ui \
     ../Filter/fstoredocs.ui \
@@ -1010,18 +679,12 @@ FORMS    += mainwindow.ui \
     dlgback.ui \
     fonlinebreakfast.ui \
     ../Filter/fmonthlyoccperc.ui \
-    fnatbyperiod.ui \
     dlgpaymentmode.ui \
-    dlgchangeclofvaucher.ui \
-    dlgnoshow.ui \
-    ../Filter/fnoshowcancelationfee.ui \
     ../Filter/frestsalebystore.ui \
-    dlgcheckadvancebeforecancel.ui \
     dlgrefundvaucher.ui \
     dlgeditservtax.ui \
     dlgreserveshortinfo.ui \
     dlgnewvaucheroption.ui \
-    ../Filter/fallguestindaterange.ui \
     ../RowEditor/remodelofcars.ui \
     ../RowEditor/recarclient.ui \
     ../Filter/freportbypayment.ui \
@@ -1043,29 +706,15 @@ FORMS    += mainwindow.ui \
     ../Filter/fdiscountreport.ui \
     ../Filter/fsalesbycar.ui \
     ../Filter/fdiscounttotal.ui \
-    dlgtaxback2.ui \
     ../Filter/fdebtholders.ui \
     dlgpostbreakfast.ui \
-    dlghouseitem.ui \
     ../Filter/fhouseitems.ui \
     dlgdebtpay.ui \
-    dlgcityadvance.ui \
-    ../Filter/fcladvance.ui \
-    ../Filter/fcitytrayledger.ui \
-    ../Filter/finhousedetailbalance.ui \
-    ../Filter/favailablerooms.ui \
     ../Widgets/wdate2.ui \
     dlgconfiggrid.ui \
-    ../RowEditor/reroominventory.ui \
-    ../RowEditor/reroominventorystate.ui \
-    dlggroupreserveoption.ui \
     ../GridOptionWidgets/godaily.ui \
-    dlgexport.ui \
-    goexpextedarrivals.ui \
     dlgemail.ui \
     ../Filter/guestcheckin.ui \
-    ../Filter/flengthofstay.ui \
-    ../Filter/fexportreservation.ui \
     dlgreservationguests.ui \
     ../Filter/fdiscountfullstat.ui \
     ftstorereport.ui \
@@ -1083,18 +732,17 @@ LIBS +=  -lwsock32
 DISTFILES += \
     last_cache.txt
 
-INCLUDEPATH += $$PWD/../Base
-INCLUDEPATH += $$PWD/../Cache
-INCLUDEPATH += $$PWD/../Selector
-INCLUDEPATH += $$PWD/../Controls
-INCLUDEPATH += $$PWD/../RowEditor
-INCLUDEPATH += $$PWD/../RoomChart
-INCLUDEPATH += $$PWD/../Filter
-INCLUDEPATH += $$PWD/../Print
-INCLUDEPATH += $$PWD/../Widgets
-INCLUDEPATH += $$PWD/../RGDoubleClick
-INCLUDEPATH += $$PWD/../GridOptionWidgets
-INCLUDEPATH += $$PWD/../Vouchers
+INCLUDEPATH += ../Base
+INCLUDEPATH += ../Cache
+INCLUDEPATH += ../Selector
+INCLUDEPATH += ../Controls
+INCLUDEPATH += ../RowEditor
+INCLUDEPATH += ../Filter
+INCLUDEPATH += ../Print
+INCLUDEPATH += ../Widgets
+INCLUDEPATH += ../RGDoubleClick
+INCLUDEPATH += ../GridOptionWidgets
+INCLUDEPATH += ../Vouchers
 INCLUDEPATH += /OpenSSL-Win32/include
 INCLUDEPATH += /OpenSSL-Win32/include/openssl
 INCLUDEPATH += /Projects/NewTax

@@ -86,8 +86,6 @@ private slots:
 
     void on_btnNewStoreCheckPoint_clicked();
 
-    void on_btnCashOps_clicked();
-
     void on_btnDiscountCards_clicked();
 
     void on_btnDebts_clicked();
@@ -109,6 +107,8 @@ private slots:
     void on_btnCardBalances_clicked();
 
     void on_btnSalary_clicked();
+
+    void on_btnCashOps_clicked();
 
 private:
     Ui::wwelcomerest *ui;

@@ -272,7 +272,10 @@ void TableModel::clearColumns()
 
 void TableModel::clearData()
 {
-    beginRemoveRows(QModelIndex(), 0, rowCount(QModelIndex()));
+    if (fDD.fDbRows.count() == 0) {
+        return;
+    }
+    beginRemoveRows(QModelIndex(), 0, rowCount(QModelIndex()) - 1);
     fRows.clear();
     fDD.fDbRows.clear();
     fBackgroundColors.clear();

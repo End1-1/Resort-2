@@ -4,7 +4,6 @@
 #include "basedialog.h"
 #include "dwselectorpaymentmode.h"
 #include "dwselectorcreditcard.h"
-#include "dwselectorcityledger.h"
 
 namespace Ui {
 class DlgPaymentMode;
@@ -27,7 +26,6 @@ private slots:
 private:
     Ui::DlgPaymentMode *ui;
     DWSelectorPaymentMode *fDockPayment;
-    DWSelectorCityLedger *fDockCL;
     DWSelectorCreditCard *fDockCard;
 };
 

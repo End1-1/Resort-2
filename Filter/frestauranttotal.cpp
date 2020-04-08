@@ -344,6 +344,11 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             where += " and od.f_state in (" + ui->leDishState->fHiddenText + ") ";
         }
     }
+    if (!countAmount) {
+        if (ui->chOnlyZeroes->isChecked()) {
+            where += " and od.f_total=0 ";
+        }
+    }
     if (!ui->leStore->text().isEmpty()) {
         where += " and od.f_store in (" + ui->leStore->fHiddenText + ") ";
     }
@@ -801,11 +806,6 @@ void FRestaurantTotal::hall(CI_RestHall *c)
 void FRestaurantTotal::user(CI_User *c)
 {
     dockResponse<CI_User, CacheUsers>(ui->leStaff, c);
-}
-
-void FRestaurantTotal::cityLedger(CI_CityLedger *c)
-{
-    dockResponse<CI_CityLedger, CacheCityLedger>(ui->leCL, c);
 }
 
 void FRestaurantTotal::store(CI_RestStore *c)

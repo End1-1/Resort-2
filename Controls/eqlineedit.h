@@ -22,7 +22,7 @@ public:
     EQLineEdit(QWidget *parent = 0);
     ~EQLineEdit();
     void setText(const QString &text);
-    QString text();
+    QString text() const;
     void setInt(int val);
     void setDouble(double val);
     void setBgColor(const QColor &color);

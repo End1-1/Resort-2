@@ -253,10 +253,18 @@ void WStoreEntry::on_btnCalculate_clicked()
     fDbBind[":f_store"] = ui->leStore->asInt();
     drt.select(fDb, query, fDbBind);
     //get middle prices from st_header
-    query = "select r.f_goods, sum(r.f_qty) as f_qty, sum(r.f_amount) as f_total from st_body r "
-            "left join st_header d on d.f_id=r.f_doc "
-            "where d.f_date = :date1 and d.f_store=:f_store  "
-            "group by 1";
+    query = "select b.f_material, "
+            "sum(b.f_qty*b.f_sign) as f_qty, "
+            "sum(b.f_total*b.f_sign) as f_total "
+            "from r_body b "
+            "left join r_store s on s.f_id=b.f_store "
+            "left join r_dish d on d.f_id=b.f_material "
+            "left join r_docs bd on bd.f_id=b.f_doc "
+            "where bd.f_date<=:date1 and bd.f_state=1 and b.f_store=:f_store group by 1 ";
+//    query = "select r.f_goods, sum(r.f_qty) as f_qty, sum(r.f_amount) as f_total from st_body r "
+//            "left join st_header d on d.f_id=r.f_doc "
+//            "where d.f_date = :date1 and d.f_store=:f_store  "
+//            "group by 1";
     DatabaseResult drt2;
     fDbBind[":date1"]  = ui->deLastDate->date().addDays(-1);
     fDbBind[":f_store"] = ui->leStore->asInt();

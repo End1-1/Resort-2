@@ -6,7 +6,6 @@
 #include "dwselectororderstate.h"
 #include "dwselectorresttable.h"
 #include "dwselectorusers.h"
-#include "dwselectorcityledger.h"
 #include "dwselectorreststore.h"
 #include "dwselectordishtype.h"
 #include "dwselectordish.h"
@@ -52,7 +51,6 @@ private slots:
     void removePermanently();
     void hall(CI_RestHall *c);
     void user(CI_User *c);
-    void cityLedger(CI_CityLedger *c);
     void store(CI_RestStore *c);
     void dishType(CI_RestDishType *c);
     void on_btnOrdersSubtotal_clicked();

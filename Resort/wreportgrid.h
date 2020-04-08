@@ -6,13 +6,8 @@
 #include "roweditordialog.h"
 #include "wfilterbase.h"
 #include "pprintpreview.h"
-#include "rgdoubleclickdelegate.h"
 
 #define tr_col(lang, width) (def_lang == lang ? width : 0)
-
-class FTrackChanges;
-class FCityLedgerBalance;
-class FCategoryToSell;
 
 namespace Ui {
 class WReportGrid;
@@ -100,7 +95,6 @@ public:
     EQTableWidget *fTableTotal;
     QString fStaticQuery;
     WFilterBase *fFilter;
-    RGDoubleClickDelegate *fRgDoubleClick;
     QMap<QString, int> fFieldsWidths;
     QStringList fFields;
     QMap<QString, QString> fFieldTitles;

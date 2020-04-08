@@ -7,7 +7,6 @@
 #include "cachevaucher.h"
 #include "basewidget.h"
 #include "cachepaymentmode.h"
-#include "cachecityledger.h"
 #include "cachecreditcard.h"
 #include "cacheinvoiceitem.h"
 #include "databaseresult.h"
@@ -157,9 +156,6 @@ void PPrintVaucher::printVaucher(const QString &id)
             break;
         case PAYMENT_CARD:
             pmInfo = CacheCreditCard::instance()->get(p.fDbRows.at(0).at(10).toString())->fName;
-            break;
-        case PAYMENT_CL:
-            pmInfo = CacheCityLedger::instance()->get(p.fDbRows.at(0).at(11).toString())->fName;
             break;
         }
         vals << pmInfo;

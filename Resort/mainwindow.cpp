@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dlghouseitem.h"
 #include "preferences.h"
 #include "login.h"
 #include "fdebtholders.h"
@@ -8,85 +7,49 @@
 #include "loginsettings.h"
 #include "databasesconnections.h"
 #include "message.h"
-#include "wmaindesk.h"
 #include "wreportgrid.h"
-#include "fcanceledreservations.h"
 #include "recoupon.h"
 #include "freportbypayment.h"
 #include "guestcheckin.h"
-#include "wreportroom.h"
 #include "fdiscountreport.h"
-#include "fexportreservation.h"
 #include "recouponseria.h"
-#include "wwelcome.h"
 #include "dlgback.h"
 #include "fdiscounttotal.h"
 #include "fhouseitems.h"
-#include "favailablerooms.h"
 #include "fbreakfast.h"
-#include "fmonthlyoccperc.h"
-#include "reroominventory.h"
-#include "reroominventorystate.h"
 #include "fsalesbycar.h"
 #include "fcash.h"
-#include "renationalityfile.h"
 #include "fstoreentry.h"
-#include "dlgexport.h"
-#include "froomstate.h"
-#include "fcladvance.h"
-#include "dlgcityadvance.h"
-#include "dlgnotes.h"
 #include "wwelcomerest.h"
 #include "fpartnersdebt.h"
 #include "fcouponsales.h"
-#include "flengthofstay.h"
 #include "wstoreentry.h"
 #include "fdebtofcostumers.h"
-#include "finhousedetailbalance.h"
-#include "dlgnoshow.h"
-#include "dlgrefundvaucher.h"
 #include "about.h"
-#include "fcitytrayledger.h"
 #include "baseuid.h"
 #include "remodelofcars.h"
 #include "frestsalebystore.h"
 #include "recashdesk.h"
-#include "wweb.h"
 #include "dlgcalculateoutputofrestaurant.h"
-#include "wguests.h"
 #include "fcouponstatistics.h"
 #include "ecomboboxcompleter.h"
 #include "fonlinebreakfast.h"
 #include "recarclient.h"
-#include "fnoshowcancelationfee.h"
 #include "fnatbyperiod.h"
-#include "wreservations.h"
 #include "fstoredocs.h"
 #include "dlgutils.h"
-#include "freservebycreate.h"
 #include "wnotes.h"
 #include "reguesttitle.h"
-#include "dlggroupreservationfuck.h"
 #include "wcustomreports.h"
 #include "wcontacts.h"
 #include "wusers.h"
 #include "fmaterialsinstore.h"
-#include "recardexgroup.h"
 #include "fstoremovement.h"
 #include "wusersgroups.h"
-#include "rebanquetcomment.h"
-#include "freservegroups.h"
-#include "freservaionremarks.h"
 #include "whotelstatus.h"
 #include "fyearlyfinancialreport.h"
 #include "storedoc.h"
-#include "wroomview.h"
-#include "wremarks.h"
-#include "dlgexportother.h"
-#include "wreservation.h"
-#include "flistsourcereserve.h"
 #include "vauchers.h"
-#include "wcardex.h"
 #include "cachebase.h"
 #include "fonlinerest.h"
 #include "reresthall.h"
@@ -97,58 +60,33 @@
 #include "rerestmenupart.h"
 #include "rerestdishtype.h"
 #include "rerestdish.h"
-#include "recityledger.h"
 #include "rerestdishmod.h"
 #include "rereststore.h"
 #include "rerestprinter.h"
 #include "recreditcard.h"
-#include "fcardexsales.h"
 #include "fdailymovementcommon.h"
 #include "ftrackchanges.h"
 #include "restorepartner.h"
 #include "cacherights.h"
 #include "fcallhistory.h"
-#include "fcityledgerbalance.h"
-#include "dlgadvanceentry.h"
 #include "dlguserpasswords.h"
-#include "reroomcategory.h"
 #include "wglobaldbconfig.h"
 #include "rerestdishcomplex.h"
-#include "reroombed.h"
-#include "reroomcategoryrate.h"
-#include "wsyncinvoices.h"
-#include "finvoices.h"
-#include "waccinvoice.h"
 #include "wsynchronize.h"
 #include "frestauranttotal.h"
-#include "freservationscommon.h"
-#include "fcategorytosell.h"
 #include "recurrency.h"
-#include "fforecastoccupancycategory.h"
 #include "faccmonthlyreport.h"
 #include "dlgtaxprintsetup.h"
 #include "reinvoiceitem.h"
 #include "fcityledgerbalanceextended.h"
 #include "fevents.h"
-#include "fexpectedarrivalsimple.h"
-#include "finhouseguest.h"
-#include "fexpectedarrivals.h"
-#include "dlgpostingcharges.h"
-#include "dlgdiscount.h"
-#include "wrecheckin.h"
-#include "dlgtransferinvoiceamount.h"
 #include "fcashreportsummary.h"
-#include "dlgreceiptvaucher.h"
-#include "fdailymovement.h"
-#include "fcityledgerdetailedbalance.h"
 #include "fcommonfilterbydate.h"
 #include "fcashreport.h"
 #include "fnousedadvance.h"
-#include "fvauchers.h"
 #include "recomplimentarycomment.h"
 #include "databaseresult.h"
 #include "wreportbuilder.h"
-#include "fallguestindaterange.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -196,8 +134,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(shortcut12, SIGNAL(activated()), this, SLOT(on_actionLogout_triggered()));
     QShortcut *shortcat11 = new QShortcut(QKeySequence("F11"), this);
     connect(shortcat11, SIGNAL(activated()), this, SLOT(shortcutFullScreen()));
-    QShortcut *shortCat4 = new QShortcut(QKeySequence("F4"), this);
-    connect(shortCat4, SIGNAL(activated()), this, SLOT(on_actionRoomChart_triggered()));
 
     ui->menuStorehouse->setVisible(false);
     ui->menuDiscount_system->setVisible(false);
@@ -297,14 +233,7 @@ void MainWindow::login()
     CacheBase<CI_Base>::setDatabase(fDb.db());
     fCacheDate = WORKING_DATE;
     enableMainMenu(true);
-    if (fPreferences.getDb(def_welcome_rest_mode).toInt() == 1) {
-        wwelcomerest *ww = addTab<wwelcomerest>();
-        Q_UNUSED(ww)
-    } else {
-        WWelcome *ww = addTab<WWelcome>();
-        ww->setSlogan(fPreferences.getLocalString("Slogan"));
-        showMaximized();
-    }
+    wwelcomerest *ww = addTab<wwelcomerest>();
     ui->tabWidget->tabBar()->tabButton(0, QTabBar::RightSide)->resize(0, 0);
     fTimer.start(60000);
     ui->actionChange_password->setVisible(true);
@@ -319,21 +248,6 @@ void MainWindow::addTabWidget(BaseWidget *widget)
     int index = ui->tabWidget->addTab(widget, "");
     widget->setTab(ui->tabWidget, index);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
-}
-
-void MainWindow::refreshReservationList()
-{
-    bool refreshed = false;
-    for (int i = 0, count = ui->tabWidget->count(); i < count; i++) {
-        WMainDesk *d = dynamic_cast<WMainDesk*>(ui->tabWidget->widget(i));
-        if (d) {
-            if (!refreshed) {
-                d->loadReservationList();
-                refreshed = true;
-            }
-            d->filterRoom();
-        }
-    }
 }
 
 void MainWindow::setCurrentWidget(QWidget *w)
@@ -408,16 +322,7 @@ void MainWindow::timeout()
                 go = true;
             }
         }
-        if (go) {
-            (*it).removeAt(13);
-            DlgNotes *d = new DlgNotes(*it, this);
-            d->setValues();
-            d->setScheduleVisible();
-            if (d->exec() == QDialog::Accepted) {
 
-            }
-            delete d;
-        }
     }
     fTimer.start(60000);
 }
@@ -434,7 +339,7 @@ void MainWindow::parseSocketCommand(const QString &command)
     QJsonObject jObj = jDoc.object();
     QString cmd = jObj.value("command").toString();
     if (cmd == "refresh_reservations") {
-        refreshReservationList();
+
     } else if (cmd == "update_cache") {
         int cacheId = jObj.value("cache").toInt();
         QString item = jObj.value("item").toString();
@@ -663,26 +568,11 @@ void MainWindow::disableMainMenu()
     }
 }
 
-void MainWindow::on_actionRoom_list_triggered()
-{
-    addTab<WReportRoom>();
-}
-
 void MainWindow::on_actionAbout_triggered()
 {
     About *a = new About(this);
     a->exec();
     delete a;
-}
-
-void MainWindow::on_actionGuest_file_triggered()
-{
-    addTab<WGuests>();
-}
-
-void MainWindow::on_actionDaily_movement_triggered()
-{
-    FDailyMovement::open();
 }
 
 void MainWindow::on_actionContacts_triggered()
@@ -698,21 +588,6 @@ void MainWindow::on_actionUsers_triggered()
 void MainWindow::on_actionUsers_groups_triggered()
 {
     addTab<WUsersGroups>();
-}
-
-void MainWindow::on_actionRoom_view_triggered()
-{
-    addTab<WRoomView>();
-}
-
-void MainWindow::on_actionInvoices_triggered()
-{
-    FInvoices::openReport(false);
-}
-
-void MainWindow::on_actionPartners_triggered()
-{
-    addTab<WCardex>();
 }
 
 void MainWindow::on_actionHakk_triggered()
@@ -1102,27 +977,6 @@ void MainWindow::on_actionPrinters_triggered()
     r->fullSetup<RERestPrinter>(widths, fields, titles, title, icon, query);
 }
 
-void MainWindow::on_actionTrack_changes_triggered()
-{
-
-}
-
-void MainWindow::on_actionRoomChart_triggered()
-{
-    if (!ui->menuReception->isEnabled()) {
-        return;
-    }
-    addTab<WMainDesk>();
-}
-
-void MainWindow::on_actionNew_reservation_triggered()
-{
-    QList<CI_Room*> rooms;
-    rooms.append(0);
-    WReservation *w = addTab<WReservation>();
-    w->setInitialParams(WORKING_DATE, WORKING_DATE, rooms);
-}
-
 void MainWindow::on_actionCredit_card_triggered()
 {
     QList<int> widths;
@@ -1141,22 +995,12 @@ void MainWindow::on_actionCredit_card_triggered()
     r->fullSetup<RECreditCard>(widths, fields, titles, title, icon, query);
 }
 
-void MainWindow::on_actionCity_Ledger_balance_triggered()
-{
-    FCityLedgerBalance::open();
-}
-
 void MainWindow::on_actionChange_password_triggered()
 {
     DlgUserPasswords *d = new DlgUserPasswords(this);
     d->setSelfMode();
     d->exec();
     delete d;
-}
-
-void MainWindow::on_actionNew_advance_entry_triggered()
-{
-    DlgAdvanceEntry::advance();
 }
 
 void MainWindow::on_actionGlobal_config_triggered()
@@ -1210,47 +1054,6 @@ void MainWindow::on_actionComplex_dish_triggered()
     r->fullSetup<RERestDishComplex>(widths, fields, titles, title, icon, query);
 }
 
-void MainWindow::on_actionCategories_triggered()
-{
-    QList<int> widths;
-    widths << 80
-           << 200
-           << 300;
-    QStringList fields;
-    fields << "f_id"
-           << "f_short"
-           << "f_description";
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Short")
-           << tr("Description");
-    QString title = tr("Room categories");
-    QString icon = ":/images/category.png";
-    QString query = "select f_id, f_short, f_description from f_room_classes";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RERoomCategory>(widths, fields, titles, title, icon, query);
-    RERoomCategoryRate *cr = new RERoomCategoryRate(r);
-    Q_UNUSED(cr)
-}
-
-void MainWindow::on_actionType_of_bed_triggered()
-{
-    QList<int> widths;
-    widths << 80
-           << 200;
-    QStringList fields;
-    fields << "f_id"
-           << "f_name";
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Name");
-    QString title = actionTitle(sender());
-    QString icon = ":/images/bed.png";
-    QString query = "select f_id, f_name from f_room_bed";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RERoomBed>(widths, fields, titles, title, icon, query);
-}
-
 QString MainWindow::actionTitle(QObject *a)
 {
     return static_cast<QAction*>(a)->text();
@@ -1264,53 +1067,6 @@ void MainWindow::on_actionSynchronization_triggered()
 void MainWindow::on_actionRestaurant_triggered()
 {
     FRestaurantTotal::open();
-}
-
-void MainWindow::on_actionReservatios_triggered()
-{
-
-}
-
-void MainWindow::on_actionCategory_to_sell_triggered()
-{
-    WReportGrid *wr = addTab<WReportGrid>();
-    wr->setQueryModel<FCategoryToSell>();
-}
-
-void MainWindow::on_actionCity_Ledger_triggered()
-{
-    QList<int> widths;
-    widths << 80
-           << 300
-           << 300
-           << 200
-           << 200
-           << 100
-           << 100
-              ;
-    QStringList fields;
-    fields << "f_id"
-           << "f_name"
-           << "f_address"
-           << "f_phone"
-           << "f_email"
-           << "f_extra1"
-           << "f_extra2"
-              ;
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Name")
-           << tr("Address")
-           << tr("Phone")
-           << tr("Email")
-           << tr("Extra1")
-           << tr("Extra2")
-              ;
-    QString title = actionTitle(sender());
-    QString icon = ":/images/currency.png";
-    QString query = "select f_id, f_name, f_address, f_phone, f_email, f_extra1, f_extra2 from f_city_ledger";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RECityLedger>(widths, fields, titles, title, icon, query);
 }
 
 void MainWindow::on_actionCurrencies_triggered()
@@ -1337,18 +1093,6 @@ void MainWindow::on_actionCurrencies_triggered()
     r->fullSetup<RECurrency>(widths, fields, titles, title, icon, query);
 }
 
-void MainWindow::on_actionForecast_Occupancy_Category_triggered()
-{
-    WReportGrid *wr = addTab<WReportGrid>();
-    wr->setQueryModel<FForecastOccupancyCategory>();
-}
-
-void MainWindow::on_actionMonthly_Report_triggered()
-{
-    WReportGrid *wr = addTab<WReportGrid>();
-    wr->setQueryModel<FAccMonthlyReport>();
-}
-
 void MainWindow::on_actionSetup_Tax_Printer_triggered()
 {
     DlgTaxPrintSetup *d = new DlgTaxPrintSetup(this);
@@ -1356,150 +1100,14 @@ void MainWindow::on_actionSetup_Tax_Printer_triggered()
     delete d;
 }
 
-void MainWindow::on_actionInvoice_items_triggered()
-{
-    QList<int> widths;
-    widths << 80
-           << 0
-           << 0
-           << 150
-           << 200
-           << 200
-           << 200
-           << 80
-           << 200
-           << 80
-           << 80
-           << 80
-           << 30
-           << 30
-           << 0
-              ;
-    QStringList fields;
-    fields << "i.f_id"
-           << "i.f_vaucher"
-           << "i.f_group"
-           << "g.f_" + def_lang
-           << "i.f_am"
-           << "i.f_en"
-           << "i.f_ru"
-           << "i.f_price"
-           << "i.f_taxName"
-           << "i.f_adgt"
-           << "i.f_vatDept"
-           << "i.f_noVatDept"
-           << "i.f_auto"
-           << "i.f_rest"
-           << "i.f_vatReception"
-              ;
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Voucher")
-           << tr("Group code")
-           << tr("Group")
-           << tr("Name, am")
-           << tr("Name, en")
-           << tr("Name, ru")
-           << tr("Price")
-           << tr("Tax name")
-           << tr("ADGT")
-           << tr("VAT Dept")
-           << tr("No VAT Dept")
-           << tr("Manual charge")
-           << tr("Restaurant")
-           << tr("Vat Reception")
-              ;
-    QString title = tr("Invoice items");
-    QString icon = ":/images/list.png";
-    QString query = "select i.f_id, i.f_vaucher, i.f_group, g.f_" +def_lang + ", i.f_am, i.f_en, i.f_ru, i.f_price, "
-            "i.f_taxName, i.f_adgt, i.f_vatDept, i.f_noVatDept, i.f_auto, i.f_rest, i.f_vatReception "
-            "from f_invoice_item i "
-            "inner join f_invoice_item_group g on g.f_id=i.f_group ";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<REInvoiceItem>(widths, fields, titles, title, icon, query);
-}
-
-void MainWindow::on_actionIn_house_guest_triggered()
-{
-
-}
-
-void MainWindow::on_actionExpected_arrivals_triggered()
-{
-    WReportGrid *wr = addTab<WReportGrid>();
-    wr->setQueryModel<FExpectedArrivals>();
-}
-
-void MainWindow::on_actionPosting_charge_triggered()
-{
-    DlgPostingCharges *p = new DlgPostingCharges(this);
-    p->exec();
-    delete p;
-}
-
-void MainWindow::on_actionDiscount_triggered()
-{
-    DlgDiscount *d = new DlgDiscount(this);
-    d->exec();
-    delete d;
-}
-
-void MainWindow::on_actionRe_checkin_triggered()
-{
-    addTab<WReCheckIn>();
-}
-
-void MainWindow::on_actionTransfer_amount_triggered()
-{
-
-    DlgTransferInvoiceAmount *d = new DlgTransferInvoiceAmount(this);
-    d->exec();
-    delete d;
-}
-
-void MainWindow::on_actionExpected_arrivals_simple_triggered()
-{
-    WReportGrid *rg = addTab<WReportGrid>();
-    rg->setQueryModel<FExpectedArrivalSimple>();
-}
-
 void MainWindow::on_actionCash_report_total_triggered()
 {
     addTab<WReportGrid>()->setQueryModel<FCashReportSummary>();
 }
 
-void MainWindow::on_actionUpdate_program_triggered()
-{
-    fDbBind[":f_version"] = Utils::getVersionString(qApp->applicationFilePath());
-    fDb.update("s_app", fDbBind, where_field("f_app", "smarthotel"));
-    BroadcastThread::cmdCommand(cmd_update_program, QMap<QString, QString>());
-}
-
-void MainWindow::on_actionReceipt_vaucher_triggered()
-{
-    DlgReceiptVaucher *d = new DlgReceiptVaucher(this);
-    d->exec();
-    delete d;
-}
-
-void MainWindow::on_actionCity_Ledger_detailed_balance_triggered()
-{
-    FCityLedgerDetailedBalance::open();
-}
-
 void MainWindow::on_actionCash_repoort_detailed_triggered()
 {
     FCashReport::open();
-}
-
-void MainWindow::on_actionVauchers_triggered()
-{
-    FVauchers::open();
-}
-
-void MainWindow::on_actionNotes_triggered()
-{
-    addTab<WNotes>();
 }
 
 void MainWindow::on_actionEvent_triggered()
@@ -1510,21 +1118,6 @@ void MainWindow::on_actionEvent_triggered()
 void MainWindow::on_actionDaily_financial_report_triggered()
 {
     FDailyMovementCommon::open();
-}
-
-void MainWindow::on_actionBanquet_comment_triggered()
-{
-    REBanquetComment::openBanquet();
-}
-
-void MainWindow::on_actionCity_ledger_balance_2_triggered()
-{
-    FCityLedgerBalanceExtended::open();
-}
-
-void MainWindow::on_actionHistory_of_calls_triggered()
-{
-    FCallHistory::open();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -1592,165 +1185,14 @@ void MainWindow::customReport()
     FCommonFilterByDate::open(reportId);
 }
 
-void MainWindow::on_actionCardex_analysis_triggered()
-{
-    FCardexSales::open();
-}
-
-void MainWindow::on_actionExport_invoices_triggered()
-{
-    WSyncInvoices::open();
-}
-
 void MainWindow::on_actionComplimentary_comment_triggered()
 {
     REComplimentaryComment::openComplimentaryComment();
 }
 
-void MainWindow::on_actionExport_active_reservations_triggered()
-{
-    DlgExport::start();
-    return;
-    Database SDb;
-    QStringList dbParams = fPreferences.getDb("AHC").toString().split(";", QString::SkipEmptyParts);
-    if (dbParams.count() < 4) {
-        message_error_tr("Setup second database parameters");
-        return;
-    }
-    SDb.setConnectionParams(dbParams[0], dbParams[1], dbParams[2], dbParams[3]);
-    if (!SDb.open()) {
-        message_error_tr("Cannot connect to second database");
-        return;
-    }
-
-    if (message_confirm_tr("Confirm to export checkin and reserved entries.\r\nThis operation cannot be undone.") != QDialog::Accepted) {
-        return;
-    }
-    /* Checkin and Reservation */
-    DatabaseResult reserve;
-    fDbBind[":f_state1"] = RESERVE_CHECKIN;
-    fDbBind[":f_state2"] = RESERVE_RESERVE;
-    reserve.select(fDb, "select * from f_reservation where f_state=:f_state1 or f_state=:f_state2", fDbBind);
-    /* Online invoices */
-    DatabaseResult vauchers;
-    fDbBind[":f_state"] = RESERVE_CHECKIN;
-    vauchers.select(fDb, "select * from m_register where f_canceled=0 and f_inv in (select f_invoice from f_reservation where f_state=:f_state)", fDbBind);
-    /* active gpos orders */
-    DatabaseResult oheader;
-    fDbBind[":f_state"] = RESERVE_CHECKIN;
-    fDbBind[":f_hstate"] = ORDER_STATE_OPENED;
-    oheader.select(fDb, "select * from o_header h where f_id in "
-                   "(select f_doc from m_register where f_source='PS' and f_canceled=0 and f_inv in "
-                   "(select f_invoice from f_reservation where f_state=:f_state)) or (h.f_state=:f_hstate)", fDbBind);
-    /* active items for gpos */
-    DatabaseResult odish;
-    fDbBind[":f_state"] = RESERVE_CHECKIN;
-    fDbBind[":f_hstate"] = ORDER_STATE_OPENED;
-    odish.select(fDb, "select * from o_dish where f_header in "
-                   "(select f_doc from m_register where f_source='PS' and f_canceled=0 and f_inv in "
-                   "(select f_invoice from f_reservation where f_state=:f_state)) "
-                 " or (f_header in (select f_id from o_header where f_state=:f_hstate)) ", fDbBind);
-    /* guests for reservations */
-    DatabaseResult reserveGuest;
-    fDbBind[":f_state1"] = RESERVE_CHECKIN;
-    fDbBind[":f_state2"] = RESERVE_RESERVE;
-    reserveGuest.select(fDb, "select * from f_reservation_guests "
-                        "where f_reservation in (select f_id from f_reservation where f_state=:f_state1 or f_state=:f_state2)",
-                        fDbBind);
-    DatabaseResult guests;
-    fDbBind[":f_state1"] = RESERVE_CHECKIN;
-    fDbBind[":f_state2"] = RESERVE_RESERVE;
-    guests.select(fDb, "select * from f_guests "
-                        "where f_id in "
-                             "(select f_guest from f_reservation_guests where f_reservation in  "
-                             "(select f_id from f_reservation where f_state=:f_state1 or f_state=:f_state2))",
-                        fDbBind);
-
-    DatabaseResult tax;
-    fDbBind[":f_state1"] = RESERVE_CHECKIN;
-    fDbBind[":f_state2"] = RESERVE_RESERVE;
-    tax.select(fDb, "select * from m_free_tax where f_invoice in (select f_invoice from f_reservation where f_state=:f_state1 or f_state=:f_state2)", fDbBind);
-
-    DatabaseResult oo;
-    fDbBind[":f_state"] = RESERVE_OUTOFROOM;
-    oo.select(fDb, "select * from f_reservation where f_state=:f_state and f_endDate>="
-              + ap(WORKING_DATE.toString(def_mysql_date_format)), fDbBind);
-
-    for (int i = 0; i < reserve.rowCount(); i++) {
-        reserve.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("f_reservation", fDbBind);
-    }
-    for (int i = 0; i < vauchers.rowCount(); i++) {
-        vauchers.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("m_register", fDbBind);
-    }
-    for (int i = 0; i < oheader.rowCount(); i++) {
-        oheader.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("o_header", fDbBind);
-    }
-    for (int i = 0; i < odish.rowCount(); i++) {
-        odish.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("o_dish", fDbBind);
-    }
-    for (int i = 0; i < reserveGuest.rowCount(); i++) {
-        reserveGuest.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("f_reservation_guests", fDbBind);
-    }
-    for (int i = 0; i < guests.rowCount(); i++) {
-        guests.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("f_guests", fDbBind);
-    }
-    for (int i = 0; i < tax.rowCount(); i++) {
-        tax.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("m_free_tax", fDbBind);
-    }
-    for (int i = 0; i < oo.rowCount(); i++) {
-        oo.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("f_reservation", fDbBind);
-    }
-
-    DatabaseResult drother;
-    drother.select(fDb, "select * from f_global_settings", fDbBind);
-    SDb.select("delete from f_global_settings", fDbBind, fDbRows);
-    for (int i = 0; i < drother.rowCount(); i++) {
-        drother.getBindValues(i, fDbBind);
-        SDb.insertWithoutId("f_global_settings", fDbBind);
-    }
-    drother.select(fDb, "select f_id, f_state, f_rate from f_room", fDbBind);
-    for (int i = 0; i < drother.rowCount(); i++) {
-        drother.getBindValues(i, fDbBind);
-        SDb.select("update f_room set f_state=:f_state, f_rate=:f_rate where f_id=:f_id", fDbBind, fDbRows);
-    }
-
-    SDb.select("update serv_id set f_cp=-1", fDbBind, fDbRows);
-    SDb.select("delete from f_global_settings where f_key ='AHC'");
-    SDb.select("delete from f_global_settings where f_key ='HC'");
-    message_info(tr("All done."));
-}
-
 void MainWindow::on_actionReport_buillder_triggered()
 {
     addTab<WReportBuilder>();
-}
-
-void MainWindow::on_actionRemarks_triggered()
-{
-    FReservaionRemarks::openReport();
-}
-
-void MainWindow::on_actionHotel_status_triggered()
-{
-    addTab<WHotelStatus>();
-}
-
-void MainWindow::on_actionList_of_source_reservation_triggered()
-{
-    FListSourceReserve::openReport();
-}
-
-void MainWindow::on_actionYearly_financial_report_triggered()
-{
-    FYearlyFinancialReport::openReport();
 }
 
 void MainWindow::on_actionReports_set_triggered()
@@ -1770,26 +1212,9 @@ void MainWindow::on_actionUtils_triggered()
     delete d;
 }
 
-void MainWindow::on_actionExport_data_triggered()
-{
-    DlgExportOther *d = new DlgExportOther(this);
-    d->exec();
-    delete d;
-}
-
-void MainWindow::on_actionAdvance_report_triggered()
-{
-    FNoUsedAdvance::openReport();
-}
-
 void MainWindow::on_actionRestaurant_online_triggered()
 {
     FOnlineRest::openOnlineRestaurant();
-}
-
-void MainWindow::on_actionReservation_groups_triggered()
-{
-    FReserveGroups::openReport();
 }
 
 void MainWindow::on_actionConfigure_Welcome_Page_triggered()
@@ -1797,51 +1222,6 @@ void MainWindow::on_actionConfigure_Welcome_Page_triggered()
     DlgWelcomeButtonConfig *d = new DlgWelcomeButtonConfig(this);
     d->exec();
     delete d;
-}
-
-void MainWindow::on_actionPartners_group_triggered()
-{
-    RECardexGroup::openEditor();
-}
-
-void MainWindow::on_actionGuest_titles_triggered()
-{
-    REGuestTitle::openEditor();
-}
-
-void MainWindow::on_actionNationality_file_triggered()
-{
-    RENationalityFile::openEditor();
-}
-
-void MainWindow::on_actionCheckout_invoices_free_rooming_triggered()
-{
-    FInvoices::openReport(true);
-}
-
-void MainWindow::on_actionNew_group_reservation_triggered()
-{
-    addTab<DlgGroupReservationFuck>();
-}
-
-void MainWindow::on_actionChanges_of_states_of_room_triggered()
-{
-    FRoomState::openReport();
-}
-
-void MainWindow::on_actionCanceled_reservations_triggered()
-{
-    FCanceledReservations::openReport();
-}
-
-void MainWindow::on_actionWeb_triggered()
-{
-    addTab<WWeb>();
-}
-
-void MainWindow::on_actionReservations_by_date_created_triggered()
-{
-    FReserveByCreate::openReport();
 }
 
 void MainWindow::on_actionNew_store_document_triggered()
@@ -1879,48 +1259,14 @@ void MainWindow::on_actionCalculate_output_of_restaurant_triggered()
     DlgCalculateOutputOfRestaurant::openDialog();
 }
 
-void MainWindow::on_actionExport_back_triggered()
-{
-    DlgBack *d = new DlgBack(this);
-    d->exec();
-    delete d;
-}
-
 void MainWindow::on_actionOpen_breakfast_triggered()
 {
     FOnlineBreakfast::openFilterReport<FOnlineBreakfast, WReportGrid>();
 }
 
-void MainWindow::on_actionMonthly_occupancy_percentages_triggered()
-{
-    FMonthlyOccPerc::openFilterReport<FMonthlyOccPerc, WReportGrid>();
-}
-
-void MainWindow::on_actionNaitonality_report_by_period_triggered()
-{
-    FNatByPeriod::openFilterReport<FNatByPeriod, WReportGrid>();
-}
-
-void MainWindow::on_actionCancelation_No_show_fees_triggered()
-{
-    FNoShowCancelationFee::openFilterReport<FNoShowCancelationFee, WReportGrid>();
-}
-
-void MainWindow::on_actionCancelation_No_show_fee_triggered()
-{
-    DlgNoShow *d = new DlgNoShow(this);
-    d->exec();
-    delete d;
-}
-
 void MainWindow::on_actionSales_by_storages_triggered()
 {
     FRestSaleByStore::openFilterReport<FRestSaleByStore, WReportGrid>();
-}
-
-void MainWindow::on_actionGuest_by_nationality_triggered()
-{
-    FAllGuestInDateRange::openFilterReport<FAllGuestInDateRange, WReportGrid>();
 }
 
 void MainWindow::on_actionModels_of_cars_triggered()
@@ -2006,69 +1352,4 @@ void MainWindow::on_actionSales_report_by_cars_triggered()
 void MainWindow::on_actionDiscount_total_triggered()
 {
     FDiscountTotal::openFilterReport<FDiscountTotal, WReportGrid>();
-}
-
-void MainWindow::on_actionCostumers_triggered()
-{
-    FDebtHolders::openFilterReport<FDebtHolders, WReportGrid>();
-}
-
-void MainWindow::on_actionRefund_voucher_triggered()
-{
-    DlgRefundVaucher::refundVaucher("", "");
-}
-
-void MainWindow::on_actionRoom_inventory_triggered()
-{
-    RERoomInventory::openRoomInventoryReport();
-}
-
-void MainWindow::on_actionTransfer_CL_amount_triggered()
-{
-    DlgCityAdvance::cityAdvance("", "", 0);
-}
-
-void MainWindow::on_actionAvailable_amounts_triggered()
-{
-    FCLAdvance::openFilterReport<FCLAdvance, WReportGrid>();
-}
-
-void MainWindow::on_actionGuest_Tray_Ledger_triggered()
-{
-    FCityTrayLedger::openFilterReport<FCityTrayLedger, WReportGrid>();
-}
-
-void MainWindow::on_actionIn_house_detailed_balance_triggered()
-{
-    FInhouseDetailBalance::openFilterReport<FInhouseDetailBalance, WReportGrid>();
-}
-
-void MainWindow::on_actionAvaiable_rooms_triggered()
-{
-    FAvailableRooms::openFilterReport<FAvailableRooms, WReportGrid>();
-}
-
-void MainWindow::on_actionRoom_inventory_2_triggered()
-{
-    DlgHouseItem::openWindow();
-}
-
-void MainWindow::on_actionRoom_inventory_states_triggered()
-{
-    RERoomInventoryState::openReport();
-}
-
-void MainWindow::on_actionList_of_checkin_guests_triggered()
-{
-    GuestCheckin::openFilterReport<GuestCheckin, WReportGrid>();
-}
-
-void MainWindow::on_actionLenght_of_stay_triggered()
-{
-    FLengthOfStay::openFilterReport<FLengthOfStay, WReportGrid>();
-}
-
-void MainWindow::on_actionExport_reservations_triggered()
-{
-    FExportReservation::openFilterReport<FExportReservation, WReportGrid>();
 }

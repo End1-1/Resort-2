@@ -9258,6 +9258,10 @@ ledger</source>
         <source>Payment mode</source>
         <translation>Վճարման տեսակ</translation>
     </message>
+    <message>
+        <source>Only zeroes</source>
+        <translation>Միանյ 0 արժեքով</translation>
+    </message>
 </context>
 <context>
     <name>FRoomState</name>

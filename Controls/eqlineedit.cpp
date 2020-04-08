@@ -36,8 +36,8 @@ void EQLineEdit::setText(const QString &text)
     if (v) {
         if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             QLocale l;
-            t.replace(".", l.decimalPoint());
-            t.replace(",", l.decimalPoint());
+//            t.replace(".", l.decimalPoint());
+//            t.replace(",", l.decimalPoint());
             t.replace("․", l.decimalPoint());
         }
     }
@@ -57,7 +57,7 @@ void EQLineEdit::setText(const QString &text)
     }
 }
 
-QString EQLineEdit::text()
+QString EQLineEdit::text() const
 {
     const QValidator *v = validator();
     if (v) {
@@ -202,7 +202,8 @@ int EQLineEdit::asInt()
 
 double EQLineEdit::asDouble()
 {
-    return QLocale().toDouble(text());
+    const QString &t = text();
+    return QLocale().toDouble(t);
 }
 
 void EQLineEdit::setSelector(DWSelector *selector)

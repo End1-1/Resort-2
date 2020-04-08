@@ -2,7 +2,6 @@
 #define VAUCHERS_H
 
 #include "defines.h"
-#include "cachecityledger.h"
 #include "cachecreditcard.h"
 #include <QString>
 
@@ -44,9 +43,6 @@ QString vaucherPaymentName(int code, const QString &cardcode, const QString &clc
 QString vaucherCode(int code, const QString &prefix);
 bool isTaxPay(const QString &code);
 bool isTaxPrepay(const QString &code);
-bool openVaucherInvoice(const QString &vaucherId);
-bool openInvoiceWithId(const QString &invoice);
-void openVaucher(const QString &vaucher, const QString &id);
 bool removeVaucher(const QString &id, const QString &reason);
 
 #endif // VAUCHERS_H

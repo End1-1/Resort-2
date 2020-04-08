@@ -78,10 +78,7 @@ void FOnlineRest::openOnlineRestaurant()
 
 void FOnlineRest::doubleClickOnRow(const QList<QVariant> &row)
 {
-    if (row.count() == 0) {
-        return;
-    }
-    openVaucher("PS", row.at(0).toString());
+
 }
 
 void FOnlineRest::on_tblFilter_clicked(const QModelIndex &index)
