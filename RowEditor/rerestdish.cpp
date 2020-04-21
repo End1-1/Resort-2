@@ -282,7 +282,7 @@ void RERestDish::save()
         fDbBind[":f_state"] = (int) check->isChecked();
         fDbBind[":f_menu"] = cellValue(i, 2);
         fDbBind[":f_dish"] = ui->leCode->text();
-        fDbBind[":f_price"] = cellValue(i, 4);
+        fDbBind[":f_price"] = QLocale().toFloat(cellValue(i, 4));
         fDbBind[":f_print1"] = cellValue(i, 5);
         fDbBind[":f_print2"] = cellValue(i, 6);
         fDbBind[":f_store"] = cellValue(i, 7);

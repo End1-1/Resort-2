@@ -52,7 +52,6 @@ private slots:
     void on_chContainItself_clicked(bool checked);
     void on_btnTrack_clicked();
     void on_leReadScancode_returnPressed();
-
     void on_btnRemove_clicked();
 
 private:
