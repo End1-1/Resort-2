@@ -64,20 +64,13 @@ SOURCES += main.cpp\
     ../Controls/eqtimeedit.cpp \
     ../Controls/trackcontrol.cpp \
     dlgreservation.cpp \
-    ../Cache/cacheactiveroom.cpp \
     ../Cache/cachebase.cpp \
-    ../Cache/cachecardex.cpp \
-    ../Cache/cachecityledger.cpp \
     ../Cache/cachecreditcard.cpp \
     ../Cache/cacheguest.cpp \
     ../Cache/cacheguesttitle.cpp \
     ../Cache/cacheinvoiceitem.cpp \
     ../Cache/cacheone.cpp \
     ../Cache/cachepaymentmode.cpp \
-    ../Cache/cacheredreservation.cpp \
-    ../Cache/cachereservation.cpp \
-    ../Cache/cachereservestate.cpp \
-    ../Cache/cachereservestatus.cpp \
     ../Cache/cacherestdishmod.cpp \
     ../Cache/cacherestdishpart.cpp \
     ../Cache/cacherestdishtype.cpp \
@@ -87,8 +80,6 @@ SOURCES += main.cpp\
     ../Cache/cachereststore.cpp \
     ../Cache/cacheresttable.cpp \
     ../Cache/cacherights.cpp \
-    ../Cache/cacheroom.cpp \
-    ../Cache/cacheroomarrangment.cpp \
     ../Cache/cachetrackingtables.cpp \
     ../Cache/cacheusers.cpp \
     ../Cache/cacheusersgroups.cpp \
@@ -106,12 +97,10 @@ SOURCES += main.cpp\
     reportprint.cpp \
     ../Controls/eqcombobox.cpp \
     ../Cache/cachsex.cpp \
-    ../Cache/cachereminderstate.cpp \
     dlgselecttaxcashmode.cpp \
     dlgbreakfast.cpp \
     ../Base/command.cpp \
     ../Resort/broadcastthread.cpp \
-    dlgbanket.cpp \
     dlgbanketitems.cpp \
     dlglist.cpp \
     dlgdate.cpp \
@@ -120,12 +109,9 @@ SOURCES += main.cpp\
     dlgvoidback.cpp \
     ../Print/pprintreceipt.cpp \
     dlgorders.cpp \
-    dlgonebreakfasat.cpp \
     ../Base/baseuid.cpp \
     dlggettext.cpp \
     dlgconnecttoserver.cpp \
-    ../Cache/cachebed.cpp \
-    ../Cache/cacheroomcategory.cpp \
     ../Cache/cachecoupontype.cpp \
     ../Base/defrest.cpp \
     ../Base/baseorder.cpp \
@@ -138,8 +124,6 @@ SOURCES += main.cpp\
     dlgprinttaxnew.cpp \
     ../Cache/cachecouponseria.cpp \
     dlgsalary.cpp \
-    ../Cache/cacheroominventory.cpp \
-    ../Cache/cacheroominventorystate.cpp \
     ../Base/appconfig.cpp \
     baseextendeddialog.cpp \
     c:/projects/NewTax/Src/printtaxn.cpp \
@@ -181,20 +165,13 @@ HEADERS  += rface.h \
     ../Controls/eqtimeedit.h \
     ../Controls/trackcontrol.h \
     dlgreservation.h \
-    ../Cache/cacheactiveroom.h \
     ../Cache/cachebase.h \
-    ../Cache/cachecardex.h \
-    ../Cache/cachecityledger.h \
     ../Cache/cachecreditcard.h \
     ../Cache/cacheguest.h \
     ../Cache/cacheguesttitle.h \
     ../Cache/cacheinvoiceitem.h \
     ../Cache/cacheone.h \
     ../Cache/cachepaymentmode.h \
-    ../Cache/cacheredreservation.h \
-    ../Cache/cachereservation.h \
-    ../Cache/cachereservestate.h \
-    ../Cache/cachereservestatus.h \
     ../Cache/cacherestdishmod.h \
     ../Cache/cacherestdishpart.h \
     ../Cache/cacherestdishtype.h \
@@ -204,8 +181,6 @@ HEADERS  += rface.h \
     ../Cache/cachereststore.h \
     ../Cache/cacheresttable.h \
     ../Cache/cacherights.h \
-    ../Cache/cacheroom.h \
-    ../Cache/cacheroomarrangment.h \
     ../Cache/cachetrackingtables.h \
     ../Cache/cacheusers.h \
     ../Cache/cacheusersgroups.h \
@@ -224,12 +199,10 @@ HEADERS  += rface.h \
     reportprint.h \
     ../Controls/eqcombobox.h \
     ../Cache/cachsex.h \
-    ../Cache/cachereminderstate.h \
     dlgselecttaxcashmode.h \
     dlgbreakfast.h \
     ../Base/command.h \
     ../Resort/broadcastthread.h \
-    dlgbanket.h \
     dlgbanketitems.h \
     ../Base/vauchers.h \
     dlglist.h \
@@ -239,12 +212,9 @@ HEADERS  += rface.h \
     dlgvoidback.h \
     ../Print/pprintreceipt.h \
     dlgorders.h \
-    dlgonebreakfasat.h \
     ../Base/baseuid.h \
     dlggettext.h \
     dlgconnecttoserver.h \
-    ../Cache/cachebed.h \
-    ../Cache/cacheroomcategory.h \
     ../Cache/cachecoupontype.h \
     ../Base/defrest.h \
     ../Base/baseorder.h \
@@ -257,8 +227,6 @@ HEADERS  += rface.h \
     dlgprinttaxnew.h \
     ../Cache/cachecouponseria.h \
     dlgsalary.h \
-    ../Cache/cacheroominventory.h \
-    ../Cache/cacheroominventorystate.h \
     ../Base/appconfig.h \
     ../Resort/message.h \
     baseextendeddialog.h \
@@ -287,13 +255,11 @@ FORMS    += rface.ui \
     ../Print/pprintpreview.ui \
     dlgselecttaxcashmode.ui \
     dlgbreakfast.ui \
-    dlgbanket.ui \
     dlgbanketitems.ui \
     dlglist.ui \
     dlgdate.ui \
     dlgvoidback.ui \
     dlgorders.ui \
-    dlgonebreakfasat.ui \
     dlggettext.ui \
     dlgconnecttoserver.ui \
     dlgcarselection.ui \

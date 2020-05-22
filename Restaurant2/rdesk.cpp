@@ -34,7 +34,6 @@
 #include "reportprint.h"
 #include "printtax.h"
 #include "dlgselecttaxcashmode.h"
-#include "cachecityledger.h"
 #include "dlgvoidback.h"
 #include "dlgcarselection.h"
 #include "dlglist.h"
@@ -208,7 +207,7 @@ protected:
             o.setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
             QRect totalRect = option.rect;
             totalRect.adjust(2, 2, -2, -2);
-            painter->drawText(totalRect, float_str(od->fTotal, 0), o);
+            painter->drawText(totalRect, float_str(od->fTotal, 2), o);
             break;
         }
         }
@@ -896,7 +895,7 @@ void RDesk::visitStat()
             .arg(tr("Visits"))
             .arg(dr.value("qty").toInt())
             .arg(tr("Amount"))
-            .arg(float_str(dr.value("amount").toDouble(), 0));
+            .arg(float_str(dr.value("amount").toDouble(), 2));
     }
     fDbBind[":f_debtHolder"] = id;
     dr.select(fDb, "select h.f_dateCash, h.f_id, d.f_name, v.f_debt "
@@ -915,7 +914,7 @@ void RDesk::visitStat()
             debt += dr.value(i, "f_debt").toDouble();
         }
         if (debt > 1 || debt < -1) {
-            msg += "<br>" + tr("Debt") + ": " + float_str(debt, 0);
+            msg += "<br>" + tr("Debt") + ": " + float_str(debt, 2);
         }
     }
 
@@ -1164,6 +1163,7 @@ void RDesk::onBtnQtyClicked()
         dc->fQty = complexQty;
         fDbBind[":f_qty"] = dc->fQty;
         fDbBind[":f_total"] = dc->fPrice * dc->fQty;
+        fDbBind[":f_totalUSD"] = dc->fPrice * dc->fQty;
         fDb.update("o_dish", fDbBind, where_id(ap(dc->fRecId)));
         QString newQty = QString("%1, %2").arg(dc->fName[def_lang])
                 .arg(dc->fQty);
@@ -1385,6 +1385,10 @@ void RDesk::updateDish(OrderDishStruct *od)
     fDbBind[":f_cancelUser"] = od->fCancelUser;
     fDbBind[":f_cancelDate"] = od->fCancelDate;
     fDb.update("o_dish", fDbBind, QString("where f_id='%1'").arg(od->fRecId));
+//    if (!od->fComplexRecId.isEmpty()) {
+//        fDbBind[":f_id"] = od->fComplexRecId;
+//        fDb.query("update o_dish set f_totalUSD=f_total where f_id=:f_id", fDbBind);
+//    }
     updateDishQtyHistory(od);
 }
 
@@ -1414,7 +1418,7 @@ double RDesk::countTotal()
     }
 
     double grandTotal = total ;
-    ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 0));
+    ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
     fDbBind[":f_total"] = grandTotal;
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
     fDbBind[":f_cash"] = grandTotal;
@@ -1422,7 +1426,7 @@ double RDesk::countTotal()
     fDbBind[":f_debt"] = 0;
     fDbBind[":f_coupon"] = 0;
     fDb.update("o_header_payment", fDbBind, where_id(ap(fTable->fOrder)));
-    fTable->fAmount = float_str(grandTotal, 0);
+    fTable->fAmount = float_str(grandTotal, 2);
     updateTableInfo();
     return grandTotal;
 }
@@ -2130,19 +2134,19 @@ void RDesk::printReceipt(bool printModePayment)
         }
         if (dr.value("f_cash").toDouble() > 0.1) {
             ps->addTextRect(10, top, 600, rowHeight, tr("Cash"), &th);
-            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_cash").toDouble(), 0), &thr)->textHeight();
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_cash").toDouble(), 2), &thr)->textHeight();
             ps->addLine(10, top, 680, top);
             top++;
         }
         if (dr.value("f_card").toDouble() > 0.1) {
             ps->addTextRect(10, top, 600, rowHeight, tr("Card"), &th);
-            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_card").toDouble(), 0), &thr)->textHeight();
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_card").toDouble(), 2), &thr)->textHeight();
             ps->addLine(10, top, 680, top);
             top++;
         }
         if (dr.value("f_coupon").toDouble() > 0.1) {
             ps->addTextRect(10, top, 600, rowHeight, tr("Coupon"), &th);
-            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_coupon").toDouble(), 0), &thr)->textHeight();
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_coupon").toDouble(), 2), &thr)->textHeight();
             top += ps->addTextRect(10, top, 600, rowHeight, dr.value("f_couponSeria").toString() + "/" + dr.value("f_couponNumber").toString(), &thr)->textHeight();
             ps->addLine(10, top, 680, top);
             top++;
@@ -2155,7 +2159,7 @@ void RDesk::printReceipt(bool printModePayment)
                        "left join o_header_payment p on p.f_debtHolder=h.f_id "
                        "where p.f_id=:f_id", fDbBind);
             ps->addTextRect(10, top, 600, rowHeight, tr("Debt"), &th);
-            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_debt").toDouble(), 0), &thr)->textHeight();
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_debt").toDouble(), 2), &thr)->textHeight();
             if (drh.rowCount() > 0) {
                 top += ps->addTextRect(10, top, 680, rowHeight, drh.value("f_name").toString(), &th)->textHeight();
             }
@@ -2166,7 +2170,7 @@ void RDesk::printReceipt(bool printModePayment)
         }
         if (dr.value("f_discount").toDouble() > 0.1) {
             ps->addTextRect(10, top, 600, rowHeight, tr("Discount"), &th);
-            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_discount").toDouble(), 0), &thr)->textHeight();
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_discount").toDouble(), 2), &thr)->textHeight();
             fDbBind[":f_card"] = dr.value("f_costumer");
             dr.select(fDb, "select f_name from d_car_client where f_id=:f_card", fDbBind);
             if (dr.rowCount() > 0) {
@@ -3070,3 +3074,4 @@ void RDesk::on_btnHallVIP_clicked()
 {
     loadHall(3);
 }
+

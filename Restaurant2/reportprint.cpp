@@ -75,10 +75,10 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                 top += ps->addTextRect(10, top, 680, rowHeight, tr("Total for ") + currHall + "/" + currPayment, &th)->textHeight();
                 ps->addTextRect(200, top, 150, rowHeight, QString::number(count), &th);
                 if (total2 > 0.1 && total2 != total) {
-                    ps->addTextRect(350, top, 200, rowHeight, float_str(total, 0), &th)->textHeight();
-                    top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 0) + "]", &th)->textHeight();
+                    ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+                    top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 2) + "]", &th)->textHeight();
                 } else {
-                    top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 0), &th)->textHeight();
+                    top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
                 }
                 top += rowHeight;
                 f.setBold(false);
@@ -108,11 +108,11 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         ps->addTextRect(255, top, 195, rowHeight, row.at(3).toString(), &th);
         double s1 = row.at(5).toDouble();
         double s2 = row.at(6).toDouble();
-        QString s3 = float_str(s1, 0);
+        QString s3 = float_str(s1, 2);
         bool addline = false;
         DatabaseResult drcard;
         if (s1 < s2) {
-            s3 = QString("%1 [%2]").arg(float_str(s1, 0)).arg(float_str(s2, 0));
+            s3 = QString("%1 [%2]").arg(float_str(s1, 2)).arg(float_str(s2, 2));
             qDebug() << row;
             rp.fDbBind[":f_card"] = row.at(8);
             drcard.select(rp.fDb, "select f_name from d_car_client where f_card=:f_card", rp.fDbBind);
@@ -154,10 +154,10 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         top += ps->addTextRect(10, top, 680, rowHeight, tr("Total for ") + currHall + "/" + currPayment, &th)->textHeight();
         ps->addTextRect(200, top, 150, rowHeight, QString::number(count), &th);
         if (total2 > 0.1 && total != total2) {
-            ps->addTextRect(350, top, 200, rowHeight, float_str(total, 0), &th)->textHeight();
-            top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 0) + "]", &th)->textHeight();
+            ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+            top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 2) + "]", &th)->textHeight();
         } else {
-            top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 0), &th)->textHeight();
+            top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
         }
         top += rowHeight;
         if (top > sizePortrait.height() - 200) {

@@ -181,7 +181,7 @@ void DlgPayment::on_btnCouponNumber_clicked()
         message_error(tr("Invalide coupon seria"));
         return;
     }
-    ui->leCouponAmount->setText(float_str(ci->fPrice, 0));
+    ui->leCouponAmount->setText(float_str(ci->fPrice, 2));
     fCountId = dr.value("f_id").toInt();
     calcCash();
 }

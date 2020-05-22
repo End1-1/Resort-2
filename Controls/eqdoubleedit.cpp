@@ -6,7 +6,7 @@ EQDoubleEdit::EQDoubleEdit(QWidget *parent) :
     EQLineEdit(parent)
 {
     fLimit = 12;
-    fDecimal = 0;
+    fDecimal = 2;
     setVal();
 }
 

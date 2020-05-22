@@ -5,11 +5,9 @@
 #include "rdesk.h"
 #include "splash.h"
 #include "dlgbreakfast.h"
-#include "dlgonebreakfasat.h"
 #include "cacherights.h"
 #include "rchangehall.h"
 #include "broadcastthread.h"
-#include "dlgbanket.h"
 #include <QPainter>
 #include <QScrollBar>
 #include <QItemDelegate>
@@ -328,30 +326,12 @@ void RFace::on_btnChangeHall_clicked()
 
 void RFace::on_btnBreakFast_clicked()
 {
-    User *u = login();
-    if (!u) {
-        return;
-    }
-    if (!RIGHT(u->fGroup, cr__o_breakfast)) {
-        return;
-    }
-    DlgOneBreakfasat *b = new DlgOneBreakfasat(u, this);
-    b->exec();
-    delete b;
+
 }
 
 void RFace::on_btnBanket_clicked()
 {
-    User *u = login();
-    if (!u) {
-        return;
-    }
-    if (!RIGHT(u->fGroup, cr__o_banquet)) {
-        return;
-    }
-    DlgBanket *b = new DlgBanket(u, this);
-    b->exec();
-    delete b;
+
 }
 
 void RFace::on_btnTools_clicked()
