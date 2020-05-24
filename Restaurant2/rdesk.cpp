@@ -2990,8 +2990,11 @@ void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
 
 void RDesk::on_btnPayment_2_clicked()
 {
-     printReceipt(false);
-     changeBtnState();
+    if (fTable->fPrint > 0) {
+        return;
+    }
+    printReceipt(false);
+    changeBtnState();
 }
 
 void RDesk::on_btnSetCar_clicked()
@@ -3074,4 +3077,3 @@ void RDesk::on_btnHallVIP_clicked()
 {
     loadHall(3);
 }
-
