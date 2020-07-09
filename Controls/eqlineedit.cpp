@@ -5,6 +5,8 @@
 #include <QRegExpValidator>
 #include <QDebug>
 
+static QLocale mLocale;
+
 EQLineEdit::EQLineEdit(QWidget *parent) :
     QLineEdit(parent)
 {
@@ -59,16 +61,18 @@ void EQLineEdit::setText(const QString &text)
 
 QString EQLineEdit::text() const
 {
+    QString t = QLineEdit::text();
     const QValidator *v = validator();
     if (v) {
+        t.replace(mLocale.groupSeparator(), "");
         if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             const QDoubleValidator *dv = static_cast<const QDoubleValidator*>(v);
-            return float_str(QLineEdit::text().toDouble(), dv->decimals());
+            return float_str(QLocale().toDouble(t), dv->decimals());
         } else if (!strcmp(v->metaObject()->className(), "QIntValidator")) {
             return QString::number(QLineEdit::text().toInt());
         }
     }
-    return QLineEdit::text();
+    return t;
 }
 
 void EQLineEdit::setInt(int val)
@@ -219,10 +223,10 @@ void EQLineEdit::resizeEvent(QResizeEvent *event)
 
 void EQLineEdit::focusInEvent(QFocusEvent *event)
 {
-//    if (fShowButtonOnFocus) {
-//        fButton->show();
-//        correctButtonPosition();
-//    }
+    const QValidator *v = validator();
+    if (v) {
+        setText(text());
+    }
     if (fEnableHiddenText) {
         setText(fHiddenText);
     }
@@ -233,7 +237,6 @@ void EQLineEdit::focusInEvent(QFocusEvent *event)
 
 void EQLineEdit::focusOutEvent(QFocusEvent *event)
 {
-    //fButton->hide();
     if (fEnableHiddenText) {
         setText(fShowText);
     }

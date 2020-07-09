@@ -604,8 +604,6 @@ void MainWindow::on_actionHakk_triggered()
            << 80
            << 30
            << 30
-           << 30
-           << 30
               ;
     QStringList fields;
     fields << "f_id"
@@ -619,8 +617,6 @@ void MainWindow::on_actionHakk_triggered()
            << "f_noVatDept"
            << "f_showBanket"
            << "f_showHall"
-           << "f_serviceItem"
-           << "f_prefix"
               ;
     QStringList titles;
     titles << tr("Code")
@@ -634,14 +630,11 @@ void MainWindow::on_actionHakk_triggered()
              << tr("No VAT dept")
              << tr("Banket")
              << tr("Hall")
-             << tr("Service item")
-             << tr("Order Prefix")
                 ;
     QString title = tr("Hall");
     QString icon = ":/images/hall.png";
     QString query = "select h.f_id, h.f_name, h.f_defaultMenu, m.f_" + def_lang + ", h.f_defaultSvc, "
-            "h.f_itemForInvoice, h.f_receiptPrinter, f_vatDept, f_noVatDept, f_showBanket, f_showHall, "
-            "h.f_serviceItem, h.f_prefix "
+            "h.f_itemForInvoice, h.f_receiptPrinter, f_vatDept, f_noVatDept, f_showBanket, f_showHall "
             "from r_hall h "
             "inner join r_menu_names m on m.f_id=h.f_defaultMenu ";
     WReportGrid *r = addTab<WReportGrid>();

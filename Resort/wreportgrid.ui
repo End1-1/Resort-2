@@ -308,7 +308,7 @@
          <item>
           <layout class="QHBoxLayout" name="filterLayout">
            <property name="sizeConstraint">
-            <enum>QLayout::SetDefaultConstraint</enum>
+            <enum>QLayout::SetMinimumSize</enum>
            </property>
            <property name="leftMargin">
             <number>1</number>
@@ -473,7 +473,7 @@
   <customwidget>
    <class>EQTableWidget</class>
    <extends>QTableWidget</extends>
-   <header location="global">eqtablewidget.h</header>
+   <header>eqtablewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

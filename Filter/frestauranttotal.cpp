@@ -348,6 +348,10 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         if (ui->chOnlyZeroes->isChecked()) {
             where += " and od.f_total=0 ";
         }
+    } else {
+        if (ui->chOnlyZeroes->isChecked()) {
+            where += " and oh.f_total=0 ";
+        }
     }
     if (!ui->leStore->text().isEmpty()) {
         where += " and od.f_store in (" + ui->leStore->fHiddenText + ") ";
@@ -400,7 +404,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             }
         }
     }
-    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon", "");
+    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon,", "");
     if (group.length() > 0) {
         if (group.at(group.length() - 1) == ",") {
             group.remove(group.length() - 1, 1);

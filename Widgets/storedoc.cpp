@@ -421,6 +421,7 @@ void StoreDoc::totalChange(const QString &arg1)
     if (ui->tblGoods->lineEdit(row, 3)->asDouble() < 0.001) {
         return;
     }
+    qDebug() << l->text();
     ui->tblGoods->lineEdit(row, 5)->setDouble(l->asDouble() / ui->tblGoods->lineEdit(row, 3)->asDouble());
     countTotal();
 }

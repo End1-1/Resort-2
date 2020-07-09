@@ -134,7 +134,6 @@ SOURCES += main.cpp\
     ../Filter/fcategorytosell.cpp \
     ../Cache/cachecurrencies.cpp \
     ../RowEditor/recurrency.cpp \
-    ../Filter/fforecastoccupancycategory.cpp \
     ../Filter/faccmonthlyreport.cpp \
     ../Cache/cachsex.cpp \
     ../Base/logging.cpp \
@@ -205,7 +204,6 @@ SOURCES += main.cpp\
     fonlinerest.cpp \
     ../RowEditor/reguesttitle.cpp \
     dlghelp.cpp \
-    ../Filter/froomstate.cpp \
     ../Widgets/wweb.cpp \
     ../Widgets/storedoc.cpp \
     ../RowEditor/restorepartner.cpp \
@@ -417,7 +415,6 @@ HEADERS  += mainwindow.h \
     ../Filter/fcategorytosell.h \
     ../Cache/cachecurrencies.h \
     ../RowEditor/recurrency.h \
-    ../Filter/fforecastoccupancycategory.h \
     ../Filter/faccmonthlyreport.h \
     ../Cache/cachsex.h \
     ../Base/logging.h \
@@ -488,7 +485,6 @@ HEADERS  += mainwindow.h \
     fonlinerest.h \
     ../RowEditor/reguesttitle.h \
     dlghelp.h \
-    ../Filter/froomstate.h \
     ../Widgets/wweb.h \
     ../Widgets/storedoc.h \
     ../RowEditor/restorepartner.h \
@@ -622,7 +618,6 @@ FORMS    += mainwindow.ui \
     ../Filter/frestauranttotal.ui \
     ../Filter/fcategorytosell.ui \
     ../RowEditor/recurrency.ui \
-    ../Filter/fforecastoccupancycategory.ui \
     ../Filter/faccmonthlyreport.ui \
     dlgtaxprintsetup.ui \
     dlginvoiceprintoption.ui \
@@ -666,7 +661,6 @@ FORMS    += mainwindow.ui \
     fonlinerest.ui \
     ../RowEditor/reguesttitle.ui \
     dlghelp.ui \
-    ../Filter/froomstate.ui \
     ../Widgets/wweb.ui \
     ../Widgets/storedoc.ui \
     ../RowEditor/restorepartner.ui \

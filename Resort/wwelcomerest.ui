@@ -169,8 +169,8 @@ orders</string>
             </size>
            </property>
            <property name="text">
-            <string>Common
-report</string>
+            <string>Elite
+sales</string>
            </property>
            <property name="icon">
             <iconset resource="res.qrc">
@@ -978,7 +978,8 @@ Groups</string>
             </size>
            </property>
            <property name="text">
-            <string>Menu review</string>
+            <string>Serviceses
+review</string>
            </property>
            <property name="icon">
             <iconset resource="res.qrc">

@@ -63,7 +63,7 @@ signals:
     void focusOut();
 protected:
     virtual void resizeEvent(QResizeEvent *event);
-    virtual void focusInEvent(QFocusEvent *event);
+    virtual void focusInEvent(QFocusEvent *event) override;
     virtual void focusOutEvent(QFocusEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
