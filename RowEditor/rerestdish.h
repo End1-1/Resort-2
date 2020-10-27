@@ -27,6 +27,7 @@ protected:
     virtual void clearWidgets();
     virtual void save();
     virtual void hide();
+
 private slots:
     void checkComplex(bool v);
     void tabPageIndexChanged(int index);

@@ -14,13 +14,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "Kudryashov Vasili\0"
-            VALUE "FileDescription", "Hotel control program\0"
+            VALUE "FileDescription", "EliteCarwash\0"
             VALUE "FileVersion", _FILE_VERSION_STR
-            VALUE "InternalName", "SmartHotel.exe\0"
+            VALUE "InternalName", "EliteCarwash.exe\0"
             VALUE "LegalCopyright", "(C)2017-2020, Kudryashov Vasili\0"
-            VALUE "OriginalFilename", "Resort.exe\0"
+            VALUE "OriginalFilename", "EliteCarwash.exe\0"
             VALUE "Email", "end1_1@yahoo.com\0"
-            VALUE "ProductName", "SmartHotel\0"
+            VALUE "ProductName", "EliteCarwash\0"
             VALUE "ProductVersion", _PRODUCT_VERSION_STR
         END
     END

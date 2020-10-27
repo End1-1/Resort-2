@@ -18,6 +18,7 @@ template<class T>
 T *addTab() {
     T *t = new T();
     fMainWindow->addTabWidget(t);
+    fMainWindow->expandTab();
     t->setup();
     return t;
 }

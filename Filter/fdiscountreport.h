@@ -17,8 +17,10 @@ public:
     virtual QString reportTitle();
     virtual QWidget *firstElement();
     virtual void apply(WReportGrid *rg);
+
 private:
     Ui::FDiscountReport *ui;
+
 private slots:
     void doubleClickOnRow(const QList<QVariant> &row);
 };

@@ -5,8 +5,11 @@
 #include "dwselectordishstate.h"
 #include "dlgperemovereason.h"
 #include "dlggposorderinfo.h"
+#include "baseorder.h"
+#include "storeoutput.h"
 #include "paymentmode.h"
 #include "cacheresthall.h"
+#include "recalculatestoreoutputs.h"
 #include "cacheusers.h"
 #include "cacheresttable.h"
 #include "cachepaymentmode.h"
@@ -28,6 +31,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     if (r__(cr__remove_restaurant)) {
         fReportGrid->addToolBarButton(":/images/biohazard.png", tr("Eliminate!"), SLOT(removePermanently()), this)->setFocusPolicy(Qt::ClickFocus);
     }
+    fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
     fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);
@@ -458,7 +462,7 @@ QWidget *FRestaurantTotal::firstElement()
 QString FRestaurantTotal::reportTitle()
 {
     return QString("%1 %2-%3")
-            .arg(tr("Restaurant sales"))
+            .arg(tr("Earnings"))
             .arg(ui->deStart->text())
             .arg(ui->deEnd->text());
 }
@@ -466,7 +470,7 @@ QString FRestaurantTotal::reportTitle()
 void FRestaurantTotal::open()
 {
     WReportGrid *rg = addTab<WReportGrid>();
-    rg->setupTabTextAndIcon(tr("Restaurant total"), ":/images/cutlery.png");
+    rg->setupTabTextAndIcon(tr("Earnings"), ":/images/cutlery.png");
     FRestaurantTotal *fr = new FRestaurantTotal(rg);
     rg->addFilterWidget(fr);
     fr->apply(rg);
@@ -740,6 +744,24 @@ void FRestaurantTotal::printReceipt()
 
 }
 
+void FRestaurantTotal::recalculateStore()
+{
+    if (!fReportGrid->fIncludes["oh.f_id"]) {
+        message_error(tr("Order id must be included in the query"));
+        return;
+    }
+    if (message_yesnocancel(tr("Confirm to recalculate store outputs")) != RESULT_YES) {
+        return;
+    }
+    QSet<int> ids;
+    for (int i = 0; i < fReportGrid->fModel->rowCount(); i++) {
+        ids.insert(fReportGrid->fModel->data(i, 0, Qt::EditRole).toInt());
+    }
+    RecalculateStoreOutputs *r = new RecalculateStoreOutputs(ids, this);
+    r->exec();
+    delete r;
+}
+
 void FRestaurantTotal::removeOrder()
 {
     if (!fReportGrid->fIncludes["oh.f_id"]) {
@@ -762,7 +784,7 @@ void FRestaurantTotal::removeOrder()
     fDb.fDb.transaction();
     fDbBind[":f_state"] = ORDER_STATE_REMOVED;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
-    fDb.update("o_header", fDbBind, where_id(ap(val.at(0).toString())));
+    fDb.update("o_header", fDbBind, where_id(val.at(0).toInt()));
     fDbBind[":f_state"] = state;
     fDbBind[":f_state_cond"] = DISH_STATE_READY;
     fDbBind[":f_header"] = val.at(0);
@@ -773,6 +795,8 @@ void FRestaurantTotal::removeOrder()
     fDbBind[":f_cancelReason"] = "Canceled by " + WORKING_USERNAME;
     fDb.select("update m_register set f_canceled=1, f_cancelReason=:f_cancelReason where f_id=:f_id",
                fDbBind, fDbRows);
+    StoreOutput so(fDb, val.at(0).toInt());
+    so.rollbackSale(fDb, val.at(0).toInt());
     fDb.fDb.commit();
     message_info_tr("Please, refresh report to view the changes");
 }
@@ -798,6 +822,8 @@ void FRestaurantTotal::removePermanently()
     fDb.select("delete from o_header where f_id=:f_id", fDbBind, fDbRows);
     fDbBind[":f_id"] = val.at(0);
     fDb.select("delete from m_register where f_id=:f_id", fDbBind, fDbRows);
+    StoreOutput so(fDb, val.at(0).toInt());
+    so.rollbackSale(fDb, val.at(0).toInt());
     fDb.fDb.commit();
     message_info_tr("Please, refresh report to view the changes");
 }
@@ -820,18 +846,6 @@ void FRestaurantTotal::store(CI_RestStore *c)
 void FRestaurantTotal::dishType(CI_RestDishType *c)
 {
     dockResponse<CI_RestDishType, CacheRestDishType>(ui->leDishType, c);
-}
-
-void FRestaurantTotal::on_btnOrdersSubtotal_clicked()
-{
-    if (!ui->chOrderNum->isChecked()) {
-        message_error(tr("Order number must be checked"));
-        return;
-    }
-    QList<int> cols;
-    cols << fReportGrid->fModel->columnIndex(tr("Qty"))
-         << fReportGrid->fModel->columnIndex(tr("Total"));
-    fReportGrid->fModel->insertSubTotals(0, cols);
 }
 
 void FRestaurantTotal::doubleClick(const QList<QVariant> &row)

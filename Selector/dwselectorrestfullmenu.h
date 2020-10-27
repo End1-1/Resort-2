@@ -6,6 +6,7 @@
 
 class DWSelectorRestFullMenu : public DWTemplateSelector<CI_RestFullMenu, CacheRestFullMenu>
 {
+    Q_OBJECT
 public:
     DWSelectorRestFullMenu(QWidget *parent = 0);
     int fMenu;

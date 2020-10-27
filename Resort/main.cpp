@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 
     a.setStyle(QStyleFactory::create("fusion"));
 
-    QFile styleFile("./style.css");
+    QString fsn = qApp->applicationDirPath() +  "/styles.qss";
+    QFile styleFile(fsn);
     if (styleFile.exists()) {
         styleFile.open(QIODevice::ReadOnly);
         a.setStyleSheet(styleFile.readAll());

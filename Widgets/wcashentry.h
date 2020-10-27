@@ -37,31 +37,27 @@ public:
     double amount();
     void amount(double a);
     void docType(int t);
-    void docNum(int n);
+    void docNum(QString n);
     int partner();
     void partner(int p);
     bool isCorrent(QString &errors);
     void setSaveVisible(bool v);
     virtual void selector(int selectorNumber, const QVariant &value);
+
 private slots:
     void on_btnCancel_clicked();
-
     void on_btnSave_clicked();
-
     void on_chEnable_stateChanged(int arg1);
-
     void on_chEnable_clicked(bool checked);
-
     void on_rbCashIn_clicked();
-
     void on_rbCashOut_clicked();
-
     void on_rbCashMove_clicked();
 
 private:
     Ui::WCashEntry *ui;
     DWSelectorCashDesk *dockDebit;
     bool fIn;
+
 signals:
     void rejected();
     void accepted();

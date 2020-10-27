@@ -106,6 +106,10 @@ public:
     void dontResizeSave(bool v);
     void setBtnNewVisible(bool value = true);
     virtual QWidget *gridOptionWidget();
+
+public slots:
+    virtual void on_btnRefresh_clicked();
+
 protected:
     QString fGridClassName;
     QString fHelp;
@@ -114,6 +118,7 @@ protected:
     virtual void processValues(int row, bool isNew);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool event(QEvent *event);
+
 private slots:
     void newSum(const QList<int> &columns, const QList<double> &values);
     void tblMainHeaderClicked(int index);
@@ -129,16 +134,13 @@ private slots:
     void on_btnExcel_clicked();
     void on_tblMain_doubleClicked(const QModelIndex &index);
     void on_btnNew_clicked();
-    virtual void on_btnRefresh_clicked();
     void on_btnFilter_clicked();
     void on_tblMain_clicked(const QModelIndex &index);
     void on_btnHideFilter_clicked();
     void on_btnApplyFilter_clicked();
     void on_btnClearQuickSearch_clicked();
     void on_btnPrint_clicked();
-
     void on_btnHelp_clicked();
-
     void on_btnConfigGrid_clicked();
     void endApply();
 

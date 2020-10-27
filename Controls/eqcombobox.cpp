@@ -6,6 +6,7 @@
 #include "cachedocpayment.h"
 #include "cachsex.h"
 #include "cachecoupontype.h"
+#include "cacheresthall.h"
 #include <QWheelEvent>
 
 EQComboBox::EQComboBox(QWidget *parent) :
@@ -51,6 +52,9 @@ void EQComboBox::setCache(int cache)
         break;
     case cid_doc_payment:
         CacheForComboBox::configure<CacheDocPayment, CI_DocPayment>(this);
+        break;
+    case cid_rest_hall:
+        CacheForComboBox::configure<CacheRestHall, CI_RestHall>(this);
         break;
     default:
         //message_error(QString("Please contact with application developer. Message: unknown cache id %1 for EQComboBox").arg(cache));

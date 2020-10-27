@@ -5,7 +5,7 @@
 
 extern int _IDGENMODE_;
 
-#define uuuid(x, y) BaseUID::genID(x, y)
+//#define uuuid(x, y) BaseUID::genID(x, y)
 
 class BaseUID
 {

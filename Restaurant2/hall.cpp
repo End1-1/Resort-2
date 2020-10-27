@@ -67,7 +67,7 @@ void Hall::init()
         t->fHall = it->value(1).toInt();
         t->fName = it->value(2).toString();
         t->fLocked = it->value(3).toDateTime();
-        t->fOrder = it->value(4).toString();
+        t->fOrder = it->value(4).toInt();
         fTables.append(t);
         fTablesMap[t->fId] = t;
     }
@@ -94,7 +94,7 @@ void Hall::refresh()
             continue;
         }
         t->fLockStation = it->at(1).toString();
-        t->fOrder = it->at(2).toString();
+        t->fOrder = it->at(2).toInt();
         t->fDateOpen = it->at(3).toDateTime().toString(def_date_time_format);
         t->fComment = it->at(4).toString();
         t->fStaff = it->at(5).toString();
@@ -107,7 +107,7 @@ void Hall::refresh()
             continue;
         }
         t->fLockStation = it->at(1).toString();
-        t->fOrder = it->at(2).toString();
+        t->fOrder = it->at(2).toInt();
     }
     fDb.fDb.commit();
 }
@@ -140,12 +140,12 @@ void Hall::filterTables(int hallId, int busy, QList<TableStruct *> &tables)
         if (busy > 0) {
             switch (busy) {
             case 1:
-                if (!(*it)->fOrder.isEmpty()) {
+                if (!(*it)->fOrder == 0) {
                     continue;
                 }
                 break;
             case 2:
-                if ((*it)->fOrder.isEmpty()) {
+                if ((*it)->fOrder == 0) {
                     continue;
                 }
                 break;

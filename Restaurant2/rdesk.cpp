@@ -430,76 +430,6 @@ void RDesk::showMyTotal()
 
 }
 
-void RDesk::recover()
-{
-    int trackUser;
-    if (!right(cr__o_recover_order, trackUser)){
-        message_error(tr("Access denied"));
-        return;
-    }
-    QString ordNum;
-    if (!DlgGetText::getText(ordNum, "PS-")) {
-        return;
-    }
-    if (ordNum.trimmed().isEmpty()) {
-        return;
-    }
-
-    fDbBind[":f_id"] = ordNum;
-    fDb.select("select f_staff, f_dateCash, f_total, f_table from o_header where f_id=:f_id", fDbBind, fDbRows);
-    if (fDbRows.count() == 0) {
-        message_error(tr("Invalid order id"));
-        return;
-    }
-    if (WORKING_DATE > fDbRows.at(0).at(1).toDate()) {
-        message_error(tr("Order is not in current working date"));
-        return;
-    }
-    int table = fDbRows.at(0).at(3).toInt();
-    int staff = fDbRows.at(0).at(0).toInt();
-    double amount = fDbRows.at(0).at(2).toDouble();
-    fDbBind[":f_id"] = fDbRows.at(0).at(3).toInt();
-    fDb.select("select f_order from r_table where f_id=:f_id", fDbBind, fDbRows);
-    if (fDbRows.count() == 0) {
-        message_error(tr("Invalid order id"));
-        return;
-    }
-    int orderId = fDbRows.at(0).at(0).toInt();
-    if (orderId > 0) {
-        message_error(tr("Table is busy, try again later"));
-        return;
-    }
-    QString q = QString("Table %1<br>Staff %2<br>Amount %3")
-            .arg(Hall::fTablesMap[table]->fName)
-            .arg(CacheUsers::instance()->get(staff)->fFull)
-            .arg(amount);
-    if (message_question(q) != QDialog::Accepted) {
-        return;
-    }
-    fDbBind[":f_order"] = ordNum;
-    fDb.update("r_table", fDbBind, where_id(table));
-    fDbBind[":f_state"] = ORDER_STATE_OPENED;
-    fDb.update("o_header", fDbBind, where_id(ap(ordNum)));
-    QString rrId = uuuid(VAUCHER_RECOVER_N, fDb);
-    fDbBind[":f_id1"] = rrId;
-    fDbBind[":f_source1"] = VAUCHER_RECOVER_N;
-    fDbBind[":f_itemCode"] = 41;
-    fDbBind[":f_finalName"] = tr("RECOVER FOR ") + ordNum;
-    fDbBind[":f_finance"] = 0;
-    fDbBind[":f_id"] = ordNum;
-    fDb.select("update m_register set f_id=:f_id1, f_source=:f_source1, f_finance=:f_finance, f_itemCode=:f_itemCode "
-               "where f_id=:f_id", fDbBind, fDbRows);
-    if (fTable) {
-        if (table == fTable->fId) {
-            fTable = 0;
-            TableStruct *t = Hall::fTablesMap[table];
-            setTable(t);
-        }
-    }
-    message_info(tr("Table was successful recovered"));
-
-}
-
 void RDesk::initialCash()
 {
     float num;
@@ -550,14 +480,12 @@ void RDesk::setComplexMode()
         fDbBind[":f_complex"] = dc->fId;
         fDbBind[":f_complexId"] = dc->fId;
         fDbBind[":f_adgt"] = dc->fAdgt;
-        dc->fRecId = uuuid("DR", fDb);
-        fDb.insertId("o_dish", dc->fRecId);
-        if (dc->fRecId.isEmpty()) {
+        dc->fRecId = fDb.insert("o_dish", fDbBind);
+        if (dc->fRecId == 0) {
             message_error("Application will quit due an program error.");
             qApp->quit();
             return;
         }
-        fDb.update("o_dish", fDbBind, where_id(ap(dc->fRecId)));
         fTrackControl->insert("New complex begin", dc->fName["en"], "----");
         for (int i = 0; i < dc->fDishes.count(); i++) {
             dc->fDishes[i]->fComplexRec = dc->fRecId;
@@ -576,12 +504,12 @@ void RDesk::setComplexMode()
 void RDesk::closeOrder(int state)
 {
     BaseOrder bo(fTable->fOrder);
-    bo.calculateOutput();
+    bo.calculateOutput(fDb);
     fDbBind[":f_state"] = state;
     fDbBind[":f_dateCash"] = WORKING_DATE;
     fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
-    fDbBind[":f_order"] = "";
+    fDbBind[":f_order"] = 0;
     fDb.update("r_table", fDbBind, where_id(ap(fTable->fId)));
     clearOrder();
 }
@@ -680,7 +608,7 @@ void RDesk::printReceiptByNumber()
         userName = "#Username Error";
     }
     QString ordNum;
-    if (!DlgGetText::getText(ordNum, "PS-")) {
+    if (!DlgGetText::getText(ordNum, "")) {
         return;
     }
     if (ordNum.trimmed().isEmpty()) {
@@ -1342,9 +1270,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     fDbBind[":f_complexId"] = 0;
     fDbBind[":f_adgt"] = od->fAdgt;
     fDbBind[":f_complexRec"] = od->fComplexRecId;
-    od->fRecId = uuuid("DR", fDb);
-    fDb.insertId("o_dish", od->fRecId);
-    fDb.update("o_dish", fDbBind, where_id(ap(od->fRecId)));
+    od->fRecId = fDb.insert("o_dish", fDbBind);
     updateDishQtyHistory(od);
     addDishToTable(od, counttotal);
     resetPrintQty();
@@ -1384,7 +1310,7 @@ void RDesk::updateDish(OrderDishStruct *od)
     fDbBind[":f_comment"] = od->fComment;
     fDbBind[":f_cancelUser"] = od->fCancelUser;
     fDbBind[":f_cancelDate"] = od->fCancelDate;
-    fDb.update("o_dish", fDbBind, QString("where f_id='%1'").arg(od->fRecId));
+    fDb.update("o_dish", fDbBind, QString("where f_id=%1").arg(od->fRecId));
 //    if (!od->fComplexRecId.isEmpty()) {
 //        fDbBind[":f_id"] = od->fComplexRecId;
 //        fDb.query("update o_dish set f_totalUSD=f_total where f_id=:f_id", fDbBind);
@@ -1497,8 +1423,8 @@ bool RDesk::setTable(TableStruct *t)
 //    }
 
     if (fTable) {
-        fTable->fOrder = fDbRows.at(0).at(0).toString();
-        if (!fTable->fOrder.isEmpty()) {
+        fTable->fOrder = fDbRows.at(0).at(0).toInt();
+        if (fTable->fOrder > 0) {
             loadOrder();
         }
         fHall = Hall::getHallById(fTable->fHall);
@@ -1543,13 +1469,12 @@ bool RDesk::setTable(TableStruct *t)
 
 void RDesk::checkOrderHeader(TableStruct *t)
 {
-    if (t->fOrder.isEmpty()) {
+    if (t->fOrder == 0) {
         fDb.fDb.transaction();
         QString query = QString("select f_id from r_table where f_id='%1' for update")
                 .arg(t->fId);
         fDb.queryDirect(query);
-        t->fOrder = uuuid(VAUCHER_POINT_SALE_N, fDb);
-        fDb.insertId("o_header", t->fOrder);
+
         fDbBind[":f_state"] = ORDER_STATE_OPENED;
         fDbBind[":f_table"] = t->fId;
         fDbBind[":f_staff"] = fStaff->fId;
@@ -1559,13 +1484,12 @@ void RDesk::checkOrderHeader(TableStruct *t)
         fDbBind[":f_paymentMode"] = PAYMENT_CASH;
         fDbBind[":f_hall"] = t->fHall;
         t->fOpened = fDbBind[":f_dateOpen"].toDateTime();
-        fDb.update("o_header", fDbBind, where_id(ap(t->fOrder)));
+        t->fOrder = fDb.insert("o_header", fDbBind);
+
         fDbBind[":f_order"] = t->fOrder;
         fDb.update("r_table", fDbBind, QString("where f_id=%1").arg(t->fId));
         fDb.fDb.commit();
-        fTrackControl->resetChanges();
-        fTrackControl->fInvoice = t->fOrder;
-        fTrackControl->insert("Order started", "", "");
+
         ui->tblTables->viewport()->update();
         if (fTable->fHall == 1) {
             on_btnSetCar_clicked();
@@ -1584,7 +1508,7 @@ void RDesk::clearOrder()
     ui->tblOrder->clear();
     ui->tblOrder->setRowCount(0);
     fTable->fPrint = 0;
-    fTable->fOrder = "";
+    fTable->fOrder = 0;
     for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
         DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
         for (int j = 0; j < dc->fDishes.count(); j++) {
@@ -1656,7 +1580,7 @@ void RDesk::loadOrder()
     et.restart();
     foreach_rows {
         DishComplexStruct *dc = new DishComplexStruct();
-        dc->fRecId = it->at(0).toString();
+        dc->fRecId = it->at(0).toInt();
         dc->fName["en"] = it->at(2).toString();
         dc->fName["ru"] = it->at(3).toString();
         dc->fName["am"] = it->at(4).toString();
@@ -1686,7 +1610,7 @@ void RDesk::loadOrder()
     for (QList<QList<QVariant> >::const_iterator it = dbr.begin(); it != dbr.end(); it++) {
         OrderDishStruct *d = new OrderDishStruct();
         int c = 0;
-        d->fRecId = it->at(c++).toString();
+        d->fRecId = it->at(c++).toInt();
         d->fDishId = it->at(c++).toInt();
         d->fName["en"] = it->at(c++).toString();
         d->fName["ru"] = it->at(c++).toString();
@@ -2299,7 +2223,7 @@ void RDesk::checkEmpty()
     if (!fTable) {
         return;
     }
-    if (fTable->fOrder.isEmpty()) {
+    if (fTable->fOrder == 0) {
         return;
     }
 
@@ -2385,7 +2309,7 @@ void RDesk::manualdisc(double val, int costumer)
         fDbBind[":f_price"] = dc->fPrice;
         fDbBind[":f_total"] = dc->fPrice * dc->fQty;
         fDbBind[":f_totalusd"] = dc->fPrice * dc->fQty;
-        fDb.update("o_dish", fDbBind, where_id(ap(dc->fRecId)));
+        fDb.update("o_dish", fDbBind, where_id(dc->fRecId));
 
     }
     fDbBind[":f_id"] = fTable->fOrder;
@@ -2552,8 +2476,6 @@ void RDesk::on_btnTrash_clicked()
                             r->fState = reason.toInt();
                             r->fQty = num;
                             r->fQtyPrint = num;
-                            r->fRecId = uuuid("DR", fDb);
-                            fDb.insertId("o_dish", r->fRecId);
                             fDbBind[":f_header"] = fTable->fOrder;
                             fDbBind[":f_state"] = r->fState;
                             fDbBind[":f_dish"] = r->fDishId;
@@ -2572,7 +2494,7 @@ void RDesk::on_btnTrash_clicked()
                             fDbBind[":f_staff"] = fStaff->fId;
                             fDbBind[":f_cancelUser"] = trackUser;
                             fDbBind[":f_cancelDate"] = QDateTime::currentDateTime();
-                            fDb.update("o_dish", fDbBind, where_id(ap(r->fRecId)));
+                            r->fRecId = fDb.insert("o_dish", fDbBind);
                             addDishToTable(r, true);
                         }
                     }
@@ -2769,92 +2691,6 @@ void RDesk::on_btnCheckout_clicked()
     fCloseTimeout = 0;
 }
 
-void RDesk::on_btnTransfer_clicked()
-{
-    int trackUser;
-    if (!right(cr__o_movement, trackUser)) {
-        return;
-    }
-    QModelIndexList sel = ui->tblOrder->selectionModel()->selectedRows();
-    if (sel.count() == 0) {
-        return;
-    }
-    /*------------------------------BEGIN SELECT TABLE-------------------*/
-    RSelectTable *t = new RSelectTable(this);
-    TableStruct *table = 0;
-    t->setup(fTable->fHall);
-    if (t->exec() == QDialog::Accepted) {
-        table = t->table();
-        if (table == fTable) {
-            DlgSmile *ds = new DlgSmile(this);
-            ds->exec();
-            delete ds;
-            return;
-        }
-        fDb.fDb.transaction();
-        fDb.queryDirect(QString("select f_id from r_table where f_id in (%1, %2) for update")
-                .arg(fTable->fId)
-                .arg(table->fId));
-        if (!table->fOrder.isEmpty()) {
-            if (!message_question(tr("Destination table is not empty, continue with merge?"))) {
-                delete t;
-                fDb.fDb.commit();
-                return;
-            }
-        } else {
-            checkOrderHeader(table);
-        }
-        /*----------------------------- END SELECT TABLE -------------------------*/
-        /*-----------------------------BEGIN MOVE DISH-----------------------------*/
-        OrderDishStruct *om = sel.at(0).data(Qt::UserRole).value<OrderDishStruct*>();
-        OrderDishStruct od = *om;
-        om->fState = DISH_STATE_MOVED;
-        setOrderRowHidden(sel.at(0).row(), om);
-        updateDish(om);
-        fDbBind[":f_header"] = table->fOrder;
-        fDbBind[":f_state"] = od.fState;
-        fDbBind[":f_dish"] = od.fDishId;
-        fDbBind[":f_qty"] = od.fQty;
-        fDbBind[":f_qtyPrint"] = od.fQtyPrint;
-        fDbBind[":f_price"] = od.fPrice;
-        fDbBind[":f_svcValue"] = od.fSvcValue;
-        fDbBind[":f_svcAmount"] = od.fSvcAmount;
-        fDbBind[":f_dctValue"] = od.fDctValue;
-        fDbBind[":f_dctAmount"] = od.fDctAmount;
-        fDbBind[":f_total"] = od.fTotal;
-        fDbBind[":f_print1"] = od.fPrint1;
-        fDbBind[":f_print2"] = od.fPrint2;
-        fDbBind[":f_store"] = od.fStore;
-        fDbBind[":f_comment"] = od.fComment;
-        fDbBind[":f_staff"] = fStaff->fId;
-        fDbBind[":f_complex"] = od.fComplex;
-        fDbBind[":f_complexId"] = 0;
-        fDbBind[":f_adgt"] = od.fAdgt;
-        fDbBind[":f_complexRec"] = od.fComplexRecId;
-        od.fRecId = uuuid("DR", fDb);
-        fDbBind[":f_id"] = od.fRecId;
-        fDb.insertWithoutId("o_dish", fDbBind);
-        if (od.fRecId.isEmpty()) {
-            message_error(tr("Cannot insert new dish. Please reopen application"));
-            return;
-        }
-        fTrackControl->insert("Dish movement",
-                                  QString("%1: %2, %3/%4")
-                                  .arg(fTable->fName)
-                                  .arg(od.fName[def_lang])
-                                  .arg(od.fQty)
-                                  .arg(od.fQtyPrint),
-                                  QString("%1: %2/%3")
-                                  .arg(tr("New table"))
-                                  .arg(table->fName)
-                                  .arg(table->fOrder));
-    }    
-    fDb.fDb.commit();
-    resetPrintQty();
-    changeBtnState();
-    /*-----------------------------END MOVE DISH-----------------------------*/
-}
-
 int RDesk::right(int right, int &trackUser)
 {
     bool access = RIGHT(fStaff->fGroup, right);
@@ -2940,7 +2776,7 @@ void RDesk::repaintTables()
             if (!t) {
                 continue;
             }
-            t->fOrder = "";
+            t->fOrder = 0;
             t->fAmount = "0";
         }
     }
@@ -2963,7 +2799,7 @@ void RDesk::repaintTables()
                     continue;
                 }
                 if (t->fId == it->at(0).toInt()) {
-                    t->fOrder = it->at(2).toString();
+                    t->fOrder = it->at(2).toInt();
                     t->fAmount = it->at(6).toString();
                     goto GO;
                 }
@@ -3003,7 +2839,7 @@ void RDesk::on_btnSetCar_clicked()
         message_error(tr("Please, select table"));
         return;
     }
-    if (fTable->fOrder.isEmpty()) {
+    if (fTable->fOrder == 0) {
         message_error(tr("Emtpy order"));
         return;
     }
@@ -3076,4 +2912,9 @@ void RDesk::on_btnDiss50_clicked()
 void RDesk::on_btnHallVIP_clicked()
 {
     loadHall(3);
+}
+
+void RDesk::on_btnShop_clicked()
+{
+    loadHall(4);
 }

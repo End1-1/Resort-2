@@ -62,41 +62,19 @@
     <name>DWSelector</name>
     <message>
         <source>DockWidget</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Search for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Փնտրել</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
+        <translation>Կոդ</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorActiveRoom</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorCLAdvance</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
+        <translation>Անվանում</translation>
     </message>
 </context>
 <context>
@@ -104,21 +82,6 @@
     <message>
         <source>Car model</source>
         <translation>Ավտոմեքենա</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorCardex</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Valid to</source>
-        <translation type="obsolete">Ակտիվ է մինջև</translation>
     </message>
 </context>
 <context>
@@ -133,60 +96,6 @@
     <message>
         <source>Cash document type</source>
         <translation>Դրամարկղի փաստաթղթի տեսակ</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorCheckoutInvoice</name>
-    <message>
-        <source>Checkout invoices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Օպերատոր</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorCityLedger</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Valid to</source>
-        <translation type="obsolete">Ակտիվ է մինջև</translation>
     </message>
 </context>
 <context>
@@ -382,46 +291,6 @@
     </message>
 </context>
 <context>
-    <name>DWSelectorRedReservation</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorReservationCardex</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorReserveState</name>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorReserveStatus</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
     <name>DWSelectorRestFullMenu</name>
     <message>
         <source>Dishes</source>
@@ -494,39 +363,6 @@
     <message>
         <source>Tables</source>
         <translation>Սեղաններ</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorRoom</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorRoomArrangment</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>DWSelectorRoomCategory</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
     </message>
 </context>
 <context>
@@ -742,7 +578,7 @@ name</source>
     <name>Dialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>PushButton</source>
@@ -750,249 +586,10 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgAdvance</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Tax code</source>
-        <translation type="obsolete">ՀՎՀՀ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgAdvanceEntry</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Նոր</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgBack</name>
-    <message>
-        <source>Welcome back</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgCL</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgCLInitialBalance</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-</context>
-<context>
-    <name>DlgCalculateOutputOfRestaurant</name>
-    <message>
-        <source>Calulate output of restaurant</source>
-        <translation>Հաշվարկել ապրանքի ելքը</translation>
-    </message>
-    <message>
-        <source>Date range</source>
-        <translation>Ժամանակաշրջան</translation>
-    </message>
-    <message>
-        <source>Calculate</source>
-        <translation>Հաշվարկել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Output of sale</source>
-        <translation>Ելք ըստ վաճառքի</translation>
-    </message>
-</context>
-<context>
-    <name>DlgCardex</name>
-    <message>
-        <source>Partner</source>
-        <translation type="obsolete">Գործընկեր</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Valid to</source>
-        <translation type="obsolete">Ակտիվ է մինջև</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-    <message>
-        <source>City ledger code</source>
-        <translation type="obsolete">Պարտքատերի կոդ</translation>
-    </message>
-</context>
-<context>
     <name>DlgCashOp</name>
     <message>
         <source>Cash document</source>
         <translation>Դրամարկղի փաստաթուղթ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgChangeCLOfVaucher</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgChangeExportVaucher</name>
-    <message>
-        <source>Type of sale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="unfinished">Ժամ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
     </message>
 </context>
 <context>
@@ -1004,44 +601,6 @@ name</source>
     <message>
         <source>Date start</source>
         <translation type="unfinished">Սկիզբ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgCheckAdvanceBeforeCancel</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgCityAdvance</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
     </message>
 </context>
 <context>
@@ -1170,17 +729,6 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgCreateGroupReservation</name>
-    <message>
-        <source>Yes</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">Ոչ</translation>
-    </message>
-</context>
-<context>
     <name>DlgDebtPay</name>
     <message>
         <source>Payment of debt</source>
@@ -1216,53 +764,6 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgDiscount</name>
-    <message>
-        <source>Discount</source>
-        <translation type="obsolete">Զեղչ</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="obsolete">Առժեք</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Discount type</source>
-        <translation type="obsolete">Զեղչի տեսակ</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Տեսակ</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-</context>
-<context>
     <name>DlgDishHistory</name>
     <message>
         <source>Dish history</source>
@@ -1285,7 +786,7 @@ name</source>
     <name>DlgEditServTax</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Computer</source>
@@ -1314,145 +815,6 @@ name</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgEmail</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Subject</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgEndOfDay</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Action</source>
-        <translation type="obsolete">Գործողություն</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgExport</name>
-    <message>
-        <source>Destination</source>
-        <translation type="obsolete">Գործընկեր</translation>
-    </message>
-    <message>
-        <source>Host</source>
-        <translation type="obsolete">Համակարգիչ</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="obsolete">Օգտագործող</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Գախտնաբառ</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Օգտագործողներ</translation>
-    </message>
-    <message>
-        <source>Tables</source>
-        <translation type="obsolete">Սեղաններ</translation>
-    </message>
-    <message>
-        <source>Menu</source>
-        <translation type="obsolete">Ճաշացանկ</translation>
-    </message>
-    <message>
-        <source>Hall</source>
-        <translation type="obsolete">Սրահ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgExportOther</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Օգտագործողներ</translation>
-    </message>
-    <message>
-        <source>Menu</source>
-        <translation type="obsolete">Ճաշացանկ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgExportSingleVaucher</name>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to invoice #</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="unfinished">Ժամ</translation>
-    </message>
-    <message>
-        <source>Export voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voucher</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1550,75 +912,6 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgGroupParams</name>
-    <message>
-        <source>Count</source>
-        <translation type="obsolete">Քանակ</translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="obsolete">Գին</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgGroupReservationFuck</name>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="obsolete">Գին</translation>
-    </message>
-    <message>
-        <source>Card</source>
-        <translation type="obsolete">Քարտ</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgGroupReserveOption</name>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-</context>
-<context>
     <name>DlgHelp</name>
     <message>
         <source>Help</source>
@@ -1626,199 +919,26 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgHouseItem</name>
+    <name>DlgOneTwoAll</name>
     <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
+        <source>Dialog</source>
+        <translation>-</translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
+        <source>The text</source>
+        <translation></translation>
     </message>
     <message>
-        <source>Comment</source>
-        <translation type="obsolete">Լրացուցիչ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgInvoiceCancelation</name>
-    <message>
-        <source>Cancelation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="unfinished">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Souce</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>ItemId</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>Reason for cancelation</source>
-        <translation type="unfinished"></translation>
+        <source>RadioButton</source>
+        <translation></translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Այո</translation>
+        <translation>Այո</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgInvoicePrintOption</name>
-    <message>
-        <source>Printing options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Company side</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest and company separately</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest and company together</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest side</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgNewVaucherOption</name>
-    <message>
-        <source>Post charge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>New voucher option</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receipt voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Manual voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgNoShow</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>Tax code</source>
-        <translation type="obsolete">ՀՎՀՀ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgNotes</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Date start</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgOORoomProp</name>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgOpenGroupOrSingle</name>
-    <message>
-        <source>Selection mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -1904,219 +1024,6 @@ name</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgPaymentsDetails</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="obsolete">Կանխիկ</translation>
-    </message>
-    <message>
-        <source>Card</source>
-        <translation type="obsolete">Քարտ</translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Paid</source>
-        <translation type="obsolete">Վճար․</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-</context>
-<context>
-    <name>DlgPostBreakfast</name>
-    <message>
-        <source>Breakfast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reservation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="unfinished">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Qty</source>
-        <translation type="unfinished">Քնկ</translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dish</source>
-        <translation type="unfinished">Ապրանք</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="unfinished">Վճարում</translation>
-    </message>
-    <message>
-        <source>Table</source>
-        <translation type="unfinished">Սեղան</translation>
-    </message>
-    <message>
-        <source>Hall</source>
-        <translation type="unfinished">Սրահ</translation>
-    </message>
-    <message>
-        <source>Tax number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Print Tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="unfinished">Գին</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Hall must be selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Table must be selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dish must be selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid quantity of the guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Payment mode is not selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Card is not selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Saved</source>
-        <translation type="unfinished">Պահպանված է</translation>
-    </message>
-</context>
-<context>
-    <name>DlgPostingCharges</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Նոր</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Տեսակ</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Card</source>
-        <translation type="obsolete">Քարտ</translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="obsolete">Կանխիկ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Tax code</source>
-        <translation type="obsolete">ՀՎՀՀ</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
     </message>
 </context>
 <context>
@@ -2242,24 +1149,6 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgPrintReservation</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgPrintTaxSM</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
     <name>DlgPrintTaxSideOption</name>
     <message>
         <source>Tax part</source>
@@ -2308,61 +1197,6 @@ for this operation</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgReceiptVaucher</name>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Տեսակ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Partner</source>
-        <translation type="obsolete">Գործընկեր</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Նոր</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
     </message>
 </context>
 <context>
@@ -2455,7 +1289,7 @@ for this operation</source>
     <name>DlgReportBuilderGroups</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>New name</source>
@@ -2491,228 +1325,6 @@ for this operation</source>
     <message>
         <source>Passport</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgReservationRemarks</name>
-    <message>
-        <source>Remarks templates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current remark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save as new</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update current</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Are you sure to delete selected text?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgReserveConfirmStatus</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Confirmed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guaranted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tentative</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Waiting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgReserveQuickInfo</name>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="obsolete">Կրեդիտ</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-</context>
-<context>
-    <name>DlgReserveShortInfo</name>
-    <message>
-        <source>Reservation info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reservation id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checkout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checkin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Checkout user</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="unfinished">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgRoom</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Class</source>
-        <translation type="obsolete">Դաս</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Queue</source>
-        <translation type="obsolete">Հերթ</translation>
-    </message>
-    <message>
-        <source>Qty</source>
-        <translation type="obsolete">Քնկ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Նոր</translation>
-    </message>
-</context>
-<context>
-    <name>DlgRoomView</name>
-    <message>
-        <source>Room view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Short name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Description, AM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description, EN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_am</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_en</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_short</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_ru</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description, RU</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -2756,67 +1368,6 @@ for this operation</source>
     <message>
         <source>Guest</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgSimpleSelectRoom</name>
-    <message>
-        <source>Price</source>
-        <translation type="obsolete">Գին</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">Ոչ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgTaxBack</name>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgTaxBack2</name>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -2958,83 +1509,6 @@ for this operation</source>
     <message>
         <source>Old version</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgTransfer</name>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>DlgTransferInvoiceAmount</name>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Mode of Payment</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-    <message>
-        <source>Purpose</source>
-        <translation type="obsolete">Նշանակություն</translation>
-    </message>
-    <message>
-        <source>Printer</source>
-        <translation type="obsolete">Տպիչ</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
-    </message>
-</context>
-<context>
-    <name>DlgTransferRoom</name>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -3252,7 +1726,7 @@ for this operation</source>
     </message>
     <message>
         <source>Global config</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Կարգավորումներ</translation>
     </message>
     <message>
         <source>Update program</source>
@@ -3335,10 +1809,6 @@ for this operation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Common</source>
-        <translation type="obsolete">Ընդհանուր</translation>
-    </message>
-    <message>
         <source>Room inventory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3369,10 +1839,6 @@ for this operation</source>
     <message>
         <source>Change date for saved card receipt voucher</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
     </message>
     <message>
         <source>Bookeeping</source>
@@ -3469,25 +1935,6 @@ for this operation</source>
     <message>
         <source>Guests by nationality</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgUtils</name>
-    <message>
-        <source>Gen UUID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Utils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Prefix</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Count</source>
-        <translation type="unfinished">Քանակ</translation>
     </message>
 </context>
 <context>
@@ -3670,179 +2117,6 @@ voucher</source>
     </message>
 </context>
 <context>
-    <name>FAccMonthlyReport</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Group by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Week</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set date for</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2017</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>January</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>February</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>April</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>May</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>June</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>July</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>August</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>September</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>October</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>November</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>December</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Canceled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>#</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="unfinished">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Av.
-room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Occ.
-room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fr
-ee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Avg.rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>By day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>By week</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>By month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>By year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Monthly report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2018</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FAllGuestInDateRange</name>
-    <message>
-        <source>Date start</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date end</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
     <name>FBalanceOnCard</name>
     <message>
         <source>Form</source>
@@ -3934,13 +2208,6 @@ ee</source>
     <message>
         <source>THIS WILL REMOVE PERMANENTLY BREAKFAST DATA!</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FCLAdvance</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
     </message>
 </context>
 <context>
@@ -4039,36 +2306,6 @@ ee</source>
     </message>
 </context>
 <context>
-    <name>FCanceledReservations</name>
-    <message>
-        <source>Date from</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date to</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-</context>
-<context>
-    <name>FCardexSales</name>
-    <message>
-        <source>DateTo</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>Partner</source>
-        <translation type="obsolete">Գործընկեր</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-</context>
-<context>
     <name>FCash</name>
     <message>
         <source>Form</source>
@@ -4081,14 +2318,6 @@ ee</source>
     <message>
         <source>DateTo</source>
         <translation>Վերջ</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation type="vanished">Դեբետ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="vanished">Կրեդիտ</translation>
     </message>
     <message>
         <source>Partner</source>
@@ -4266,173 +2495,6 @@ ee</source>
     </message>
 </context>
 <context>
-    <name>FCategoryToSell</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date start</source>
-        <translation type="unfinished">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date end</source>
-        <translation type="unfinished">Վերջ</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Category to sell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="unfinished">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Confirmed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guaranted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tentative</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Waiting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CheckIn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Still to sell</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FCityLedgerBalance</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>FCityLedgerBalanceExtended</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>C/L Balance by period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CODE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DESCRIPTION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BROUHGT FORWARD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DEBIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CREDIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BALANCE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CITY LEDGER BALANCE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FROM DATE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TO DATE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FCityLedgerDetailedBalance</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Printed</source>
-        <translation type="obsolete">Տպված</translation>
-    </message>
-    <message>
-        <source>Page</source>
-        <translation type="obsolete">Էջ</translation>
-    </message>
-</context>
-<context>
-    <name>FCityTrayLedger</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-</context>
-<context>
     <name>FCommonFilterByDate</name>
     <message>
         <source>Form</source>
@@ -4527,104 +2589,6 @@ ee</source>
     <message>
         <source>Active</source>
         <translation>Ակտիվ</translation>
-    </message>
-</context>
-<context>
-    <name>FDailyMovement</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Տեսակ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Queue</source>
-        <translation type="obsolete">Հերթ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-</context>
-<context>
-    <name>FDailyMovementCommon</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date from</source>
-        <translation type="unfinished">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date to</source>
-        <translation type="unfinished">Վերջ</translation>
-    </message>
-    <message>
-        <source>Show by date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type of sale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Financial report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Daily financial report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount, AMD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount, USD</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4770,6 +2734,10 @@ ee</source>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Ամսաթիվ</translation>
+    </message>
 </context>
 <context>
     <name>FDiscountTotal</name>
@@ -4820,6 +2788,45 @@ ee</source>
     <message>
         <source>Gov. num</source>
         <translation>Պետ․ համարանիշ</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Ամսաթիվ</translation>
+    </message>
+</context>
+<context>
+    <name>FEarningsWash</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hall</source>
+        <translation>Սրահ</translation>
+    </message>
+    <message>
+        <source>Earings</source>
+        <translation>Հասույթ</translation>
+    </message>
+    <message>
+        <source>Earnings</source>
+        <translation>Հասույթ</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Տեսակ</translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation>Ծառայություն</translation>
+    </message>
+    <message>
+        <source>Qty</source>
+        <translation>Քնկ</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Գումար</translation>
     </message>
 </context>
 <context>
@@ -4914,221 +2921,6 @@ ee</source>
     </message>
 </context>
 <context>
-    <name>FExpectedArrivals</name>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-</context>
-<context>
-    <name>FExportReservation</name>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>FForecastOccupancyCategory</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-</context>
-<context>
-    <name>FHouseItems</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>House inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>FInHouseGuest</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Display rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>r.f_pricePerNight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Display cardex</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cx.f_name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Display name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>concat(g.f_title, &apos; &apos;, g.f_firstName, &apos; &apos;, g.f_lastName)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="unfinished">Բոլորը</translation>
-    </message>
-    <message>
-        <source>r.f_extraBedFee;r.f_mealPrice;v.f_vat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acc.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Childs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Occupied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TOTAL RATE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In house guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FInhouseDetailBalance</name>
-    <message>
-        <source>Date range</source>
-        <translation type="obsolete">Ժամանակաշրջան</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation type="obsolete">Դեբետ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="obsolete">Կրեդիտ</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="obsolete">Լրացուցիչ</translation>
-    </message>
-</context>
-<context>
-    <name>FInvoices</name>
-    <message>
-        <source>Eliminate!</source>
-        <translation type="vanished">Ջնջել!</translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation type="obsolete">Համար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation type="obsolete">Դեբետ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="obsolete">Կրեդիտ</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-</context>
-<context>
-    <name>FLengthOfStay</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation type="obsolete">Դեբետ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="obsolete">Կրեդիտ</translation>
-    </message>
-</context>
-<context>
-    <name>FListSourceReserve</name>
-    <message>
-        <source>Date from</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date to</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-</context>
-<context>
     <name>FMaterialsInStore</name>
     <message>
         <source>Form</source>
@@ -5196,48 +2988,6 @@ ee</source>
     <message>
         <source>Occ. percent</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FNoShowCancelationFee</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-</context>
-<context>
-    <name>FNoUsedAdvance</name>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="obsolete">Լրացուցիչ</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
     </message>
 </context>
 <context>
@@ -5441,63 +3191,10 @@ ee</source>
     </message>
 </context>
 <context>
-    <name>FReservationsCommon</name>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-</context>
-<context>
-    <name>FReserveByCreate</name>
-    <message>
-        <source>Date from</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date to</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
-    </message>
-</context>
-<context>
-    <name>FReserveGroups</name>
-    <message>
-        <source>Date from</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date to</source>
-        <translation type="obsolete">Վերջ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-</context>
-<context>
     <name>FRestSaleByStore</name>
     <message>
         <source>Form</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Data start</source>
-        <translation type="vanished">Սկիզբ</translation>
     </message>
     <message>
         <source>...</source>
@@ -5579,10 +3276,6 @@ ee</source>
         <translation></translation>
     </message>
     <message>
-        <source>Subtotals</source>
-        <translation>Ենթագումար</translation>
-    </message>
-    <message>
         <source>Show complex</source>
         <translation>Ցուցադրել կոմլեքսները</translation>
     </message>
@@ -5605,11 +3298,6 @@ ee</source>
     <message>
         <source>oh.f_cityLedger,cl.f_name</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Payment
-mode</source>
-        <translation type="vanished">Վճարման տեսակ</translation>
     </message>
     <message>
         <source>City
@@ -5777,14 +3465,6 @@ ledger</source>
         <translation>Ընդամենը</translation>
     </message>
     <message>
-        <source>Restaurant sales</source>
-        <translation>Ռեստորանի վաճառք</translation>
-    </message>
-    <message>
-        <source>Restaurant total</source>
-        <translation>Ընդամենը ռեստորանում</translation>
-    </message>
-    <message>
         <source>Printed</source>
         <translation>Տպված</translation>
     </message>
@@ -5863,10 +3543,6 @@ ledger</source>
     <message>
         <source>Nothing was selected</source>
         <translation>Ոչինչ նշված չէ</translation>
-    </message>
-    <message>
-        <source>Order number must be checked</source>
-        <translation>Պատվերի համարը պետքէ ընդգրկված լինի հաշվետվության մեչ</translation>
     </message>
     <message>
         <source>Order number checkbox must be checked</source>
@@ -5952,59 +3628,18 @@ ledger</source>
         <source>Only zeroes</source>
         <translation>Միանյ 0 արժեքով</translation>
     </message>
-</context>
-<context>
-    <name>FRoomState</name>
     <message>
-        <source>Date from</source>
-        <translation type="obsolete">Սկիզբ</translation>
+        <source>Earnings</source>
+        <translation>Հասույթ</translation>
     </message>
     <message>
-        <source>Date to</source>
-        <translation type="obsolete">Վերջ</translation>
+        <source>Recalculate store</source>
+        <translation>Վերահաշվարկել
+պահեստի ելքը</translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Օգտգործող</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="obsolete">Լրացուցիչ</translation>
-    </message>
-</context>
-<context>
-    <name>FSalary</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date start</source>
-        <translation type="unfinished">Սկիզբ</translation>
-    </message>
-    <message>
-        <source>Date end</source>
-        <translation type="unfinished">Վերջ</translation>
-    </message>
-    <message>
-        <source>Employee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Employes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
+        <source>Confirm to recalculate store outputs</source>
+        <translation>Հաստատեք պահեստի վերահաշվարքը</translation>
     </message>
 </context>
 <context>
@@ -6087,14 +3722,6 @@ ledger</source>
     <message>
         <source>Amount</source>
         <translation>Գումար</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="vanished">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Invoice date</source>
-        <translation type="vanished">ՀԱ ամսաթիվ</translation>
     </message>
     <message>
         <source>Operator</source>
@@ -6354,148 +3981,6 @@ ledger</source>
     </message>
 </context>
 <context>
-    <name>FVauchers</name>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Տեսակ</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Card</source>
-        <translation type="obsolete">Քարտ</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="obsolete">Լրացուցիչ</translation>
-    </message>
-    <message>
-        <source>Reason</source>
-        <translation type="obsolete">Պատճառ</translation>
-    </message>
-</context>
-<context>
-    <name>FYearlyFinancialReport</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2017</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Currency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AMD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>USD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yearly financial report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Jan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Feb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Apr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>May</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Jun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Jul</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sep</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Oct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nov</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="unfinished">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>2018</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GODaily</name>
     <message>
         <source>Form</source>
@@ -6580,12 +4065,6 @@ ledger</source>
         <translation>Տվյալների պահող</translation>
     </message>
     <message>
-        <source>Press F1 to  for first setup
-or contact to administrator</source>
-        <translation>Սեղմեք F1 առաջին կարգավորումների համար կամ
-կապնվեք ադմինիստրատորի հետ</translation>
-    </message>
-    <message>
         <source>First setup</source>
         <translation>Առաջին կարգավորում</translation>
     </message>
@@ -6620,64 +4099,8 @@ or contact to administrator</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Working</source>
-        <translation>Աշխատանք</translation>
-    </message>
-    <message>
-        <source>Reservation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation>Ծրագրի մասին</translation>
-    </message>
-    <message>
-        <source>Bookkeeping</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Directory of Hotel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Directory of Restaurant</source>
-        <translation>Ռեստորանի տեղեկատուներ</translation>
-    </message>
-    <message>
-        <source>City ledger </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reception</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cashier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Analytics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other Reports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restaurant</source>
-        <translation>Ռեստորան</translation>
-    </message>
-    <message>
         <source>Storehouse</source>
         <translation>Պահեստ</translation>
-    </message>
-    <message>
-        <source>Discount system</source>
-        <translation>Զեղչի համակարգ</translation>
     </message>
     <message>
         <source>Login</source>
@@ -6708,30 +4131,6 @@ or contact to administrator</source>
         <translation>Օգնություն</translation>
     </message>
     <message>
-        <source>Room chart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Daily movement</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reservations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contacts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Users</source>
         <translation>Օգտագործողներ</translation>
     </message>
@@ -6739,18 +4138,6 @@ or contact to administrator</source>
         <source>Users groups</source>
         <translation>Օգտագործողների
 խմբեր</translation>
-    </message>
-    <message>
-        <source>Room view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checkout Invoices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New reservation</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Partners</source>
@@ -6798,190 +4185,34 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Track changes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Credit cards</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Total balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Բալանս</translation>
     </message>
     <message>
         <source>Change password</source>
-        <translation type="unfinished">Փոխել գախտնաբառը</translation>
+        <translation>Փոխել գախտնաբառը</translation>
     </message>
     <message>
         <source>Global config</source>
-        <translation type="unfinished"></translation>
+        <translation>Կարգավորումներ</translation>
     </message>
     <message>
         <source>Complex dish</source>
         <translation>Փաթեթներ</translation>
     </message>
     <message>
-        <source>Room categories</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type of bed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export POS, Events, Single vauchers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Category to sell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>City Ledger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Currencies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Forecast Occupancy / Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Monthly Report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Setup Tax And Hall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice items</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In house guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected arrivals / departures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recheckout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Posting charge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Discount</source>
         <translation>Զեղչ</translation>
     </message>
     <message>
-        <source>Re-checkin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Transfer amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected arrivals / pax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cash report / summary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update program</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detailed balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cash report / detailed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reminder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Call history</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Events</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Financial report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Banquet comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Balance by period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>History of calls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cardex analysis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export invoices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Complimentary comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export active reservations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Report buillder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remarks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hotel status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List of source reservation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yearly financial report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reports set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6989,20 +4220,8 @@ or contact to administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Export other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Advance report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Restaurant online</source>
         <translation type="unfinished">Ընդացիկ պատվերներ</translation>
-    </message>
-    <message>
-        <source>Reservation groups</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Configure Welcome Page</source>
@@ -7013,44 +4232,12 @@ or contact to administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Guest titles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nationality file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checkout invoices (free rooming)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New group reservation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Changes of states of room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Canceled reservations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Web</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New store document</source>
         <translation>Նոր պահեստի փասթաթուղթ</translation>
     </message>
     <message>
         <source>Materials list</source>
         <translation>Ապրանքների ցանկ</translation>
-    </message>
-    <message>
-        <source>Reservations by date created</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Documents list</source>
@@ -7073,28 +4260,8 @@ or contact to administrator</source>
         <translation>Հաշվարկել ապրանքի ելքը</translation>
     </message>
     <message>
-        <source>Welcome</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Working date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last charge date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Lost connection to broadcast server, force logout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Code</source>
@@ -7114,7 +4281,7 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ծառայություն</translation>
     </message>
     <message>
         <source>Invoice id</source>
@@ -7189,18 +4356,6 @@ or contact to administrator</source>
         <translation>Տեսակ</translation>
     </message>
     <message>
-        <source>Description, am</source>
-        <translation>Նկարագրություն, հայ․</translation>
-    </message>
-    <message>
-        <source>Description, en</source>
-        <translation>Նկարագրություն, անգ․</translation>
-    </message>
-    <message>
-        <source>Description, ru</source>
-        <translation>Նկարագրություն, ռուս․</translation>
-    </message>
-    <message>
         <source>Background color</source>
         <translation>Ֆոնի գույն</translation>
     </message>
@@ -7245,83 +4400,7 @@ or contact to administrator</source>
         <translation>Ճաշացանկ</translation>
     </message>
     <message>
-        <source>Table code</source>
-        <translation type="vanished">Սեղանի կոդ</translation>
-    </message>
-    <message>
-        <source>Table</source>
-        <translation type="vanished">Սեղան</translation>
-    </message>
-    <message>
-        <source>Host</source>
-        <translation type="obsolete">Համակարգիչ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Օգտգործող</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Նոր</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="unfinished">Սկիզբ, ժամ</translation>
-    </message>
-    <message>
-        <source>End time</source>
-        <translation type="unfinished">Ավարտ, ժամ</translation>
-    </message>
-    <message>
-        <source>Price deviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Short</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>State code</source>
-        <translation type="obsolete">Վիճակի կոդ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Phone</source>
-        <translation type="obsolete">Հեռախոս</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="obsolete">Օպերատոր</translation>
-    </message>
-    <message>
         <source>Input price</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7329,88 +4408,60 @@ or contact to administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Monthly occupancy percentages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nationality by period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancelation/No show fees</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancelation/No show fee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sales by storages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest by nationality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Advance voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receipt voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Vouchers history</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SmartHotel</source>
-        <translation type="unfinished"></translation>
+        <translation>Վաճառք ըստ
+պահեստների</translation>
     </message>
     <message>
         <source>Models of cars</source>
-        <translation type="unfinished"></translation>
+        <translation>Մեքենաների 
+մատնիշներ</translation>
     </message>
     <message>
         <source>Costumers (cars)</source>
-        <translation type="unfinished"></translation>
+        <translation>Հաճախորդներ</translation>
     </message>
     <message>
         <source>Report by payment</source>
-        <translation type="unfinished">Հաշվետվություն ըստ վճարումների</translation>
+        <translation>Հաշվետվություն 
+ըստ վճարումների</translation>
     </message>
     <message>
         <source>Partners debts</source>
-        <translation type="unfinished">Վճարումներ գործընկերներին</translation>
+        <translation>Վճարումներ 
+գործընկերներին</translation>
     </message>
     <message>
         <source>Coupons sales</source>
-        <translation type="unfinished">Կտրոնների վաճառք</translation>
+        <translation>Կտրոնների վաճառք</translation>
     </message>
     <message>
         <source>Coupons seria</source>
-        <translation type="unfinished"></translation>
+        <translation>Կտրոնների
+սերիա</translation>
     </message>
     <message>
         <source>Accounts</source>
-        <translation type="unfinished"></translation>
+        <translation>Դրամարկղ</translation>
     </message>
     <message>
         <source>Store entries</source>
-        <translation type="unfinished">Նոր պահեստի մնացորդ</translation>
+        <translation>Պահեստի 
+մնացորդ</translation>
     </message>
     <message>
         <source>New store checkpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Նոր պահեստի 
+մնացորդ</translation>
     </message>
     <message>
         <source>Partner payments</source>
-        <translation type="unfinished"></translation>
+        <translation>Վճարումներ
+գործընկերներին</translation>
     </message>
     <message>
         <source>Coupons statistics</source>
-        <translation type="unfinished">Կտրոնների առկայություն</translation>
+        <translation>Կտրոնների առկայություն</translation>
     </message>
     <message>
         <source>Confirm to close application</source>
@@ -7418,82 +4469,29 @@ or contact to administrator</source>
     </message>
     <message>
         <source>Debts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Breakfast</source>
-        <translation type="unfinished"></translation>
+        <translation>Պարտքեր</translation>
     </message>
     <message>
         <source>Discount report</source>
-        <translation type="unfinished"></translation>
+        <translation>Հաշվետվություն
+ըստ զեղչերի</translation>
     </message>
     <message>
         <source>Sales report by cars</source>
-        <translation type="unfinished"></translation>
+        <translation>Հասույթ 
+ըստ մեքենաների</translation>
     </message>
     <message>
         <source>Discount, total</source>
-        <translation type="unfinished">Վաճառք ըստ հաճախորդների</translation>
+        <translation>Վաճառք
+ըստ հաճախորդների</translation>
     </message>
     <message>
         <source>Costumers</source>
-        <translation type="unfinished">Հաճախորդներ</translation>
-    </message>
-    <message>
-        <source>Refund voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>City ledger advance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Transfer CL amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available amounts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest Tray Ledger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In house detailed balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Avaiable rooms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room inventory states</source>
-        <translation type="unfinished"></translation>
+        <translation>Հաճախորդներ</translation>
     </message>
     <message>
         <source>Receipt voucher id not defined</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List of checkin guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lenght of stay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export reservations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7504,252 +4502,99 @@ or contact to administrator</source>
         <source>Unit name</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PExportInvoiceToExcel</name>
     <message>
-        <source>Cannot print empty invoice. Contact with program developer.</source>
-        <translation type="unfinished"></translation>
+        <source>Earnings</source>
+        <translation>Հասույթ</translation>
     </message>
     <message>
-        <source>SETTLEMENT / TAX INVOICE</source>
-        <translation type="unfinished"></translation>
+        <source>Storage</source>
+        <translation>Պահեստ</translation>
     </message>
     <message>
-        <source>PROFORMA INVOICE</source>
-        <translation type="unfinished"></translation>
+        <source>Indexes</source>
+        <translation>ՏԵղեկատուներ</translation>
     </message>
     <message>
-        <source>ROOM</source>
-        <translation type="unfinished"></translation>
+        <source>Discount
+system</source>
+        <translation>Զեղչի
+համակարգ</translation>
     </message>
     <message>
-        <source>Address: </source>
-        <translation type="unfinished"></translation>
+        <source>Configuration</source>
+        <translation>Կարգավորումներ</translation>
     </message>
     <message>
-        <source>Nationality</source>
-        <translation type="unfinished"></translation>
+        <source>T-Report</source>
+        <translation>T-հաշիվ</translation>
     </message>
     <message>
-        <source>Arrival date</source>
-        <translation type="unfinished"></translation>
+        <source>Carwash index</source>
+        <translation>Ավտոլվացման
+ծառայություններ</translation>
     </message>
     <message>
-        <source>Room category</source>
-        <translation type="unfinished"></translation>
+        <source>Waiting room index</source>
+        <translation>Սպասասրհաի
+ծառայություններ</translation>
     </message>
     <message>
-        <source>Departure date</source>
-        <translation type="unfinished"></translation>
+        <source>Storage goods index</source>
+        <translation>Պահեստի ապրանքներ</translation>
     </message>
     <message>
-        <source>S/N </source>
-        <translation type="unfinished"></translation>
+        <source>Coupons one-off</source>
+        <translation>Միանգամյան կտրոններ</translation>
     </message>
     <message>
-        <source>Number of nights</source>
-        <translation type="unfinished"></translation>
+        <source>Coupons present</source>
+        <translation>Նվեր քարտեր</translation>
     </message>
     <message>
-        <source>CheckIn</source>
-        <translation type="unfinished"></translation>
+        <source>Balance of the cards</source>
+        <translation>Քարտերի բալանս</translation>
     </message>
     <message>
-        <source>Number of guests</source>
-        <translation type="unfinished"></translation>
+        <source>Cash operation</source>
+        <translation>Դրամարկղի
+տեղեկատու</translation>
     </message>
     <message>
-        <source>CheckIn time</source>
-        <translation type="unfinished"></translation>
+        <source>Elite Carwash</source>
+        <translation>Էլիտ ավտոլվացում</translation>
     </message>
     <message>
-        <source>CheckOut date</source>
-        <translation type="unfinished"></translation>
+        <source>Earnings, carwash</source>
+        <translation>Հասույթ, ավտոլվացում</translation>
     </message>
     <message>
-        <source>Operator in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CheckOut time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrangement</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CheckOut Op.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cardex</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
+        <source>Earnings, waitroom</source>
+        <translation>Հասույթ, սպասասրահ</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Նկարագրություն</translation>
+        <translation>Նկարագրություն</translation>
     </message>
     <message>
-        <source>Cur</source>
-        <translation type="unfinished"></translation>
+        <source>Earnings, shop</source>
+        <translation>Հասույթ, խանութ</translation>
     </message>
     <message>
-        <source>Debit
-</source>
-        <translation type="unfinished"></translation>
+        <source>Visible</source>
+        <translation>Տեսանելիությունը</translation>
     </message>
     <message>
-        <source>Credit</source>
-        <translation type="unfinished">Կրեդիտ</translation>
+        <source>All</source>
+        <translation>Բոլորը</translation>
     </message>
     <message>
-        <source>Balance</source>
-        <translation type="unfinished">Բալանս</translation>
+        <source>Not active</source>
+        <translation>Ոչ ակտիվ</translation>
     </message>
     <message>
-        <source>Total amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total cash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total cashless</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Being the equivalent of USD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>VAT 20%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest signature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The sum of only </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PPrintCheckin</name>
-    <message>
-        <source>REGISTRATION CARD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ARRIVAL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DEPARTURE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ROOM </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ROOM RATE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>EXTRA BED</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PAX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ARR.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MODE OF PAYMENT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LAST NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FIRST NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ADDRESS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TEL.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FAX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>P.O.B.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>EMAIL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>NATIONALITY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PASSPORT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1- ALL RATES ARE SUBJECT 20% V.A.T.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2- THE MANAGEMENT IS NOT RESPONSIBLE FOR ANY VALUABLE LEFT IN THE ROOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3- YOU WILL FIND A PRESONAL SAFETY DEPOSIT BOX IN YOUR ROOM FOR YOUR CONVEIENCE.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHOULD YOU WISH TO USE THE HOTEL&apos;S SAFETY DEPOSIT BOXES AT THE FRON OFFICE, US $10 PER DAY WILL APPLY.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>4- FOR YOUR SAFETY, KINDLY NOTE THAT WATER PIPE AND ANY OTHER RELATE ITEMS TO IT ARE NOT ALLOWED IN THE ROOMS.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5- OUR CHECK OUT TIME IS 12:00 (NOON).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WE WISH YOU A NICE AND PLEASANT STAY!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GUEST SIGNATURE</source>
-        <translation type="unfinished"></translation>
+        <source>Shop index</source>
+        <translation>Խանութի
+ապրանքներ</translation>
     </message>
 </context>
 <context>
@@ -7997,10 +4842,6 @@ or contact to administrator</source>
         <translation>Սխալ փասթաթղթի համար</translation>
     </message>
     <message>
-        <source>Store document #</source>
-        <translation type="vanished">ՄՆԱՑՈՐԴՆԵՐ №</translation>
-    </message>
-    <message>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
@@ -8015,45 +4856,6 @@ or contact to administrator</source>
     <message>
         <source>Store document</source>
         <translation>ՄՆԱՑՈՐԴՆԵՐ</translation>
-    </message>
-</context>
-<context>
-    <name>PrintTax</name>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Card</source>
-        <translation type="obsolete">Քարտ</translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="obsolete">Կանխիկ</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -8211,8 +5013,8 @@ or contact to administrator</source>
         <translation>Տպված</translation>
     </message>
     <message>
-        <source>Could not open reservation</source>
-        <translation type="unfinished"></translation>
+        <source>Sale</source>
+        <translation>Վաճառք</translation>
     </message>
 </context>
 <context>
@@ -8259,10 +5061,6 @@ or contact to administrator</source>
     <message>
         <source>Code</source>
         <translation>Կոդ</translation>
-    </message>
-    <message>
-        <source>Car model</source>
-        <translation type="vanished">Մատնիշ</translation>
     </message>
     <message>
         <source>Car gov. number</source>
@@ -8317,16 +5115,8 @@ or contact to administrator</source>
         <translation>Մատնիշ</translation>
     </message>
     <message>
-        <source>Gov. number</source>
-        <translation type="vanished">Պետ․ համարանիշ</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Անվանում</translation>
-    </message>
-    <message>
-        <source>Model of cars</source>
-        <translation type="vanished">Մեքենաներ</translation>
     </message>
     <message>
         <source>Costumers</source>
@@ -8386,29 +5176,6 @@ or contact to administrator</source>
     </message>
 </context>
 <context>
-    <name>RECardexGroup</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
     <name>RECashDesk</name>
     <message>
         <source>Code</source>
@@ -8449,37 +5216,6 @@ or contact to administrator</source>
     <message>
         <source>Account</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RECityLedger</name>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Phone</source>
-        <translation type="obsolete">Հեռախոս</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -8691,227 +5427,6 @@ or contact to administrator</source>
     </message>
 </context>
 <context>
-    <name>RECurrency</name>
-    <message>
-        <source>Currency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_short</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Current rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>f_id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Short</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>REGuestTitle</name>
-    <message>
-        <source>Guest title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_en</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Partners groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>REInvoiceItem</name>
-    <message>
-        <source>Invoice Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_am</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_ru</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_noVatDept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>f_price</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="unfinished">Խումբ</translation>
-    </message>
-    <message>
-        <source>ADGT code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax VAT dept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_adgt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_vatDept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax No VAT dept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="unfinished">Գին</translation>
-    </message>
-    <message>
-        <source>Name, am</source>
-        <translation type="unfinished">Անվանում, հայ․</translation>
-    </message>
-    <message>
-        <source>Name, en</source>
-        <translation type="unfinished">Անվանում, անգ․</translation>
-    </message>
-    <message>
-        <source>Name, ru</source>
-        <translation type="unfinished">Անվանում, ռուս․</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>f_en</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No manual charge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_taxName</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_auto</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_vaucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available in restaurant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f_rest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Main</source>
-        <translation type="unfinished">Գլխավոր</translation>
-    </message>
-    <message>
-        <source>Tax, reception</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Department</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voucher type</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>REModelOfCars</name>
     <message>
         <source>Model of car</source>
@@ -8955,25 +5470,6 @@ or contact to administrator</source>
     </message>
 </context>
 <context>
-    <name>RENationalityFile</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
     <name>RERestDish</name>
     <message>
         <source>Dish</source>
@@ -8988,10 +5484,6 @@ or contact to administrator</source>
         <translation></translation>
     </message>
     <message>
-        <source>Part</source>
-        <translation type="vanished">Բաժին</translation>
-    </message>
-    <message>
         <source>Code</source>
         <translation>Կոդ</translation>
     </message>
@@ -9000,32 +5492,12 @@ or contact to administrator</source>
         <translation>Տեսակ</translation>
     </message>
     <message>
-        <source>Name, en</source>
-        <translation>Անվանում, անգ․</translation>
-    </message>
-    <message>
-        <source>Name, am</source>
-        <translation>Անվանում, հայ․</translation>
-    </message>
-    <message>
         <source>Description, am</source>
         <translation>Նկարագրություն, հայ․</translation>
     </message>
     <message>
-        <source>Name, ru</source>
-        <translation>Անվանում, ռուս․</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Տառերի գույն</translation>
-    </message>
-    <message>
-        <source>Description, ru</source>
-        <translation>Նկարագրություն, ռուս․</translation>
-    </message>
-    <message>
-        <source>Description, en</source>
-        <translation>Նկարագրություն, անգ․</translation>
     </message>
     <message>
         <source>f_id</source>
@@ -9044,10 +5516,6 @@ or contact to administrator</source>
         <translation></translation>
     </message>
     <message>
-        <source>f_am</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>f_queue</source>
         <translation></translation>
     </message>
@@ -9056,23 +5524,11 @@ or contact to administrator</source>
         <translation></translation>
     </message>
     <message>
-        <source>f_ru</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>f_textColor</source>
         <translation></translation>
     </message>
     <message>
         <source>f_text_en</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>f_text_am</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>f_text_ru</source>
         <translation></translation>
     </message>
     <message>
@@ -9809,108 +6265,6 @@ deviation</source>
     </message>
 </context>
 <context>
-    <name>RERoomBed</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>RERoomCategory</name>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>RERoomCategoryRate</name>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>RERoomCategoryRateRow</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>RERoomInventory</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>RERoomInventoryState</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
     <name>REStorePartner</name>
     <message>
         <source>Partner</source>
@@ -10033,62 +6387,30 @@ deviation</source>
     </message>
 </context>
 <context>
-    <name>ReserveWidgetAction</name>
+    <name>RecalculateStoreOutputs</name>
     <message>
         <source>Action</source>
-        <translation type="obsolete">Գործողություն</translation>
+        <translation>Գործողություն</translation>
     </message>
     <message>
-        <source>Lock</source>
-        <translation type="obsolete">Ընդմիջում</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-</context>
-<context>
-    <name>RoomState</name>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Այո</translation>
+        <source>Progress</source>
+        <translation>Պրոգրես</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
+        <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-</context>
-<context>
-    <name>Smtp</name>
-    <message>
-        <source>Message sent</source>
-        <translation type="unfinished"></translation>
+        <source>Rollback</source>
+        <translation>Հետ գործարք</translation>
     </message>
     <message>
-        <source>Qt Simple SMTP client</source>
-        <translation type="unfinished"></translation>
+        <source>Write</source>
+        <translation>Գրանցում</translation>
     </message>
     <message>
-        <source>Unexpected reply from SMTP server:
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to send message</source>
-        <translation type="unfinished"></translation>
+        <source>Recalculate store output</source>
+        <translation>Վերահաշվարկել պահեստի ելքը</translation>
     </message>
 </context>
 <context>
@@ -10273,72 +6595,6 @@ deviation</source>
     </message>
 </context>
 <context>
-    <name>WAccInvoice</name>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="obsolete">Կարգավորումներ</translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation type="obsolete">Դեբետ</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="obsolete">Կրեդիտ</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="obsolete">Բալանս</translation>
-    </message>
-    <message>
-        <source>Nothing was selected</source>
-        <translation type="obsolete">Ոչինչ նշված չէ</translation>
-    </message>
-</context>
-<context>
-    <name>WCardex</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>Valid to</source>
-        <translation type="obsolete">Ակտիվ է մինջև</translation>
-    </message>
-    <message>
-        <source>Partners</source>
-        <translation type="obsolete">Գործընկերներ</translation>
-    </message>
-</context>
-<context>
     <name>WCashEntry</name>
     <message>
         <source>Form</source>
@@ -10365,10 +6621,6 @@ deviation</source>
         <translation>Գործնեյության տեսակ</translation>
     </message>
     <message>
-        <source>Debit</source>
-        <translation type="vanished">Դեբետ</translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation>Գումար</translation>
     </message>
@@ -10377,24 +6629,12 @@ deviation</source>
         <translation>Փասթաթղթի համար</translation>
     </message>
     <message>
-        <source>Credit</source>
-        <translation type="vanished">Կրեդիտ</translation>
-    </message>
-    <message>
         <source>Code</source>
         <translation>Կոդ</translation>
     </message>
     <message>
         <source>Comment</source>
         <translation>Լրացուցիչ</translation>
-    </message>
-    <message>
-        <source>Debit is not defined</source>
-        <translation type="vanished">Դեբետ դաշտը պարտադիր է</translation>
-    </message>
-    <message>
-        <source>Credit is not defined</source>
-        <translation type="vanished">Կրեդիտ դաշտը պարտադիր է</translation>
     </message>
     <message>
         <source>Cash in</source>
@@ -10525,7 +6765,7 @@ deviation</source>
     <name>WGlobalDbConfig</name>
     <message>
         <source>Global config</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Կարգավորումներ</translation>
     </message>
     <message>
         <source>Hotel</source>
@@ -10849,304 +7089,6 @@ deviation</source>
     </message>
 </context>
 <context>
-    <name>WGuest</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation type="obsolete">Անուն</translation>
-    </message>
-    <message>
-        <source>Last name</source>
-        <translation type="obsolete">Ազգանուն</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Հեռացնել</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>WGuests</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation type="obsolete">Անուն</translation>
-    </message>
-    <message>
-        <source>Last name</source>
-        <translation type="obsolete">Ազգանուն</translation>
-    </message>
-</context>
-<context>
-    <name>WHotelStatus</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Working date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrivals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty rooms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Paid occ.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Male</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>F/B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rooms in hotel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rooms to sell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comp. occ.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Female</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>H/B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of beds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Occupied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Avg room rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Childs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B/B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available rooms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Curr. occ.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B/O</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Market sigment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nationality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Nbr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Occ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Pax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Already Arrived</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Arrivals Today</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Already checkout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest in house</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departures Today</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrivals Today</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Already arrived</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hotel Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WInvoice</name>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Թարմացնել</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Discount</source>
-        <translation type="obsolete">Զեղչ</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="obsolete">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="obsolete">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>WMainDesk</name>
-    <message>
-        <source>Class</source>
-        <translation type="obsolete">Դաս</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-</context>
-<context>
-    <name>WNotes</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>State code</source>
-        <translation type="obsolete">Վիճակի կոդ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="obsolete">Խումբ</translation>
-    </message>
-    <message>
-        <source>Date start</source>
-        <translation type="obsolete">Սկիզբ</translation>
-    </message>
-</context>
-<context>
     <name>WRemarks</name>
     <message>
         <source>Room</source>
@@ -11370,29 +7312,6 @@ if empty</source>
     </message>
 </context>
 <context>
-    <name>WReportRoom</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Class</source>
-        <translation type="obsolete">Դաս</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Qty</source>
-        <translation type="obsolete">Քնկ</translation>
-    </message>
-    <message>
-        <source>Queue</source>
-        <translation type="obsolete">Հերթ</translation>
-    </message>
-</context>
-<context>
     <name>WReportsSetOld</name>
     <message>
         <source>Form</source>
@@ -11540,94 +7459,6 @@ if empty</source>
     </message>
 </context>
 <context>
-    <name>WReservation</name>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Տպել</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>WReservationRoomTab</name>
-    <message>
-        <source>Common</source>
-        <translation type="obsolete">Ընդհանուր</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Անվանում</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Total, USD</source>
-        <translation type="obsolete">Ընդամենը, դոլլար</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">Ընդամենը</translation>
-    </message>
-</context>
-<context>
-    <name>WReservations</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>State code</source>
-        <translation type="obsolete">Վիճակի կոդ</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="obsolete">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Payment</source>
-        <translation type="obsolete">Վճարում</translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="obsolete">Գին</translation>
-    </message>
-</context>
-<context>
-    <name>WRoomView</name>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished">Նկարագրություն</translation>
-    </message>
-    <message>
-        <source>Room view</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>WSalary</name>
     <message>
         <source>Form</source>
@@ -11675,10 +7506,6 @@ if empty</source>
     <message>
         <source>...</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Count output</source>
-        <translation>Հաշվարկել ելք</translation>
     </message>
     <message>
         <source>Document number</source>
@@ -11741,10 +7568,6 @@ if empty</source>
         <translation>Պահպանված է</translation>
     </message>
     <message>
-        <source>Empry report</source>
-        <translation>Դատարկ հաշվետվություն</translation>
-    </message>
-    <message>
         <source>Document must be saved first</source>
         <translation>Պահպանեք պաստաթուղթը</translation>
     </message>
@@ -11764,495 +7587,76 @@ if empty</source>
         <source>Unit</source>
         <translation>Չափման միավոր</translation>
     </message>
-</context>
-<context>
-    <name>WSyncInvoices</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
+        <source>Autocorrection, output</source>
+        <translation>Մնացորդի ուղղում, ելք</translation>
     </message>
     <message>
-        <source>Invoice #</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished">Պատճե</translation>
-    </message>
-    <message>
-        <source>Reservation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="unfinished">Առժեք</translation>
-    </message>
-    <message>
-        <source>Separator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RESERVE NUM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GUEST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ENTRY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DEPARTURE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>INVOICE NUM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BALANCE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Financial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Info</source>
-        <translation type="unfinished">Տեղեկություններ</translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Src</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>ItemName</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="unfinished">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>Fin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Original</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LAST SYNC ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DEBIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CREDIT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do not hide search panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>x</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>#</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>f</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Balance</source>
-        <translation type="unfinished">Բալանս</translation>
-    </message>
-    <message>
-        <source>Export invoices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Vouchers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Override duplicates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Difference between departure date and last charge more the one!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>City ledger is not exists in destination database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PAYMENT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REFUND</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WSynchronize</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Hotel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restaurant</source>
-        <translation type="unfinished">Ռեստորան</translation>
-    </message>
-    <message>
-        <source>Active reservations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sync #</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice #</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice date</source>
-        <translation type="unfinished">ՀԱ ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation type="unfinished">Կրեդիտ</translation>
-    </message>
-    <message>
-        <source>Debet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tax</source>
-        <translation type="unfinished">ՀԴՄ</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>11</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>12</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Synchronize</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>NoShow/Cancelation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Single vouchers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Override</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="unfinished">Վիճակ</translation>
-    </message>
-    <message>
-        <source>Events,breakfast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Table</source>
-        <translation type="unfinished">Սեղան</translation>
-    </message>
-    <message>
-        <source>Mode of payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="unfinished">Լրացուցիչ</translation>
-    </message>
-    <message>
-        <source>City ledger is not exists in destination database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PAYMENT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REFUND</source>
-        <translation type="unfinished"></translation>
+        <source>Autocorrection, input</source>
+        <translation>Մնացորդի ուղղում, մուտք</translation>
     </message>
 </context>
 <context>
     <name>WUsers</name>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
+        <translation>Կոդ</translation>
     </message>
     <message>
         <source>State code</source>
-        <translation type="unfinished">Վիճակի կոդ</translation>
+        <translation>Վիճակի կոդ</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Վիճակ</translation>
+        <translation>Վիճակ</translation>
     </message>
     <message>
         <source>Group code</source>
-        <translation type="unfinished"></translation>
+        <translation>Խմբի կոդ</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished">Խումբ</translation>
+        <translation>Խումբ</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished">Օգտագործող</translation>
+        <translation>Օգտագործող</translation>
     </message>
     <message>
         <source>First name</source>
-        <translation type="unfinished">Անուն</translation>
+        <translation>Անուն</translation>
     </message>
     <message>
         <source>Last name</source>
-        <translation type="unfinished">Ազգանուն</translation>
+        <translation>Ազգանուն</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation type="unfinished">Օգտագործողներ</translation>
+        <translation>Օգտագործողներ</translation>
     </message>
     <message>
         <source>Change passwords</source>
-        <translation type="unfinished"></translation>
+        <translation>Փոխել գախտնաբառը</translation>
     </message>
 </context>
 <context>
     <name>WUsersGroups</name>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
+        <translation>Կոդ</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished">Խումբ</translation>
+        <translation>Խումբ</translation>
     </message>
     <message>
         <source>Users groups</source>
-        <translation type="unfinished">Օգտագործողների
+        <translation>Օգտագործողների
 խմբեր</translation>
     </message>
     <message>
         <source>Permissions</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WVaucherEditor</name>
-    <message>
-        <source>Code</source>
-        <translation type="obsolete">Կոդ</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Օգտգործող</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="obsolete">Գումար</translation>
-    </message>
-    <message>
-        <source>Payment mode</source>
-        <translation type="obsolete">Վճարման տեսակ</translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="obsolete">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="obsolete">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Պահպանել</translation>
-    </message>
-    <message>
-        <source>Main</source>
-        <translation type="obsolete">Գլխավոր</translation>
-    </message>
-</context>
-<context>
-    <name>WWeb</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>https://www.ya.ru</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WWelcome</name>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Ժամ</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Restaurant</source>
-        <translation type="obsolete">Ռեստորան</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="obsolete">Տուն</translation>
+        <translation>Իրավասություններ</translation>
     </message>
 </context>
 <context>
@@ -12285,359 +7689,6 @@ if empty</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
-    <name>wwelcomerest</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Restaurant configuration</source>
-        <translation>Ռեստորանի կարգավորումներ</translation>
-    </message>
-    <message>
-        <source>Materials
-Groups</source>
-        <translation>Ապրանքների
-խմբեր</translation>
-    </message>
-    <message>
-        <source>Other configuration</source>
-        <translation>Այլ
-կարգավորումներ</translation>
-    </message>
-    <message>
-        <source>Hall</source>
-        <translation>Սրահ</translation>
-    </message>
-    <message>
-        <source>Tables</source>
-        <translation>Սեղաններ</translation>
-    </message>
-    <message>
-        <source>Storages</source>
-        <translation>Պահեստներ</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation>Կարգավորումներ</translation>
-    </message>
-    <message>
-        <source>Sales</source>
-        <translation>Վաճառք</translation>
-    </message>
-    <message>
-        <source>Opened
-orders</source>
-        <translation>Բացված
-պատվերներ</translation>
-    </message>
-    <message>
-        <source>Common
-report</source>
-        <translation>Ընդհանուր
-հաշվետվություն</translation>
-    </message>
-    <message>
-        <source>Report by
-department</source>
-        <translation>Վաճառք ըստ
-պահեստների</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation>Պահեստ</translation>
-    </message>
-    <message>
-        <source>New store
-document</source>
-        <translation>Նոր պահեստի
-փասթաթուղթ</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation>Փասթաթղթեր</translation>
-    </message>
-    <message>
-        <source>Movement in
-store</source>
-        <translation>Տեհաշարժ
-պահեստում</translation>
-    </message>
-    <message>
-        <source>Materials
-in store</source>
-        <translation>Ապրանքներ
-պահեստում</translation>
-    </message>
-    <message>
-        <source>Calculate
-output</source>
-        <translation>Հաշվարկել
-ապր․ ելքը</translation>
-    </message>
-    <message>
-        <source>Materials
- names</source>
-        <translation>Ապրանքներ</translation>
-    </message>
-    <message>
-        <source>Menu review</source>
-        <translation>Ճաշացանկ</translation>
-    </message>
-    <message>
-        <source>Users groups</source>
-        <translation>Օգտագործողների
-խմբեր</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation>Օգտագործողներ</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation>Տուն</translation>
-    </message>
-    <message>
-        <source>Discount system</source>
-        <translation>Զեղչի
-համակարգ</translation>
-    </message>
-    <message>
-        <source>Coupuns</source>
-        <translation>Կտրոններ</translation>
-    </message>
-    <message>
-        <source>Discount
-cards</source>
-        <translation type="vanished">Զեղչի 
-քարտեր</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation>Ծրագրի
-ավարտ</translation>
-    </message>
-    <message>
-        <source>Packages</source>
-        <translation>Փաթեթներ</translation>
-    </message>
-    <message>
-        <source>Model of
-cars</source>
-        <translation>Մեքենաների
-մակնիշներ</translation>
-    </message>
-    <message>
-        <source>Customers</source>
-        <translation type="vanished">Հաճախորդներ</translation>
-    </message>
-    <message>
-        <source>Cashdesk</source>
-        <translation type="vanished">Դրամարկղ</translation>
-    </message>
-    <message>
-        <source>Report by
-payment</source>
-        <translation>Հաշվետվություն
-ըստ վճարման եղ․</translation>
-    </message>
-    <message>
-        <source>Partners
-debts</source>
-        <translation>Վճարումներ
-գործընկերներին</translation>
-    </message>
-    <message>
-        <source>Coupuns
-Sales</source>
-        <translation>Կտրոնների
-վաճաքռ</translation>
-    </message>
-    <message>
-        <source>Partners</source>
-        <translation>Գործընկերներ</translation>
-    </message>
-    <message>
-        <source>Coupons
-seria</source>
-        <translation>Կտրոնների
-սերիա</translation>
-    </message>
-    <message>
-        <source>Names of
-cashdesk</source>
-        <translation>Հաշիվներ</translation>
-    </message>
-    <message>
-        <source>Accounts</source>
-        <translation type="vanished">Հաշիվներ</translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="vanished">Դրամարկղ</translation>
-    </message>
-    <message>
-        <source>New store
-checkpoint</source>
-        <translation>Նոր պահեստի
-մնացորդ</translation>
-    </message>
-    <message>
-        <source>Store
-entries</source>
-        <translation>Պահեստի
-մնացորդներ</translation>
-    </message>
-    <message>
-        <source>Coupons
-statics</source>
-        <translation>Կտրոնների
-առկայություն</translation>
-    </message>
-    <message>
-        <source>Cash
-operations</source>
-        <translation>Դրամարկղի
-տեղեկատու</translation>
-    </message>
-    <message>
-        <source>Store final
-report</source>
-        <translation>Պահեստի
-վերջնահաշվարկ</translation>
-    </message>
-    <message>
-        <source>Debts by
-costumers</source>
-        <translation>Հաճախորդների
-պարտքեր</translation>
-    </message>
-    <message>
-        <source>Cashdesk
- of Cash</source>
-        <translation>Կանխիկի
-դրամարկղ</translation>
-    </message>
-    <message>
-        <source>Report by
-cars</source>
-        <translation>Վաճառք ըստ
-մեքենաների</translation>
-    </message>
-    <message>
-        <source>Discount
-report</source>
-        <translation>Հաշվետվություն
-ըստ զեղչերի</translation>
-    </message>
-    <message>
-        <source>Discount
-Total</source>
-        <translation>Վաճառք ըստ
-հաճախորդների</translation>
-    </message>
-    <message>
-        <source>Costumers</source>
-        <translation>Հաճախորդներ</translation>
-    </message>
-    <message>
-        <source>Discount
-cards, depo</source>
-        <translation>Կուտակային
-Քարտեր</translation>
-    </message>
-    <message>
-        <source>Discount
-cards, one</source>
-        <translation>Միանգամյա
-Քարտեր</translation>
-    </message>
-    <message>
-        <source>Discount
-cards, present</source>
-        <translation>Նվեր
-Քարտեր</translation>
-    </message>
-    <message>
-        <source>T Report</source>
-        <translation>T-հաշիվ</translation>
-    </message>
-    <message>
-        <source>Balances
-on the cards</source>
-        <translation>Քարտերի
-բալանս</translation>
-    </message>
-    <message>
-        <source>Salary</source>
-        <translation>Աշխատավարձ</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished">Կոդ</translation>
-    </message>
-    <message>
-        <source>Voucher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Group code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="unfinished">Խումբ</translation>
-    </message>
-    <message>
-        <source>Name, am</source>
-        <translation type="unfinished">Անվանում, հայ․</translation>
-    </message>
-    <message>
-        <source>Name, en</source>
-        <translation type="unfinished">Անվանում, անգ․</translation>
-    </message>
-    <message>
-        <source>Name, ru</source>
-        <translation type="unfinished">Անվանում, ռուս․</translation>
-    </message>
-    <message>
-        <source>Price</source>
-        <translation type="unfinished">Գին</translation>
-    </message>
-    <message>
-        <source>Tax name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ADGT</source>
-        <translation type="unfinished">ԱԴԳՏ</translation>
-    </message>
-    <message>
-        <source>VAT Dept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No VAT Dept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Manual charge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restaurant</source>
-        <translation type="unfinished">Ռեստորան</translation>
-    </message>
-    <message>
-        <source>Vat Reception</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice items</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

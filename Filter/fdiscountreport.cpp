@@ -33,12 +33,13 @@ QWidget *FDiscountReport::firstElement()
 void FDiscountReport::apply(WReportGrid *rg)
 {
     rg->fModel->clearColumns();
-    rg->fModel->setColumn(100, "", tr("Card"))
+    rg->fModel->setColumn(120, "", tr("Date"))
+            .setColumn(100, "", tr("Card"))
             .setColumn(200, "", tr("Costumer"))
             .setColumn(80, "", tr("Qty"))
             .setColumn(80, "", tr("Total"))
             .setColumn(80, "", tr("Discount"));
-    QString sql = "select d.f_card, d.f_name,  count(hp.f_id), sum(op.f_total), sum(hp.f_discount) \
+    QString sql = "select op.f_datecash, d.f_card, d.f_name,  count(hp.f_id), sum(op.f_total), sum(hp.f_discount) \
             from o_header op \
             left join o_header_payment hp on hp.f_id=op.f_id \
             left join d_car_client d on d.f_id=hp.f_costumer \
@@ -50,7 +51,7 @@ void FDiscountReport::apply(WReportGrid *rg)
     rg->fModel->setSqlQuery(sql);
     rg->fModel->apply(rg);
     QList<int> cols;
-    cols << 2 << 3 << 4;
+    cols << 3 << 4 << 5;
     QList<double> vals;
     rg->fModel->sumOfColumns(cols, vals);
     rg->setTblTotalData(cols, vals);

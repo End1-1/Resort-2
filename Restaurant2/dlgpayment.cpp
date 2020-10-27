@@ -3,6 +3,7 @@
 #include "rmessage.h"
 #include "dlglist.h"
 #include "rnumbers.h"
+#include "defstore.h"
 #include "cachecouponseria.h"
 #include "dlgdeptholder.h"
 
@@ -19,7 +20,7 @@ DlgPayment::~DlgPayment()
     delete ui;
 }
 
-bool DlgPayment::payment(const QString &order)
+bool DlgPayment::payment(int order)
 {
     bool result;
     DlgPayment *d = new DlgPayment();
@@ -76,7 +77,7 @@ void DlgPayment::on_btnOk_clicked()
         fDbBind[":f_costumer"] = drDisc.value("f_costumer");
     }
     if (fUpdateHeader) {
-        fDb.update("o_header_payment", fDbBind, where_id(ap(fOrder)));
+        fDb.update("o_header_payment", fDbBind, where_id(fOrder));
     } else {
         fDbBind[":f_id"] = fOrder;
         fDb.insertWithoutId("o_header_payment", fDbBind);
@@ -92,6 +93,9 @@ void DlgPayment::on_btnOk_clicked()
         fDbBind[":f_number"] = ui->leCouponNumber->asInt();
         fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind, fDbRows);
     }
+
+
+
 
     accept();
 }

@@ -1,16 +1,16 @@
 #ifndef BASEORDER_H
 #define BASEORDER_H
 
-#include "base.h"
+#include "database.h"
 
-class BaseOrder : public Base
+class BaseOrder
 {
 public:
-    BaseOrder(const QString &id);
-    void calculateOutput();
-    void calculateOutput(const QString &id);
+    BaseOrder(int id);
+    void calculateOutput(Database &db);
+    void calculateOutput(Database &db, int id);
 private:
-    QString fId;
+    int fId;
 };
 
 #endif // BASEORDER_H

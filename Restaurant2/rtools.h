@@ -32,7 +32,6 @@ private slots:
     void on_btnCompimentary_clicked();
     void on_btnTax_clicked();
     void on_btnChangePassword_clicked();
-    void on_btnRecover_clicked();
     void on_btnTotalReportAnyDay_clicked();
     void on_btnPrintAnyReport_clicked();
     void on_btnVoidBack_clicked();

@@ -38,7 +38,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="res.qrc">:/images/app.png</pixmap>
+      <pixmap resource="res.qrc">:/images/logo.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -96,6 +96,33 @@
        </layout>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Database</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cbDatabase"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="lePassword">
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QLabel" name="lbFullName">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="leUsername"/>
+     </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -107,53 +134,6 @@
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Username</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="leUsername"/>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="lePassword">
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Database</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="cbDatabase"/>
-     </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QLabel" name="lbFullName">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="QLabel" name="lbF1">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color:rgb(0, 0, 127)</string>
-       </property>
-       <property name="text">
-        <string>Press F1 to  for first setup
-or contact to administrator</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

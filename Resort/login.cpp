@@ -40,6 +40,7 @@ Login::Login(QWidget *parent) :
         connect(&fTimer, SIGNAL(timeout()), this, SLOT(timeout()));
         fTimer.start(2000);
     }
+    ui->lbLogo->setPixmap(QPixmap(qApp->applicationDirPath() + "/bg.jpg"));
 }
 
 Login::~Login()
@@ -188,7 +189,6 @@ void Login::getDatabases()
     }
     ui->cbDatabase->setCurrentIndex(ui->cbDatabase->findText(__s.value("_last_login_db_name").toString()));
     on_leUsername_textChanged(ui->leUsername->text());
-    ui->lbF1->setVisible(ui->cbDatabase->count() == 0);
 }
 
 void Login::on_btnLogin_clicked()

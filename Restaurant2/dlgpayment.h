@@ -14,7 +14,7 @@ class DlgPayment : public BaseExtendedDialog
 public:
     explicit DlgPayment(QWidget *parent = 0);
     ~DlgPayment();
-    static bool payment(const QString &order);
+    static bool payment(int order);
 private slots:
     void on_btnCancel_clicked();
 
@@ -40,7 +40,7 @@ private slots:
 
 private:
     Ui::DlgPayment *ui;
-    QString fOrder;
+    int fOrder;
     bool fUpdateHeader;
     void calcCash();
     int fCountId;

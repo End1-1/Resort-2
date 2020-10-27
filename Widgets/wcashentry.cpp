@@ -73,7 +73,7 @@ void WCashEntry::save()
     if (ui->rbCashIn->isChecked()) {
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_docType"] = ui->leDocTypeNum->asInt();
-        fDbBind[":f_docNum"] = ui->leDocNum->asInt();
+        fDbBind[":f_docNum"] = ui->leDocNum->text();
         fDbBind[":f_debit"] = ui->leDebit->asInt();
         fDbBind[":f_credit"] = ui->leCredit->asInt();
         fDbBind[":f_partner"] = ui->lePartnerCode->asInt();
@@ -83,7 +83,7 @@ void WCashEntry::save()
     } else if (ui->rbCashOut->isChecked()) {
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_docType"] = ui->leDocTypeNum->asInt();
-        fDbBind[":f_docNum"] = ui->leDocNum->asInt();
+        fDbBind[":f_docNum"] = ui->leDocNum->text();
         fDbBind[":f_debit"] = ui->leCashout->asInt();
         fDbBind[":f_credit"] = ui->leCredit->asInt();
         fDbBind[":f_partner"] = ui->lePartnerCode->asInt();
@@ -94,11 +94,11 @@ void WCashEntry::save()
         if (ui->leDocNum->asInt() == 0) {
             QMap<QString, QVariant> b;
             b[":f_id"] = 0;
-            ui->leDocNum->setInt(fDb.insert("c_cash", b));
+            ui->leDocNum->setText(QString::number(fDb.insert("c_cash", b)));
         }
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_docType"] = ui->leDocTypeNum->asInt();
-        fDbBind[":f_docNum"] = ui->leDocNum->asInt();
+        fDbBind[":f_docNum"] = ui->leDocNum->text();
         fDbBind[":f_debit"] = (fIn ? ui->leDebit->asInt() : ui->leCashout->asInt());
         fDbBind[":f_credit"] = ui->leCredit->asInt();
         fDbBind[":f_partner"] = ui->lePartnerCode->asInt();
@@ -108,7 +108,7 @@ void WCashEntry::save()
 
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_docType"] = ui->leDocTypeNum->asInt();
-        fDbBind[":f_docNum"] = ui->leCode->asInt();
+        fDbBind[":f_docNum"] = ui->leCode->text();
         fDbBind[":f_debit"] = (fIn ? ui->leCashout->asInt() : ui->leDebit->asInt());
         fDbBind[":f_credit"] = ui->leCredit->asInt();
         fDbBind[":f_partner"] = ui->lePartnerCode->asInt();
@@ -304,9 +304,9 @@ void WCashEntry::docType(int t)
     }
 }
 
-void WCashEntry::docNum(int n)
+void WCashEntry::docNum(QString n)
 {
-    ui->leDocNum->setInt(n);
+    ui->leDocNum->setText(n);
 }
 
 int WCashEntry::partner()

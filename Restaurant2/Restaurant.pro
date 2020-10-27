@@ -24,12 +24,13 @@ INCLUDEPATH += c:/projects/resort2/Resort
 INCLUDEPATH += c:/projects/resort2/Selector
 INCLUDEPATH += c:/projects/Cafe5/Classes
 INCLUDEPATH += C:/Projects/NewTax/Src/
-INCLUDEPATH += c:/OpenSSL-Win32/include
-INCLUDEPATH += c:/OpenSSL-Win32/include/openssl
+INCLUDEPATH += c:/Soft/OpenSSL-Win32/include
+INCLUDEPATH += c:/Soft/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
     ../../Cafe5/Classes/notificationwidget.cpp \
     ../Resort/message.cpp \
+    ../Resort/storeoutput.cpp \
     dlgcheckcard.cpp \
     rface.cpp \
     rlogin.cpp \
@@ -270,7 +271,7 @@ FORMS    += rface.ui \
     ../Resort/message.ui \
 
 LIBS += -lVersion
-LIBS += -LC:/OpenSSL-Win32/lib
+LIBS += -LC:/Soft/OpenSSL-Win32/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS +=  -lwsock32

@@ -136,7 +136,7 @@ void FStoreMovement::doubleClicked(const QList<QVariant> &row)
         return;
     }
     StoreDoc *d = addTab<StoreDoc>();
-    d->loadDoc(row.at(0).toString());
+    d->loadDoc(row.at(0).toInt());
 }
 
 void FStoreMovement::on_btnDateLeft_clicked()

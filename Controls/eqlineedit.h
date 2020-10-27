@@ -69,6 +69,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void leaveEvent(QEvent *event);
     virtual bool eventFilter(QObject *watched, QEvent *event);
+
 private:
     QToolButton *fButton;
     bool fShowButtonOnFocus;

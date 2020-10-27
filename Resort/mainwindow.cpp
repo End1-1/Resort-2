@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "preferences.h"
+#include "dlgonetwoall.h"
 #include "login.h"
 #include "fdebtholders.h"
 #include "appconfig.h"
@@ -13,16 +14,17 @@
 #include "guestcheckin.h"
 #include "fdiscountreport.h"
 #include "recouponseria.h"
-#include "dlgback.h"
+#include "ftstorereport.h"
 #include "fdiscounttotal.h"
-#include "fhouseitems.h"
+#include "fearningswash.h"
 #include "fbreakfast.h"
 #include "fsalesbycar.h"
+#include "fbalanceoncard.h"
 #include "fcash.h"
 #include "fstoreentry.h"
-#include "wwelcomerest.h"
 #include "fpartnersdebt.h"
 #include "fcouponsales.h"
+#include "fdebtholders.h"
 #include "wstoreentry.h"
 #include "fdebtofcostumers.h"
 #include "about.h"
@@ -30,24 +32,17 @@
 #include "remodelofcars.h"
 #include "frestsalebystore.h"
 #include "recashdesk.h"
-#include "dlgcalculateoutputofrestaurant.h"
 #include "fcouponstatistics.h"
 #include "ecomboboxcompleter.h"
 #include "fonlinebreakfast.h"
 #include "recarclient.h"
-#include "fnatbyperiod.h"
 #include "fstoredocs.h"
-#include "dlgutils.h"
-#include "wnotes.h"
-#include "reguesttitle.h"
 #include "wcustomreports.h"
 #include "wcontacts.h"
 #include "wusers.h"
 #include "fmaterialsinstore.h"
 #include "fstoremovement.h"
 #include "wusersgroups.h"
-#include "whotelstatus.h"
-#include "fyearlyfinancialreport.h"
 #include "storedoc.h"
 #include "vauchers.h"
 #include "cachebase.h"
@@ -64,7 +59,6 @@
 #include "rereststore.h"
 #include "rerestprinter.h"
 #include "recreditcard.h"
-#include "fdailymovementcommon.h"
 #include "ftrackchanges.h"
 #include "restorepartner.h"
 #include "cacherights.h"
@@ -72,18 +66,12 @@
 #include "dlguserpasswords.h"
 #include "wglobaldbconfig.h"
 #include "rerestdishcomplex.h"
-#include "wsynchronize.h"
 #include "frestauranttotal.h"
-#include "recurrency.h"
-#include "faccmonthlyreport.h"
 #include "dlgtaxprintsetup.h"
-#include "reinvoiceitem.h"
-#include "fcityledgerbalanceextended.h"
 #include "fevents.h"
 #include "fcashreportsummary.h"
 #include "fcommonfilterbydate.h"
 #include "fcashreport.h"
-#include "fnousedadvance.h"
 #include "recomplimentarycomment.h"
 #include "databaseresult.h"
 #include "wreportbuilder.h"
@@ -93,6 +81,8 @@
 #include <QShortcut>
 #include <QNetworkProxy>
 
+static QMap<int, QList<QAction*> > fMenu;
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -101,25 +91,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QWidget *statusWidget = new QWidget();
-    QHBoxLayout *hl = new QHBoxLayout();
-    fStatusLabelLeft = new QLabel();
-    fStatusLabelRight = new QLabel();
+
     QFont f(qApp->font());
     f.setBold(true);
     f.setPointSize(f.pointSize() + 1);
-    fStatusLabelLeft->setFont(f);
-    fStatusLabelRight->setFont(f);
-    hl->addWidget(fStatusLabelLeft);
-    hl->addSpacerItem(new QSpacerItem(100, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    hl->addWidget(fStatusLabelRight);
-    statusWidget->setLayout(hl);
-    ui->statusBar->addWidget(statusWidget);
     ui->actionChange_password->setVisible(false);
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
     fMainWindow = this;
     fTab = ui->tabWidget;
-    connect(&fTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     logout();
     fSocket.setProxy(QNetworkProxy::NoProxy);
     fCommand.setSocket(&fSocket);
@@ -135,8 +114,73 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut *shortcat11 = new QShortcut(QKeySequence("F11"), this);
     connect(shortcat11, SIGNAL(activated()), this, SLOT(shortcutFullScreen()));
 
-    ui->menuStorehouse->setVisible(false);
-    ui->menuDiscount_system->setVisible(false);
+    if (fMenu.isEmpty()) {
+        QList<QAction*> a1;
+        a1.append(ui->actionRestaurant);
+        a1.append(ui->actionEarnings_carwash);
+        a1.append(ui->actionEarnings_waitroom);
+        a1.append(ui->actionEarnings_shop);
+        a1.append(ui->actionSales_by_storages);
+        a1.append(ui->actionAccounts);
+        a1.append(ui->actionReport_by_payment);
+        a1.append(ui->actionSales_report_by_cars);
+        fMenu.insert(0, a1);
+        QList<QAction*> a2;
+        a2.append(ui->actionNew_store_document);
+        a2.append(ui->actionNew_store_checkpoint);
+        a2.append(ui->actionDocuments_list);
+        a2.append(ui->actionStore_movement);
+        a2.append(ui->actionT_Report);
+        a2.append(ui->actionStore_entries);
+        a2.append(ui->actionMaterials_in_the_store);
+        a2.append(ui->actionPartners_debts);
+        a2.append(ui->actionCalculate_output_of_restaurant);
+        fMenu.insert(1, a2);
+        QList<QAction*> a3;
+        a3.append(ui->actionType_of_dishes);
+        a3.append(ui->actionCarwash_index);
+        a3.append(ui->actionWaiting_room_index);
+        a3.append(ui->actionShop_index);
+        a3.append(ui->actionStorage_goods_index);
+        a3.append(ui->actionComplex_dish);
+        fMenu.insert(2, a3);
+        QList<QAction*> a4;
+        a4.append(ui->actionCoupons);
+        a4.append(ui->actionCoupons_seria);
+        a4.append(ui->actionCoupons_sales);
+        a4.append(ui->actionCoupons_statistics);
+        a4.append(ui->actionModels_of_cars);
+        a4.append(ui->actionCostumers);
+        a4.append(ui->actionCostumers_cars);
+        a4.append(ui->actionCoupons_one_off);
+        a4.append(ui->actionCoupons_present);
+        a4.append(ui->actionDiscount_report);
+        a4.append(ui->actionDiscount_total);
+        a4.append(ui->actionBalance_of_the_cards);
+        fMenu.insert(3, a4);
+        QList<QAction*> a5;
+        a5.append(ui->actionHakk);
+        a5.append(ui->actionTables);
+        a5.append(ui->actionStorages);
+        a5.append(ui->actionAccounts_2);
+        a5.append(ui->actionCash_operation);
+        a5.append(ui->actionPartners_2);
+        a5.append(ui->actionUsers_groups);
+        a5.append(ui->actionUsers);
+        a5.append(ui->actionGlobal_config);
+        fMenu.insert(4, a5);
+    }
+
+    QString bgpath = qApp->applicationDirPath() + "/bg.png";
+    qDebug() << bgpath;
+    QPixmap bkgnd(bgpath);
+    bkgnd = bkgnd.scaled(ui->wbg->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    ui->wbg->setPalette(palette);
+
+    ui->wbg->setStyleSheet(QString(".QWidget{border-image:url(%1)0 0 0 0 stretch stretch;}").arg(qApp->applicationDirPath()
+                                                                                        + "/bg.jpg"));
 
 }
 
@@ -231,10 +275,7 @@ void MainWindow::login()
         return;
     }
     CacheBase<CI_Base>::setDatabase(fDb.db());
-    fCacheDate = WORKING_DATE;
     enableMainMenu(true);
-    wwelcomerest *ww = addTab<wwelcomerest>();
-    ui->tabWidget->tabBar()->tabButton(0, QTabBar::RightSide)->resize(0, 0);
     fTimer.start(60000);
     ui->actionChange_password->setVisible(true);
     if (fPreferences.getDb(def_receip_vaucher_id).toInt() == 0) {
@@ -255,26 +296,10 @@ void MainWindow::setCurrentWidget(QWidget *w)
     ui->tabWidget->setCurrentWidget(w);
 }
 
-void MainWindow::configureLabels()
+void MainWindow::expandTab()
 {
-    QString text = QString("[%1] %2, %3")
-            .arg(fDbName)
-            .arg(tr("Welcome"))
-            .arg(WORKING_USERNAME);
-    QString textRight = QString("%1: %2; %3: %4; %5: %6")
-            .arg(tr("Current date"))
-            .arg(QDate::currentDate().toString(def_date_format))
-            .arg(tr("Working date"))
-            .arg(fPreferences.getLocalString(def_working_day))
-            .arg(tr("Last charge date"))
-            .arg(WORKING_DATE.addDays(-1).toString(def_date_format));
-    fStatusLabelLeft->setText(text);
-    fStatusLabelRight->setText(textRight);
-}
-
-void MainWindow::hideMenu()
-{
-    ui->menuBar->setVisible(false);
+    ui->tabWidget->setMaximumWidth(16777215);
+    ui->wbg->setMaximumWidth(0);
 }
 
 void MainWindow::tabCloseRequested(int index)
@@ -285,46 +310,10 @@ void MainWindow::tabCloseRequested(int index)
     }
     ui->tabWidget->removeTab(index);
     delete w;
-}
-
-void MainWindow::timeout()
-{
-    fTimer.stop();
-    Database db;
-    db.copyConnectionParamsFrom(fDb);
-    if (!db.open())
-        return;
-    QString query = "select r.f_id, r.f_state, s.f_" + def_lang + ", r.f_room, rm.f_short as f_room_short, "
-            "r.f_group, ug.f_" + def_lang + ", r.f_dateStart, "
-            "r.f_interval, r.f_text, r.f_guest, concat(g.f_firstName, ' ', g.f_lastName) as f_guestName, "
-            "n.f_name as f_nationality, r.f_dateLastComplete, concat(u.f_firstName, ' ', u.f_lastName) "
-            "from f_reminder r "
-            "left join f_room rm on r.f_room=rm.f_id "
-            "left join f_guests g on r.f_guest=g.f_id "
-            "left join f_nationality n on g.f_nation=n.f_short "
-            "left join f_reminder_state s on r.f_state=s.f_id "
-            "left join users_groups ug on ug.f_id=r.f_group "
-            "left join users u on u.f_id=r.f_author "
-            "where r.f_state=1 and (r.f_group = 0 or r.f_group=:f_group) "
-            "and (r.f_dateLastComplete is null or current_timestamp() > addtime(r.f_dateLastComplete, r.f_interval)) ";
-    QList<QList<QVariant> > rows;
-    QMap<QString, QVariant> bind;
-    bind[":f_group"] = WORKING_USERGROUP;
-    db.select(query, bind, rows);
-    db.close();
-    for (QList<QList<QVariant> >::iterator it = rows.begin(); it != rows.end(); it++) {
-        QDateTime l = (*it)[13].toDateTime();
-        bool go = false;
-        if (l.isValid()) {
-            go = true;
-        } else {
-            if (QDateTime::currentDateTime() > (*it)[7].toDateTime()) {
-                go = true;
-            }
-        }
-
+    if (ui->tabWidget->count() == 0) {
+        ui->tabWidget->setMaximumWidth(0);
+        ui->wbg->setMaximumWidth(167772150);
     }
-    fTimer.start(60000);
 }
 
 void MainWindow::socketReadyRead()
@@ -383,12 +372,6 @@ void MainWindow::logout()
     CacheOne::clearAll();
     fSocket.close();
     ui->actionChange_password->setVisible(false);
-    fStatusLabelLeft->setText(tr("Not connected"));
-    fStatusLabelRight->clear();
-    foreach (QAction *a, fCustomReports.keys()) {
-        ui->menuBar->removeAction(a);
-        delete a;
-    }
     fCustomReports.clear();
 }
 
@@ -402,170 +385,118 @@ void MainWindow::lock()
 
 void MainWindow::enableMainMenu(bool value)
 {
+    ui->wmenu->setVisible(value);
+    ui->lstMenu->setMinimumHeight(0);
+    ui->lstMenu->setMaximumHeight(0);
     if (!value) {
         return;
     }
-
-    for (int i = 1; i < ui->menuBar->actions().count() - 1; i++) {
-        ui->menuBar->actions()[i]->setEnabled(true);
-    }
-
-    ui->menuBar->actions().at(1)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_reservation)); //Resevation
-    ui->actionRoomChart->setVisible(RIGHT(WORKING_USERGROUP, cr__room_chart));
-    ui->actionNew_reservation->setVisible(RIGHT(WORKING_USERGROUP, cr__edit_reservation));
-    ui->actionNew_group_reservation->setVisible(r__(cr__reservation_group_reservation));
-    ui->actionReservatios->setVisible(RIGHT(WORKING_USERGROUP, cr__reservations));
-    ui->actionReservation_groups->setVisible(r__(cr__reservation_group_reservation));
-    ui->actionReservations_by_date_created->setVisible(r__(cr__reservations));
-    ui->actionRe_checkin->setVisible(r__(cr__re_checkin));
-    ui->actionChanges_of_states_of_room->setVisible(r__(cr__reservation_changes_state_room));
-    ui->actionCanceled_reservations->setVisible(r__(cr__reservations));
-    ui->actionCancelation_No_show_fees->setVisible(r__(cr__reservation_cancelation_no_show));
-    ui->actionLenght_of_stay->setVisible(r__(cr__reserv_lenght_of_stay));
-    ui->actionList_of_source_reservation->setVisible(r__(cr__reservatoin_list_of_source));
-    ui->actionCategory_to_sell->setVisible(r__(cr__reservation_category_to_sell));
-    ui->actionForecast_Occupancy_Category->setVisible(r__(cr__reservation_forecast_occupation));
-    ui->actionAvaiable_rooms->setVisible(r__(cr__reservation_avaiable_room));
-
-    ui->menuBar->actions().at(2)->setVisible(RIGHT(WORKING_USERGROUP, cr__reception)); // Reception
-    ui->actionIn_house_guest->setVisible(r__(cr__report_guest));
-    ui->actionExpected_arrivals->setVisible(r__(cr__report_guest));
-    ui->actionExpected_arrivals_simple->setVisible(r__(cr__report_guest));
-    ui->actionRe_checkin->setVisible(r__(cr__re_checkin));
-    ui->actionCall_history->setVisible(r__(cr__calls_history));
-    ui->actionNotes->setVisible(r__(cr__notes));
-    ui->actionContacts->setVisible(r__(cr__contacts));
-    ui->actionRemarks->setVisible(r__(cr__remarks));
-    ui->actionHotel_status->setVisible(r__(cr__hotel_status));
-    ui->actionRoom_inventory_2->setVisible(r__(cr__reception_room_inventory));
-    ui->actionList_of_checkin_guests->setVisible(r__(cr__list_of_checking_guests));
-
-    ui->menuBar->actions().at(3)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_cashier)); // Cashier
-    ui->actionCurrencies->setVisible(r__(cr__currencies));
-    ui->actionNew_advance_entry->setVisible(r__(cr__advance_vaucher));
-    ui->actionPosting_charge->setVisible(r__(cr__postchage_vaucher));
-    ui->actionReceipt_vaucher->setVisible(r__(cr__receipt_vaucher));
-    ui->actionDiscount->setVisible(r__(cr__discount_vaucher));
-    ui->actionTransfer_amount->setVisible(r__(cr__discount_vaucher));
-    ui->actionCash_report_total->setVisible(r__(cr__report_cash));
-    ui->actionCash_repoort_detailed->setVisible(r__(cr__report_cash));
-    ui->actionAdvance_report->setVisible(r__(cr__cashier_advance_report));
-    ui->actionCancelation_No_show_fee->setVisible(r__(cr__reservation_cancelation_no_show));
-    ui->actionTransfer_CL_amount->setVisible(r__(cr__cashier_transfer_any_direction));
-    ui->actionRefund_voucher->setVisible(r__(cr__cashier_refund));
-#ifdef _HOTEL_
-    ui->actionAccounts->setVisible(false);
-#endif
-
-    ui->menuBar->actions().at(4)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_cityledger)); //Cityledger
-    ui->actionCity_Ledger_detailed_balance->setVisible(r__(cr__cityledger_balance));
-    ui->actionCity_ledger_balance_2->setVisible(r__(cr__cityledger_balance));
-    ui->actionCity_Ledger_balance->setVisible(RIGHT(WORKING_USERGROUP, cr__cityledger_balance));
-    ui->actionAvailable_amounts->setVisible(r__(cr__cityledger_avaiable_amounts));
-
-
-    ui->menuBar->actions().at(5)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_bookkeeping)); //Bookkeeping
-    ui->actionVauchers->setVisible(r__(cr__report_vauchers));
-    ui->actionDaily_movement->setVisible(r__(cr__report_daily_movement));
-    ui->actionMonthly_Report->setVisible(r__(cr__report_monthly));
-    ui->actionDaily_financial_report->setVisible(r__(cr__report_daily_movement));
-    ui->actionRestaurant->setVisible(r__(cr__report_restaurant));
-    ui->actionInvoices->setVisible(r__(cr__report_checkout_invoices));
-    ui->actionGuest_Tray_Ledger->setVisible(r__(cr__bookeeping_guest_tray_ledger));
-    ui->actionIn_house_detailed_balance->setVisible(r__(cr__bookeeping_inhouse_detailed));
-    ui->actionYearly_financial_report->setVisible(r__(cr__bookeeping_yearly_financial_report));
-    ui->actionCheckout_invoices_free_rooming->setVisible(r__(cr__report_checkout_invoices));
-
-    ui->menuBar->actions().at(6)->setVisible(r__(cr__menu_restaurant_reports)); //Restaurant
-    ui->actionOpen_breakfast->setVisible(r__(cr__menu_restaurant_reports));
-    ui->actionSales_by_storages->setVisible(r__(cr__menu_restaurant_reports));
-    ui->actionBreakfast_report->setVisible(r__(cr__menu_restaurant_reports));
-
-    ui->menuBar->actions().at(7)->setVisible(r__(cr__analytics_menu)); // Analytics
-    ui->actionCardex_analysis->setVisible(r__(cr__cardex_analysis));
-    ui->actionReports_set->setVisible(r__(cr__reports_set));
-    ui->actionStatistics->setVisible(r__(cr__reports_set));
-    ui->actionMonthly_occupancy_percentages->setVisible(r__(cr__analytics_menu));
-    ui->actionNaitonality_report_by_period->setVisible(r__(cr__reports_set));
-    ui->actionCall_history->setVisible(r__(cr__call_in) || r__(cr__call_int) || r__(cr__call_out) || r__(cr__call_tin) || r__(cr__call_tout));
-    ui->actionMonthly_occupancy_percentages->setVisible(r__(cr__analytics_monthly_occupancy_perc));
-    ui->actionGuest_by_nationality->setVisible(r__(cr__analytics_guest_by_nationality));
-
-    ui->menuBar->actions().at(9)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_restaurant)); //directory restaurant
-
-    ui->menuBar->actions().at(10)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_direcotory)); //Directory hotel
-    ui->actionContacts->setVisible(RIGHT(WORKING_USERGROUP, cr__contacts));
-    ui->actionPartners->setVisible(RIGHT(WORKING_USERGROUP, cr__partners));
-    ui->actionPartners_group->setVisible(r__(cr__partners));
-    ui->actionCity_Ledger->setVisible(r__(cr__partners));
-    ui->actionNationality_file->setVisible(r__(cr__guests));
-    ui->actionGuest_file->setVisible(RIGHT(WORKING_USERGROUP, cr__guests));
-    ui->actionGuest_titles->setVisible(r__(cr__guests));
-    ui->actionCredit_card->setVisible(RIGHT(WORKING_USERGROUP, cr__credit_cards));
-    ui->actionCategories->setVisible(r__(cr__room_editor));
-    ui->actionRoom_view->setVisible(r__(cr__room_editor));
-    ui->actionType_of_bed->setVisible(r__(cr__room_editor));
-    ui->actionRoom_list->setVisible(r__(cr__room_editor));
-    ui->actionInvoice_items->setVisible(r__(cr__invoice_items));
-    ui->actionSetup_Tax_Printer->setVisible(r__(cr__setup_tax));
-    ui->actionRoom_inventory->setVisible(r__(cr__directory_hotel_room_inventory));
-    ui->actionRoom_inventory_states->setVisible(r__(cr__directory_hotel_room_inventory_state));
-#ifdef _HOTEL_
-    ui->actionCostumers_cars->setVisible(false);
-    ui->actionModels_of_cars->setVisible(false);
-    ui->actionAccounts_2->setVisible(false);
-#endif
-
-    ui->menuBar->actions().at(11)->setVisible(RIGHT(WORKING_USERGROUP, cr__menu_application)); //Application
-    ui->actionUsers_groups->setVisible(RIGHT(WORKING_USERGROUP, cr__users_groups));
-    ui->actionUsers->setVisible(RIGHT(WORKING_USERGROUP, cr__users));
-    ui->actionTrack_changes->setVisible(RIGHT(WORKING_USERGROUP, cr_trackin_changes));
-    ui->actionGlobal_config->setVisible(RIGHT(WORKING_USERGROUP, cr__global_config));
-    ui->actionUpdate_program->setVisible(RIGHT(WORKING_USERGROUP, cr__update_program));
-    ui->actionReport_buillder->setVisible(WORKING_USERGROUP == 1);
-    ui->actionExport_invoices->setVisible(r__(cr__bookkeeper_sync) && fPreferences.getDb("HC").toInt() > 0);
-    ui->actionSynchronization->setVisible(fPreferences.getDb("HC").toBool() && RIGHT(WORKING_USERGROUP, cr__export_event_etc));
-    ui->actionExport_back->setVisible(fPreferences.getDb("HC").toBool() && RIGHT(WORKING_USERGROUP, cr__export_active_reservations));
-    ui->actionExport_active_reservations->setVisible(fPreferences.getDb("HC").toBool() && RIGHT(WORKING_USERGROUP, cr__export_active_reservations));
-    ui->actionExport_data->setVisible(fPreferences.getDb("HC").toBool() && r__(cr__bookkeeper_sync));
-    ui->actionExport_reservations->setVisible(fPreferences.getDb("HC").toBool() && r__(cr__export_active_reservations));
-    ui->actionUtils->setVisible(WORKING_USERGROUP == 1);
-    ui->actionWeb->setVisible(false);
-
-    ui->menuBar->actions().at(12)->setVisible(r__(cr__storehouse_all_items)); // Storehouse
-
-    ui->menuBar->actions().at(13)->setVisible(false); // Discount system
-#ifdef _HOTEL_
-    ui->actionDebts->setVisible(false);
-    ui->actionSales_report_by_cars->setVisible(false);
-#endif
-
-    fDb.select("select f_id, f_name, f_groupAccess, f_menu from serv_reports where f_menu>0", fDbBind, fDbRows);
-    foreach_rows {
-        if (it->at(2).toString() != "*") {
-            QStringList groups = it->at(2).toString().split(";", QString::SkipEmptyParts);
-            if (!groups.contains(QString::number(WORKING_USERGROUP))) {
-                continue;
-            }
-        }
-        QAction *a = ui->menuBar->actions().at(it->at(3).toInt())->menu()->
-                addAction(QIcon(":/images/report.png"), it->at(1).toString(), this, SLOT(customReport()));
-        fCustomReports[a] = it->at(0).toInt();
-    }
-    ui->menuBar->actions().at(8)->setVisible(ui->menuOther_Reports->actions().count() > 0);
-
-#ifdef _RESORT_BUILD_
-    ui->menuDiscount_system->setVisible(false);
-    ui->menuStorehouse->setVisible(false);
-#endif
 }
 
 void MainWindow::disableMainMenu()
 {
-    for (int i = 1; i < ui->menuBar->actions().count() - 1; i++) {
-        ui->menuBar->actions()[i]->setEnabled(false);
-        ui->menuBar->actions()[i]->setVisible(true);
+    enableMainMenu(false);
+}
+
+void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
+{
+    ui->lstMenu->clear();
+    for (QAction *a: l)  {
+        QToolButton *b = new QToolButton();
+        b->setText(a->text());
+        b->setIcon(a->icon());
+        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        b->setStyleSheet("border: 1px solid gray; background-color: rgb(240, 240, 170); margin: 1px; font-size: 10pt;");
+        connect(b, SIGNAL(clicked()), a, SLOT(trigger()));
+        QListWidgetItem *item = new QListWidgetItem(ui->lstMenu);
+        item->setSizeHint(QSize(100, 40));
+        ui->lstMenu->setItemWidget(item, b);
     }
+    ui->lstMenu->setMinimumHeight(ui->lstMenu->count() * 40);
+    ui->lstMenu->setMaximumHeight(ui->lstMenu->count() * 40);
+    ui->verticalLayout->insertWidget(btn->property("index").toInt(), ui->lstMenu);
+}
+
+void MainWindow::dish(int t)
+{
+    int ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
+    if (ot == 0) {
+        return;
+    }
+    QString cond;
+    switch (ot) {
+    case 2:
+        cond = " and d.f_id in (select f_dish from r_menu where f_state=1) ";
+        break;
+    case 3:
+        cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
+        break;
+    }
+
+    QList<int> widths;
+    widths << 100
+           << 0
+           << 120
+           << 0
+           << 120
+           << 150
+           << 0
+           << 0
+           << 0
+           << 80
+           << 80
+           << 80
+           << 80
+           << 0
+           << 80   ;
+    QStringList fields;
+    fields << "f_id"
+           << "f_defstore"
+           << "f_defstorename"
+           << "f_type"
+           << "f_type_name"
+           << "f_en"
+           << "f_den"
+           << "f_bgColor"
+           << "f_textColor"
+           << "f_queue"
+           << "f_adgt"
+           << "f_as"
+           << "f_lastPrice"
+           << "f_unit"
+           << "f_unitName"
+              ;
+    QStringList titles;
+    titles << tr("Code")
+           << tr("Part")
+           << tr("Store")
+           << tr("Type code")
+           << tr("Type")
+           << tr("Name")
+           << tr("Description")
+           << tr("Background color")
+           << tr("Text color")
+           << tr("Queue")
+           << tr("ADGT")
+           << tr("ArmSoft")
+           << tr("Input price")
+           << tr("Unit code")
+           << tr("Unit name")
+              ;
+    QString title = tr("Dishes");
+    QString icon = ":/images/cutlery.png";
+    QString query = "select d.f_id, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
+            "d.f_en, d.f_text_en,  "
+            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName "
+            "from r_dish d "
+            "inner join r_dish_type t on t.f_id=d.f_type "
+            "inner join r_dish_part p on p.f_id=t.f_part "
+            "inner join r_unit u on u.f_id=d.f_unit "
+            "left join r_store st on st.f_id=d.f_defstore "
+            "where p.f_id=" + QString("%1 ").arg(t) + cond +
+            "order by p.f_en, t.f_en, d.f_queue ";
+    WReportGrid *r = addTab<WReportGrid>();
+    r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -767,81 +698,7 @@ void MainWindow::on_actionType_of_dishes_triggered()
 
 void MainWindow::on_actionDishes_triggered()
 {
-    QList<int> widths;
-    widths << 100
-           << 0
-           << 120
-           << 0
-           << 120
-           << 150
-           << 150
-           << 150
-           << 0
-           << 0
-           << 0
-           << 0
-           << 0
-           << 80
-           << 80
-           << 80
-           << 80
-           << 0
-           << 80   ;
-    QStringList fields;
-    fields << "f_id"
-           << "f_defstore"
-           << "f_defstorename"
-           << "f_type"
-           << "f_type_name"
-           << "f_am"
-           << "f_en"
-           << "f_ru"
-           << "f_dam"
-           << "f_den"
-           << "f_dru"
-           << "f_bgColor"
-           << "f_textColor"
-           << "f_queue"
-           << "f_adgt"
-           << "f_as"
-           << "f_lastPrice"
-           << "f_unit"
-           << "f_unitName"
-              ;
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Part")
-           << tr("Store")
-           << tr("Type code")
-           << tr("Type")
-           << tr("Name, am")
-           << tr("Name, en")
-           << tr("Name, ru")
-           << tr("Description, am")
-           << tr("Description, en")
-           << tr("Description, ru")
-           << tr("Background color")
-           << tr("Text color")
-           << tr("Queue")
-           << tr("ADGT")
-           << tr("ArmSoft")
-           << tr("Input price")
-           << tr("Unit code")
-           << tr("Unit name")
-              ;
-    QString title = tr("Dishes");
-    QString icon = ":/images/cutlery.png";
-    QString query = "select d.f_id, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_" + def_lang +", "
-            "d.f_am, d.f_en, d.f_ru, d.f_text_am, d.f_text_en, d.f_text_ru, "
-            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName "
-            "from r_dish d "
-            "inner join r_dish_type t on t.f_id=d.f_type "
-            "inner join r_dish_part p on p.f_id=t.f_part "
-            "inner join r_unit u on u.f_id=d.f_unit "
-            "left join r_store st on st.f_id=d.f_defstore "
-            "order by p.f_" + def_lang + ", t.f_" + def_lang + ", d.f_queue";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);
+    dish(2);
 }
 
 void MainWindow::on_actionModifiers_triggered()
@@ -1003,48 +860,7 @@ void MainWindow::on_actionGlobal_config_triggered()
 
 void MainWindow::on_actionComplex_dish_triggered()
 {
-    QList<int> widths;
-    widths << 80
-           << (def_lang == "am" ? 300 : 0)
-           << (def_lang == "en" ? 300 : 0)
-           << (def_lang == "ru" ? 300 : 0)
-           << 80
-           << 80
-           << 80
-           << 80
-           << 80
-           << 30
-              ;
-    QStringList fields;
-    fields << "f_id"
-           << "f_am"
-           << "f_en"
-           << "f_ru"
-           << "f_startTime"
-           << "f_endTime"
-           << "f_price"
-           << "f_priceDeviation"
-           << "f_adgt"
-           << "f_enabled"
-              ;
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Name, am")
-           << tr("Name, en")
-           << tr("Name, ru")
-           << tr("Start time")
-           << tr("End time")
-           << tr("Price")
-           << tr("Price deviation")
-           << tr("ADGT")
-           << tr("Active")
-              ;
-    QString title = tr("Complex dish");
-    QString icon = ":/images/dinner.png";
-    QString query = "select f_id, f_am, f_en, f_ru, f_startTime, f_endTime, f_price, "
-            "f_priceDeviation, f_adgt, f_enabled from r_dish_complex";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RERestDishComplex>(widths, fields, titles, title, icon, query);
+    dish(4);
 }
 
 QString MainWindow::actionTitle(QObject *a)
@@ -1052,38 +868,9 @@ QString MainWindow::actionTitle(QObject *a)
     return static_cast<QAction*>(a)->text();
 }
 
-void MainWindow::on_actionSynchronization_triggered()
-{
-    addTab<WSynchronize>();
-}
-
 void MainWindow::on_actionRestaurant_triggered()
 {
     FRestaurantTotal::open();
-}
-
-void MainWindow::on_actionCurrencies_triggered()
-{
-    QList<int> widths;
-    widths << 80
-           << 100
-           << 300
-           << 80;
-    QStringList fields;
-    fields << "f_id"
-           << "f_short"
-           << "f_name"
-           << "f_rate";
-    QStringList titles;
-    titles << tr("Code")
-           << tr("Short")
-           << tr("Name")
-           << tr("Rate");
-    QString title = actionTitle(sender());
-    QString icon = ":/images/currency.png";
-    QString query = "select f_id, f_short, f_name, f_rate from f_acc_currencies";
-    WReportGrid *r = addTab<WReportGrid>();
-    r->fullSetup<RECurrency>(widths, fields, titles, title, icon, query);
 }
 
 void MainWindow::on_actionSetup_Tax_Printer_triggered()
@@ -1108,11 +895,6 @@ void MainWindow::on_actionEvent_triggered()
     FEvents::open();
 }
 
-void MainWindow::on_actionDaily_financial_report_triggered()
-{
-    FDailyMovementCommon::open();
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     bool canClose = true;
@@ -1135,28 +917,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    /*
-    if (event->pos().y() < 30) {
-        if (isFullScreen()) {
-            ui->menuBar->show();
-        }
-    } else if (isFullScreen()) {
-        ui->menuBar->hide();
-    }
-    */
-    QMainWindow::mouseMoveEvent(event);
-}
-
 void MainWindow::shortcutFullScreen()
 {
     if (isFullScreen()) {
         showMaximized();
-        ui->menuBar->show();
     } else {
         showFullScreen();
-        ui->menuBar->hide();
     }
 }
 
@@ -1198,13 +964,6 @@ void MainWindow::on_actionStatistics_triggered()
     addTab<WReportsSetOld>();
 }
 
-void MainWindow::on_actionUtils_triggered()
-{
-    DlgUtils *d = new DlgUtils(this);
-    d->exec();
-    delete d;
-}
-
 void MainWindow::on_actionRestaurant_online_triggered()
 {
     FOnlineRest::openOnlineRestaurant();
@@ -1219,7 +978,7 @@ void MainWindow::on_actionConfigure_Welcome_Page_triggered()
 
 void MainWindow::on_actionNew_store_document_triggered()
 {
-    StoreDoc::openStoreDocument("");
+    StoreDoc::openStoreDocument(0);
 }
 
 void MainWindow::on_actionPartners_2_triggered()
@@ -1245,11 +1004,6 @@ void MainWindow::on_actionStore_movement_triggered()
 void MainWindow::on_actionCoupons_triggered()
 {
     RECoupon::openReport();
-}
-
-void MainWindow::on_actionCalculate_output_of_restaurant_triggered()
-{
-    DlgCalculateOutputOfRestaurant::openDialog();
 }
 
 void MainWindow::on_actionOpen_breakfast_triggered()
@@ -1345,4 +1099,97 @@ void MainWindow::on_actionSales_report_by_cars_triggered()
 void MainWindow::on_actionDiscount_total_triggered()
 {
     FDiscountTotal::openFilterReport<FDiscountTotal, WReportGrid>();
+}
+
+void MainWindow::on_actionT_Report_triggered()
+{
+    FTStoreReport::openFilterReport<FTStoreReport, WReportGrid>();
+}
+
+void MainWindow::on_tbEarning_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[0]);
+}
+
+void MainWindow::on_tbStore_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[1]);
+}
+
+void MainWindow::on_tbStore_2_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[2]);
+}
+
+void MainWindow::on_tbStore_3_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[3]);
+}
+
+void MainWindow::on_tbStore_4_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[4]);
+}
+
+void MainWindow::on_actionCostumers_triggered()
+{
+    FDebtHolders::openFilterReport<FDebtHolders, WReportGrid>();
+}
+
+void MainWindow::on_actionCoupons_one_off_triggered()
+{
+    RECarClient::openReport2();
+}
+
+void MainWindow::on_actionCoupons_present_triggered()
+{
+    RECarClient::openReport3();
+}
+
+void MainWindow::on_actionBalance_of_the_cards_triggered()
+{
+    FBalanceOnCard::openFilterReport<FBalanceOnCard, WReportGrid>();
+}
+
+void MainWindow::on_tbExit_clicked()
+{
+    close();
+}
+
+void MainWindow::on_actionEarnings_carwash_triggered()
+{
+    FEarningsWash *w = FEarningsWash::openFilterReport<FEarningsWash, WReportGrid>();
+    w->setHall(1);
+}
+
+void MainWindow::on_actionEarnings_waitroom_triggered()
+{
+    FEarningsWash *w = FEarningsWash::openFilterReport<FEarningsWash, WReportGrid>();
+    w->setHall(2);
+}
+
+void MainWindow::on_actionCarwash_index_triggered()
+{
+    dish(1);
+}
+
+void MainWindow::on_actionWaiting_room_index_triggered()
+{
+    dish(2);
+}
+
+void MainWindow::on_actionStorage_goods_index_triggered()
+{
+    dish(3);
+}
+
+void MainWindow::on_actionEarnings_shop_triggered()
+{
+    FEarningsWash *w = FEarningsWash::openFilterReport<FEarningsWash, WReportGrid>();
+    w->setHall(4);
+}
+
+void MainWindow::on_actionShop_index_triggered()
+{
+    dish(5);
 }

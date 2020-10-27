@@ -37,7 +37,6 @@
         <file>ahuni.ttf</file>
         <file>images/error.png</file>
         <file>images/transfer.png</file>
-        <file>images/app.png</file>
         <file>images/controls.png</file>
         <file>images/window.png</file>
         <file>images/eraser.png</file>
@@ -132,5 +131,11 @@
         <file>images/minibar.png</file>
         <file>images/email.png</file>
         <file>images/paper-plane.png</file>
+        <file>images/coffee.png</file>
+        <file>images/carwash.png</file>
+        <file>images/earnings.png</file>
+        <file>images/puzzle.png</file>
+        <file>images/package.png</file>
+        <file>images/earn.png</file>
     </qresource>
 </RCC>

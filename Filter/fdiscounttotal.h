@@ -17,6 +17,7 @@ public:
     virtual QString reportTitle();
     virtual QWidget *firstElement();
     virtual void apply(WReportGrid *rg);
+
 private:
     Ui::FDiscountTotal *ui;
 };

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1020</width>
+    <width>1067</width>
     <height>567</height>
    </rect>
   </property>
@@ -104,6 +104,25 @@
         </property>
         <property name="text">
          <string>VIP</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnShop">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>SHOP</string>
         </property>
        </widget>
       </item>
@@ -470,35 +489,6 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="btnPackage">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="res.qrc">
-                <normaloff>:/images/box.png</normaloff>:/images/box.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QPushButton" name="btnSetCar">
               <property name="minimumSize">
                <size>
@@ -753,6 +743,9 @@
             </property>
             <item row="1" column="4">
              <widget class="QPushButton" name="btnTransfer">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>

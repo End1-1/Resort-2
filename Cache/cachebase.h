@@ -19,8 +19,6 @@ typedef struct CI_Base {
 } CI_Base;
 Q_DECLARE_METATYPE(CI_Base*)
 
-extern QDate fCacheDate;
-
 template<class T>
 class CacheBase : public CacheOne
 {

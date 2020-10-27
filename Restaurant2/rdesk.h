@@ -36,7 +36,6 @@ public:
     void removeOrder();
     void showTableOrders();
     void showMyTotal();
-    void recover();
     void initialCash();
     void setComplexMode();
     void closeOrder(int state = ORDER_STATE_CLOSED);
@@ -80,7 +79,6 @@ private slots:
     void on_btnComment_clicked();
     void on_btnTools_clicked();
     void on_btnCheckout_clicked();
-    void on_btnTransfer_clicked();
     void on_btnTypeUp_clicked();
     void on_btnTypeDown_clicked();
     void on_btnDishUp_clicked();
@@ -99,6 +97,8 @@ private slots:
     void on_btnExit_2_clicked();
     void on_btnDiss50_clicked();
     void on_btnHallVIP_clicked();
+
+    void on_btnShop_clicked();
 
 private:
     Ui::RDesk *ui;

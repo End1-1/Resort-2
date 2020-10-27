@@ -33,12 +33,6 @@ int main(int argc, char *argv[])
     for (int i = 0; i < argc; i++) {
         params << argv[i];
     }
-    /*
-    if (params.contains("noversion")) {
-        QMessageBox::information(nullptr, "No version", "No check version mode");
-        DO_NOT_CHECK_VERSION = true;
-    }
-    */
 
     QFile file(p.getString(def_home_path) + "/lock.pid");
     file.remove();
@@ -57,9 +51,12 @@ int main(int argc, char *argv[])
     }
     styleSheet.open(QIODevice::ReadOnly);
     a.setStyleSheet(styleSheet.readAll());
-    QFont f("Times", 12);
+    QFont f("Tahoma", 12);
     a.setFont(f);
     a.setWindowIcon(QIcon(":/images/app.ico"));
+
+//    QFont font("Arial LatArm Unicode", 12);
+//    a.setFont(font);
 
     RFace *w = new RFace();
     if (!w->fIsConfigured) {

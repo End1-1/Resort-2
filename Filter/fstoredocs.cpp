@@ -139,7 +139,7 @@ void FStoreDocs::copyDoc()
             return;
     }
     StoreDoc *d = addTab<StoreDoc>();
-    d->copyDoc(out.at(0).toString());
+    d->copyDoc(out.at(0).toInt());
 }
 
 void FStoreDocs::doubleClicked(const QList<QVariant> &row)
@@ -149,7 +149,7 @@ void FStoreDocs::doubleClicked(const QList<QVariant> &row)
         return;
     }
     StoreDoc *d = addTab<StoreDoc>();
-    d->loadDoc(row.at(0).toString());
+    d->loadDoc(row.at(0).toInt());
 }
 
 void FStoreDocs::on_btnDateLeft_clicked()

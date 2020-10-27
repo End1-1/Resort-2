@@ -1,0 +1,40 @@
+alter table o_dish drop column f_id;
+alter table o_dish add column f_id integer primary key auto_increment first;
+drop table r_store_info;
+update r_docs set f_id=replace(f_id, 'ST-', '');
+update r_body set f_doc=replace(f_doc, 'ST-', '');
+update r_docs set f_id='-4551' where f_id='00455A';
+update r_docs set f_id='-4552' where f_id='00455B';
+update r_body set f_doc='-4551' where f_doc='00455A';
+update r_body set f_doc='-4552' where f_doc='00455B';
+alter table r_body change column f_doc f_doc integer;
+alter table r_docs change column f_id f_id integer auto_increment;
+delete from r_store_acc;
+alter table r_store_acc change column f_doc f_doc integer;
+alter table r_store_acc add f_sign smallint;
+update r_table set f_order='0';
+ALTER TABLE `r_table` CHANGE COLUMN `f_order` `f_order` INT NULL DEFAULT NULL ;
+update o_Header set f_id=replace(f_id, 'PS-', '');
+update o_Header_payment set f_id=replace(f_id, 'PS-', '');
+DELETE FROM `o_header_payment` WHERE (`f_id` = '');
+alter table o_header add column f_nid integer;
+alter table o_header_payment add column f_nid integer;
+update o_Header set f_nid=cast(f_id as unsigned);
+update o_Header_payment set f_nid=cast(f_id as unsigned);
+alter table o_Header drop column f_id;
+alter table o_header_payment drop column f_Id;
+alter table o_header change column f_nid f_id integer primary key auto_increment first;
+alter table o_header_payment change column f_nid f_id integer primary key first;
+
+update o_dish set f_header=replace(f_header, 'PS-', '');
+alter table o_dish change column f_header f_header integer;
+
+update o_car set f_order=replace(f_order, 'PS-', '');
+alter table o_car change column f_order f_order integer;
+
+update o_temp_disc set f_id=replace(f_id, 'PS-', '');
+delete from o_temp_disc where f_id='';
+alter table o_temp_disc change column f_id f_id integer;
+ALTER TABLE `r_docs` CHANGE COLUMN `f_rest` `f_rest` INT NULL DEFAULT '0' ;
+delete from o_recipe;
+alter table o_recipe change column f_header f_header integer, change column f_body f_body integer;

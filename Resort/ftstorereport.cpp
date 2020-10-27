@@ -296,6 +296,6 @@ void FTStoreReport::doubleClickOnRow(int row, int column, const QList<QVariant> 
     }
     for (int i = 0; i < dr.rowCount(); i++) {
         StoreDoc *d = addTab<StoreDoc>();
-        d->loadDoc(dr.value(0).toString());
+        d->loadDoc(dr.value(0).toInt());
     }
 }

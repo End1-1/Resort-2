@@ -19,11 +19,11 @@ class StoreDoc : public BaseWidget
 public:
     explicit StoreDoc(QWidget *parent = 0);
     ~StoreDoc();
-    void loadDoc(const QString &id);
-    void copyDoc(const QString &id);
+    void loadDoc(int id);
+    void copyDoc(int id);
     virtual void setup();
     virtual void selector(int number, const QVariant &value);
-    static void openStoreDocument(const QString &id);
+    static void openStoreDocument(int id);
 
 private:
     Ui::StoreDoc *ui;

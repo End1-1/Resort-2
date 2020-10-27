@@ -49,7 +49,7 @@ typedef struct {
 Q_DECLARE_METATYPE(DishStruct*)
 
 typedef struct {
-    QString fRecId;
+    int fRecId;
     int fState;
     int fCancelUser;
     QDateTime fCancelDate;
@@ -75,7 +75,7 @@ typedef struct {
 Q_DECLARE_METATYPE(OrderDishStruct*)
 
 struct DishComplexStruct{
-    QString fRecId;
+    int fRecId;
     int fId;
     QMap<QString, QString> fName;
     QTime fStart;

@@ -105,12 +105,6 @@ void RTools::on_btnChangePassword_clicked()
     fDesk->changePassword();
 }
 
-void RTools::on_btnRecover_clicked()
-{
-    accept();
-    fDesk->recover();
-}
-
 void RTools::on_btnTotalReportAnyDay_clicked()
 {
     accept();

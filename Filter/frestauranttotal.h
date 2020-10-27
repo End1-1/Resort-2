@@ -47,13 +47,13 @@ private:
 
 private slots:
     void printReceipt();
+    void recalculateStore();
     void removeOrder();
     void removePermanently();
     void hall(CI_RestHall *c);
     void user(CI_User *c);
     void store(CI_RestStore *c);
     void dishType(CI_RestDishType *c);
-    void on_btnOrdersSubtotal_clicked();
     void doubleClick(const QList<QVariant> &row);
     void on_btnPrevDate_clicked();
     void on_btnNextDate_clicked();

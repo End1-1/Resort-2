@@ -33,7 +33,7 @@ protected:
             return;
         }
 
-        if (!t->fOrder.isEmpty()) {
+        if (!t->fOrder == 0) {
             painter->fillRect(rectFill, QColor::fromRgb(200, 245, 195));
         }
 

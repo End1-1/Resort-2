@@ -8,7 +8,7 @@ QT       += core gui sql network xml printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = SmartHotel
+TARGET = EliteCarwash
 TEMPLATE = app
 
 RC_FILE = res.rc
@@ -18,7 +18,10 @@ DEFINES += _HOTEL_
 
 SOURCES += main.cpp\
     ../Base/base.cpp \
+    ../Base/baseorder.cpp \
+    ../Filter/fearningswash.cpp \
     ../Filter/wsalary.cpp \
+    dlgonetwoall.cpp \
         mainwindow.cpp \
     login.cpp \
     loginsettings.cpp \
@@ -26,6 +29,8 @@ SOURCES += main.cpp\
     databasesconnections.cpp \
     databaseconnection.cpp \
     databasepasswordchange.cpp \
+    recalculatestoreoutputs.cpp \
+    storeoutput.cpp \
     wreportgrid.cpp \
     wcontacts.cpp \
     tablemodel.cpp \
@@ -46,8 +51,6 @@ SOURCES += main.cpp\
     wusers.cpp \
     wusersgroups.cpp \
     dlgusergroup.cpp \
-    wroomview.cpp \
-    dlgroomview.cpp \
     ../Base/command.cpp \
     broadcastthread.cpp \
     ../Cache/cacheinvoiceitem.cpp \
@@ -115,7 +118,6 @@ SOURCES += main.cpp\
     dlguserpasswords.cpp \
     ../Selector/dwselectorpaymentmode.cpp \
     ../Controls/eqtablewidget.cpp \
-    dlginvoicecancelation.cpp \
     dlgraiseuser.cpp \
     wglobaldbconfig.cpp \
     ../Controls/eqspinbox.cpp \
@@ -127,23 +129,16 @@ SOURCES += main.cpp\
     ../Cache/cachemenudishes.cpp \
     ../Selector/deselectormenudishes.cpp \
     ../Controls/epushbutton.cpp \
-    wsynchronize.cpp \
     ../Filter/frestauranttotal.cpp \
     ../Print/pimage.cpp \
     ../Print/pprintinvoice.cpp \
-    ../Filter/fcategorytosell.cpp \
     ../Cache/cachecurrencies.cpp \
-    ../RowEditor/recurrency.cpp \
-    ../Filter/faccmonthlyreport.cpp \
     ../Cache/cachsex.cpp \
     ../Base/logging.cpp \
     ../Print/pprintheader.cpp \
     dlgtaxprintsetup.cpp \
-    dlginvoiceprintoption.cpp \
-    ../RowEditor/reinvoiceitem.cpp \
     ../Cache/cacheinvoiceitemgroup.cpp \
     ../Selector/dwselectorinvoiceitemgroup.cpp \
-    ../Filter/finhouseguest.cpp \
     ../Controls/edateedit.cpp \
     ../Filter/fcashreportsummary.cpp \
     ../Filter/fcashreport.cpp \
@@ -153,7 +148,6 @@ SOURCES += main.cpp\
     ../Selector/dwtemplateselector.cpp \
     ../Cache/cachevaucher.cpp \
     ../Print/pprintvaucher.cpp \
-    dlgreservationremarks.cpp \
     ../Filter/fevents.cpp \
     ../Cache/cacheorderstate.cpp \
     ../Selector/dwselectororderstate.cpp \
@@ -164,26 +158,20 @@ SOURCES += main.cpp\
     ../Selector/dwselectordishstate.cpp \
     dlgpretax.cpp \
     dlgprinttaxsideoption.cpp \
-    ../Filter/fdailymovementcommon.cpp \
     dlgsearchinvoice.cpp \
     ../RowEditor/rebanquetcomment.cpp \
-    ../Filter/fcityledgerbalanceextended.cpp \
     ../Filter/fcallhistory.cpp \
     ../Filter/fcommonfilterbydate.cpp \
     dlgprintrandomtax.cpp \
     dlgtaxreference.cpp \
-    ../Widgets/wsyncinvoices.cpp \
     ../RowEditor/recomplimentarycomment.cpp \
     ../Base/databaseresult.cpp \
-    dlgexportsinglevaucher.cpp \
     ../Controls/etoolbarbutton.cpp \
     dlgwelcomebuttonconfig.cpp \
     ../Widgets/wreportbuilder.cpp \
     ../Widgets/wremarks.cpp \
     ../Controls/efilterlineedit.cpp \
     ../Print/pprintreceipt.cpp \
-    ../Widgets/whotelstatus.cpp \
-    ../Filter/fyearlyfinancialreport.cpp \
     ../Widgets/wcustomreports.cpp \
     dlgreportbuildergroups.cpp \
     ../Controls/ecomboboxcompleter.cpp \
@@ -193,18 +181,10 @@ SOURCES += main.cpp\
     ../Base/baseuid.cpp \
     dlgviewinvoicecorrections.cpp \
     dlgperemovereason.cpp \
-    dlgutils.cpp \
     dlgdishhistory.cpp \
-    ../Cache/cachecheckoutinvoice.cpp \
-    ../Selector/dwselectorcheckoutinvoice.cpp \
     dlgremotinvoices.cpp \
-    dlgopengrouporsingle.cpp \
-    dlgreserveconfirmstatus.cpp \
-    dlgchangeexportvaucher.cpp \
     fonlinerest.cpp \
-    ../RowEditor/reguesttitle.cpp \
     dlghelp.cpp \
-    ../Widgets/wweb.cpp \
     ../Widgets/storedoc.cpp \
     ../RowEditor/restorepartner.cpp \
     ../Cache/cachestorepartners.cpp \
@@ -218,18 +198,13 @@ SOURCES += main.cpp\
     ../Filter/fstoremovement.cpp \
     ../RowEditor/recoupon.cpp \
     ../Cache/cachecoupontype.cpp \
-    dlgcalculateoutputofrestaurant.cpp \
-    wwelcomerest.cpp \
     ../Base/defrest.cpp \
-    dlgback.cpp \
     fonlinebreakfast.cpp \
     ../Filter/fmonthlyoccperc.cpp \
     dlgpaymentmode.cpp \
     ../Filter/frestsalebystore.cpp \
     dlgeditservtax.cpp \
     ../Cache/cachetaxmap.cpp \
-    dlgreserveshortinfo.cpp \
-    dlgnewvaucheroption.cpp \
     ../RowEditor/remodelofcars.cpp \
     ../RowEditor/recarclient.cpp \
     ../Cache/cachecar.cpp \
@@ -259,29 +234,21 @@ SOURCES += main.cpp\
     ../Cache/cachedebtcostumer.cpp \
     ../Selector/dwselectordebtcostumer.cpp \
     ../Filter/fbreakfast.cpp \
-    ../Filter/fsalary.cpp \
     ../Filter/fdiscountreport.cpp \
     ../Filter/fsalesbycar.cpp \
     ../Filter/fdiscounttotal.cpp \
     ../Filter/fdebtholders.cpp \
-    dlgpostbreakfast.cpp \
     ../Controls/eqdoubleedit.cpp \
     ../Cache/cacherestfullmenu.cpp \
     ../Selector/dwselectorrestfullmenu.cpp \
-    ../Filter/fhouseitems.cpp \
     dlgdebtpay.cpp \
-    ../Vouchers/basevoucher.cpp \
-    ../Print/pprintcheckin.cpp \
     ../Widgets/wdate2.cpp \
     ../Base/paymentmode.cpp \
     dlgconfiggrid.cpp \
     ../Base/appconfig.cpp \
-    ../Print/pexportinvoicetoexcel.cpp \
     ../GridOptionWidgets/gowidget.cpp \
     ../GridOptionWidgets/godaily.cpp \
     ../Base/demo.cpp \
-    smtp.cpp \
-    dlgemail.cpp \
     ../Print/pprintstoredoc.cpp \
     ../Print/pprintstoreentry.cpp \
     ../Filter/guestcheckin.cpp \
@@ -297,19 +264,23 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     ../Base/base.h \
+    ../Base/baseorder.h \
+    ../Filter/fearningswash.h \
     ../Filter/wsalary.h \
+    dlgonetwoall.h \
     login.h \
     loginsettings.h \
     message.h \
     databasesconnections.h \
     databaseconnection.h \
     databasepasswordchange.h \
+    recalculatestoreoutputs.h \
+    storeoutput.h \
     wreportgrid.h \
     wcontacts.h \
     tablemodel.h \
     excel.h \
     dlgcontact.h \
-    wnotes.h \
     roweditordialog.h \
     about.h \
     rc.h \
@@ -326,8 +297,6 @@ HEADERS  += mainwindow.h \
     wusers.h \
     wusersgroups.h \
     dlgusergroup.h \
-    wroomview.h \
-    dlgroomview.h \
     ../Base/command.h \
     broadcastthread.h \
     ../Cache/cachebase.h \
@@ -396,7 +365,6 @@ HEADERS  += mainwindow.h \
     dlguserpasswords.h \
     ../Selector/dwselectorpaymentmode.h \
     ../Controls/eqtablewidget.h \
-    dlginvoicecancelation.h \
     dlgraiseuser.h \
     wglobaldbconfig.h \
     ../Controls/eqspinbox.h \
@@ -408,23 +376,16 @@ HEADERS  += mainwindow.h \
     ../Cache/cachemenudishes.h \
     ../Selector/deselectormenudishes.h \
     ../Controls/epushbutton.h \
-    wsynchronize.h \
     ../Filter/frestauranttotal.h \
     ../Print/pimage.h \
     ../Print/pprintinvoice.h \
-    ../Filter/fcategorytosell.h \
     ../Cache/cachecurrencies.h \
-    ../RowEditor/recurrency.h \
-    ../Filter/faccmonthlyreport.h \
     ../Cache/cachsex.h \
     ../Base/logging.h \
     ../Print/pprintheader.h \
     dlgtaxprintsetup.h \
-    dlginvoiceprintoption.h \
-    ../RowEditor/reinvoiceitem.h \
     ../Cache/cacheinvoiceitemgroup.h \
     ../Selector/dwselectorinvoiceitemgroup.h \
-    ../Filter/finhouseguest.h \
     ../Controls/edateedit.h \
     ../Filter/fcashreportsummary.h \
     ../Filter/fcashreport.h \
@@ -434,7 +395,6 @@ HEADERS  += mainwindow.h \
     ../Selector/dwtemplateselector.h \
     ../Cache/cachevaucher.h \
     ../Print/pprintvaucher.h \
-    dlgreservationremarks.h \
     ../Filter/fevents.h \
     ../Cache/cacheorderstate.h \
     ../Selector/dwselectororderstate.h \
@@ -445,26 +405,20 @@ HEADERS  += mainwindow.h \
     ../Selector/dwselectordishstate.h \
     dlgpretax.h \
     dlgprinttaxsideoption.h \
-    ../Filter/fdailymovementcommon.h \
     dlgsearchinvoice.h \
     ../RowEditor/rebanquetcomment.h \
-    ../Filter/fcityledgerbalanceextended.h \
     ../Filter/fcallhistory.h \
     ../Filter/fcommonfilterbydate.h \
     dlgprintrandomtax.h \
     dlgtaxreference.h \
-    ../Widgets/wsyncinvoices.h \
     ../RowEditor/recomplimentarycomment.h \
     ../Base/databaseresult.h \
-    dlgexportsinglevaucher.h \
     ../Controls/etoolbarbutton.h \
     dlgwelcomebuttonconfig.h \
     ../Widgets/wreportbuilder.h \
     ../Widgets/wremarks.h \
     ../Controls/efilterlineedit.h \
     ../Print/pprintreceipt.h \
-    ../Widgets/whotelstatus.h \
-    ../Filter/fyearlyfinancialreport.h \
     ../Widgets/wcustomreports.h \
     dlgreportbuildergroups.h \
     ../Controls/ecomboboxcompleter.h \
@@ -474,18 +428,10 @@ HEADERS  += mainwindow.h \
     ../Base/baseuid.h \
     dlgviewinvoicecorrections.h \
     dlgperemovereason.h \
-    dlgutils.h \
     dlgdishhistory.h \
-    ../Cache/cachecheckoutinvoice.h \
-    ../Selector/dwselectorcheckoutinvoice.h \
     dlgremotinvoices.h \
-    dlgopengrouporsingle.h \
-    dlgreserveconfirmstatus.h \
-    dlgchangeexportvaucher.h \
     fonlinerest.h \
-    ../RowEditor/reguesttitle.h \
     dlghelp.h \
-    ../Widgets/wweb.h \
     ../Widgets/storedoc.h \
     ../RowEditor/restorepartner.h \
     ../Cache/cachestorepartners.h \
@@ -500,19 +446,13 @@ HEADERS  += mainwindow.h \
     ../Filter/fstoremovement.h \
     ../RowEditor/recoupon.h \
     ../Cache/cachecoupontype.h \
-    dlgcalculateoutputofrestaurant.h \
-    wwelcomerest.h \
     ../Base/defrest.h \
-    dlgback.h \
     fonlinebreakfast.h \
     ../Filter/fmonthlyoccperc.h \
-    fnatbyperiod.h \
     dlgpaymentmode.h \
     ../Filter/frestsalebystore.h \
     dlgeditservtax.h \
     ../Cache/cachetaxmap.h \
-    dlgreserveshortinfo.h \
-    dlgnewvaucheroption.h \
     ../RowEditor/remodelofcars.h \
     ../RowEditor/recarclient.h \
     ../Cache/cachecar.h \
@@ -542,29 +482,21 @@ HEADERS  += mainwindow.h \
     ../Cache/cachedebtcostumer.h \
     ../Selector/dwselectordebtcostumer.h \
     ../Filter/fbreakfast.h \
-    ../Filter/fsalary.h \
     ../Filter/fdiscountreport.h \
     ../Filter/fsalesbycar.h \
     ../Filter/fdiscounttotal.h \
     ../Filter/fdebtholders.h \
-    dlgpostbreakfast.h \
     ../Controls/eqdoubleedit.h \
     ../Cache/cacherestfullmenu.h \
     ../Selector/dwselectorrestfullmenu.h \
-    ../Filter/fhouseitems.h \
     dlgdebtpay.h \
-    ../Vouchers/basevoucher.h \
-    ../Print/pprintcheckin.h \
     ../Widgets/wdate2.h \
     ../Base/paymentmode.h \
     dlgconfiggrid.h \
     ../Base/appconfig.h \
-    ../Print/pexportinvoicetoexcel.h \
     ../GridOptionWidgets/gowidget.h \
     ../GridOptionWidgets/godaily.h \
     ../Base/demo.h \
-    smtp.h \
-    dlgemail.h \
     ../Print/pprintstoredoc.h \
     ../Print/pprintstoreentry.h \
     ../Filter/guestcheckin.h \
@@ -579,20 +511,22 @@ HEADERS  += mainwindow.h \
     ../Filter/fbalanceoncard.h
 
 FORMS    += mainwindow.ui \
+    ../Filter/fearningswash.ui \
     ../Filter/wsalary.ui \
+    dlgonetwoall.ui \
     login.ui \
     loginsettings.ui \
     message.ui \
     databasesconnections.ui \
     databaseconnection.ui \
     databasepasswordchange.ui \
+    recalculatestoreoutputs.ui \
     wreportgrid.ui \
     dlgcontact.ui \
     about.ui \
     dlgfiltervalues.ui \
     dlgchartdaterange.ui \
     dlgusergroup.ui \
-    dlgroomview.ui \
     ../Selector/dwselector.ui \
     ../RowEditor/reresthall.ui \
     ../RowEditor/reresttable.ui \
@@ -608,77 +542,51 @@ FORMS    += mainwindow.ui \
     ../Print/pprintpreview.ui \
     ../RowEditor/recreditcard.ui \
     dlguserpasswords.ui \
-    dlginvoicecancelation.ui \
     dlgraiseuser.ui \
     wglobaldbconfig.ui \
     dlggposorderinfo.ui \
     ../RowEditor/rerestdishcomplex.ui \
     dlgtracking.ui \
-    wsynchronize.ui \
     ../Filter/frestauranttotal.ui \
-    ../Filter/fcategorytosell.ui \
-    ../RowEditor/recurrency.ui \
-    ../Filter/faccmonthlyreport.ui \
     dlgtaxprintsetup.ui \
-    dlginvoiceprintoption.ui \
-    ../RowEditor/reinvoiceitem.ui \
-    ../Filter/finhouseguest.ui \
     ../Filter/fcashreportsummary.ui \
     ../Filter/fcashreport.ui \
     dlguserrights.ui \
-    dlgreservationremarks.ui \
     ../Filter/fevents.ui \
     dlgpretax.ui \
     dlgprinttaxsideoption.ui \
-    ../Filter/fdailymovementcommon.ui \
     dlgsearchinvoice.ui \
     ../RowEditor/rebanquetcomment.ui \
-    ../Filter/fcityledgerbalanceextended.ui \
     ../Filter/fcallhistory.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
     dlgtaxreference.ui \
-    ../Widgets/wsyncinvoices.ui \
     ../RowEditor/recomplimentarycomment.ui \
-    dlgexportsinglevaucher.ui \
     dlgwelcomebuttonconfig.ui \
     ../Widgets/wreportbuilder.ui \
     ../Controls/efilterlineedit.ui \
-    ../Widgets/whotelstatus.ui \
-    ../Filter/fyearlyfinancialreport.ui \
     ../Widgets/wcustomreports.ui \
     dlgreportbuildergroups.ui \
     ../Widgets/wreportssetold.ui \
     dlgviewinvoicecorrections.ui \
     dlgposremoveoption.ui \
     dlgperemovereason.ui \
-    dlgutils.ui \
     dlgdishhistory.ui \
     dlgremotinvoices.ui \
-    dlgopengrouporsingle.ui \
-    dlgreserveconfirmstatus.ui \
-    dlgchangeexportvaucher.ui \
     fonlinerest.ui \
-    ../RowEditor/reguesttitle.ui \
     dlghelp.ui \
-    ../Widgets/wweb.ui \
     ../Widgets/storedoc.ui \
     ../RowEditor/restorepartner.ui \
     ../Filter/fstoredocs.ui \
     ../Filter/fmaterialsinstore.ui \
     ../Filter/fstoremovement.ui \
     ../RowEditor/recoupon.ui \
-    dlgcalculateoutputofrestaurant.ui \
-    wwelcomerest.ui \
-    dlgback.ui \
     fonlinebreakfast.ui \
     ../Filter/fmonthlyoccperc.ui \
     dlgpaymentmode.ui \
     ../Filter/frestsalebystore.ui \
     dlgrefundvaucher.ui \
     dlgeditservtax.ui \
-    dlgreserveshortinfo.ui \
-    dlgnewvaucheroption.ui \
     ../RowEditor/remodelofcars.ui \
     ../RowEditor/recarclient.ui \
     ../Filter/freportbypayment.ui \
@@ -696,18 +604,14 @@ FORMS    += mainwindow.ui \
     ../Filter/fcouponstatistics.ui \
     ../Filter/fdebtofcostumers.ui \
     ../Filter/fbreakfast.ui \
-    ../Filter/fsalary.ui \
     ../Filter/fdiscountreport.ui \
     ../Filter/fsalesbycar.ui \
     ../Filter/fdiscounttotal.ui \
     ../Filter/fdebtholders.ui \
-    dlgpostbreakfast.ui \
-    ../Filter/fhouseitems.ui \
     dlgdebtpay.ui \
     ../Widgets/wdate2.ui \
     dlgconfiggrid.ui \
     ../GridOptionWidgets/godaily.ui \
-    dlgemail.ui \
     ../Filter/guestcheckin.ui \
     dlgreservationguests.ui \
     ../Filter/fdiscountfullstat.ui \
@@ -718,7 +622,7 @@ RESOURCES += \
     res.qrc
 
 LIBS += -lVersion
-LIBS += -LC:/OpenSSL-Win32/lib
+LIBS += -LC:/Soft/OpenSSL-Win32/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS +=  -lwsock32
@@ -737,8 +641,8 @@ INCLUDEPATH += ../Widgets
 INCLUDEPATH += ../RGDoubleClick
 INCLUDEPATH += ../GridOptionWidgets
 INCLUDEPATH += ../Vouchers
-INCLUDEPATH += /OpenSSL-Win32/include
-INCLUDEPATH += /OpenSSL-Win32/include/openssl
+INCLUDEPATH += /Soft/OpenSSL-Win32/include
+INCLUDEPATH += /Soft/OpenSSL-Win32/include/openssl
 INCLUDEPATH += /Projects/NewTax
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"

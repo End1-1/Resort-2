@@ -22,12 +22,8 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->leDefStoreName, "Store name");
     addWidget(ui->leTypeCode, "");
     addWidget(ui->leTypeName, "Type");
-    addWidget(ui->leNameAm, "Name, am");
-    addWidget(ui->leNameEn, "Name, en");
-    addWidget(ui->leNameRu, "Name, ru");
-    addWidget(ui->teAm, "Text, am");
-    addWidget(ui->teEn, "Text, en");
-    addWidget(ui->teRu, "Text, ru");
+    addWidget(ui->leNameAm, "Name");
+    addWidget(ui->teAm, "Text");
     addWidget(ui->leBgColor, "Backgroun color");
     addWidget(ui->leTextColor, "Text color");
     addWidget(ui->leQueue, "Queue");

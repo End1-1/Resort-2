@@ -9,6 +9,7 @@ class CacheForComboBox
 public:
     template<typename T, typename C>
     static void configure(EQComboBox *cb) {
+        cb->addItem("*", 0);
         T *t = T::instance();
         QMapIterator<QString, C*>it(t->it());
         while (it.hasNext()) {

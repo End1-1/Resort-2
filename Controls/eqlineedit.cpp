@@ -4,6 +4,7 @@
 #include <QStyle>
 #include <QRegExpValidator>
 #include <QDebug>
+#include <QApplication>
 
 static QLocale mLocale;
 
@@ -281,6 +282,13 @@ bool EQLineEdit::eventFilter(QObject *watched, QEvent *event)
                 if (getShowButton()) {
                     emit customButtonClicked(true);
                     return true;
+                }
+                break;
+            default:
+                if (k->key() == mLocale.groupSeparator()) {
+                    QKeyEvent * eve2 = new QKeyEvent (QEvent::KeyRelease,Qt::Key_A,Qt::NoModifier, mLocale.decimalPoint());
+                    qApp->postEvent(this,(QEvent *)eve2);
+                    event->ignore();
                 }
                 break;
             }

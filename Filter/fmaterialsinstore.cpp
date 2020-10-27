@@ -57,11 +57,11 @@ void FMaterialsInStore::apply(WReportGrid *rg)
     if (!ui->leMaterial->isEmpty()) {
         where += " and b.f_material in (" + ui->leMaterial->fHiddenText + ") ";
     }
-    QString query = "select s.f_name as f_store, b.f_material, d.f_en as f_material, sum(b.f_qty*b.f_sign) as f_qty, "
-            "sum(b.f_total)/sum(b.f_qty) as f_price, sum(b.f_total*b.f_sign) as f_total "
-            "from r_body b "
+    QString query = "select s.f_name as f_store, b.f_goods, d.f_en as f_material, sum(b.f_qty*b.f_sign) as f_qty, "
+            "sum(b.f_price*b.f_qty)/sum(b.f_qty) as f_price, sum(b.f_price*b.f_qty*b.f_sign) as f_total "
+            "from r_store_acc b "
             "left join r_store s on s.f_id=b.f_store "
-            "left join r_dish d on d.f_id=b.f_material "
+            "left join r_dish d on d.f_id=b.f_goods "
             "left join r_docs bd on bd.f_id=b.f_doc "
             "where bd.f_date<=" + ui->deDate->dateMySql() + " and bd.f_state=1 " + where +
             "group by 1, 2 ";

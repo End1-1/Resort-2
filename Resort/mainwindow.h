@@ -26,14 +26,12 @@ public:
     void logout();
     void addTabWidget(BaseWidget *widget);
     void setCurrentWidget(QWidget *w);
-    void configureLabels();
     QTabWidget *fTab;
-    void hideMenu();
+    void expandTab();
 
 public slots:
     void on_actionCash_repoort_detailed_triggered();
     void on_actionCash_report_total_triggered();
-    void on_actionSynchronization_triggered();
     void on_actionRestaurant_triggered();
     void on_actionReports_set_triggered();
     void on_actionStatistics_triggered();
@@ -47,20 +45,12 @@ public slots:
     void on_actionStorages_triggered();
     void on_actionMenu_review_triggered();
     void on_actionPrinters_triggered();
-
     void on_actionNew_store_document_triggered();
-
     void on_actionPartners_2_triggered();
-
     void on_actionDocuments_list_triggered();
-
     void on_actionMaterials_in_the_store_triggered();
-
     void on_actionStore_movement_triggered();
-
     void on_actionCoupons_triggered();
-
-    void on_actionCalculate_output_of_restaurant_triggered();
     void on_actionLogout_triggered();
     void on_actionLock_triggered();
     void on_actionDatabases_triggered();
@@ -68,36 +58,18 @@ public slots:
     void on_actionContacts_triggered();
     void on_actionUsers_triggered();
     void on_actionUsers_groups_triggered();
-
     void on_actionCredit_card_triggered();
-
     void on_actionChange_password_triggered();
-
     void on_actionGlobal_config_triggered();
-
     void on_actionComplex_dish_triggered();
-
-    void on_actionCurrencies_triggered();
-
     void on_actionSetup_Tax_Printer_triggered();
-
     void on_actionEvent_triggered();
-
-    void on_actionDaily_financial_report_triggered();
-
     void on_actionComplimentary_comment_triggered();
-
     void on_actionReport_buillder_triggered();
-
-    void on_actionUtils_triggered();
-
     void on_actionRestaurant_online_triggered();
     void on_actionOpen_breakfast_triggered();
-
     void on_actionSales_by_storages_triggered();
-
     void on_actionConfigure_Welcome_Page_triggered();
-
     void on_actionModels_of_cars_triggered();
     void on_actionCostumers_cars_triggered();
     void on_actionReport_by_payment_triggered();
@@ -119,19 +91,35 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
 
 private slots:
     void shortcutFullScreen();
     void shortcutSlot();
     void customReport();
     void tabCloseRequested(int index);
-    void timeout();
     void socketReadyRead();
     void parseSocketCommand(const QString &command);
     void socketError(QAbstractSocket::SocketError f_cityLedger);
     void socketDisconnected();
     void on_actionBreakfast_report_triggered();
+    void on_actionT_Report_triggered();
+    void on_tbEarning_clicked();
+    void on_tbStore_clicked();
+    void on_tbStore_2_clicked();
+    void on_tbStore_3_clicked();
+    void on_tbStore_4_clicked();
+    void on_actionCostumers_triggered();
+    void on_actionCoupons_one_off_triggered();
+    void on_actionCoupons_present_triggered();
+    void on_actionBalance_of_the_cards_triggered();
+    void on_tbExit_clicked();
+    void on_actionEarnings_carwash_triggered();
+    void on_actionEarnings_waitroom_triggered();
+    void on_actionCarwash_index_triggered();
+    void on_actionWaiting_room_index_triggered();
+    void on_actionStorage_goods_index_triggered();
+    void on_actionEarnings_shop_triggered();
+    void on_actionShop_index_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -141,12 +129,12 @@ private:
     QUdpSocket fUdpSocket;
     QTcpSocket fSocketDraft;
     QString actionTitle(QObject *a);
-    QLabel *fStatusLabelLeft;
-    QLabel *fStatusLabelRight;
     void lock();
     void enableMainMenu(bool value);
     void disableMainMenu();
+    void buildMenu(QToolButton *btn, const QList<QAction*> &l);
     QMap<QAction*, int> fCustomReports;
+    void dish(int t);
 };
 
 #endif // MAINWINDOW_H

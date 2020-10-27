@@ -27,7 +27,7 @@ typedef struct {
     QString fDateOpen;
     QString fStaff;
     QString fComment;
-    QString fOrder;
+    int fOrder;
     int fPrint;
     int fTaxPrint;
     int fPaymentMode;
