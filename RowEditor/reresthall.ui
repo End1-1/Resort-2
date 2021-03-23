@@ -262,6 +262,13 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="2">
+      <widget class="EQLineEdit" name="leServiceValue">
+       <property name="Field" stdset="0">
+        <string>f_servicevalue</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

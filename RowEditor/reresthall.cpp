@@ -21,7 +21,7 @@ RERestHall::RERestHall(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->chShowBanket, "Show in banket");
     addWidget(ui->chShowHall, "Show in hall");
     addWidget(ui->leServiceItem, "Service item");
-    addWidget(ui->lePrefix, "Order prefix");
+    addWidget(ui->leServiceValue, "Service value");
     fTable = "r_hall";
     fCacheId = cid_rest_hall;
     fDockMenu = new DWSelectorRestMenu(this);

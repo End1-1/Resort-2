@@ -4596,6 +4596,14 @@ system</source>
         <translation>Խանութի
 ապրանքներ</translation>
     </message>
+    <message>
+        <source>Service item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Serivce value</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PPrintInvoice</name>
@@ -6058,6 +6066,10 @@ deviation</source>
     </message>
     <message>
         <source>f_prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>f_servicevalue</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -511,6 +511,57 @@ void RDesk::closeOrder(int state)
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
     fDbBind[":f_order"] = 0;
     fDb.update("r_table", fDbBind, where_id(ap(fTable->fId)));
+
+    if (fHall->fServiceItem > 0) {
+        DatabaseResult dr;
+        fDbBind[":f_header"] = fTable->fOrder;
+        fDbBind[":f_state"] = DISH_STATE_READY;
+        dr.select(fDb, "select sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", fDbBind);
+        double t = dr.value("f_total").toDouble();
+
+        OrderDishStruct *od = new OrderDishStruct();
+        od->fDishId = fHall->fServiceItem;
+        od->fState = DISH_STATE_READY;
+        od->fPrint1 = "";
+        od->fPrint2 = "";
+        od->fStore = 3;
+        od->fName["en"] = fHall->fServiceName;
+        od->fPrice = t * (fHall->fServiceValue / 100);
+        od->fTotal = od->fPrice;
+        od->fSvcValue = fHall->fDefaultSvcValue;
+        od->fSvcAmount = t * fHall->fServiceValue;
+        od->fDctValue = 0;
+        od->fDctAmount = 0;
+        od->fQty = 1;
+        od->fQtyPrint = 1;
+        od->fComplex = 0;
+        od->fComplexRecId = "";
+        od->fAdgt = "";
+
+        fDbBind[":f_header"] = fTable->fOrder;
+        fDbBind[":f_state"] = DISH_STATE_READY;
+        fDbBind[":f_dish"] = od->fDishId;
+        fDbBind[":f_qty"] = od->fQty;
+        fDbBind[":f_qtyPrint"] = od->fQtyPrint;
+        fDbBind[":f_price"] = od->fPrice;
+        fDbBind[":f_svcValue"] = od->fSvcValue;
+        fDbBind[":f_svcAmount"] = od->fSvcAmount;
+        fDbBind[":f_dctValue"] = od->fDctValue;
+        fDbBind[":f_dctAmount"] = od->fDctAmount;
+        fDbBind[":f_total"] = od->fTotal;
+        fDbBind[":f_totalUSD"] = od->fTotal;
+        fDbBind[":f_print1"] = od->fPrint1;
+        fDbBind[":f_print2"] = od->fPrint2;
+        fDbBind[":f_store"] = od->fStore;
+        fDbBind[":f_comment"] = od->fComment;
+        fDbBind[":f_staff"] = fStaff->fId;
+        fDbBind[":f_complex"] = od->fComplex;
+        fDbBind[":f_complexId"] = 0;
+        fDbBind[":f_adgt"] = od->fAdgt;
+        fDbBind[":f_complexRec"] = od->fComplexRecId;
+        od->fRecId = fDb.insert("o_dish", fDbBind);
+        fTrackControl->insert("New dish", od->fName["en"], "");
+    }
     clearOrder();
 }
 
@@ -1344,6 +1395,15 @@ double RDesk::countTotal()
     }
 
     double grandTotal = total ;
+
+    fHall = Hall::getHallById(fTable->fHall);
+    ui->tblTotal->setItem(2, 0, new QTableWidgetItem(fHall->fServiceName));
+    if (fHall->fServiceItem > 0) {
+        double serviceValue = grandTotal * (fHall->fServiceValue / 100);
+        ui->tblTotal->setItem(2, 1, new QTableWidgetItem(float_str(serviceValue, 2)));
+        grandTotal += serviceValue;
+    }
+
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
     fDbBind[":f_total"] = grandTotal;
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
@@ -1353,6 +1413,7 @@ double RDesk::countTotal()
     fDbBind[":f_coupon"] = 0;
     fDb.update("o_header_payment", fDbBind, where_id(ap(fTable->fOrder)));
     fTable->fAmount = float_str(grandTotal, 2);
+
     updateTableInfo();
     return grandTotal;
 }
@@ -1483,6 +1544,7 @@ void RDesk::checkOrderHeader(TableStruct *t)
         fDbBind[":f_tax"] = 0;
         fDbBind[":f_paymentMode"] = PAYMENT_CASH;
         fDbBind[":f_hall"] = t->fHall;
+        fDbBind[":f_servicevalue"] = fHall->fServiceValue;
         t->fOpened = fDbBind[":f_dateOpen"].toDateTime();
         t->fOrder = fDb.insert("o_header", fDbBind);
 
@@ -1523,6 +1585,9 @@ void RDesk::clearOrder()
     fCostumerId = 0;
     fCarId = 0;
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, "0");
+    if (ui->tblTotal->item(2, 1)) {
+        ui->tblTotal->item(2, 1)->setData(Qt::EditRole, "0");
+    }
     fTable = nullptr;
 }
 
@@ -2006,6 +2071,10 @@ void RDesk::printReceipt(bool printModePayment)
             ps = new PPrintScene(Portrait);
             lps.append(ps);
         }
+    }
+    if (!ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString().isEmpty()){
+        ps->addTextRect(new PTextRect(10, top, 400, rowHeight, ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString(), &th, f));
+        top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(2, 1)->data(Qt::DisplayRole).toString(), &th, f))->textHeight();
     }
     top += 2;
     ps->addLine(10, top, 680, top);
@@ -2555,7 +2624,6 @@ void RDesk::on_btnTrash_clicked()
 
 void RDesk::on_btnPayment_clicked()
 {
-
     fCloseTimeout = 0;
 
     if (fTable->fHall == 1) {

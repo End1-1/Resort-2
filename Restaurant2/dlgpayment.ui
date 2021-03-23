@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>439</height>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,171 @@
       <property name="verticalSpacing">
        <number>30</number>
       </property>
-      <item row="5" column="0" colspan="7">
+      <item row="3" column="4">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Discount amount</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="EQLineEdit" name="leCouponSerial">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Coupon number</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="6">
+       <widget class="QToolButton" name="btnDept">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Cash</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QToolButton" name="btnCouponNumber">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Cardholder</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="EQLineEdit" name="leCouponNumber">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QToolButton" name="btnCard">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" colspan="2">
+       <widget class="QToolButton" name="btnCash">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Coupon amount</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Coupon seria</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Discount card</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <widget class="EQLineEdit" name="leDiscountAmount">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6">
+       <widget class="QLabel" name="lbVisit">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="EQLineEdit" name="leCardHolder">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="EQLineEdit" name="leCash">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="7">
        <widget class="QWidget" name="widget_2" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="leftMargin">
@@ -71,7 +235,24 @@
         </layout>
        </widget>
       </item>
-      <item row="6" column="0" colspan="7">
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Card</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="btnCouponSerail">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="7">
        <widget class="QWidget" name="widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
@@ -181,16 +362,6 @@
         </layout>
        </widget>
       </item>
-      <item row="1" column="5">
-       <widget class="EQLineEdit" name="leCouponNumber">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="5">
        <widget class="EQLineEdit" name="leCard">
         <property name="focusPolicy">
@@ -201,14 +372,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Final amount</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="EQLineEdit" name="leFinalAmount">
         <property name="maximumSize">
          <size>
@@ -231,76 +395,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_4">
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Coupon number</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <widget class="QToolButton" name="btnCouponNumber">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="EQLineEdit" name="leCouponSerial">
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QToolButton" name="btnCard">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="EQLineEdit" name="leCash">
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Coupon seria</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Cash</string>
+         <string>Final amount</string>
         </property>
        </widget>
       </item>
@@ -317,47 +415,39 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="6">
-       <widget class="QToolButton" name="btnDept">
+      <item row="3" column="1">
+       <widget class="EQLineEdit" name="leCouponAmount">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::ClickFocus</enum>
         </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Card</string>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_5">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>Discount card</string>
+         <string>Service</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" colspan="2">
-       <widget class="QToolButton" name="btnCash">
+      <item row="4" column="1">
+       <widget class="EQLineEdit" name="leServiceValue">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="btnCouponSerail">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>...</string>
+         <enum>Qt::ClickFocus</enum>
         </property>
        </widget>
       </item>
@@ -371,74 +461,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Cardholder</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Coupon amount</string>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="4">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Debt</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="EQLineEdit" name="leCouponAmount">
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="5">
-       <widget class="EQLineEdit" name="leDiscountAmount">
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>Discount amount</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5">
-       <widget class="EQLineEdit" name="leCardHolder">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6">
-       <widget class="QLabel" name="lbVisit">
-        <property name="text">
-         <string/>
         </property>
        </widget>
       </item>

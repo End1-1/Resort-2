@@ -26,19 +26,27 @@ bool DlgPayment::payment(int order)
     DlgPayment *d = new DlgPayment();
     d->fOrder = order;
     DatabaseResult dr;
+    double servicevalue = 0.0;
+    d->fDbBind[":f_id"] = order;
+    dr.select(d->fDb, "select f_servicevalue from o_header where f_id=:f_id", d->fDbBind);
+    servicevalue = dr.value("f_servicevalue").toDouble() / 100;
+
     d->fDbBind[":f_id"] = order;
     dr.select(d->fDb, "select f_id from o_header_payment where f_id=:f_id", d->fDbBind);
+
     if (dr.rowCount() == 0) {
         d->fDbBind[":f_header"] = order;
         d->fDbBind[":f_state"] = DISH_STATE_READY;
         dr.select(d->fDb, "select sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", d->fDbBind);
         if (dr.rowCount() > 0) {
-            d->ui->leFinalAmount->setDouble(dr.value("f_total").toDouble());
-            d->ui->leCash->setDouble(dr.value("f_total").toDouble());
+            d->ui->leServiceValue->setDouble(dr.value("f_total").toDouble() * servicevalue);
+            d->ui->leFinalAmount->setDouble(dr.value("f_total").toDouble() + (dr.value("f_total").toDouble() * servicevalue));
+            d->ui->leCash->setDouble(dr.value("f_total").toDouble() + (dr.value("f_total").toDouble() * servicevalue));
         }
     } else {
         d->fUpdateHeader = true;
     }
+
     result = d->exec() == QDialog::Accepted;
     delete d;
     return result;
@@ -93,9 +101,6 @@ void DlgPayment::on_btnOk_clicked()
         fDbBind[":f_number"] = ui->leCouponNumber->asInt();
         fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind, fDbRows);
     }
-
-
-
 
     accept();
 }
@@ -322,7 +327,7 @@ void DlgPayment::on_leDiscount_returnPressed()
                 if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
                     double itemTotal = dri.value(i, "f_qty").toDouble() * dri.value(i, "f_price").toDouble();
                     if (balance >= itemTotal) {
-                        balance -= itemTotal;
+                        ;balance -= itemTotal;
                         totalDisc += itemTotal;
                         itemTotal = 0;
                     } else {
@@ -334,6 +339,14 @@ void DlgPayment::on_leDiscount_returnPressed()
                     fDbBind[":f_total"] = itemTotal;
                     //fDbBind[":f_totalUSD"] = newPrice * def_usd;
                     fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
+                }
+            }
+            if (balance > 0.001) {
+                if (ui->leServiceValue->asDouble() < balance) {
+                    balance -= ui->leServiceValue->asDouble();
+                    totalDisc += ui->leServiceValue->asDouble();
+                } else {
+                    balance = 0;
                 }
             }
             fDbBind[":f_mode"] = QString("%1;%2;%3;%4;").arg("1").arg("0").arg(QString::number(balance,'f', 0)).arg(items.at(0));

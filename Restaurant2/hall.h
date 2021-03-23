@@ -13,6 +13,9 @@ typedef struct {
     QString fReceiptPrinter;
     QString fVatDept;
     QString fNoVatDept;
+    int fServiceItem;
+    QString fServiceName;
+    double fServiceValue;
 } HallStruct;
 Q_DECLARE_METATYPE(HallStruct*)
 

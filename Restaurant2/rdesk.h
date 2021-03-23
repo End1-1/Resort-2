@@ -97,7 +97,6 @@ private slots:
     void on_btnExit_2_clicked();
     void on_btnDiss50_clicked();
     void on_btnHallVIP_clicked();
-
     void on_btnShop_clicked();
 
 private:

@@ -23,9 +23,11 @@ void Hall::init()
     fHallTable.clear();
     qDeleteAll(fTables);
     fTables.clear();
-    QString query = "select f_id, f_name, f_defaultMenu, f_itemForInvoice, f_receiptPrinter, "
-            "f_vatDept, f_noVatDept "
-            "from r_hall where f_showHall=1 order by f_name";
+    QString query = "select h.f_id, h.f_name, h.f_defaultMenu, h.f_itemForInvoice, h.f_receiptPrinter, "
+            "h.f_vatDept, h.f_noVatDept, h.f_serviceitem, h.f_servicevalue, r.f_en as f_servicename "
+            "from r_hall h "
+            "left join r_dish r on r.f_id=h.f_serviceitem "
+            "where h.f_showhall=1 order by h.f_name";
     fDb.select(query, fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         HallStruct *h = new HallStruct();
@@ -36,13 +38,18 @@ void Hall::init()
         h->fReceiptPrinter = it->value(4).toString();
         h->fVatDept = it->value(5).toString();
         h->fNoVatDept = it->value(6).toString();
+        h->fServiceItem = it->value(7).toInt();
+        h->fServiceValue = it->value(8).toDouble();
+        h->fServiceName = it->value(9).toString();
         fHallTable.append(h);
         fHallMap[h->fId] = h;
     }
 
-    query = "select f_id, f_name, f_defaultMenu, f_itemForInvoice, f_receiptPrinter, "
-            "f_vatDept, f_noVatDept "
-            "from r_hall where f_showBanket=1 order by f_name";
+    query = "select h.f_id, h.f_name, h.f_defaultMenu, h.f_itemForInvoice, h.f_receiptPrinter, "
+            "h.f_vatDept, h.f_noVatDept, h.f_serviceitem, h.f_servicevalue, r.f_en as f_servicename "
+            "from r_hall h "
+            "left join r_dish r on r.f_id=h.f_serviceitem "
+            "where h.f_showBanket=1 order by h.f_name";
     fDb.select(query, fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         HallStruct *h = new HallStruct();
@@ -53,6 +60,9 @@ void Hall::init()
         h->fReceiptPrinter = it->value(4).toString();
         h->fVatDept = it->value(5).toString();
         h->fNoVatDept = it->value(6).toString();
+        h->fServiceItem = it->value(7).toInt();
+        h->fServiceValue = it->value(8).toDouble();
+        h->fServiceName = it->value(9).toString();
         fBanketHall.append(h);
         if (!fHallMap.contains(h->fId)) {
             fHallMap[h->fId] = h;
