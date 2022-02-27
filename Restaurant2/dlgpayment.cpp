@@ -37,11 +37,11 @@ bool DlgPayment::payment(int order)
     if (dr.rowCount() == 0) {
         d->fDbBind[":f_header"] = order;
         d->fDbBind[":f_state"] = DISH_STATE_READY;
-        dr.select(d->fDb, "select sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", d->fDbBind);
+        dr.select(d->fDb, "select sum(f_svcamount) as f_svcamount, sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", d->fDbBind);
         if (dr.rowCount() > 0) {
-            d->ui->leServiceValue->setDouble(dr.value("f_total").toDouble() * servicevalue);
-            d->ui->leFinalAmount->setDouble(dr.value("f_total").toDouble() + (dr.value("f_total").toDouble() * servicevalue));
-            d->ui->leCash->setDouble(dr.value("f_total").toDouble() + (dr.value("f_total").toDouble() * servicevalue));
+            d->ui->leServiceValue->setDouble(dr.value("f_svcamount").toDouble());
+            d->ui->leFinalAmount->setDouble(dr.value("f_total").toDouble());
+            d->ui->leCash->setDouble(dr.value("f_total").toDouble());
         }
     } else {
         d->fUpdateHeader = true;
@@ -88,7 +88,9 @@ void DlgPayment::on_btnOk_clicked()
         fDb.update("o_header_payment", fDbBind, where_id(fOrder));
     } else {
         fDbBind[":f_id"] = fOrder;
-        fDb.insertWithoutId("o_header_payment", fDbBind);
+        if (!fDb.insertWithoutId("o_header_payment", fDbBind)) {
+            message_error(fDb.fLastError);
+        }
     }
     if (ui->leDept->asDouble() > 0) {
         fDbBind[":f_id"] = fOrder;

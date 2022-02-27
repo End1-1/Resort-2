@@ -330,7 +330,7 @@ QString Database::lastQuery(QSqlQuery &q)
         default:
             break;
         }
-        sql.replace(it.key(), value.toString());
+        sql.replace(QRegExp(it.key() + "\\b"), value.toString());
     }
     return sql;
 }

@@ -344,6 +344,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         where += " and oh.f_staff in (" + ui->leStaff->fHiddenText + ") ";
     }
     if (!countAmount) {
+        where += " and od.f_dish<>558 ";
         if (!ui->leDishState->text().isEmpty()) {
             where += " and od.f_state in (" + ui->leDishState->fHiddenText + ") ";
         }

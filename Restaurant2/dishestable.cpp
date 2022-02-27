@@ -141,7 +141,7 @@ void DishesTable::init(Splash *s)
     query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, d.f_ru, d.f_am,"
             "d.f_bgColor, d.f_textColor, d.f_text_en, d.f_text_ru, d.f_text_am,"
             "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, m.f_complex, "
-            "d.f_adgt "
+            "d.f_adgt, d.f_tax "
             "from r_menu m "
             "inner join r_dish d on d.f_id=m.f_dish "
             "inner join r_dish_type t on d.f_type=t.f_id "
@@ -168,6 +168,7 @@ void DishesTable::init(Splash *s)
         d->fQueue = it->at(16).toInt();
         d->fComplex = it->at(17).toBool();
         d->fAdgt = it->at(18).toString();
+        d->fTax = it->at(19).toInt();
         fDish.append(d);
     }
 

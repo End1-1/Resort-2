@@ -26,6 +26,8 @@ private slots:
     void on_btnLogin_clicked();
     void on_leUsername_textChanged(const QString &arg1);
 
+    void on_btnDatabases_clicked();
+
 private:
     Ui::Login *ui;
     int fLockUser;

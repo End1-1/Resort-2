@@ -47,7 +47,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                   "inner join r_table t on t.f_id=oh.f_table "
                   "inner join o_dish d on d.f_header=oh.f_id "
                   "left join o_car oc on oc.f_order=oh.f_id "
-                  "where oh.f_state=:f_state and d.f_state=1 "
+                  "where oh.f_state=:f_state and d.f_state=1 and d.f_dish<>558 "
                   "and oh.f_dateCash=:f_dateCash "
                   "group by 1, 2, 3, 4, 5, 8 "
                   "order by h.f_id, 2, oh.f_id ",
@@ -249,6 +249,18 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         lps.append(ps);
     }
     DatabaseResult drsal;
+    rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_state2"] = DISH_STATE_READY;
+    rp.fDbBind[":f_dateCash"] =  date;
+    rp.fDbBind[":f_store"] = 2;
+    drsal.select(rp.fDb,
+                 QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
+                 "left join o_header h on h.f_id=d.f_header "
+                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), rp.fDbBind);
+    double minusfromsalary = drsal.value("f_deduction").toInt();
+
     rp.fDbBind[":f_date"] = date;
     drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
 //    drsal.select(rp.fDb, "select ug.f_en, sum(s2.f_amount) as f_amount from "
@@ -269,9 +281,6 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
             lps.append(ps);
         }
     }
-    top += 20;
-    ps->addLine(10, top, 680, top, dotPen);
-    top ++;
 
     DatabaseResult drFinalWash;
     rp.fDbBind[":f_dateCash"] = date;
@@ -333,6 +342,15 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         ps = new PPrintScene(Portrait);
         lps.append(ps);
     }
+
+    ps->addTextRect(10, top, 680, rowHeight, tr("Deduction (500)"), &trl);
+    top += ps->addTextRect(10, top,  680, rowHeight, float_str(minusfromsalary, 2), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
+
     ps->addTextRect(10, top, 680, rowHeight, tr("Salary"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, float_str(totalSalary, 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
@@ -340,6 +358,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         ps = new PPrintScene(Portrait);
         lps.append(ps);
     }
+
 
     ps->addTextRect(10, top, 680, rowHeight, tr("Finally"), &trl);
     //top += ps->addTextRect(10, top,  680, rowHeight, float_str(drFinalWash.value("f_cash").toDouble() - totalSalary, 2), &trr)->textHeight();

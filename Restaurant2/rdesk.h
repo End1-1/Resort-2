@@ -9,7 +9,6 @@
 #include "baseorder.h"
 #include "trackcontrol.h"
 #include <QPainter>
-#include <QTimer>
 
 namespace Ui {
 class RDesk;
@@ -65,7 +64,6 @@ protected:
 
 private slots:
     void onBtnQtyClicked();
-    void timeout();
     void on_btnExit_clicked();
     void on_btnLanguage_clicked();
     void on_btnMenu_clicked();
@@ -112,7 +110,6 @@ private:
     int fMenu;
     int fCloseTimeout;
     DishesTable fDishTable;
-    QTimer fTimer;
     int fCarId;
     QString fCarModel;
     QString fCarGovNum;

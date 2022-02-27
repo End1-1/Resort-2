@@ -335,3 +335,15 @@ void Login::timeout()
         fUdpSocket.writeDatagram(datagram, QHostAddress::Broadcast, DATAGRAM_PORT);
     }
 }
+
+void Login::on_btnDatabases_clicked()
+{
+    if (fPreferences.getString(def_preferences_password).length() > 0) {
+        LoginSettings ls(this);
+        if (ls.exec() != QDialog::Accepted) {
+            return;
+        }
+    }
+    DatabasesConnections dc(this);
+    dc.exec();
+}

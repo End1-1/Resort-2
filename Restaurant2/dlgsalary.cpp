@@ -195,12 +195,26 @@ void DlgSalary::countSalary()
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
                  "and h.f_dateCash=:f_dateCash and d.f_store=:f_store", fDbBind);
 
-    if (drsal.value("f_total").toDouble() > 0.1) {
+    double total = drsal.value("f_total").toDouble();
+
+    fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
+    fDbBind[":f_state2"] = DISH_STATE_READY;
+    fDbBind[":f_dateCash"] =  ui->deDate->date();
+    fDbBind[":f_store"] = 2;
+    drsal.select(fDb,
+                 QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
+                 "left join o_header h on h.f_id=d.f_header "
+                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), fDbBind);
+    total -= drsal.value("f_deduction").toDouble();
+
+    if (total > 0.1) {
         fDbBind[":f_date"] =  ui->deDate->date();
         fDbBind[":f_docType"] = 3;
         fDbBind[":f_debit"] = 1;
         fDbBind[":f_credit"] = 2;
-        fDbBind[":f_amount"] = drsal.value("f_total").toDouble() * -1 * 0.4;
+        fDbBind[":f_amount"] = total * -1 * 0.4;
         fDbBind[":f_comment"] = tr("Wash");
         fDb.insert("c_cash", fDbBind);
     }

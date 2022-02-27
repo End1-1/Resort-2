@@ -331,8 +331,6 @@ bool RDesk::setup(TableStruct *t)
 //        result = setTable(t);
 //    }
     result = true;
-    connect(&fTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-    fTimer.start(10000);
     changeBtnState();
     return result;
 }
@@ -528,8 +526,8 @@ void RDesk::closeOrder(int state)
         od->fName["en"] = fHall->fServiceName;
         od->fPrice = t * (fHall->fServiceValue / 100);
         od->fTotal = od->fPrice;
-        od->fSvcValue = fHall->fDefaultSvcValue;
-        od->fSvcAmount = t * fHall->fServiceValue;
+        od->fSvcValue = 0;
+        od->fSvcAmount = 0;
         od->fDctValue = 0;
         od->fDctAmount = 0;
         od->fQty = 1;
@@ -1155,23 +1153,6 @@ void RDesk::onBtnQtyClicked()
     repaintTables();
 }
 
-void RDesk::timeout()
-{
-    if (fTable) {
-        QString query = QString("update r_table set f_lockTime=%1, f_lockHost='%2' where f_id=%3")
-                .arg(QDateTime::currentDateTime().toTime_t())
-                .arg(Utils::hostName())
-                .arg(fTable->fId);
-        fDb.queryDirect(query);
-    }
-    fCloseTimeout++;
-    if (fCloseTimeout > 5) {
-        if (defrest(dr_open_table_after_run).toInt() == 0) {
-            on_btnExit_clicked();
-        }
-    }
-}
-
 void RDesk::on_btnExit_clicked()
 {
     if (message_question(tr("Confirm to close application")) != QDialog::Accepted) {
@@ -1289,8 +1270,8 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     od->fStore = d->fStore;
     od->fName = d->fName;
     od->fPrice = d->fPrice;
-    od->fSvcValue = fHall->fDefaultSvcValue;
-    od->fSvcAmount = od->fSvcValue * od->fTotal;
+    od->fSvcValue = d->fId == 487 ? 0 : fHall->fServiceValue / 100;
+    od->fSvcAmount = d->fId == 487 ? 0 : od->fSvcValue * od->fTotal;
     od->fDctValue = 0;
     od->fDctAmount = 0;
     od->fQty = 1;
@@ -1298,6 +1279,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     od->fComplex = d->fComplex;
     od->fComplexRecId = d->fComplexRec;
     od->fAdgt = d->fAdgt;
+    od->fTax = d->fTax;
 
     countDish(od);
     fDbBind[":f_header"] = fTable->fOrder;
@@ -1372,6 +1354,7 @@ void RDesk::updateDish(OrderDishStruct *od)
 double RDesk::countTotal()
 {
     double total = 0;
+    double serviceValue = 0;
     for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
         OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
         if (!od) {
@@ -1384,6 +1367,7 @@ double RDesk::countTotal()
             continue;
         }
         total += od->fTotal;
+        serviceValue += od->fSvcAmount;
     }
     for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
         DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
@@ -1399,10 +1383,15 @@ double RDesk::countTotal()
     fHall = Hall::getHallById(fTable->fHall);
     ui->tblTotal->setItem(2, 0, new QTableWidgetItem(fHall->fServiceName));
     if (fHall->fServiceItem > 0) {
-        double serviceValue = grandTotal * (fHall->fServiceValue / 100);
         ui->tblTotal->setItem(2, 1, new QTableWidgetItem(float_str(serviceValue, 2)));
-        grandTotal += serviceValue;
     }
+
+//    if ((int)grandTotal % 10 > 0) {
+//        double r = (int)grandTotal % 10;
+//        double serviceValue += 10 - r;
+//        grandTotal += 10 - r;
+//        ui->tblTotal->setItem(2, 1, new QTableWidgetItem(float_str(serviceValue, 2)));
+//    }
 
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
     fDbBind[":f_total"] = grandTotal;
@@ -1421,7 +1410,7 @@ double RDesk::countTotal()
 void RDesk::countDish(OrderDishStruct *d)
 {
     d->fTotal = d->fQty * d->fPrice;
-    d->fSvcAmount += (d->fTotal * d->fSvcValue);
+    d->fSvcAmount = (d->fTotal * d->fSvcValue);
     d->fTotal += d->fSvcAmount;
     d->fDctAmount = d->fTotal * d->fDctValue;
     d->fTotal -= d->fDctAmount;
@@ -2083,8 +2072,7 @@ void RDesk::printReceipt(bool printModePayment)
     th.setFont(f);
     ps->addTextRect(new PTextRect(10, top, 400, rowHeight, tr("Total, AMD"), &th, f));
     top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(1, 1)->data(Qt::EditRole).toString(), &th, f))->textHeight();
-    // ps->addTextRect(new PTextRect(10, top, 400, rowHeight, tr("Total, USD"), &th, f));
-    // top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(ui->tblTotal->item(1, 1)->data(Qt::EditRole).toDouble() / def_usd, 2), &th, f))->textHeight();
+
 
     top += rowHeight;
     f.setPointSize(28);
@@ -2230,11 +2218,7 @@ void RDesk::printReceipt(bool printModePayment)
     QPrinter printer;
     qDebug() << defrest(dr_second_receipt_printer);
     qDebug() << defrest(dr_first_receipt_printer);
-    if (printModePayment) {
-        printer.setPrinterName(defrest(dr_second_receipt_printer));
-    } else {
-        printer.setPrinterName(defrest(dr_first_receipt_printer));
-    }
+    printer.setPrinterName("local");
     QMatrix m;
 #ifdef QT_DEBUG
     m.scale(1, 1);

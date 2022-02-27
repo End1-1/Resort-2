@@ -4076,6 +4076,10 @@ ledger</source>
         <source>Cannot connect to main database</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LoginSettings</name>

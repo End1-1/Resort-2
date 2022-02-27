@@ -45,6 +45,7 @@ typedef struct {
     int fComplex;
     QString fComplexRec;
     QString fAdgt;
+    int fTax;
 } DishStruct;
 Q_DECLARE_METATYPE(DishStruct*)
 
@@ -71,6 +72,7 @@ typedef struct {
     int fComplex;
     QString fComplexRecId;
     QString fAdgt;
+    int fTax;
 } OrderDishStruct;
 Q_DECLARE_METATYPE(OrderDishStruct*)
 
