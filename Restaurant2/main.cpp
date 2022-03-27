@@ -68,8 +68,7 @@ int main(int argc, char *argv[])
 
     User *u = nullptr;
     DefRest der(QHostInfo::localHostName().toUpper());
-    if (der.v(dr_open_table_after_run).toInt() != 0)
-    {
+
         QString login;
         if (RLogin::getLogin(login, QObject::tr("Login"), nullptr)) {
             u = new User(login, 0);
@@ -83,21 +82,17 @@ int main(int argc, char *argv[])
             return 0;
         }
 
-        TableStruct *t = nullptr;
+        TableStruct *ts = nullptr;
         RDesk *rd = new RDesk(nullptr);
         rd->prepareToShow();
         rd->setStaff(u);
-        t = rd->loadHall(1);
-        if (rd->setup(t)) {
+        ts = rd->loadHall(1);
+        if (rd->setup(ts)) {
             rd->exec();
             return 0;
         }
 
-    } else {
-        w->showFullScreen();
-        qApp->processEvents();
 
-    }
 
     return a.exec();
 }

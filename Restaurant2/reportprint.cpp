@@ -36,8 +36,14 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("Date") + ": " + date.toString(def_date_format), &th, f))->textHeight();
     ps->addLine(10, top, 750, top);
 
-    th.setTextAlignment(Qt::AlignLeft);
     ReportPrint rp;
+    /* print carash - x*500 dram */
+
+    double totalff = totalx500(date);
+    /* end of print 500 dram */
+
+
+    th.setTextAlignment(Qt::AlignLeft);
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber, hp.f_discountcard "
@@ -75,10 +81,13 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                 top += ps->addTextRect(10, top, 680, rowHeight, tr("Total for ") + currHall + "/" + currPayment, &th)->textHeight();
                 ps->addTextRect(200, top, 150, rowHeight, QString::number(count), &th);
                 if (total2 > 0.1 && total2 != total) {
-                    ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
-                    top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 2) + "]", &th)->textHeight();
+                    top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+                    top += ps->addTextRect(350, top, 200, rowHeight, "Նվ[" + float_str(total2, 2) + "]", &th)->textHeight();
                 } else {
                     top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+                }
+                if (currHall == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+                    top += ps->addTextRect(350, top, 200, rowHeight, "Աշ[" + float_str(totalff, 2) + "]", &th)->textHeight();
                 }
                 top += rowHeight;
                 f.setBold(false);
@@ -112,7 +121,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         bool addline = false;
         DatabaseResult drcard;
         if (s1 < s2) {
-            s3 = QString("%1 [%2]").arg(float_str(s1, 2)).arg(float_str(s2, 2));
+            s3 = QString("%1 [%2]").arg(float_str(s1, 2), float_str(s2, 2));
             qDebug() << row;
             rp.fDbBind[":f_card"] = row.at(8);
             drcard.select(rp.fDb, "select f_name from d_car_client where f_card=:f_card", rp.fDbBind);
@@ -154,10 +163,13 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         top += ps->addTextRect(10, top, 680, rowHeight, tr("Total for ") + currHall + "/" + currPayment, &th)->textHeight();
         ps->addTextRect(200, top, 150, rowHeight, QString::number(count), &th);
         if (total2 > 0.1 && total != total2) {
-            ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
-            top += ps->addTextRect(460, top, 200, rowHeight, "[" + float_str(total2, 2) + "]", &th)->textHeight();
+            top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+            top += ps->addTextRect(350, top, 200, rowHeight, "Նվ[" + float_str(total2, 2) + "]", &th)->textHeight();
         } else {
             top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+        }
+        if (currHall == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+            top += ps->addTextRect(350, top, 200, rowHeight, "Աշ[" + float_str(totalff, 2) + "]", &th)->textHeight();
         }
         top += rowHeight;
         if (top > sizePortrait.height() - 200) {
@@ -434,11 +446,14 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     PTextRect trr(th, "");
     trr.setTextAlignment(Qt::AlignRight);
     for (int i = 0; i < dr.rowCount(); i++) {
-    top += ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "f_name").toString(), &th)->textHeight();
-    ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "qty").toString(), &trl);
-    top += ps->addTextRect(10, top,  680, rowHeight, dr.value(i, "f_total").toString(), &trr)->textHeight();
-    ps->addLine(10, top, 750, top);
-    top += 20;
+        top += ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "f_name").toString(), &th)->textHeight();
+        ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "qty").toString(), &trl);
+        top += ps->addTextRect(10, top,  680, rowHeight, dr.value(i, "f_total").toString(), &trr)->textHeight();
+        if (dr.value(i, "f_name").toString() == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+            top += ps->addTextRect(10, top,  680, rowHeight, "Աշ[" + float_str(totalx500(date), 2) + "]", &trr)->textHeight();
+        }
+        ps->addLine(10, top, 750, top);
+        top += 20;
     }
 
     QPen dotPen(Qt::DotLine);
@@ -538,4 +553,34 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
         lps[i]->render(&painter);
     }
     qDeleteAll(lps);
+}
+
+double ReportPrint::totalx500(const QDate &date)
+{
+    ReportPrint rp;
+    DatabaseResult drsal1;
+    rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_state2"] = DISH_STATE_READY;
+    rp.fDbBind[":f_dateCash"] =  date;
+    rp.fDbBind[":f_store"] = 2;
+    drsal1.select(rp.fDb, "select sum(d.f_totalUSD) as f_total from o_dish d "
+                 "left join o_header h on h.f_id=d.f_header "
+                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store", rp.fDbBind);
+
+    double totalff = drsal1.value("f_total").toDouble();
+
+    rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_state2"] = DISH_STATE_READY;
+    rp.fDbBind[":f_dateCash"] =  date;
+    rp.fDbBind[":f_store"] = 2;
+    drsal1.select(rp.fDb,
+                 QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
+                 "left join o_header h on h.f_id=d.f_header "
+                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), rp.fDbBind);
+    totalff -= drsal1.value("f_deduction").toDouble();
+    return totalff;
+
 }

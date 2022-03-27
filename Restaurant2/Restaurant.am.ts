@@ -1132,12 +1132,12 @@
         <translation>*****ԽՈՏԱՆ*****</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="74"/>
+        <location filename="main.cpp" line="73"/>
         <source>Login</source>
         <translation>Մուտք</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="79"/>
+        <location filename="main.cpp" line="78"/>
         <source>Access denied</source>
         <translation>Գործողությունը արգելված է</translation>
     </message>
@@ -2269,20 +2269,20 @@ removed items</source>
     <name>ReportPrint</name>
     <message>
         <location filename="reportprint.cpp" line="32"/>
-        <location filename="reportprint.cpp" line="412"/>
+        <location filename="reportprint.cpp" line="411"/>
         <source>CASH TOTAL REPORT</source>
         <translation>ԴՐԱՄԱՐԿՂԻ ՀԱՇՎԵՏՎՈՒԹՅՈՒՆ</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="35"/>
-        <location filename="reportprint.cpp" line="415"/>
+        <location filename="reportprint.cpp" line="414"/>
         <source>Printed by </source>
         <oldsource>Printed by</oldsource>
         <translation>Տպված</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="36"/>
-        <location filename="reportprint.cpp" line="416"/>
+        <location filename="reportprint.cpp" line="415"/>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
@@ -2310,7 +2310,7 @@ removed items</source>
     <message>
         <location filename="reportprint.cpp" line="211"/>
         <location filename="reportprint.cpp" line="312"/>
-        <location filename="reportprint.cpp" line="491"/>
+        <location filename="reportprint.cpp" line="490"/>
         <source>Card</source>
         <translation>Քարտ</translation>
     </message>
@@ -2322,7 +2322,7 @@ removed items</source>
     <message>
         <location filename="reportprint.cpp" line="226"/>
         <location filename="reportprint.cpp" line="338"/>
-        <location filename="reportprint.cpp" line="498"/>
+        <location filename="reportprint.cpp" line="497"/>
         <source>Debt</source>
         <translation>Պարտք</translation>
     </message>
@@ -2333,33 +2333,33 @@ removed items</source>
     </message>
     <message>
         <location filename="reportprint.cpp" line="245"/>
-        <location filename="reportprint.cpp" line="346"/>
-        <location filename="reportprint.cpp" line="449"/>
-        <location filename="reportprint.cpp" line="505"/>
+        <location filename="reportprint.cpp" line="354"/>
+        <location filename="reportprint.cpp" line="448"/>
+        <location filename="reportprint.cpp" line="504"/>
         <source>Salary</source>
         <translation>Աշխատավարձ</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="300"/>
-        <location filename="reportprint.cpp" line="484"/>
+        <location filename="reportprint.cpp" line="483"/>
         <source>Total Finally</source>
         <oldsource>Finally, wash</oldsource>
         <translation>ՎԵՐՋՆԱՀԱՇՎԱՐԿ</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="301"/>
-        <location filename="reportprint.cpp" line="485"/>
+        <location filename="reportprint.cpp" line="484"/>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="353"/>
+        <location filename="reportprint.cpp" line="346"/>
         <source>Deduction (500)</source>
         <translation>Պահում (500դրամ)</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="364"/>
-        <location filename="reportprint.cpp" line="513"/>
+        <location filename="reportprint.cpp" line="363"/>
+        <location filename="reportprint.cpp" line="512"/>
         <source>Finally</source>
         <translation>Մնացորդ</translation>
     </message>

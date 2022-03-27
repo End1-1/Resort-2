@@ -82,7 +82,7 @@ RFace::RFace(QWidget *parent) :
     fCommand(0)
 {
     ui->setupUi(this);
-    ui->lbWorkingDate->setText(QString("%1\n%2").arg(tr("Working date")).arg(WORKING_DATE.toString(def_date_format)));
+    ui->lbWorkingDate->setText(QString("%1\n%2").arg(tr("Working date"), WORKING_DATE.toString(def_date_format)));
     ui->tblTables->setItemDelegate(new TableItemDelegate());
     fCurrenTableState = 0;
     fTimerCounter = 0;

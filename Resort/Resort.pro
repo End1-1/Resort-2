@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     ../Base/base.cpp \
     ../Base/baseorder.cpp \
     ../Filter/fearningswash.cpp \
+    ../Filter/fsalarybyemployes.cpp \
     ../Filter/wsalary.cpp \
     dlgonetwoall.cpp \
         mainwindow.cpp \
@@ -266,6 +267,7 @@ HEADERS  += mainwindow.h \
     ../Base/base.h \
     ../Base/baseorder.h \
     ../Filter/fearningswash.h \
+    ../Filter/fsalarybyemployes.h \
     ../Filter/wsalary.h \
     dlgonetwoall.h \
     login.h \
@@ -512,6 +514,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     ../Filter/fearningswash.ui \
+    ../Filter/fsalarybyemployes.ui \
     ../Filter/wsalary.ui \
     dlgonetwoall.ui \
     login.ui \

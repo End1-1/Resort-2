@@ -959,6 +959,15 @@ system</string>
     <string>Shop index</string>
    </property>
   </action>
+  <action name="actionSalary_by_employes">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/salary.png</normaloff>:/images/salary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Salary by employes</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

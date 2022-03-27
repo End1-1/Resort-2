@@ -120,6 +120,7 @@ private slots:
     void on_actionStorage_goods_index_triggered();
     void on_actionEarnings_shop_triggered();
     void on_actionShop_index_triggered();
+    void on_actionSalary_by_employes_triggered();
 
 private:
     Ui::MainWindow *ui;

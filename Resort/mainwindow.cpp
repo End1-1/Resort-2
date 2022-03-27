@@ -46,6 +46,7 @@
 #include "storedoc.h"
 #include "vauchers.h"
 #include "cachebase.h"
+#include "fsalarybyemployes.h"
 #include "fonlinerest.h"
 #include "reresthall.h"
 #include "reresttable.h"
@@ -124,6 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
         a1.append(ui->actionAccounts);
         a1.append(ui->actionReport_by_payment);
         a1.append(ui->actionSales_report_by_cars);
+        a1.append(ui->actionSalary_by_employes);
         fMenu.insert(0, a1);
         QList<QAction*> a2;
         a2.append(ui->actionNew_store_document);
@@ -1199,4 +1201,9 @@ void MainWindow::on_actionEarnings_shop_triggered()
 void MainWindow::on_actionShop_index_triggered()
 {
     dish(5);
+}
+
+void MainWindow::on_actionSalary_by_employes_triggered()
+{
+    FSalaryByEmployes::openFilterReport<FSalaryByEmployes, WReportGrid>();
 }

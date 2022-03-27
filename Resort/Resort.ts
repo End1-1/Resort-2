@@ -3643,6 +3643,41 @@ ledger</source>
     </message>
 </context>
 <context>
+    <name>FSalaryByEmployes</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>From</source>
+        <translation>Սկիզբ</translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation>Ավարտ</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Ամսաթիվ</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>Հաստիկ</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Ազգանուն, անուն</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Գումար</translation>
+    </message>
+    <message>
+        <source>Salary of employes</source>
+        <translation>Աշխատողների աշխատավարձ</translation>
+    </message>
+</context>
+<context>
     <name>FSalesByCar</name>
     <message>
         <source>Form</source>
@@ -4607,6 +4642,18 @@ system</source>
     <message>
         <source>Serivce value</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Page 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Page 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salary by employes</source>
+        <translation type="unfinished">Աշխատողների աշխատավարձ</translation>
     </message>
 </context>
 <context>
