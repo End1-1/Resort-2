@@ -92,17 +92,47 @@
             <string>Reservation</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
-            <item row="17" column="0">
-             <widget class="QLabel" name="label_40">
+            <item row="4" column="1">
+             <widget class="EQLineEdit" name="leLateCheckoutID"/>
+            </item>
+            <item row="3" column="1">
+             <widget class="EQLineEdit" name="leEarlyCheckinID"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_19">
               <property name="text">
-               <string>Minibar table id</string>
+               <string>Items for manual tax</string>
               </property>
              </widget>
             </item>
-            <item row="15" column="0">
-             <widget class="QLabel" name="label_38">
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_22">
               <property name="text">
-               <string>Breakfast dish id</string>
+               <string>Rooming list</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="label_26">
+              <property name="text">
+               <string>No show fee code</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_32">
+              <property name="text">
+               <string>Default room arrangement</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QLineEdit" name="leNoshowCode"/>
+            </item>
+            <item row="19" column="0">
+             <widget class="QLabel" name="label_42">
+              <property name="text">
+               <string>Passport required</string>
               </property>
              </widget>
             </item>
@@ -120,70 +150,10 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="0">
-             <widget class="QLabel" name="label_39">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>Minibar hall id</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLineEdit" name="leManualTax"/>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>Items for manual tax</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>Rooming list</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="EQLineEdit" name="leRoomingList"/>
-            </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_31">
-              <property name="text">
-               <string>Restore halls for reception charges</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="1">
-             <widget class="QLineEdit" name="leNoshowCode"/>
-            </item>
-            <item row="12" column="1">
-             <widget class="EQLineEdit" name="leRoomArrangement"/>
-            </item>
-            <item row="11" column="1">
-             <widget class="EQLineEdit" name="leRestHallForReception"/>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_32">
-              <property name="text">
-               <string>Default room arrangement</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="label_26">
-              <property name="text">
-               <string>No show fee code</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="1">
-             <widget class="QLineEdit" name="leCancelCode"/>
-            </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="text">
-               <string>Cancelation fee code</string>
+               <string>Day use id</string>
               </property>
              </widget>
             </item>
@@ -194,11 +164,49 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="EQLineEdit" name="leExtraBed"/>
+            <item row="18" column="1">
+             <widget class="EQLineEdit" name="leMinibarDishId"/>
             </item>
-            <item row="1" column="1">
-             <widget class="EQLineEdit" name="leDefaultCardex"/>
+            <item row="17" column="1">
+             <widget class="EQLineEdit" name="leMinibarTableId"/>
+            </item>
+            <item row="17" column="0">
+             <widget class="QLabel" name="label_40">
+              <property name="text">
+               <string>Minibar table id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="19" column="1">
+             <widget class="QCheckBox" name="chPasswordRequired">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="18" column="0">
+             <widget class="QLabel" name="label_41">
+              <property name="text">
+               <string>Minibar dish id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Early checkin id</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="1">
+             <widget class="EQLineEdit" name="leBreakfastDishId"/>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="text">
+               <string>Cancelation fee code</string>
+              </property>
+             </widget>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="label_9">
@@ -214,14 +222,13 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Extra bed rate</string>
-              </property>
-             </widget>
+            <item row="7" column="1">
+             <widget class="EQLineEdit" name="leRoomingList"/>
             </item>
-            <item row="20" column="1">
+            <item row="16" column="1">
+             <widget class="EQLineEdit" name="leMinibarHallId"/>
+            </item>
+            <item row="21" column="1">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -234,68 +241,75 @@
               </property>
              </spacer>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Day use id</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="EQLineEdit" name="leDayUse"/>
-            </item>
             <item row="5" column="1">
              <widget class="EQLineEdit" name="leAirportPickupId"/>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_8">
+            <item row="11" column="0">
+             <widget class="QLabel" name="label_31">
               <property name="text">
-               <string>Early checkin id</string>
+               <string>Restore halls for reception charges</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="EQLineEdit" name="leEarlyCheckinID"/>
+            <item row="15" column="0">
+             <widget class="QLabel" name="label_38">
+              <property name="text">
+               <string>Breakfast dish id</string>
+              </property>
+             </widget>
             </item>
             <item row="14" column="1">
              <widget class="EQLineEdit" name="leBreakfastTableId"/>
             </item>
+            <item row="0" column="1">
+             <widget class="EQLineEdit" name="leExtraBed"/>
+            </item>
+            <item row="9" column="1">
+             <widget class="QLineEdit" name="leCancelCode"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="EQLineEdit" name="leDefaultCardex"/>
+            </item>
+            <item row="11" column="1">
+             <widget class="EQLineEdit" name="leRestHallForReception"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Extra bed rate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="leManualTax"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="EQLineEdit" name="leDayUse"/>
+            </item>
+            <item row="12" column="1">
+             <widget class="EQLineEdit" name="leRoomArrangement"/>
+            </item>
+            <item row="16" column="0">
+             <widget class="QLabel" name="label_39">
+              <property name="text">
+               <string>Minibar hall id</string>
+              </property>
+             </widget>
+            </item>
             <item row="13" column="1">
              <widget class="EQLineEdit" name="leBreakfastHallId"/>
             </item>
-            <item row="15" column="1">
-             <widget class="EQLineEdit" name="leBreakfastDishId"/>
-            </item>
-            <item row="4" column="1">
-             <widget class="EQLineEdit" name="leLateCheckoutID"/>
-            </item>
-            <item row="18" column="0">
-             <widget class="QLabel" name="label_41">
+            <item row="20" column="0">
+             <widget class="QLabel" name="label_43">
               <property name="text">
-               <string>Minibar dish id</string>
+               <string>Print tax after receipt voucher</string>
               </property>
              </widget>
             </item>
-            <item row="16" column="1">
-             <widget class="EQLineEdit" name="leMinibarHallId"/>
-            </item>
-            <item row="17" column="1">
-             <widget class="EQLineEdit" name="leMinibarTableId"/>
-            </item>
-            <item row="18" column="1">
-             <widget class="EQLineEdit" name="leMinibarDishId"/>
-            </item>
-            <item row="19" column="1">
-             <widget class="QCheckBox" name="chPasswordRequired">
+            <item row="20" column="1">
+             <widget class="QCheckBox" name="chPrintTaxAfterReceiptVoucher">
               <property name="text">
                <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="19" column="0">
-             <widget class="QLabel" name="label_42">
-              <property name="text">
-               <string>Passport required</string>
               </property>
              </widget>
             </item>

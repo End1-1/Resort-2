@@ -176,6 +176,7 @@ WGlobalDbConfig::WGlobalDbConfig(QWidget *parent) :
     ui->leMinibarDishId->setText(fPreferences.getDb(def_minibar_default_dish).toString());
     ui->chPasswordRequired->setChecked(fPreferences.getDb(def_passport_required).toInt());
     ui->chShowLogs->setChecked(fPreferences.getDb(def_show_logs).toBool());
+    ui->chPrintTaxAfterReceiptVoucher->setChecked(fPreferences.getDb(def_print_tax_after_receipt_voucher).toBool() == "1");
 
     fTrackControl =  new TrackControl(TRACK_GLOBAL_CONFIG);
     fTrackControl->addWidget(ui->deWorkingDate, "Working date")
@@ -213,6 +214,7 @@ WGlobalDbConfig::WGlobalDbConfig(QWidget *parent) :
             .addWidget(ui->leMinibarDishId, "Minibar dish id")
             .addWidget(ui->chPasswordRequired, "Passport required")
             .addWidget(ui->chShowLogs, "Show logs")
+            .addWidget(ui->chPrintTaxAfterReceiptVoucher, "Print tax after report")
             ;
 
     getCompSettings();

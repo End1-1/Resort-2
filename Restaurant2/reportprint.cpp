@@ -46,7 +46,8 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     th.setTextAlignment(Qt::AlignLeft);
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
-    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber, hp.f_discountcard "
+    rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, "
+                  "sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber, hp.f_discountcard "
                   "from o_Header oh "
                   "left join o_header_payment hp on hp.f_id=oh.f_id "
                   "inner join r_hall h on h.f_id=oh.f_hall "
@@ -82,9 +83,24 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                 ps->addTextRect(200, top, 150, rowHeight, QString::number(count), &th);
                 if (total2 > 0.1 && total2 != total) {
                     top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+                    if (top > sizePortrait.height() - 200) {
+                        top = 10;
+                        ps = new PPrintScene(Portrait);
+                        lps.append(ps);
+                    }
                     top += ps->addTextRect(350, top, 200, rowHeight, "Նվ[" + float_str(total2, 2) + "]", &th)->textHeight();
+                    if (top > sizePortrait.height() - 200) {
+                        top = 10;
+                        ps = new PPrintScene(Portrait);
+                        lps.append(ps);
+                    }
                 } else {
                     top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
+                    if (top > sizePortrait.height() - 200) {
+                        top = 10;
+                        ps = new PPrintScene(Portrait);
+                        lps.append(ps);
+                    }
                 }
                 if (currHall == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
                     top += ps->addTextRect(350, top, 200, rowHeight, "Աշ[" + float_str(totalff, 2) + "]", &th)->textHeight();
@@ -428,15 +444,18 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     ps->addLine(10, top, 750, top);
 
     th.setTextAlignment(Qt::AlignLeft);
+    double totalff = totalx500(date);
     ReportPrint rp;
 
     DatabaseResult dr;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
-    dr.select(rp.fDb, "select hh.f_name, count(h.f_id) as qty, sum(h.f_total) as f_total "
-              "from o_header h  "
+    dr.select(rp.fDb, "select hh.f_name, count(distinct(h.f_id)) as qty, "
+              "sum(d.f_total) as f_total, sum(d.f_totalusd) as f_total2 "
+              "from o_dish d  "
+              "inner join o_header h on h.f_id=d.f_header "
               "left join r_hall hh on hh.f_id=h.f_hall "
-              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash "
+              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and d.f_state=1 "
               "group by 1 ", rp.fDbBind);
     th.setTextAlignment(Qt::AlignHCenter);
     f.setBold(true);
@@ -450,7 +469,11 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
         ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "qty").toString(), &trl);
         top += ps->addTextRect(10, top,  680, rowHeight, dr.value(i, "f_total").toString(), &trr)->textHeight();
         if (dr.value(i, "f_name").toString() == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
-            top += ps->addTextRect(10, top,  680, rowHeight, "Աշ[" + float_str(totalx500(date), 2) + "]", &trr)->textHeight();
+            top += ps->addTextRect(10, top,  680, rowHeight, "Աշխատավարձ[" + float_str(totalff, 2) + "]", &trr)->textHeight();
+            top += ps->addTextRect(10, top,  680, rowHeight, "Պահում[" + float_str(dr.value(i, "f_total2").toDouble() - totalff, 2) + "]", &trr)->textHeight();
+        }
+        if (dr.value(i, "f_total2").toDouble() - dr.value(i, "f_total").toDouble() > 0.001) {
+            top += ps->addTextRect(10, top,  680, rowHeight, "Նվեր[" + float_str(dr.value(i, "f_total2").toDouble()-dr.value(i, "f_total").toDouble(), 2) + "]", &trr)->textHeight();
         }
         ps->addLine(10, top, 750, top);
         top += 20;

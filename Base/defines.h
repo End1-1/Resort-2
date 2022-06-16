@@ -68,6 +68,7 @@
 #define def_daily_movement_total_side "Daily movement total side"
 #define def_daily_movement_order "Daily movement order"
 #define def_show_logs "show_logs"
+#define def_print_tax_after_receipt_voucher "Print tax after receipt voucher"
 
 #define INVOICE_HOTEL 1
 #define DATAGRAM_PORT 33110

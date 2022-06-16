@@ -13,6 +13,7 @@ DlgPayment::DlgPayment(QWidget *parent) :
 {
     ui->setupUi(this);
     fUpdateHeader = false;
+    fCanReject = true;
 }
 
 DlgPayment::~DlgPayment()
@@ -50,6 +51,18 @@ bool DlgPayment::payment(int order)
     result = d->exec() == QDialog::Accepted;
     delete d;
     return result;
+}
+
+void DlgPayment::accept()
+{
+    BaseExtendedDialog::accept();
+}
+
+void DlgPayment::reject()
+{
+    if (fCanReject) {
+        BaseExtendedDialog::reject();
+    }
 }
 
 void DlgPayment::on_btnCancel_clicked()
@@ -382,4 +395,6 @@ void DlgPayment::on_leDiscount_returnPressed()
     ui->leCouponSerial->clear();
     ui->leCouponSerial->fHiddenText.clear();
     ui->leDiscountAmount->setDouble(totalDisc);
+    ui->btnCancel->setEnabled(false);
+    fCanReject = false;
 }

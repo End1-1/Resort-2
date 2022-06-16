@@ -15,6 +15,8 @@ public:
     explicit DlgPayment(QWidget *parent = 0);
     ~DlgPayment();
     static bool payment(int order);
+    virtual void accept();
+    virtual void reject();
 
 private slots:
     void on_btnCancel_clicked();
@@ -35,6 +37,7 @@ private:
     bool fUpdateHeader;
     void calcCash();
     int fCountId;
+    bool fCanReject;
 };
 
 #endif // DLGPAYMENT_H

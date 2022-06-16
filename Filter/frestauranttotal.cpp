@@ -127,6 +127,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
 {
     QString order;
     bool countAmount = !ui->chDish->isChecked()
+            && !ui->rb500No->isChecked()
+            && !ui->rb500Yes->isChecked()
             && !ui->chStore->isChecked()
             && !ui->chDishType->isChecked()
             && !ui->chDishState->isChecked()
@@ -358,6 +360,11 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             where += " and oh.f_total=0 ";
         }
     }
+    if (ui->rb500Yes->isChecked()) {
+        where += " and od.f_dish in (159,171,158,169,153,165,386,387,388,389,390,391) ";
+    } else if (ui->rb500No->isChecked()) {
+        where += " and od.f_dish not in (159,171,158,169,153,165,386,387,388,389,390,391) ";
+    }
     if (!ui->leStore->text().isEmpty()) {
         where += " and od.f_store in (" + ui->leStore->fHiddenText + ") ";
     }
@@ -389,6 +396,12 @@ void FRestaurantTotal::apply(WReportGrid *rg)
 
     if (ui->chOrderNum->isChecked()) {
         order += "oh.f_id,";
+    }
+    if (ui->rbWithCard->isChecked()) {
+        where += " and length(op.f_discountcard)>0 ";
+    }
+    if (ui->rbNoCard->isChecked()) {
+        where += " and length(op.f_discountcard)=0 ";
     }
     QString group;
     QObjectList ol(children());
@@ -783,6 +796,25 @@ void FRestaurantTotal::removeOrder()
         return;
     }
     fDb.fDb.transaction();
+    fDbBind[":f_id"] = val.at(0);
+    fDb.select("select f_discountcard, f_discount from o_header_payment where f_id=:f_id", fDbBind, fDbRows);
+    double discamount = 0.0;
+    QString disccard = fDbRows.at(0).at(0).toString();
+    if (disccard.isEmpty() == false){
+        discamount = fDbRows.at(0).at(1).toDouble();
+        fDbBind[":f_card"] = disccard;
+        fDb.select("select f_mode from d_car_client where f_card=:f_card", fDbBind, fDbRows);
+        if (fDbRows.count() > 0) {
+            QStringList params = fDbRows.at(0).at(0).toString().split(";", Qt::SkipEmptyParts);
+            if (params.count() == 4) {
+                params[2] = QString::number(params[2].toDouble() + discamount, 'f', 0);
+                fDbBind[":f_card"] = disccard;
+                fDbBind[":f_mode"] = params.join(";") + ";";
+                fDb.select("update d_car_client set f_mode=:f_mode where f_card=:f_card", fDbBind, fDbRows);
+            }
+        }
+    }
+
     fDbBind[":f_state"] = ORDER_STATE_REMOVED;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
     fDb.update("o_header", fDbBind, where_id(val.at(0).toInt()));

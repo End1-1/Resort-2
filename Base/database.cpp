@@ -213,7 +213,7 @@ QSqlQuery *Database::select(QSqlQuery *q, const QString &sql, QMap<QString, QVar
         q = 0;
         return 0;
     }
-    for (QMap<QString, QVariant>::const_iterator it = values.begin(); it != values.end(); it++) {
+    for (QMap<QString, QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); it++) {
         q->bindValue(it.key(), it.value());
     }
     values.clear();
