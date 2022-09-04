@@ -60,14 +60,16 @@ int main(int argc, char *argv[])
 
     RFace *w = new RFace();
     if (!w->fIsConfigured) {
+        w->deleteLater();
         return -1;
     }
     if (!w->setup()) {
+        w->deleteLater();
         return -1;
     }
 
     User *u = nullptr;
-    DefRest der(QHostInfo::localHostName().toUpper());
+    DefRest(QHostInfo::localHostName().toUpper());
 
         QString login;
         if (RLogin::getLogin(login, QObject::tr("Login"), nullptr)) {
@@ -78,6 +80,7 @@ int main(int argc, char *argv[])
                 RMessage::showError(QObject::tr("Access denied"), nullptr);
                 return 0;
             }
+            __s.setValue("pin", login);
         } else {
             return 0;
         }
@@ -91,8 +94,5 @@ int main(int argc, char *argv[])
             rd->exec();
             return 0;
         }
-
-
-
     return a.exec();
 }

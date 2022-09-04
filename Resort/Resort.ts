@@ -1000,33 +1000,6 @@ name</source>
     </message>
 </context>
 <context>
-    <name>DlgPaymentMode</name>
-    <message>
-        <source>Mode of payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Card type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>City ledger</source>
-        <translation type="unfinished">Պարքատեր</translation>
-    </message>
-    <message>
-        <source>Transfer to room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-</context>
-<context>
     <name>DlgPreTax</name>
     <message>
         <source>Tax Prepaid</source>
@@ -1335,11 +1308,11 @@ for this operation</source>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Սկիզբ</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ավարտ</translation>
     </message>
     <message>
         <source>...</source>
@@ -1367,100 +1340,6 @@ for this operation</source>
     </message>
     <message>
         <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgTaxPrintSetup</name>
-    <message>
-        <source>Tax Printer Setup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hall</source>
-        <translation type="unfinished">Սրահ</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished">Գախտնաբառ</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ADG code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Այո</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Menu</source>
-        <translation type="unfinished">Ճաշացանկ</translation>
-    </message>
-</context>
-<context>
-    <name>DlgTaxReference</name>
-    <message>
-        <source>Tax reference</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="unfinished">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This invoice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All invoices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quick search</source>
-        <translation type="unfinished">Փնտրել</translation>
-    </message>
-    <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <source>RecId</source>
-        <translation type="unfinished">Գրանցման համար</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished">Անվանում</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Ամսաթիվ</translation>
-    </message>
-    <message>
-        <source>Remove entry</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2218,7 +2097,7 @@ voucher</source>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Սկիզբ</translation>
     </message>
     <message>
         <source>...</source>
@@ -2226,7 +2105,7 @@ voucher</source>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ավարտ</translation>
     </message>
     <message>
         <source>Incoming</source>
@@ -2380,7 +2259,7 @@ voucher</source>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ավարտ</translation>
     </message>
     <message>
         <source>Hotel</source>
@@ -2451,7 +2330,7 @@ voucher</source>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Սկիզբ</translation>
     </message>
     <message>
         <source>...</source>
@@ -2459,7 +2338,7 @@ voucher</source>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ավարտ</translation>
     </message>
     <message>
         <source>Hotel</source>
@@ -2841,7 +2720,7 @@ voucher</source>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ավարտ</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -3272,10 +3151,6 @@ voucher</source>
         <translation></translation>
     </message>
     <message>
-        <source>d.f_as</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show complex</source>
         <translation>Ցուցադրել կոմլեքսները</translation>
     </message>
@@ -3640,6 +3515,30 @@ ledger</source>
     <message>
         <source>Confirm to recalculate store outputs</source>
         <translation>Հաստատեք պահեստի վերահաշվարքը</translation>
+    </message>
+    <message>
+        <source>-500</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Any</source>
+        <translation>Բոլորը</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Բոլորը</translation>
+    </message>
+    <message>
+        <source>Customer info</source>
+        <translation>Պետհամարանիշ</translation>
+    </message>
+    <message>
+        <source>oc.f_govnumber</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Lisence plate</source>
+        <translation>Պետհամարանիշ</translation>
     </message>
 </context>
 <context>
@@ -4641,14 +4540,6 @@ system</source>
     </message>
     <message>
         <source>Serivce value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7148,6 +7039,10 @@ deviation</source>
     </message>
     <message>
         <source>Show logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print tax after receipt voucher</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

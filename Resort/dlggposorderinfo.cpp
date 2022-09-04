@@ -6,7 +6,6 @@
 #include "databaseresult.h"
 #include "cachepaymentmode.h"
 #include "cacheinvoiceitem.h"
-#include "dlgpaymentmode.h"
 #include "paymentmode.h"
 #include "dlgtracking.h"
 #include <QPrintDialog>
@@ -76,25 +75,6 @@ void DlgGPOSOrderInfo::setVaucher(const QString &id)
         setOrder(fDbRows.at(0).at(0).toString());
     } else {
         setOrder(id);
-    }
-}
-
-void DlgGPOSOrderInfo::selectPaymentMode(bool v)
-{
-    Q_UNUSED(v);
-    int pm;
-    int cl;
-    QString oldPm = ui->lePayment->text();
-    QString comment;
-    if (DlgPaymentMode::getPayment(pm, comment, cl)) {
-        CI_PaymentMode *ci = CachePaymentMode::instance()->get(pm);
-        fDbBind[":f_paymentMode"] = pm;
-        fDbBind[":f_paymentModeComment"] = comment;
-        fDbBind[":f_cityLedger"] = cl;
-        fDb.update("o_header", fDbBind, where_id(ap(ui->leOrder->text())));
-        fTrackControl->insert("Payment mode changed ", oldPm, ci->fName);
-        ui->lePayment->setText(ci->fName);
-        ui->lePayment->fHiddenText = ci->fCode;
     }
 }
 

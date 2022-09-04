@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "preferences.h"
-#include "dlgonetwoall.h"
 #include "login.h"
 #include "fdebtholders.h"
 #include "appconfig.h"
@@ -9,6 +8,7 @@
 #include "databasesconnections.h"
 #include "message.h"
 #include "wreportgrid.h"
+#include "dlgonetwoall.h"
 #include "recoupon.h"
 #include "freportbypayment.h"
 #include "guestcheckin.h"
@@ -68,7 +68,6 @@
 #include "wglobaldbconfig.h"
 #include "rerestdishcomplex.h"
 #include "frestauranttotal.h"
-#include "dlgtaxprintsetup.h"
 #include "fevents.h"
 #include "fcashreportsummary.h"
 #include "fcommonfilterbydate.h"
@@ -880,13 +879,6 @@ QString MainWindow::actionTitle(QObject *a)
 void MainWindow::on_actionRestaurant_triggered()
 {
     FRestaurantTotal::open();
-}
-
-void MainWindow::on_actionSetup_Tax_Printer_triggered()
-{
-    DlgTaxPrintSetup *d = new DlgTaxPrintSetup(this);
-    d->exec();
-    delete d;
 }
 
 void MainWindow::on_actionCash_report_total_triggered()

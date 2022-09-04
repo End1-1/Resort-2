@@ -51,29 +51,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="btnHallWash">
+       <widget class="QToolButton" name="btnConnectionStatus">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>WASH</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="btnHallCafe">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
+          <width>40</width>
           <height>40</height>
          </size>
         </property>
@@ -86,21 +67,90 @@
         <property name="text">
          <string>CAFE</string>
         </property>
+        <property name="icon">
+         <iconset resource="res.qrc">
+          <normaloff>:/images/wifi_off.png</normaloff>:/images/wifi_off.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnHallWash">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>WASH</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnHallCafe">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>CAFE</string>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="btnHallVIP">
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
         <property name="text">
          <string>VIP</string>
@@ -111,15 +161,22 @@
        <widget class="QToolButton" name="btnShop">
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
         <property name="text">
          <string>SHOP</string>
@@ -258,7 +315,7 @@
          <item>
           <widget class="QTableWidget" name="tblTables">
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOn</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
             <enum>Qt::ScrollBarAlwaysOff</enum>

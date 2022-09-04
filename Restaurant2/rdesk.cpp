@@ -11,6 +11,9 @@
 #include "rdishcomment.h"
 #include "dlgsmile.h"
 #include "rtools.h"
+#include "rawmessage.h"
+#include "messagelist.h"
+#include "socketconnection.h"
 #include "baseuid.h"
 #include "dlgsalary.h"
 #include "rlogin.h"
@@ -131,9 +134,7 @@ protected:
         f.setPointSize(12);
         f.setBold(true);
         painter->setFont(f);
-        QString text = QString("%1 [%2]")
-                .arg(d->fName[def_lang])
-                .arg(QString::number(d->fPrice, 'f', 0));
+        QString text = QString("%1 [%2]").arg(d->fName[def_lang], QString::number(d->fPrice, 'f', 0));
         painter->drawText(textRect, text, o);
     }
 private:
@@ -234,7 +235,7 @@ protected:
         }
         painter->fillRect(option.rect, Qt::black);
         painter->setPen(Qt::white);
-        if (t->fAmount.toDouble() > 0.1) {
+        if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
             painter->fillRect(option.rect, Qt::yellow);
             painter->setPen(Qt::black);
         }
@@ -285,6 +286,14 @@ RDesk::RDesk(QWidget *parent) :
 
     fCostumerId = 0;
     fCarId = 0;
+    connect(SocketConnection::instance(), &SocketConnection::connected, this, &RDesk::socketConnected);
+    connect(SocketConnection::instance(), &SocketConnection::externalDataReady, this, &RDesk::externalDataReceived);
+    connect(SocketConnection::instance(), &SocketConnection::connectionLost, this, &RDesk::connectionLost);
+    connect(this, &RDesk::dataReady, SocketConnection::instance(), &SocketConnection::sendData);
+    SocketConnection::startConnection(defrest("s5ip"),
+                                      defrest("s5port").toInt(),
+                                      defrest("s5user"),
+                                      defrest("s5pass"));
 }
 
 RDesk::~RDesk()
@@ -675,7 +684,7 @@ void RDesk::voidBack()
     }
     DlgVoidBack::recover();
     if (fTable) {
-        loadOrder();
+        loadOrder(true);
     }
 }
 
@@ -1042,8 +1051,67 @@ void RDesk::closeEvent(QCloseEvent *e)
         e->ignore();
         return;
     }
+    if (fTable) {
+        //unlock previous table
+        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_id=%1")
+                .arg(fTable->fId);
+        fDb.queryDirect(query);
+    }
     checkEmpty();
     BaseExtendedDialog::closeEvent(e);
+}
+
+void RDesk::externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data)
+{
+    qDebug() << "Incoming message " << cmd << messageId << data;
+    if (cmd < MessageList::dll_plugin) {
+        return;
+    }
+    if (messageId > 0) {
+        if (!fMessages.contains(messageId)) {
+            return;
+        } else {
+            fMessages.removeAll(messageId);
+        }
+    }
+    quint32 op;
+    quint8 ok;
+    RawMessage r(nullptr);
+    r.readUInt(op, data);
+    r.readUByte(ok, data);
+    if (ok == 0) {
+        QString err;
+        r.readString(err, data);
+        message_error(err);
+        return;
+    }
+    switch (op) {
+    case op_login_pin:
+        ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_on.png"));
+        break;
+    case op_update_tables:
+        repaintTables();
+        break;
+    }
+}
+
+void RDesk::socketConnected()
+{
+    ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_b.png"));
+    RawMessage r(nullptr);
+    int messageId = SocketConnection::instance()->getMessageId();
+    r.setHeader(SocketConnection::instance()->getTcpPacketNumber(), messageId, MessageList::dll_plugin);
+    r.putString(MessageList::waiterclientp);
+    r.putUInt(op_login_pin);
+    r.putUByte(3);
+    r.putString(__s.value("pin").toString());
+    fMessages.append(messageId);
+    emit dataReady(r.data());
+}
+
+void RDesk::connectionLost()
+{
+    ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_off.png"));
 }
 
 void RDesk::onBtnQtyClicked()
@@ -1379,7 +1447,7 @@ double RDesk::countTotal()
     }
 
     double grandTotal = total ;
-
+    qDebug() << fHall << fTable;
     fHall = Hall::getHallById(fTable->fHall);
     ui->tblTotal->setItem(2, 0, new QTableWidgetItem(fHall->fServiceName));
     if (fHall->fServiceItem > 0) {
@@ -1416,23 +1484,40 @@ void RDesk::countDish(OrderDishStruct *d)
     d->fTotal -= d->fDctAmount;
 }
 
-bool RDesk::setTable(TableStruct *t)
+bool RDesk::setTable(TableStruct *t, bool nosmile)
 {
     if (fTable) {
-        if (t == fTable) {
+        if (t == fTable && !nosmile) {
             DlgSmile *ds = new DlgSmile(this);
             ds->exec();
             delete ds;
             return true;
         }
     }
+    //try lock new table
+    if (t) {
+        fDb.select(QString("select f_lockhost from r_table where f_id=%1").arg(t->fId), fDbBind, fDbRows);
+        if (fDbRows[0][0].toString().isEmpty()) {
+            fDb.select(QString("update r_table set f_lockhost='%1', f_locktime=unix_timestamp(now()) where f_id=%2")
+                       .arg(HOSTNAME, QString::number(t->fId)));
+        } else {
+            if (fDbRows[0][0].toString() != HOSTNAME) {
+                if (!nosmile) {
+                    message_error(tr("Table locked by other user"));
+                }
+                return false;
+            }
+        }
+        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_lockhost='%1' and f_id <>%2")
+                .arg(HOSTNAME, QString::number(t->fId));
+        fDb.queryDirect(query);
+    }
+
     if (fTable) {
         //unlock previous table
         checkEmpty();
-        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_id=%1")
-                .arg(fTable->fId);
-        fDb.queryDirect(query);
     }
+
     clearOrder();
     if (t == 0) {
         return false;
@@ -1447,35 +1532,12 @@ bool RDesk::setTable(TableStruct *t)
     ui->tblTotal->item(0, 1)->setText(t->fName);
     ui->tblTotal->item(1, 1)->setText("0");
     fDbBind[":f_id"] = t->fId;
-    if (fDb.select("select  f_order from r_table where f_id=:f_id ", fDbBind, fDbRows) == -1) {
-//        if (fDb.fLastError.contains("Lock wait timeout exceeded")) {
-//            fDb.fDb.commit();
-//            s.close();
-//            message_error(tr("Table in editing mode"));
-//            fCanClose = true;
-//            close();
-//            return false;
-//        }
-    }
-//    QString lockHost = fDbRows.at(0).at(1).toString();
-//    int lockTime = fDbRows.at(0).at(0).toInt();
-//    int currTime = QDateTime::currentDateTime().toTime_t();
-//    if (lockTime > 0) {
-//        if (currTime - lockTime < 1 * 60 * 3) {
-//            if (lockHost != Utils::hostName()) {
-//                s.close();
-//                message_error(tr("Table in editing mode"));
-//                fCanClose = true;
-//                close();
-//                return false;
-//            }
-//        }
-//    }
+    fDb.select("select  f_order from r_table where f_id=:f_id ", fDbBind, fDbRows);
 
     if (fTable) {
         fTable->fOrder = fDbRows.at(0).at(0).toInt();
         if (fTable->fOrder > 0) {
-            loadOrder();
+            loadOrder(!nosmile);
         }
         fHall = Hall::getHallById(fTable->fHall);
         ui->lbCar->setText(fCarModel + " " + fCarGovNum);
@@ -1501,12 +1563,12 @@ bool RDesk::setTable(TableStruct *t)
                         }
                     }
                     if (!d) {
-                        setTable(nullptr);
+                        setTable(nullptr, false);
                         return false;
                     }
                     addDishToOrder(d, false);
                 } else {
-                    setTable(nullptr);
+                    setTable(nullptr, false);
                     return false;
                 }
             }
@@ -1580,7 +1642,7 @@ void RDesk::clearOrder()
     fTable = nullptr;
 }
 
-void RDesk::loadOrder()
+void RDesk::loadOrder(bool showwarning)
 {
     QElapsedTimer et;
     et.start();
@@ -1594,7 +1656,7 @@ void RDesk::loadOrder()
                             "h.f_tax "
                              "from o_header h "
                              "left join users u on u.f_id=h.f_staff "
-                             "where h.f_id='%1'")
+                             "where h.f_id=%1")
             .arg(fTable->fOrder);
     fDb.select(query, fDbBind, fDbRows);
     if (fDbRows.count() == 0) {
@@ -1613,12 +1675,13 @@ void RDesk::loadOrder()
     fTable->fTaxPrint = fDbRows.at(0).at(9).toInt();
     logtime("LOAD ORDER HEADER " , et.elapsed());
     et.restart();
-    if (u.fId != fStaff->fId) {
-        message_info(QString("%1<br>%2")
-                     .arg(tr("Table opened by"))
-                     .arg(u.fName));
+    if (showwarning) {
+        if (u.fId != fStaff->fId) {
+            message_info(QString("%1<br>%2")
+                         .arg(tr("Table opened by"))
+                         .arg(u.fName));
+        }
     }
-
     //Complex
     query = "select od.f_id, od.f_dish, dc.f_en, dc.f_ru, dc.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
@@ -2276,26 +2339,46 @@ void RDesk::checkEmpty()
     if (!fTable) {
         return;
     }
-    if (fTable->fOrder == 0) {
-        return;
-    }
 
+    int orderid = 0;
     bool orderEmpty = true;
-    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-        if (!od) {
-            continue;
-        }
-        if (od->fState == DISH_STATE_READY) {
+    fDbBind[":f_table"] = fTable->fId;
+    fDb.select("select f_id from o_header where f_table=:f_table and f_state=1", fDbBind, fDbRows);
+    if (fDbRows.count() > 0) {
+        orderid = fDbRows[0][0].toInt();
+        fDbBind[":f_header"] = orderid;
+        fDb.select("select f_id from o_dish where f_state=1 and f_header=:f_header", fDbBind, fDbRows);
+        if (fDbRows.count() > 0) {
             orderEmpty = false;
         }
     }
+
     if (orderEmpty) {
-        fDbBind[":f_state"] = ORDER_STATE_EMPTY;
-        fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
-        fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
-        fDbBind[":f_order"] = "";
+        if (orderid > 0) {
+            fDbBind[":f_state"] = ORDER_STATE_EMPTY;
+            fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
+            fDb.update("o_header", fDbBind, where_id(orderid));
+        }
+        fDbBind[":f_order"] = 0;
         fDb.update("r_table", fDbBind, where_id(fTable->fId));
+    } else {
+//        fDbBind[":f_id"] = fTable->fId;
+//        fDbBind[":f_order"] = orderid;
+//        fDb.select("update r_table set f_order=:f_order where f_id=:f_id");
+    }
+
+    fDb.select("select f_id, f_table from o_header where f_state=1 order by f_id", fDbBind, fDbRows);
+    QMap<int, int> orders;
+    for (int i = 0; i < fDbRows.count(); i++) {
+        if (orders.contains(fDbRows.at(i).at(1).toInt())) {
+            continue;
+        }
+        orders[fDbRows.at(i).at(1).toInt()] = fDbRows.at(i).at(0).toInt();
+    }
+    for (QMap<int, int>::const_iterator it = orders.constBegin(); it != orders.constEnd(); it++) {
+        fDbBind[":f_order"] = it.value();
+        fDbBind[":f_id"] = it.key();
+        fDb.select("update r_table set f_order=:f_order where f_id=:f_id", fDbBind, fDbRows);
     }
 }
 
@@ -2393,11 +2476,9 @@ void RDesk::logtime(const QString &msg, int elapsed)
 TableStruct *RDesk::loadHall(int hall)
 {
     fCurrentHall = hall;
+    ui->tblTables->setRowCount(3);
     int row = 0, col = 0;
     for (int i = 0; i < Hall::fTables.count(); i++) {
-        if (row > 2) {
-            break;
-        }
         TableStruct *t = Hall::fTables.at(i);
         if (t->fHall != hall) {
             continue;
@@ -2408,6 +2489,12 @@ TableStruct *RDesk::loadHall(int hall)
         if (col > 2) {
             col = 0;
             row ++;
+            if (row >= ui->tblTables->rowCount()) {
+                ui->tblTables->setRowCount(row + 1);
+                for (int c = 0; c < ui->tblTables->columnCount(); c++) {
+                    ui->tblTables->setItem(row, c, new QTableWidgetItem());
+                }
+            }
         }
     }
 
@@ -2419,7 +2506,7 @@ TableStruct *RDesk::loadHall(int hall)
     fMenu = hs->fDefaultMenu;
     setupType(0);
     TableStruct *ts = nullptr; //ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct*>();
-    setTable(ts);
+    setTable(ts, false);
     ui->tblTables->viewport()->update();
     return ts;
 }
@@ -2686,7 +2773,7 @@ void RDesk::on_btnTable_clicked()
     RSelectTable *t = new RSelectTable(this);
     t->setup(fTable->fHall);
     if (t->exec() == QDialog::Accepted) {
-        if (setTable(t->table())) {
+        if (setTable(t->table(), false)) {
             fHall = Hall::getHallById(fTable->fHall);
             if (fMenu != fHall->fDefaultMenu) {
                 fMenu = fHall->fDefaultMenu;
@@ -2872,7 +2959,7 @@ void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
     if (!t) {
         return;
     }
-    setTable(t);
+    setTable(t, false);
     repaintTables();
 }
 

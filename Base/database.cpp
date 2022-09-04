@@ -282,7 +282,7 @@ void Database::logError(QSqlDatabase &db)
 void Database::logQuery(QSqlQuery &query)
 {
 #ifdef QT_DEBUG
-    qDebug() << lastQuery(query);
+    qDebug() << fDb.databaseName() << lastQuery(query);
     QFile  f("log.txt");
     f.open(QIODevice::WriteOnly);
     f.write(lastQuery(query).toUtf8());

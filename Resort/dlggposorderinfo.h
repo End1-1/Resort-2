@@ -17,7 +17,6 @@ public:
     void setOrder(const QString &id);
     void setVaucher(const QString &id);
 private slots:
-    void selectPaymentMode(bool v);
     void showDishHistory(int tag);
     void on_btnOk_clicked();
     void on_btnSave_clicked();

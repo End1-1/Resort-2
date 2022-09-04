@@ -62,7 +62,6 @@ public slots:
     void on_actionChange_password_triggered();
     void on_actionGlobal_config_triggered();
     void on_actionComplex_dish_triggered();
-    void on_actionSetup_Tax_Printer_triggered();
     void on_actionEvent_triggered();
     void on_actionComplimentary_comment_triggered();
     void on_actionReport_buillder_triggered();

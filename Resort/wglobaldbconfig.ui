@@ -844,17 +844,54 @@
              </size>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="2">
-              <widget class="QLineEdit" name="leHost">
-               <property name="readOnly">
-                <bool>true</bool>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_28">
+               <property name="text">
+                <string>Second receipt check printer</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_20">
+             <item row="2" column="1" colspan="2">
+              <widget class="QLineEdit" name="leFirstReceiptPrinter"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_21">
                <property name="text">
-                <string>Host name</string>
+                <string>Default hall</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="2">
+              <widget class="EQLineEdit" name="leDisc50"/>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_30">
+               <property name="text">
+                <string>Code for discount card 50%</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1" colspan="2">
+              <widget class="EQLineEdit" name="leDisc20"/>
+             </item>
+             <item row="6" column="1">
+              <widget class="QCheckBox" name="chOpenTableAfterRun">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_44">
+               <property name="text">
+                <string>S5 server</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="label_46">
+               <property name="text">
+                <string>S5 user</string>
                </property>
               </widget>
              </item>
@@ -865,30 +902,24 @@
                </property>
               </widget>
              </item>
-             <item row="4" column="1" colspan="2">
-              <widget class="EQLineEdit" name="leDisc20"/>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_30">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_20">
                <property name="text">
-                <string>Code for discount card 50%</string>
+                <string>Host name</string>
                </property>
               </widget>
              </item>
-             <item row="5" column="1" colspan="2">
-              <widget class="EQLineEdit" name="leDisc50"/>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_45">
+               <property name="text">
+                <string>S5 port</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_27">
                <property name="text">
                 <string>First receipt check printer</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_28">
-               <property name="text">
-                <string>Second receipt check printer</string>
                </property>
               </widget>
              </item>
@@ -902,7 +933,31 @@
                </property>
               </widget>
              </item>
-             <item row="8" column="2">
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_24">
+               <property name="text">
+                <string>Open table after run</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="EQLineEdit" name="leHallName">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="leHost">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1" colspan="2">
+              <widget class="QLineEdit" name="leSecondReceiptPrinter"/>
+             </item>
+             <item row="11" column="2">
               <spacer name="verticalSpacer_3">
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
@@ -915,39 +970,24 @@
                </property>
               </spacer>
              </item>
-             <item row="6" column="1">
-              <widget class="QCheckBox" name="chOpenTableAfterRun">
+             <item row="10" column="0">
+              <widget class="QLabel" name="label_47">
                <property name="text">
-                <string/>
+                <string>S5 password</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="1" colspan="2">
-              <widget class="QLineEdit" name="leFirstReceiptPrinter"/>
+             <item row="7" column="1">
+              <widget class="QLineEdit" name="leS5Server"/>
              </item>
-             <item row="1" column="2">
-              <widget class="EQLineEdit" name="leHallName">
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
+             <item row="8" column="1">
+              <widget class="QLineEdit" name="leS5Port"/>
              </item>
-             <item row="3" column="1" colspan="2">
-              <widget class="QLineEdit" name="leSecondReceiptPrinter"/>
+             <item row="9" column="1">
+              <widget class="QLineEdit" name="leS5User"/>
              </item>
-             <item row="6" column="0">
-              <widget class="QLabel" name="label_24">
-               <property name="text">
-                <string>Open table after run</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_21">
-               <property name="text">
-                <string>Default hall</string>
-               </property>
-              </widget>
+             <item row="10" column="1">
+              <widget class="QLineEdit" name="leS5Pass"/>
              </item>
             </layout>
            </widget>

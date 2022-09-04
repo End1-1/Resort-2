@@ -60,6 +60,9 @@
         <file>../Resort/images/car.png</file>
         <file>images/box.png</file>
         <file>images/add.png</file>
+        <file>images/wifi_off.png</file>
+        <file>images/wifi_on.png</file>
+        <file>images/wifi_b.png</file>
     </qresource>
     <qresource prefix="/files">
         <file>stylesheet.qss</file>

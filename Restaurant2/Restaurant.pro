@@ -32,6 +32,7 @@ SOURCES += main.cpp\
     ../Resort/message.cpp \
     ../Resort/storeoutput.cpp \
     dlgcheckcard.cpp \
+    rawmessage.cpp \
     rface.cpp \
     rlogin.cpp \
     rmessage.cpp \
@@ -45,6 +46,7 @@ SOURCES += main.cpp\
     hall.cpp \
     rdesk.cpp \
     dishestable.cpp \
+    socketconnection.cpp \
     splash.cpp \
     rchangelanguage.cpp \
     rchangemenu.cpp \
@@ -128,12 +130,15 @@ SOURCES += main.cpp\
     ../Base/appconfig.cpp \
     baseextendeddialog.cpp \
     c:/projects/NewTax/Src/printtaxn.cpp \
-    ../../Cafe5/Classes/c5printing.cpp
+    ../../Cafe5/Classes/c5printing.cpp \
+    sslsocket.cpp
 
 HEADERS  += rface.h \
     ../../Cafe5/Classes/notificationwidget.h \
     c:/projects/NewTax/Src/printtaxn.h \
     dlgcheckcard.h \
+    messagelist.h \
+    rawmessage.h \
     rlogin.h \
     rmessage.h \
     ../Base/base.h \
@@ -146,6 +151,7 @@ HEADERS  += rface.h \
     hall.h \
     rdesk.h \
     dishestable.h \
+    socketconnection.h \
     splash.h \
     rchangelanguage.h \
     rchangemenu.h \
@@ -231,7 +237,8 @@ HEADERS  += rface.h \
     ../Base/appconfig.h \
     ../Resort/message.h \
     baseextendeddialog.h \
-     c:/projects/Cafe5/Classes/c5printing.h
+     c:/projects/Cafe5/Classes/c5printing.h \
+    sslsocket.h
 
 FORMS    += rface.ui \
     ../../Cafe5/Classes/notificationwidget.ui \
@@ -271,7 +278,7 @@ FORMS    += rface.ui \
     ../Resort/message.ui \
 
 LIBS += -lVersion
-LIBS += -LC:/Soft/OpenSSL-Win32/lib
+LIBS += -LC:/Soft/OpenSSL-Win64/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS +=  -lwsock32

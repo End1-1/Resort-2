@@ -63,6 +63,10 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
 
 private slots:
+    virtual void externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data);
+    void socketConnected();
+    virtual void connectionLost();
+
     void onBtnQtyClicked();
     void on_btnExit_clicked();
     void on_btnLanguage_clicked();
@@ -114,6 +118,7 @@ private:
     QString fCarModel;
     QString fCarGovNum;
     int fCostumerId;
+    QList<int> fMessages;
     int right(int right, int &trackUser);
     void setBtnMenuText();
     void setupType(int partId);
@@ -123,10 +128,10 @@ private:
     void updateDish(OrderDishStruct *od);
     double countTotal();
     void countDish(OrderDishStruct *d);
-    bool setTable(TableStruct *t);
+    bool setTable(TableStruct *t, bool nosmile);
     void checkOrderHeader(TableStruct *t);
     void clearOrder();
-    void loadOrder();
+    void loadOrder(bool showwarning);
     void setOrderRowHidden(int row, OrderDishStruct *od);
     void printServiceCheck(const QString &prn, int side);
     void printRemovedDish(OrderDishStruct *od, double removed, int user);
@@ -139,6 +144,9 @@ private:
     void manualdisc(double val, int costumer);
     void logtime(const QString &msg, int elapsed);
     void repaintTables();
+
+signals:
+    void dataReady(const QByteArray &);
 };
 
 #endif // RDESK_H

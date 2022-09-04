@@ -137,7 +137,6 @@ SOURCES += main.cpp\
     ../Cache/cachsex.cpp \
     ../Base/logging.cpp \
     ../Print/pprintheader.cpp \
-    dlgtaxprintsetup.cpp \
     ../Cache/cacheinvoiceitemgroup.cpp \
     ../Selector/dwselectorinvoiceitemgroup.cpp \
     ../Controls/edateedit.cpp \
@@ -164,7 +163,6 @@ SOURCES += main.cpp\
     ../Filter/fcallhistory.cpp \
     ../Filter/fcommonfilterbydate.cpp \
     dlgprintrandomtax.cpp \
-    dlgtaxreference.cpp \
     ../RowEditor/recomplimentarycomment.cpp \
     ../Base/databaseresult.cpp \
     ../Controls/etoolbarbutton.cpp \
@@ -202,7 +200,6 @@ SOURCES += main.cpp\
     ../Base/defrest.cpp \
     fonlinebreakfast.cpp \
     ../Filter/fmonthlyoccperc.cpp \
-    dlgpaymentmode.cpp \
     ../Filter/frestsalebystore.cpp \
     dlgeditservtax.cpp \
     ../Cache/cachetaxmap.cpp \
@@ -385,7 +382,6 @@ HEADERS  += mainwindow.h \
     ../Cache/cachsex.h \
     ../Base/logging.h \
     ../Print/pprintheader.h \
-    dlgtaxprintsetup.h \
     ../Cache/cacheinvoiceitemgroup.h \
     ../Selector/dwselectorinvoiceitemgroup.h \
     ../Controls/edateedit.h \
@@ -412,7 +408,6 @@ HEADERS  += mainwindow.h \
     ../Filter/fcallhistory.h \
     ../Filter/fcommonfilterbydate.h \
     dlgprintrandomtax.h \
-    dlgtaxreference.h \
     ../RowEditor/recomplimentarycomment.h \
     ../Base/databaseresult.h \
     ../Controls/etoolbarbutton.h \
@@ -451,7 +446,6 @@ HEADERS  += mainwindow.h \
     ../Base/defrest.h \
     fonlinebreakfast.h \
     ../Filter/fmonthlyoccperc.h \
-    dlgpaymentmode.h \
     ../Filter/frestsalebystore.h \
     dlgeditservtax.h \
     ../Cache/cachetaxmap.h \
@@ -551,7 +545,6 @@ FORMS    += mainwindow.ui \
     ../RowEditor/rerestdishcomplex.ui \
     dlgtracking.ui \
     ../Filter/frestauranttotal.ui \
-    dlgtaxprintsetup.ui \
     ../Filter/fcashreportsummary.ui \
     ../Filter/fcashreport.ui \
     dlguserrights.ui \
@@ -563,7 +556,6 @@ FORMS    += mainwindow.ui \
     ../Filter/fcallhistory.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
-    dlgtaxreference.ui \
     ../RowEditor/recomplimentarycomment.ui \
     dlgwelcomebuttonconfig.ui \
     ../Widgets/wreportbuilder.ui \
@@ -586,7 +578,6 @@ FORMS    += mainwindow.ui \
     ../RowEditor/recoupon.ui \
     fonlinebreakfast.ui \
     ../Filter/fmonthlyoccperc.ui \
-    dlgpaymentmode.ui \
     ../Filter/frestsalebystore.ui \
     dlgrefundvaucher.ui \
     dlgeditservtax.ui \

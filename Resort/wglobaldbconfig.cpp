@@ -176,7 +176,6 @@ WGlobalDbConfig::WGlobalDbConfig(QWidget *parent) :
     ui->leMinibarDishId->setText(fPreferences.getDb(def_minibar_default_dish).toString());
     ui->chPasswordRequired->setChecked(fPreferences.getDb(def_passport_required).toInt());
     ui->chShowLogs->setChecked(fPreferences.getDb(def_show_logs).toBool());
-    ui->chPrintTaxAfterReceiptVoucher->setChecked(fPreferences.getDb(def_print_tax_after_receipt_voucher).toBool() == "1");
 
     fTrackControl =  new TrackControl(TRACK_GLOBAL_CONFIG);
     fTrackControl->addWidget(ui->deWorkingDate, "Working date")
@@ -370,6 +369,25 @@ void WGlobalDbConfig::on_btnSaveRestaurant_clicked()
     fDbBind[":f_key"] = dr_discount_50;
     fDbBind[":f_value"] = ui->leDisc50->text();
     fDb.insert("r_config", fDbBind);
+
+    //S5
+    fDbBind[":f_comp"] = ui->leHost->text();
+    fDbBind[":f_key"] = "s5ip";
+    fDbBind[":f_value"] = ui->leS5Server->text();
+    fDb.insert("r_config", fDbBind);
+    fDbBind[":f_comp"] = ui->leHost->text();
+    fDbBind[":f_key"] = "s5port";
+    fDbBind[":f_value"] = ui->leS5Port->text();
+    fDb.insert("r_config", fDbBind);
+    fDbBind[":f_comp"] = ui->leHost->text();
+    fDbBind[":f_key"] = "s5user";
+    fDbBind[":f_value"] = ui->leS5User->text();
+    fDb.insert("r_config", fDbBind);
+    fDbBind[":f_comp"] = ui->leHost->text();
+    fDbBind[":f_key"] = "s5pass";
+    fDbBind[":f_value"] = ui->leS5Pass->text();
+    fDb.insert("r_config", fDbBind);
+
 
     getCompSettings();
     message_info_tr("Saved");

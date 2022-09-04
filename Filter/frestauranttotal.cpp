@@ -105,6 +105,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["oh.f_tax"] = false;
     fReportGrid->fIncludes["oh.f_paymentMode"] = false;
     fReportGrid->fIncludes["pm.f_" + def_lang] = false;
+    fReportGrid->fIncludes["oc.f_govnumber"] = false;
     fReportGrid->fIncludes["oh.f_paymentModeComment"] = false;
     fReportGrid->fIncludes["sum(od.f_qty)"] = true;
     fReportGrid->fIncludes["sum(od.f_total)"] = true;
@@ -116,6 +117,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(op.f_discount)"] = false;
     fReportGrid->fIncludes["sum(op.f_debt)"] = false;
     fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
+
 }
 
 FRestaurantTotal::~FRestaurantTotal()
@@ -134,9 +136,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             && !ui->chDishState->isChecked()
             && ui->leDish->fHiddenText.isEmpty()
             && ui->leStore->text().isEmpty()
-            && ui->leDishType->text().isEmpty()
-            && ui->leArmSoft->text().isEmpty()
-            && ui->chArmSoft->isChecked();
+            && ui->leDishType->text().isEmpty();;
     if (ui->chPaymentMode->isChecked()) {
         countAmount = true;
     }
@@ -177,7 +177,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths[tr("Dish code")] = 80;
     rg->fFieldsWidths[tr("Dish")] = 200;
     rg->fFieldsWidths[tr("Price")] = 80;
-    rg->fFieldsWidths[tr("ArmSoft")] = 50;
+    rg->fFieldsWidths[tr("Lisence plate")] = 80;
     rg->fFieldsWidths[tr("Tax")] = 80;
     rg->fFieldsWidths[tr("Payment mode code")] = 0;
     rg->fFieldsWidths[tr("P/M")] = 150;
@@ -221,6 +221,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "oh.f_tax"
            << "oh.f_paymentMode"
            << "pm.f_" + def_lang
+           << "oc.f_govnumber"
            << "oh.f_paymentModeComment"
            << "op.f_discountcard"
               ;
@@ -271,6 +272,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
     rg->fFieldTitles["pm.f_" + def_lang] = tr("P/M");
     rg->fFieldTitles["oh.f_paymentModeComment"] = tr("P/M comment");
+    rg->fFieldTitles["oc.f_govnumber"] = tr("Lisence plate");
     rg->fFieldTitles["op.f_discountcard"] = tr("Discount card");
     rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount amount");
     rg->fFieldTitles["count(oh.f_id)"] = tr("Qty");
@@ -289,6 +291,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "o_state os"
            << "r_hall h"
            << "r_table t"
+            << "o_car oc"
            << "r_store s"
            << "r_dish_type dt"
            << "r_dish d"
@@ -303,6 +306,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
           << "inner" //os
           << "inner" //h
           << "inner" //t
+          << "left" //oc
           << "inner" //s
           << "inner" //dt
           << "inner" // d
@@ -318,6 +322,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
               << "os.f_id=oh.f_state"
               << "h.f_id=oh.f_hall"
               << "t.f_id=oh.f_table"
+              << "oc.f_order=oh.f_id "
               << "s.f_id=od.f_store"
               << "dt.f_id=d.f_type"
               << "d.f_id=od.f_dish"
@@ -374,9 +379,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if (!ui->leDish->text().isEmpty()) {
         where += " and od.f_dish in (" + ui->leDish->fHiddenText + ") ";
     }
-    if (!ui->leArmSoft->text().isEmpty()) {
-        where += " and d.f_as in(" + ui->leArmSoft->text() + ") ";
-    }
+
 
     if (!ui->lePMComment->text().isEmpty()) {
         where += " and upper(oh.f_paymentModeComment) like '" + ui->lePMComment->text() + "%' ";
