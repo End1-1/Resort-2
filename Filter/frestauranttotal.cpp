@@ -13,6 +13,7 @@
 #include "cacheusers.h"
 #include "cacheresttable.h"
 #include "cachepaymentmode.h"
+#include "roles.h"
 #include <QPrinter>
 
 #define sn_order_state 1
@@ -25,13 +26,19 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     ui(new Ui::FRestaurantTotal)
 {
     ui->setupUi(this);
-    if (RIGHT(WORKING_USERGROUP, cr__o_cancelation)) {
+
+    switch (WORKING_USERROLE) {
+    case role_admin:
         fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeOrder()), this)->setFocusPolicy(Qt::ClickFocus);
-    }
-    if (r__(cr__remove_restaurant)) {
         fReportGrid->addToolBarButton(":/images/biohazard.png", tr("Eliminate!"), SLOT(removePermanently()), this)->setFocusPolicy(Qt::ClickFocus);
+        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
+        break;
+    case role_viewer:
+        break;
+    case role_store:
+        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
+        break;
     }
-    fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
     fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);

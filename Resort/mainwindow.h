@@ -68,7 +68,6 @@ public slots:
     void on_actionRestaurant_online_triggered();
     void on_actionOpen_breakfast_triggered();
     void on_actionSales_by_storages_triggered();
-    void on_actionConfigure_Welcome_Page_triggered();
     void on_actionModels_of_cars_triggered();
     void on_actionCostumers_cars_triggered();
     void on_actionReport_by_payment_triggered();
@@ -132,6 +131,7 @@ private:
     void lock();
     void enableMainMenu(bool value);
     void disableMainMenu();
+    void buildMenuOfRole();
     void buildMenu(QToolButton *btn, const QList<QAction*> &l);
     QMap<QAction*, int> fCustomReports;
     void dish(int t);

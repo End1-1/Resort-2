@@ -6,6 +6,7 @@
 #include "roweditordialog.h"
 #include "wfilterbase.h"
 #include "pprintpreview.h"
+#include "roles.h"
 
 #define tr_col(lang, width) (def_lang == lang ? width : 0)
 
@@ -82,11 +83,11 @@ public:
         fModel->setSqlQuery(query);
         fModel->apply(this);
         T *t = 0;
-        if (showNewBtn) {
+        if (showNewBtn && WORKING_USERROLE != role_viewer) {
             t = new T(fRowValues, this);
             fRowEditorDialog = t;
+            setBtnNewVisible(showNewBtn);
         }
-        setBtnNewVisible(showNewBtn);
         return t;
     }
     void setHelp(const QString &helpFile);

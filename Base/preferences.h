@@ -11,6 +11,7 @@
 #define WORKING_USERNAME fPreferences.getLocal(def_working_username).toString()
 #define WORKING_USERGROUP fPreferences.getLocal(def_working_user_group).toInt()
 #define WORKING_DATE fPreferences.getLocalDate(def_working_day)
+#define WORKING_USERROLE fPreferences.getLocal(def_working_user_role).toInt()
 
 typedef struct {
     char dc_name[255];

@@ -2,6 +2,7 @@
 #include "ui_fstoredocs.h"
 #include "wreportgrid.h"
 #include "storedoc.h"
+#include "roles.h"
 
 #define SEL_DOC_STATE 1
 #define SEL_DOC_TYPE 2
@@ -13,7 +14,12 @@ FStoreDocs::FStoreDocs(QWidget *parent) :
 {
     ui->setupUi(this);
     fReportGrid->setupTabTextAndIcon(tr("Documents in store"), ":/images/storage.png");
-    fReportGrid->addToolBarButton(":/images/copy.png", tr("Copy"), SLOT(copyDoc()), this)->setFocusPolicy(Qt::NoFocus);
+    switch (WORKING_USERROLE) {
+    case role_admin:
+    case role_store:
+        fReportGrid->addToolBarButton(":/images/copy.png", tr("Copy"), SLOT(copyDoc()), this)->setFocusPolicy(Qt::NoFocus);
+        break;
+    }
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClicked(QList<QVariant>)));
 
     fDockState = new DWSelectorStoreDocState(this);
@@ -148,8 +154,14 @@ void FStoreDocs::doubleClicked(const QList<QVariant> &row)
         message_error(tr("Nothing is seleted."));
         return;
     }
-    StoreDoc *d = addTab<StoreDoc>();
-    d->loadDoc(row.at(0).toInt());
+    switch (WORKING_USERROLE) {
+    case role_admin:
+    case role_store:
+        StoreDoc *d = addTab<StoreDoc>();
+        d->loadDoc(row.at(0).toInt());
+        break;
+    }
+
 }
 
 void FStoreDocs::on_btnDateLeft_clicked()

@@ -7,6 +7,7 @@
 #include "wcashentry.h"
 #include "dlgcashop.h"
 #include "cachecashdoc.h"
+#include "roles.h"
 
 #define SEL_DEBIT 1
 #define SEL_CREDIT 2
@@ -23,7 +24,14 @@ FCash::FCash(QWidget *parent) :
         DlgCashOp::cash(0);
     });
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClickOnRow(QList<QVariant>)));
-    fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeDoc()), this)->setFocusPolicy(Qt::NoFocus);
+
+    switch (WORKING_USERROLE) {
+    case role_admin:
+        fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeDoc()), this)->setFocusPolicy(Qt::NoFocus);
+        break;
+    default:
+        break;
+    }
 
     DWSelectorCashDesk *d = new DWSelectorCashDesk(this);
     d->configure();

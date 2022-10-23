@@ -202,7 +202,10 @@ void Login::on_btnLogin_clicked()
     }
     fDbBind[":username"] = ui->leUsername->text();
     fDbBind[":password"] = ui->lePassword->text();
-    fDb.select("select f_id, f_firstName, f_lastName, f_group from users where length(f_username)>0 and f_username=:username and f_password=md5(:password)", fDbBind, fDbRows);
+    fDb.select("select u.f_id, u.f_firstName, u.f_lastName, u.f_group, g.f_role "
+                "from users u "
+                "left join users_groups g on g.f_id=u.f_group "
+                "where length(u.f_username)>0 and u.f_username=:username and u.f_password=md5(:password)", fDbBind, fDbRows);
     if (fDbRows.count() == 0) {
         message_error_tr("Access denied");
         return;
@@ -223,6 +226,7 @@ void Login::on_btnLogin_clicked()
     fPreferences.setLocal(def_working_user_id, fDbRows.at(0).at(0).toInt());
     fPreferences.setLocal(def_working_username, fDbRows.at(0).at(1).toString() + " " + fDbRows.at(0).at(2).toString());
     fPreferences.setLocal(def_working_user_group, fDbRows.at(0).at(3).toInt());
+    fPreferences.setLocal(def_working_user_role, fDbRows.at(0).at(4).toInt());
     //setup new double database connection
     Db d = fPreferences.getDatabase(connName);
     __dd1Host = d.dc_main_host;
@@ -230,25 +234,9 @@ void Login::on_btnLogin_clicked()
     __dd1Username = d.dc_main_user;
     __dd1Password = d.dc_main_pass;
 
-    QStringList dbParams = fPreferences.getDb("AHC").toString().split(";", QString::SkipEmptyParts);
-    if (dbParams.count() == 4) {
-        __dd2Host = dbParams[0];
-        __dd2Database = dbParams[1];
-        __dd2Username = dbParams[2];
-        __dd2Password = dbParams[3];
-    }
 
-    // setup tax parameters
-    fDbBind[":f_comp"] = QHostInfo::localHostName();
-    fDb.select("select f_address, f_port, f_password, f_adg from s_tax_print where f_comp=:f_comp", fDbBind, fDbRows);
-    if (fDbRows.count() > 0) {
-        if (fDbRows.count() > 0) {
-            fPreferences.setDb(def_tax_address, fDbRows.at(0).at(0).toString());
-            fPreferences.setDb(def_tax_port, fDbRows.at(0).at(1).toString());
-            fPreferences.setDb(def_tax_password, fDbRows.at(0).at(2).toString());
-            fPreferences.setDb(def_tax_adg, fDbRows.at(0).at(3).toString());
-        }
-    }
+
+
     fDbBind[":f_app"] = "smarthotel";
     fDb.select("select f_version from s_app where lower(f_app)=lower(:f_app)", fDbBind, fDbRows);
     if (fDbRows.count() > 0) { /*

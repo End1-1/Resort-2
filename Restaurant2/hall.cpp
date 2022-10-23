@@ -69,7 +69,11 @@ void Hall::init()
         }
     }
 
-    query = "select f_id, f_hall, f_name, f_lockTime, f_order from r_table order by f_hall, f_queue";
+    query = "select t.f_id, t.f_hall, t.f_name, t.f_lockTime, t.f_order, c.f_govnumber, cm.f_model "
+            "from r_table t "
+            "left join o_car c on t.f_order=c.f_order "
+            "left join d_car_model cm on cm.f_id=c.f_model "
+            "order by f_hall, f_queue ";
     fDb.select(query, fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         TableStruct *t = new TableStruct();
@@ -78,6 +82,8 @@ void Hall::init()
         t->fName = it->value(2).toString();
         t->fLocked = it->value(3).toDateTime();
         t->fOrder = it->value(4).toInt();
+        t->fGovNumber = it->value(5).toString();
+        t->fCar = it->value(6).toString();
         fTables.append(t);
         fTablesMap[t->fId] = t;
     }
@@ -90,11 +96,13 @@ void Hall::refresh()
     fDbBind[":f_state"] = DISH_STATE_READY;
     QString query = "select t.f_id, t.f_lockHost, t.f_order, "
             "h.f_dateOpen, h.f_comment, u.f_firstName, "
-            "sum(d.f_total) "
+            "sum(d.f_total), c.f_govnumber, cm.f_model "
             "from r_table t "
             "left join o_header h on t.f_order=h.f_id "
             "left join users u on u.f_id=h.f_staff "
             "left join o_dish d on t.f_order=d.f_header "
+            "left join o_car c on t.f_order=c.f_order "
+            "left join d_car_model cm on cm.f_id=c.f_model "
             "where d.f_state=:f_state "
             "group by 1 ";
     fDb.select(query, fDbBind, fDbRows);
@@ -109,6 +117,8 @@ void Hall::refresh()
         t->fComment = it->at(4).toString();
         t->fStaff = it->at(5).toString();
         t->fAmount = it->at(6).toString();
+        t->fGovNumber = it->at(7).toString();
+        t->fCar = it->at(8).toString();
     }
     fDb.select("select f_id, f_lockHost, f_order from r_table", fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
@@ -141,7 +151,7 @@ TableStruct *Hall::getTableById(int id)
 void Hall::filterTables(int hallId, int busy, QList<TableStruct *> &tables)
 {
     tables.clear();
-    for (QList<TableStruct*>::const_iterator it = fTables.begin(); it != fTables.end(); it++) {
+    for (QList<TableStruct*>::const_iterator it = fTables.constBegin(); it != fTables.constEnd(); it++) {
         if (hallId > 0) {
             if ((*it)->fHall != hallId) {
                 continue;

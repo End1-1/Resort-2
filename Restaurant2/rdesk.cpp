@@ -233,20 +233,53 @@ protected:
         if (!t) {
             return;
         }
-        painter->fillRect(option.rect, Qt::black);
-        painter->setPen(Qt::white);
-        if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
-            painter->fillRect(option.rect, Qt::yellow);
-            painter->setPen(Qt::black);
+        if (t->fHall == 1) {
+            painter->fillRect(option.rect, Qt::black);
+            painter->setPen(Qt::white);
+            if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
+                painter->fillRect(option.rect, Qt::yellow);
+                painter->setPen(Qt::black);
+            }
+            QTextOption o;
+            o.setAlignment(Qt::AlignLeft);
+            QRect r = option.rect;
+            r.adjust(5, 5, -10, 0);
+            QFont font = painter->font();
+            font.setPointSize(12);
+            font.setBold(true);
+            painter->setFont(font);
+            painter->drawText(r, t->fName, o);
+            font.setBold(false);
+            painter->setFont(font);
+            o.setAlignment(Qt::AlignRight);
+            painter->drawText(r, t->fAmount, o);
+            if (t->fOrder > 0) {
+                o.setWrapMode(QTextOption::NoWrap);
+                font.setPointSize(font.pointSize() - 2);
+                painter->setFont(font);
+                r.adjust(0, 15, 0, 0);
+                o.setAlignment(Qt::AlignLeft);
+                painter->drawText(r, t->fCar, o);
+                r.adjust(0, 15, 0, 0);
+                painter->drawText(r, t->fGovNumber, o);
+            }
+        } else {
+            painter->fillRect(option.rect, Qt::black);
+            painter->setPen(Qt::white);
+            if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
+                painter->fillRect(option.rect, Qt::yellow);
+                painter->setPen(Qt::black);
+            }
+            QTextOption o;
+            o.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+            QRect r = option.rect;
+            r.adjust(0, 0, 0, -20);
+            painter->drawText(r, t->fName, o);
+            r = option.rect;
+            r.adjust(0, r.height() / 2, 0, 0);
+            painter->drawText(r, t->fAmount, o);
         }
-        QTextOption o;
-        o.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        QRect r = option.rect;
-        r.adjust(0, 0, 0, -20);
-        painter->drawText(r, t->fName, o);
-        r = option.rect;
-        r.adjust(0, r.height() / 2, 0, 0);
-        painter->drawText(r, t->fAmount, o);
+
     }
 };
 
@@ -275,7 +308,7 @@ RDesk::RDesk(QWidget *parent) :
     setBtnMenuText();
     setupType(0);
     */
-    ui->tblTables->setMaximumHeight((ui->tblTables->rowCount() * ui->tblTables->verticalHeader()->defaultSectionSize()) + 10);
+    //ui->tblTables->setMaximumHeight((ui->tblTables->rowCount() * ui->tblTables->verticalHeader()->defaultSectionSize()) + 10);
     fPreferences.setDb(def_working_day, QDate::currentDate().toString(def_date_format));
     DatabaseResult dr;
     fDbBind[":f_comp"] = QHostInfo::localHostName();
@@ -1675,13 +1708,13 @@ void RDesk::loadOrder(bool showwarning)
     fTable->fTaxPrint = fDbRows.at(0).at(9).toInt();
     logtime("LOAD ORDER HEADER " , et.elapsed());
     et.restart();
-    if (showwarning) {
-        if (u.fId != fStaff->fId) {
-            message_info(QString("%1<br>%2")
-                         .arg(tr("Table opened by"))
-                         .arg(u.fName));
-        }
-    }
+//    if (showwarning) {
+//        if (u.fId != fStaff->fId) {
+//            message_info(QString("%1<br>%2")
+//                         .arg(tr("Table opened by"))
+//                         .arg(u.fName));
+//        }
+//    }
     //Complex
     query = "select od.f_id, od.f_dish, dc.f_en, dc.f_ru, dc.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "

@@ -15,6 +15,7 @@
 #define def_working_username "def_user_full_name"
 #define def_working_user_id "def_working_user_id"
 #define def_working_user_group "def_working_user_group"
+#define def_working_user_role "def_working_user_role"
 #define def_app_font "def_app_font"
 #define def_tax_address "def_tax_address"
 #define def_tax_port "def_tax_port"

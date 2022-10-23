@@ -25,7 +25,6 @@ private slots:
     void on_btnAddDatabase_clicked();
     void on_btnLogin_clicked();
     void on_leUsername_textChanged(const QString &arg1);
-
     void on_btnDatabases_clicked();
 
 private:

@@ -166,7 +166,6 @@ SOURCES += main.cpp\
     ../RowEditor/recomplimentarycomment.cpp \
     ../Base/databaseresult.cpp \
     ../Controls/etoolbarbutton.cpp \
-    dlgwelcomebuttonconfig.cpp \
     ../Widgets/wreportbuilder.cpp \
     ../Widgets/wremarks.cpp \
     ../Controls/efilterlineedit.cpp \
@@ -274,6 +273,7 @@ HEADERS  += mainwindow.h \
     databaseconnection.h \
     databasepasswordchange.h \
     recalculatestoreoutputs.h \
+    roles.h \
     storeoutput.h \
     wreportgrid.h \
     wcontacts.h \
@@ -411,7 +411,6 @@ HEADERS  += mainwindow.h \
     ../RowEditor/recomplimentarycomment.h \
     ../Base/databaseresult.h \
     ../Controls/etoolbarbutton.h \
-    dlgwelcomebuttonconfig.h \
     ../Widgets/wreportbuilder.h \
     ../Widgets/wremarks.h \
     ../Controls/efilterlineedit.h \
@@ -557,7 +556,6 @@ FORMS    += mainwindow.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
     ../RowEditor/recomplimentarycomment.ui \
-    dlgwelcomebuttonconfig.ui \
     ../Widgets/wreportbuilder.ui \
     ../Controls/efilterlineedit.ui \
     ../Widgets/wcustomreports.ui \

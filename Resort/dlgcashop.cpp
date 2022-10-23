@@ -1,6 +1,7 @@
 #include "dlgcashop.h"
 #include "ui_dlgcashop.h"
 #include "cachecashdoc.h"
+#include "roles.h"
 
 DlgCashOp::DlgCashOp(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -20,6 +21,7 @@ DlgCashOp::DlgCashOp(QWidget *parent) :
     connect(ui->wAcc, &WCashEntry::rejected, [this]() {
         reject();
     });
+
 }
 
 DlgCashOp::~DlgCashOp()

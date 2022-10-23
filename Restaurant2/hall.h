@@ -37,6 +37,8 @@ typedef struct {
     int fCitiLedger;
     QString fPaymentComment;
     QString fRoomComment;
+    QString fCar;
+    QString fGovNumber;
 } TableStruct;
 Q_DECLARE_METATYPE(TableStruct*)
 

@@ -10,6 +10,7 @@ DatabasesConnections::DatabasesConnections(QWidget *parent) :
     ui->setupUi(this);
     loadDatabases();
     ui->chDirectConnection->setChecked(__s.value("db_direct_connection").toBool());
+    ui->tableDb->setColumnHidden(4, true);
 }
 
 DatabasesConnections::~DatabasesConnections()
@@ -30,7 +31,7 @@ void DatabasesConnections::loadDatabases()
     ui->tableDb->setRowCount(0);
     QStringList dbNames;
     fPreferences.setDatabasesNames(dbNames);
-    for (QStringList::const_iterator it = dbNames.begin(); it != dbNames.end(); it++) {
+    for (QStringList::const_iterator it = dbNames.constBegin(); it != dbNames.constEnd(); it++) {
         Db db = fPreferences.getDatabase(*it);
         QList<QVariant> values;
         values << db.dc_name
