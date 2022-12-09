@@ -4,7 +4,6 @@
 #include "eqcombobox.h"
 #include "eqtextedit.h"
 #include "eqtimeedit.h"
-#include "broadcastthread.h"
 #include "edateedit.h"
 #include <QDateEdit>
 #include <QDateTimeEdit>
@@ -229,9 +228,7 @@ bool RowEditorDialog::saveOnly()
         fTrackControl->fRecord = id->text();
         fTrackControl->saveChanges();
     }
-    if (id && fCacheId > 0) {
-        BroadcastThread::cmdRefreshCache(fCacheId, id->text());
-    }
+
     return true;
 }
 

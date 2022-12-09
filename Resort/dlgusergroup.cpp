@@ -9,8 +9,6 @@ DlgUserGroup::DlgUserGroup(QList<QVariant> &values, QWidget *parent) :
     ui->setupUi(this);
     addWidget(ui->leCode, "Code");
     addWidget(ui->leNameAm, "Name, am");
-    addWidget(ui->leNameEn, "Name, en");
-    addWidget(ui->leNameRu, "Name, ru");
     fTable = "users_groups";
     fCacheId = cid_users_group;
 }

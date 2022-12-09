@@ -7,7 +7,6 @@
 #include "trackcontrol.h"
 #include "eqtablewidget.h"
 #include "utils.h"
-#include "broadcastthread.h"
 #include <QHostInfo>
 
 class BaseExtendedDialog : public BaseDialog

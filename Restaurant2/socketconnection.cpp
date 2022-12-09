@@ -58,7 +58,7 @@ void SocketConnection::run()
 {
     QString certFileName = qApp->applicationDirPath() + "/" + "cert.pem";
     QFile file(certFileName);
-    Q_ASSERT(file.open(QIODevice::ReadOnly));
+    file.open(QIODevice::ReadOnly);
     QSslCertificate cert = QSslCertificate(file.readAll());
     fSocket = new SslSocket(this);
     fTimer = new QTimer(this);

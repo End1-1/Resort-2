@@ -13,8 +13,11 @@ TEMPLATE = app
 
 DEFINES += _WASH_
 DEFINES += _RESTAURANT_
+DEFINES += _APPLICATION_=\\\"ELITEWASH\\\"
+DEFINES += _MODULE_=\\\"SALES\\\"
 
 RC_FILE = res.rc
+
 
 INCLUDEPATH += c:/projects/resort2/Base
 INCLUDEPATH += c:/projects/resort2/Controls
@@ -29,8 +32,11 @@ INCLUDEPATH += c:/Soft/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
     ../../Cafe5/Classes/notificationwidget.cpp \
+    ../Resort/database2.cpp \
+    ../Resort/logwriter.cpp \
     ../Resort/message.cpp \
     ../Resort/storeoutput.cpp \
+    branchstoremap.cpp \
     dlgcheckcard.cpp \
     rawmessage.cpp \
     rface.cpp \
@@ -51,7 +57,6 @@ SOURCES += main.cpp\
     rchangelanguage.cpp \
     rchangemenu.cpp \
     rpaymenttype.cpp \
-    rselecttable.cpp \
     rchangehall.cpp \
     rkeyboard.cpp \
     rdishcomment.cpp \
@@ -103,7 +108,6 @@ SOURCES += main.cpp\
     dlgselecttaxcashmode.cpp \
     dlgbreakfast.cpp \
     ../Base/command.cpp \
-    ../Resort/broadcastthread.cpp \
     dlgbanketitems.cpp \
     dlglist.cpp \
     dlgdate.cpp \
@@ -135,6 +139,9 @@ SOURCES += main.cpp\
 
 HEADERS  += rface.h \
     ../../Cafe5/Classes/notificationwidget.h \
+    ../Resort/database2.h \
+    ../Resort/logwriter.h \
+    branchstoremap.h \
     c:/projects/NewTax/Src/printtaxn.h \
     dlgcheckcard.h \
     messagelist.h \
@@ -156,7 +163,6 @@ HEADERS  += rface.h \
     rchangelanguage.h \
     rchangemenu.h \
     rpaymenttype.h \
-    rselecttable.h \
     rchangehall.h \
     rkeyboard.h \
     rdishcomment.h \
@@ -209,7 +215,6 @@ HEADERS  += rface.h \
     dlgselecttaxcashmode.h \
     dlgbreakfast.h \
     ../Base/command.h \
-    ../Resort/broadcastthread.h \
     dlgbanketitems.h \
     ../Base/vauchers.h \
     dlglist.h \
@@ -250,7 +255,6 @@ FORMS    += rface.ui \
     rchangelanguage.ui \
     rchangemenu.ui \
     rpaymenttype.ui \
-    rselecttable.ui \
     rchangehall.ui \
     rkeyboard.ui \
     rdishcomment.ui \

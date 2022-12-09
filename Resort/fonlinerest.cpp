@@ -2,7 +2,6 @@
 #include "ui_fonlinerest.h"
 #include "wreportgrid.h"
 #include "cacheresthall.h"
-#include "vauchers.h"
 
 FOnlineRest::FOnlineRest(QWidget *parent) :
     WFilterBase(parent),

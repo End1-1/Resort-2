@@ -40,13 +40,7 @@ void DWSelectorInvoiceItem::configure()
                 continue;
             }
         }
-        if (fGroup == IG_POSTING_CHARGES) {
-            if (!RIGHT(WORKING_USERGROUP, cr__super_correction)) {
-                if (v->fNoManual) {
-                    continue;
-                }
-            }
-        }
+
         fTable->setItem(row, 0, new QTableWidgetItem(v->fCode));
         fTable->setItem(row, 1, new QTableWidgetItem(v->fName));
         fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(v));

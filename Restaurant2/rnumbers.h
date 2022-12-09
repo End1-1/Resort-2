@@ -15,6 +15,7 @@ public:
     explicit RNumbers(QWidget *parent = 0);
     ~RNumbers();
     static bool getNumber(float &number, float max, QWidget *parent = 0);
+    static bool getString(QString &str, QWidget *parent = nullptr);
 private:
     Ui::RNumbers *ui;
     float fMax;

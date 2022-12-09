@@ -7,7 +7,7 @@ RNumbers::RNumbers(QWidget *parent) :
     ui(new Ui::RNumbers)
 {
     ui->setupUi(this);
-    ui->leText->setValidator(new QDoubleValidator(-999999, 999999, 1));
+
 }
 
 RNumbers::~RNumbers()
@@ -19,9 +19,10 @@ bool RNumbers::getNumber(float &number, float max, QWidget *parent)
 {
     bool result = false;
     RNumbers *n = new RNumbers(parent);
+    n->ui->leText->setValidator(new QDoubleValidator(-999999, 999999, 1));
     n->fMax = max;
     if (n->exec() == QDialog::Accepted) {
-        number = n->ui->leText->text().toFloat();
+        number = str_float(n->ui->leText->text());
         if (number > 0) {
             result = true;
         }
@@ -30,10 +31,23 @@ bool RNumbers::getNumber(float &number, float max, QWidget *parent)
     return result;
 }
 
+bool RNumbers::getString(QString &str, QWidget *parent)
+{
+    bool result = false;
+    RNumbers *n = new RNumbers(parent);
+    n->fMax = -1000;
+    if (n->exec() == QDialog::Accepted) {
+        str = n->ui->leText->text();
+        result = !str.isEmpty();
+    }
+    delete n;
+    return result;
+}
+
 void RNumbers::btnNumClick()
 {
     QPushButton *b = static_cast<QPushButton*>(sender());
-    if (b->text() == "0") {
+    if (b->text() == "0" && fMax != -1000) {
         if (ui->leText->text().toFloat() < 0.01) {
             return;
         }
@@ -58,7 +72,7 @@ void RNumbers::on_btnReject_clicked()
 
 void RNumbers::on_btnAccept_clicked()
 {
-    if (ui->leText->text().toFloat() < 0.01) {
+    if (str_float(ui->leText->text()) < 0.01) {
         message_error(tr("Quantity must be greater than 0"));
         return;
     }

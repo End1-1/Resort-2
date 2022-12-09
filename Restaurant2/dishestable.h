@@ -32,10 +32,10 @@ typedef struct {
     int fMenu;
     int fPart;
     int fType;
-    QMap<QString, QString> fName;
+    QString fName;
     int fBgColor;
     int fTextColor;
-    QMap<QString, QString> fText;
+    QString fText;
     QList<QMap<QString, QString> > fMod;
     QString fPrint1;
     QString fPrint2;
@@ -55,7 +55,7 @@ typedef struct {
     int fCancelUser;
     QDateTime fCancelDate;
     int fDishId;
-    QMap<QString, QString> fName;
+    QString fName;
     QString fPrint1;
     QString fPrint2;
     int fStore;
@@ -73,6 +73,7 @@ typedef struct {
     QString fComplexRecId;
     QString fAdgt;
     int fTax;
+    int fRow;
 } OrderDishStruct;
 Q_DECLARE_METATYPE(OrderDishStruct*)
 

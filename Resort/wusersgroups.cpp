@@ -5,12 +5,10 @@
 WUsersGroups::WUsersGroups(QWidget *parent) :
     WReportGrid(parent)
 {
-    fModel->setColumn(0, "f_id", tr("Code"))
-            .setColumn(tr_col("am", 200), "f_am", tr("Group"))
-            .setColumn(tr_col("en", 200), "f_en", tr("Group"))
-            .setColumn(tr_col("ru", 200), "f_ru", tr("Group"));
+    fModel->setColumn(80, "f_id", tr("Code"))
+            .setColumn(400, "f_am", tr("Group"));
 
-    fModel->setSqlQuery("select f_id, f_am, f_en, f_ru from users_groups order by 2 ");
+    fModel->setSqlQuery("select f_id, f_am from users_groups order by 2 ");
     fModel->apply(this);
 
     fRowEditorDialog = new DlgUserGroup(fRowValues, this);
@@ -28,9 +26,11 @@ void WUsersGroups::processValues(int row, bool isNew)
     if (fRowValues.count() == 0 && !isNew) {
         return;
     }
-    if (!isNew) {
-        message_info_tr("This is not editable group");
-        return;
+    if (fRowValues.count() > 0) {
+        if (fRowValues.at(0).toInt() == 1) {
+            message_info_tr("This is not editable group");
+            return;
+        }
     }
     WReportGrid::processValues(row, isNew);
 }

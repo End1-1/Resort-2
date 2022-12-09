@@ -49,7 +49,8 @@ void FMaterialsInStore::apply(WReportGrid *rg)
             .setColumn(300, "", tr("Material"))
             .setColumn(100, "", tr("Qty"))
             .setColumn(100, "", tr("Price"))
-            .setColumn(100, "", tr("Total"));
+            .setColumn(100, "", tr("Total"))
+            .setColumn(100, "", tr("Reminder"));
     QString where;
     if (!ui->leStore->isEmpty()) {
         where += " and b.f_store in (" + ui->leStore->fHiddenText + ") ";
@@ -58,7 +59,8 @@ void FMaterialsInStore::apply(WReportGrid *rg)
         where += " and b.f_material in (" + ui->leMaterial->fHiddenText + ") ";
     }
     QString query = "select s.f_name as f_store, b.f_goods, d.f_en as f_material, sum(b.f_qty*b.f_sign) as f_qty, "
-            "sum(b.f_price*b.f_qty)/sum(b.f_qty) as f_price, sum(b.f_price*b.f_qty*b.f_sign) as f_total "
+            "sum(b.f_price*b.f_qty)/sum(b.f_qty) as f_price, sum(b.f_price*b.f_qty*b.f_sign) as f_total, "
+            "d.f_minreminder "
             "from r_store_acc b "
             "left join r_store s on s.f_id=b.f_store "
             "left join r_dish d on d.f_id=b.f_goods "
@@ -72,6 +74,13 @@ void FMaterialsInStore::apply(WReportGrid *rg)
     QList<double> val;
     rg->fModel->sumOfColumns(col, val);
     rg->setTblTotalData(col, val);
+    for (int i = 0; i < rg->fModel->rowCount(); i++) {
+        if (rg->fModel->data(i, 6).toDouble() > 0.01 && rg->fModel->data(i, 3).toDouble() < rg->fModel->data(i, 6).toDouble()) {
+            for (int j = 0; j < rg->fModel->columnCount(); j++) {
+                rg->fModel->setBackgroundColor(i, j, Qt::red);
+            }
+        }
+    }
 }
 
 void FMaterialsInStore::selector(int selectorNumber, const QVariant &value)

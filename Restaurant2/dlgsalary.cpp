@@ -2,10 +2,13 @@
 #include "ui_dlgsalary.h"
 #include "dlglist.h"
 #include "dlgreservation.h"
+#include "branchstoremap.h"
 #include "rmessage.h"
 #include "rnumbers.h"
 #include "cacheusersgroups.h"
 #include "cacheusers.h"
+#include "database2.h"
+#include "defrest.h"
 
 DlgSalary::DlgSalary(bool day, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -21,6 +24,15 @@ DlgSalary::DlgSalary(bool day, QWidget *parent) :
     } else {
         loadSalary();
     }
+    QString field = QString("f%1").arg(QDate::currentDate().dayOfWeek());
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2.exec(QString("select %1 from salary2_config ").arg(field));
+    db2.next();
+    ui->btnAdd->setEnabled(db2.integer(field) > 0);
+    ui->btnRemove->setEnabled(db2.integer(field) > 0);
+    ui->btnCopyFromReal->setEnabled(db2.integer(field) > 0);
 }
 
 DlgSalary::~DlgSalary()
@@ -45,13 +57,14 @@ void DlgSalary::salary2()
 void DlgSalary::loadSalary2()
 {
     fDbBind[":f_date"] = ui->deDate->date();
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     DatabaseResult dr;
     dr.select(fDb, "select s.f_id, s.f_employee, concat(u.f_firstName, ' ', u.f_lastName) as ename, abs(s.f_amount) as f_amount, "
               "p.f_am as position "
                "from salary2 s "
                "left join users u on u.f_id=s.f_employee "
                 "left join users_groups p on p.f_id=u.f_group "
-                "where s.f_date=:f_date", fDbBind);
+                "where s.f_date=:f_date and s.f_branch=:f_branch ", fDbBind);
     Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
                                 0, 0, 500, 100, 400);
     ui->tblData->setRowCount(0);
@@ -69,13 +82,14 @@ void DlgSalary::loadSalary2()
 void DlgSalary::loadSalary()
 {
     fDbBind[":f_date"] = ui->deDate->date();
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     DatabaseResult dr;
     dr.select(fDb, "select s.f_id, s.f_employee, concat(u.f_firstName, ' ', u.f_lastName) as ename, abs(s.f_amount) as f_amount, "
               "p.f_am as position "
                "from salary s "
                "left join users u on u.f_id=s.f_employee "
                 "left join users_groups p on p.f_id=u.f_group "
-                "where s.f_date=:f_date", fDbBind);
+                "where s.f_date=:f_date and s.f_branch=:f_branch ", fDbBind);
     Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
                                 0, 0, 500, 100, 400);
     ui->tblData->setRowCount(0);
@@ -103,6 +117,7 @@ void DlgSalary::on_btnSave_clicked()
                 fDbBind[":f_employee"] = ui->tblData->toInt(i, 1);
                 fDbBind[":f_date"] = ui->deDate->date();
                 fDbBind[":f_amount"] = ui->tblData->toDouble(i, 3);
+                fDbBind[":f_branch"] = defrest(dr_branch).toInt();
                 ui->tblData->setItemWithValue(i, 0, fDb.insert("salary2", fDbBind));
             } else {
                 fDbBind[":f_amount"] = ui->tblData->toDouble(i, 3);
@@ -116,6 +131,7 @@ void DlgSalary::on_btnSave_clicked()
                 fDbBind[":f_employee"] = ui->tblData->toInt(i, 1);
                 fDbBind[":f_date"] = ui->deDate->date();
                 fDbBind[":f_amount"] = ui->tblData->toDouble(i, 3);
+                fDbBind[":f_branch"] = defrest(dr_branch).toInt();
                 ui->tblData->setItemWithValue(i, 0, fDb.insert("salary", fDbBind));
             } else {
                 fDbBind[":f_amount"] = ui->tblData->toDouble(i, 3);
@@ -183,34 +199,38 @@ void DlgSalary::countSalary()
 {
     fDbBind[":f_date"] = ui->deDate->date();
     fDbBind[":f_docType"] = 3;
-    fDb.select("delete from c_cash where f_date=:f_date and f_docType=:f_docType", fDbBind, fDbRows);
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
+    fDb.select("delete from c_cash where f_branch=:f_branch and f_date=:f_date and f_docType=:f_docType", fDbBind, fDbRows);
 
     DatabaseResult drsal;
     fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
     fDbBind[":f_state2"] = DISH_STATE_READY;
     fDbBind[":f_dateCash"] =  ui->deDate->date();
-    fDbBind[":f_store"] = 2;
+    fDbBind[":f_store"] = storealias(2);
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drsal.select(fDb, "select sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
-                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store", fDbBind);
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch ", fDbBind);
 
     double total = drsal.value("f_total").toDouble();
 
     fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
     fDbBind[":f_state2"] = DISH_STATE_READY;
     fDbBind[":f_dateCash"] =  ui->deDate->date();
-    fDbBind[":f_store"] = 2;
+    fDbBind[":f_store"] = storealias(2);
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drsal.select(fDb,
                  QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
-                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "
                 "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), fDbBind);
     total -= drsal.value("f_deduction").toDouble();
 
     if (total > 0.1) {
         fDbBind[":f_date"] =  ui->deDate->date();
+        fDbBind[":f_branch"] = defrest(dr_branch).toInt();
         fDbBind[":f_docType"] = 3;
         fDbBind[":f_debit"] = 1;
         fDbBind[":f_credit"] = 2;
@@ -221,6 +241,7 @@ void DlgSalary::countSalary()
     for (int i = 0; i < ui->tblData->rowCount(); i++) {
         if (ui->tblData->toDouble(i, 3) > 0.01) {
             fDbBind[":f_date"] =  ui->deDate->date();
+            fDbBind[":f_branch"] = defrest(dr_branch).toInt();
             fDbBind[":f_docType"] = 3;
             fDbBind[":f_debit"] = 1;
             fDbBind[":f_credit"] = 2;

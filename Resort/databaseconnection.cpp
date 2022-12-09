@@ -1,6 +1,6 @@
 #include "databaseconnection.h"
 #include "ui_databaseconnection.h"
-#include "database.h"
+#include "database2.h"
 
 DatabaseConnection::DatabaseConnection(QWidget *parent) :
     BaseExtendedDialog(parent),

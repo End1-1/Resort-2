@@ -29,7 +29,7 @@ CacheUsers::CacheUsers() :
     CacheBase()
 {
     fCacheId = cid_users;
-    fQuery = "select f_id, f_userName, concat(f_firstName, ' ', f_lastName), f_group from users";
+    fQuery = "select f_id, concat(f_firstName, ' ', f_lastName), f_userName,  f_group from users";
     if (!fStaticCache.contains(fCacheId)) {
         load();
     }

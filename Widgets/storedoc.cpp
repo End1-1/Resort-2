@@ -51,6 +51,10 @@ StoreDoc::StoreDoc(QWidget *parent) :
     ui->wAcc->docType(CASHDOC_STORE);
     ui->wAcc->setSaveVisible(false);
     ui->wAcc->cashOp(CASHOP_OUT);
+
+    ui->btnSaveDoc->setEnabled(check_permission(pr_edit_store_doc));
+    ui->btnRemoveDoc->setEnabled(check_permission(pr_edit_store_doc));
+    ui->btnDraftDoc->setEnabled(check_permission(pr_edit_store_doc));
 }
 
 StoreDoc::~StoreDoc()

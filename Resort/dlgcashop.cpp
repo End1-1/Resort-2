@@ -1,7 +1,6 @@
 #include "dlgcashop.h"
 #include "ui_dlgcashop.h"
 #include "cachecashdoc.h"
-#include "roles.h"
 
 DlgCashOp::DlgCashOp(QWidget *parent) :
     BaseExtendedDialog(parent),

@@ -121,6 +121,42 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="tbEarning_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Staff</string>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/images/staff.png</normaloff>:/images/staff.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="index" stdset="0">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="tbStore">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -966,6 +1002,51 @@ system</string>
    </property>
    <property name="text">
     <string>Salary by employes</string>
+   </property>
+  </action>
+  <action name="actionCoupon_of_service">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/talon.png</normaloff>:/images/talon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Coupon of service</string>
+   </property>
+  </action>
+  <action name="actionCoupon_of_service_actions">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/talon.png</normaloff>:/images/talon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Coupon of service reports</string>
+   </property>
+  </action>
+  <action name="actionCoupon_of_service_documents">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/talon.png</normaloff>:/images/talon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Coupon of service documents</string>
+   </property>
+  </action>
+  <action name="actionAttendance">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/staff.png</normaloff>:/images/staff.png</iconset>
+   </property>
+   <property name="text">
+    <string>Attendance</string>
+   </property>
+  </action>
+  <action name="actionArmSoftExport">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/excel.png</normaloff>:/images/excel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Հայկական ծրագրեր</string>
    </property>
   </action>
  </widget>

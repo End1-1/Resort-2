@@ -93,12 +93,6 @@ void RTools::on_btnCompimentary_clicked()
     fDesk->complimentary();
 }
 
-void RTools::on_btnTax_clicked()
-{
-    accept();
-    fDesk->printTaxDialog();
-}
-
 void RTools::on_btnChangePassword_clicked()
 {
     accept();

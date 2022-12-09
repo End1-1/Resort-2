@@ -31,7 +31,10 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->leArmSoft, "ArmSoft code");
     addWidget(ui->leLastPrice, "Last input price");
     addWidget(ui->leUnitCode, "Unit code");
-    addWidget(ui->leUnitName, "Unit name");/*
+    addWidget(ui->leUnitName, "Unit name");
+    addWidget(ui->leMinReminder, "Min reminder");
+    addWidget(ui->leFiscalDebt, "Fiscal debt");
+    /*
     addWidget(ui->leDefStore, "Def store name");
     addWidget(ui->leDefStoreName, "Def store name");*/
     fTable = "r_dish";
@@ -157,6 +160,9 @@ bool RERestDish::isDataCorrect()
     }
     if (ui->leUnitCode->asInt() == 0) {
         fDataErrors << tr("Unit must be defined");
+    }
+    if (ui->leFiscalDebt->asInt() == 0) {
+        fDataErrors << tr("Fiscal department cannot be empty");
     }
     return fDataErrors.count() == 0;
 }

@@ -30,12 +30,16 @@ private slots:
     void on_btnCash_clicked();
     void on_btnPrintTax_clicked();
     void on_leDiscount_returnPressed();
+    void on_leCard_textChanged(const QString &arg1);
+
+    void on_btnTaxPayerId_clicked();
 
 private:
     Ui::DlgPayment *ui;
     int fOrder;
     bool fUpdateHeader;
     void calcCash();
+    void calcCard();
     int fCountId;
     bool fCanReject;
 };

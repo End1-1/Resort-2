@@ -86,141 +86,18 @@ void WGlobalDbConfig::getDatabases()
     }
 }
 
-void WGlobalDbConfig::getMonthly()
-{
-    Utils::tableSetColumnWidths(ui->tblMonthly, ui->tblMonthly->columnCount(),
-                                50, 120, 100, 300);
-    DatabaseResult dr;
-    dr.select(fDb, "select * from serv_monthly order by f_id", fDbBind);
-    ui->tblMonthly->setRowCount(dr.rowCount());
-    for (int i = 0; i < dr.rowCount(); i++) {
-        ui->tblMonthly->setItemWithValue(i, 0, dr.value(i, "f_id"));
-        ui->tblMonthly->addLineEdit(i, 1, false)->setText(dr.value(i, "f_title").toString());
-        ui->tblMonthly->addLineEdit(i, 2, false)->setText(dr.value(i, "f_width").toString());
-        ui->tblMonthly->addLineEdit(i, 3, false)->setText(dr.value(i, "f_items").toString());
-    }
-
-    Utils::tableSetColumnWidths(ui->tblCardexAnalysis, ui->tblCardexAnalysis->columnCount(),
-                                50, 120, 100, 300);
-    dr.select(fDb, "select * from serv_cardex_analysis order by f_id", fDbBind);
-    ui->tblCardexAnalysis->setRowCount(dr.rowCount());
-    for (int i = 0; i < dr.rowCount(); i++) {
-        ui->tblCardexAnalysis->setItemWithValue(i, 0, dr.value(i, "f_id"));
-        ui->tblCardexAnalysis->addLineEdit(i, 1, false)->setText(dr.value(i, "f_title").toString());
-        ui->tblCardexAnalysis->addLineEdit(i, 2, false)->setText(dr.value(i, "f_width").toString());
-        ui->tblCardexAnalysis->addLineEdit(i, 3, false)->setText(dr.value(i, "f_items").toString());
-    }
-    ui->teDailyMovement->setPlainText(fPreferences.getDb(def_daily_movement_items).toString());
-    ui->rbDailySubtotalDown->setChecked(fPreferences.getDb(def_daily_movement_total_side).toInt());
-}
-
-void WGlobalDbConfig::getTax()
-{
-    Utils::tableSetColumnWidths(ui->tblTax, ui->tblTax->columnCount(),
-                                     0, 150, 40, 150, 150, 150);
-    ui->tblTax->clearContents();
-    DatabaseResult dr;
-    dr.select(fDb, "select f_id, f_comp, f_active, f_host, f_port, f_password from serv_tax order by f_comp", fDbBind);
-    ui->tblTax->setRowCount(dr.rowCount());
-    for (int i = 0; i < dr.rowCount(); i++) {
-        ui->tblTax->setItem(i, 0, new QTableWidgetItem(dr.value(i, "f_id").toString()));
-        ui->tblTax->setItem(i, 1, new QTableWidgetItem(dr.value(i, "f_comp").toString()));
-        ui->tblTax->setItem(i, 2, new QTableWidgetItem(dr.value(i, "f_active").toString()));
-        ui->tblTax->setItem(i, 3, new QTableWidgetItem(dr.value(i, "f_host").toString()));
-        ui->tblTax->setItem(i, 4, new QTableWidgetItem(dr.value(i, "f_port").toString()));
-        ui->tblTax->setItem(i, 5, new QTableWidgetItem(dr.value(i, "f_password").toString()));
-    }
-}
 
 WGlobalDbConfig::WGlobalDbConfig(QWidget *parent) :
     BaseWidget(parent),
     ui(new Ui::WGlobalDbConfig)
 {
     ui->setupUi(this);
-    ui->deWorkingDate->setDate(WORKING_DATE);
-    ui->teSlogan->setPlainText(fPreferences.getDb(def_slogan).toString());
-    ui->leExtraBed->setText(fPreferences.getDb(def_default_extra_bed).toString());
-    ui->leDefaultCardex->setText(fPreferences.getDb(def_default_cardex).toString());
-    ui->leRoomChargeId->setText(fPreferences.getDb(def_room_charge_id).toString());
-    ui->teEarlyCheckin->setTime(QTime::fromString(fPreferences.getDb(def_earyly_checkin).toString(), "HH:mm"));
-    ui->teLateCheckout->setTime(QTime::fromString(fPreferences.getDb(def_late_checkout).toString(), "HH:mm"));
-    ui->leEarlyCheckinID->setText(fPreferences.getDb(def_earyly_checkin_id).toString());
-    ui->leLateCheckoutID->setText(fPreferences.getDb(def_late_checkout_id).toString());
-    ui->leAirportPickupId->setText(fPreferences.getDb(def_airport_pickup_id).toString());
-    ui->leDayUse->setText(fPreferences.getDb(def_day_use_id).toString());
-    ui->leVaucherDigits->setText(fPreferences.getDb(def_vouchers_digits).toString());
-    ui->teVoucherRightText->setPlainText(fPreferences.getDb(def_vouchers_right_header).toString());
-    ui->teVoucherInvoiceFooter->setPlainText(fPreferences.getDb(def_vouchers_invoice_footer).toString());
-    ui->leBrekfastChargeId->setText(fPreferences.getDb(def_auto_breakfast_id).toString());
-    ui->leDiscountId->setText(fPreferences.getDb(def_invoice_default_discount_id).toString());
-    ui->lePosTransferId->setText(fPreferences.getDb(def_invoice_default_positive_transfer_id).toString());
-    ui->leNegTransferId->setText(fPreferences.getDb(def_invoice_default_negative_transfer_id).toString());
-    ui->leRefundId->setText(fPreferences.getDb(def_invoice_default_refund_id).toString());
-    ui->chNoTrackControl->setChecked(fPreferences.getDb(def_no_tracking_changes).toBool());
-    ui->leManualTax->setText(fPreferences.getDb(def_filter_manual_tax).toString());
-    ui->leRoomingList->setText(fPreferences.getDb(def_rooming_list).toString());
-    ui->chRestMode->setChecked(fPreferences.getDb(def_welcome_rest_mode).toInt());
-    ui->leCancelCode->setText(fPreferences.getDb(def_cancelfee_code).toString());
-    ui->leNoshowCode->setText(fPreferences.getDb(def_noshowfee_code).toString());
-    ui->leRestHallForReception->setText(fPreferences.getDb(def_rest_hall_for_reception).toString());
-    ui->leRoomArrangement->setText(fPreferences.getDb(def_room_arrangement).toString());
-    ui->leReceiptVaucherId->setText(fPreferences.getDb(def_receip_vaucher_id).toString());
-    ui->leReservationVoucherId->setText(fPreferences.getDb(def_reservation_voucher_id).toString());
-    ui->leRoomRateChangeId->setText(fPreferences.getDb(def_room_rate_change_id).toString());
-    ui->leAdvanceVoucherId->setText(fPreferences.getDb(def_advance_voucher_id).toString());
-    ui->leBreakfastHallId->setText(fPreferences.getDb(def_breakfast_default_hall).toString());
-    ui->leBreakfastTableId->setText(fPreferences.getDb(def_breakfast_default_table).toString());
-    ui->leBreakfastDishId->setText(fPreferences.getDb(def_breakfast_default_dish).toString());
-    ui->leMinibarHallId->setText(fPreferences.getDb(def_minibar_default_hall).toString());
-    ui->leMinibarTableId->setText(fPreferences.getDb(def_minibar_default_table).toString());
-    ui->leMinibarDishId->setText(fPreferences.getDb(def_minibar_default_dish).toString());
-    ui->chPasswordRequired->setChecked(fPreferences.getDb(def_passport_required).toInt());
-    ui->chShowLogs->setChecked(fPreferences.getDb(def_show_logs).toBool());
 
-    fTrackControl =  new TrackControl(TRACK_GLOBAL_CONFIG);
-    fTrackControl->addWidget(ui->deWorkingDate, "Working date")
-            .addWidget(ui->teSlogan, "Slogan")
-            .addWidget(ui->leExtraBed, "Extra bed rate")
-            .addWidget(ui->leDefaultCardex, "Default cardex code")
-            .addWidget(ui->leRoomChargeId, "Room charge id")
-            .addWidget(ui->leEarlyCheckinID, "Early checkin id")
-            .addWidget(ui->leLateCheckoutID, "Late checkout id")
-            .addWidget(ui->teEarlyCheckin, "Early checkin time")
-            .addWidget(ui->teLateCheckout, "Late checkout time")
-            .addWidget(ui->leAirportPickupId, "Airport pickup id")
-            .addWidget(ui->leDayUse, "Day use id")
-            .addWidget(ui->leVaucherDigits, "Voucher number format, digits count")
-            .addWidget(ui->leBrekfastChargeId, "Breakfast charge id")
-            .addWidget(ui->leDiscountId, "Default discount id")
-            .addWidget(ui->lePosTransferId, "Positive balance default id")
-            .addWidget(ui->leNegTransferId, "Negative balance default id")
-            .addWidget(ui->chNoTrackControl, "No tracking changes")
-            .addWidget(ui->leRefundId, "Refund default id")
-            .addWidget(ui->leManualTax, "Manual tax filter")
-            .addWidget(ui->leCancelCode, "Cancelation fee code")
-            .addWidget(ui->leNoshowCode, "No show fee code")
-            .addWidget(ui->leRestHallForReception, "Restaurant hall for reception")
-            .addWidget(ui->leRoomArrangement, "Default room arrangement")
-            .addWidget(ui->leReceiptVaucherId, "Receipt vaucher id")
-            .addWidget(ui->leReservationVoucherId, "Reservation voucher id")
-            .addWidget(ui->leAdvanceVoucherId, "Advance voucher id")
-            .addWidget(ui->leRoomRateChangeId, "Room rate change voucher id")
-            .addWidget(ui->leBreakfastHallId, "Breakfast hall id")
-            .addWidget(ui->leBreakfastTableId, "Breakfast table id")
-            .addWidget(ui->leBreakfastDishId, "Breakfast dish id")
-            .addWidget(ui->leMinibarHallId, "Minibar hall id")
-            .addWidget(ui->leMinibarTableId, "MInibar table id")
-            .addWidget(ui->leMinibarDishId, "Minibar dish id")
-            .addWidget(ui->chPasswordRequired, "Passport required")
-            .addWidget(ui->chShowLogs, "Show logs")
-            .addWidget(ui->chPrintTaxAfterReceiptVoucher, "Print tax after report")
-            ;
+
 
     getCompSettings();
     getAccess();
     getDatabases();
-    getMonthly();
-    getTax();
 
     fDockHall = new DWSelectorHall(this);
     fDockHall->configure();
@@ -241,76 +118,6 @@ void WGlobalDbConfig::setupTab()
 void WGlobalDbConfig::hall(CI_RestHall *c)
 {
     dockResponse<CI_RestHall, CacheRestHall>(ui->leHallCode, ui->leHallName, c);
-}
-
-void WGlobalDbConfig::on_btnSave_clicked()
-{
-    QMap<QString, QString> values;
-    values.insert(def_working_day, ui->deWorkingDate->date().toString(def_date_format));
-    values.insert(def_slogan, ui->teSlogan->toPlainText());
-    values.insert(def_default_extra_bed, ui->leExtraBed->text());
-    values.insert(def_default_cardex, ui->leDefaultCardex->text());
-    values.insert(def_room_charge_id, ui->leRoomChargeId->text());
-    values.insert(def_earyly_checkin, ui->teEarlyCheckin->time().toString("HH:mm"));
-    values.insert(def_late_checkout, ui->teLateCheckout->time().toString("HH:mm"));
-    values.insert(def_earyly_checkin_id, ui->leEarlyCheckinID->text());
-    values.insert(def_airport_pickup_id, ui->leAirportPickupId->text());
-    values.insert(def_day_use_id, ui->leDayUse->text());
-    values.insert(def_vouchers_digits, ui->leVaucherDigits->text());
-    values.insert(def_vouchers_invoice_footer, ui->teVoucherInvoiceFooter->toPlainText());
-    values.insert(def_vouchers_right_header, ui->teVoucherRightText->toPlainText());
-    values.insert(def_late_checkout_id, ui->leLateCheckoutID->text());
-    values.insert(def_auto_breakfast_id, ui->leBrekfastChargeId->text());
-    values.insert(def_invoice_default_discount_id, ui->leDiscountId->text());
-    values.insert(def_invoice_default_positive_transfer_id, ui->lePosTransferId->text());
-    values.insert(def_invoice_default_negative_transfer_id, ui->leNegTransferId->text());
-    values.insert(def_invoice_default_refund_id, ui->leRefundId->text());
-    values.insert(def_no_tracking_changes, QString::number((int)ui->chNoTrackControl->isChecked()));
-    values.insert(def_filter_manual_tax, ui->leManualTax->text());
-    values.insert(def_cancelfee_code, ui->leCancelCode->text());
-    values.insert(def_noshowfee_code, ui->leNoshowCode->text());
-    values.insert(def_rooming_list, ui->leRoomingList->text());
-    values.insert(def_welcome_rest_mode, QString("%1").arg((int)ui->chRestMode->isChecked()));
-    values.insert(def_rest_hall_for_reception, ui->leRestHallForReception->text());
-    values.insert(def_room_arrangement, ui->leRoomArrangement->text());
-    values.insert(def_receip_vaucher_id, ui->leReceiptVaucherId->text());
-    values.insert(def_reservation_voucher_id, ui->leReservationVoucherId->text());
-    values.insert(def_room_rate_change_id, ui->leRoomRateChangeId->text());
-    values.insert(def_advance_voucher_id, ui->leAdvanceVoucherId->text());
-    values.insert(def_breakfast_default_hall, ui->leBreakfastHallId->text());
-    values.insert(def_breakfast_default_table, ui->leBreakfastTableId->text());
-    values.insert(def_breakfast_default_dish, ui->leBreakfastDishId->text());
-    values.insert(def_minibar_default_hall, ui->leMinibarHallId->text());
-    values.insert(def_minibar_default_table, ui->leMinibarTableId->text());
-    values.insert(def_minibar_default_dish, ui->leMinibarDishId->text());
-    values.insert(def_passport_required, QString::number((int)ui->chPasswordRequired->isChecked()));
-    values.insert(def_show_logs, QString::number(ui->chShowLogs->isChecked()));
-    QString query = "insert into f_global_settings (f_settings, f_key, f_value) values ";
-    bool first = true;
-    QMapIterator<QString, QString> it(values);
-    while (it.hasNext()) {
-        it.next();
-        if (first) {
-            first = false;
-        } else {
-            query += ",";
-        }
-        query += QString("(1, '%1', '%2')")
-                .arg(it.key())
-                .arg(it.value());
-    }
-    fDb.fDb.transaction();
-    fDb.select("delete from f_global_settings where f_settings=1 and f_key not in ('HC', 'AHC')");
-    bool result = fDb.queryDirect(query);
-    fTrackControl->saveChanges();
-    if (result) {
-        fDb.fDb.commit();
-        on_btnSaveReports_clicked();
-        BroadcastThread::cmdCommand(cmd_global_settings, QMap<QString, QString>());
-    } else {
-        fDb.fDb.rollback();
-        message_error(tr("New values not saved"));
-    }
 }
 
 void WGlobalDbConfig::on_lwHost_clicked(const QModelIndex &index)
@@ -337,6 +144,11 @@ void WGlobalDbConfig::on_lwHost_clicked(const QModelIndex &index)
     ui->leSecondReceiptPrinter->setText(v[dr_second_receipt_printer]);
     ui->leDisc20->setText(v[dr_discount_20]);
     ui->leDisc50->setText(v[dr_discount_50]);
+    ui->leS5Server->setText(v[dr_s5_ip]);
+    ui->leS5Port->setText(v[dr_s5_port]);
+    ui->leS5User->setText(v[dr_s5_user]);
+    ui->leS5Pass->setText(v[dr_s5_pass]);
+    ui->leBranch->setText(v[dr_branch]);
 }
 
 void WGlobalDbConfig::on_btnSaveRestaurant_clicked()
@@ -372,20 +184,24 @@ void WGlobalDbConfig::on_btnSaveRestaurant_clicked()
 
     //S5
     fDbBind[":f_comp"] = ui->leHost->text();
-    fDbBind[":f_key"] = "s5ip";
+    fDbBind[":f_key"] = dr_s5_ip;
     fDbBind[":f_value"] = ui->leS5Server->text();
     fDb.insert("r_config", fDbBind);
     fDbBind[":f_comp"] = ui->leHost->text();
-    fDbBind[":f_key"] = "s5port";
+    fDbBind[":f_key"] = dr_s5_port;
     fDbBind[":f_value"] = ui->leS5Port->text();
     fDb.insert("r_config", fDbBind);
     fDbBind[":f_comp"] = ui->leHost->text();
-    fDbBind[":f_key"] = "s5user";
+    fDbBind[":f_key"] = dr_s5_user;
     fDbBind[":f_value"] = ui->leS5User->text();
     fDb.insert("r_config", fDbBind);
     fDbBind[":f_comp"] = ui->leHost->text();
-    fDbBind[":f_key"] = "s5pass";
+    fDbBind[":f_key"] = dr_s5_pass;
     fDbBind[":f_value"] = ui->leS5Pass->text();
+    fDb.insert("r_config", fDbBind);
+    fDbBind[":f_comp"] = ui->leHost->text();
+    fDbBind[":f_key"] = dr_branch;
+    fDbBind[":f_value"] = ui->leBranch->text();
     fDb.insert("r_config", fDbBind);
 
 
@@ -439,46 +255,7 @@ void WGlobalDbConfig::on_btnSaveDatabases_clicked()
             db.update("f_db", fDbBind, where_id(ap(ui->tblDatabases->lineEdit(i, 0)->text())));
         }
     }
-    BroadcastThread::cmdCommand(cmd_global_settings, QMap<QString, QString>());
     message_info_tr("Saved");
-}
-
-void WGlobalDbConfig::on_btnSaveReports_clicked()
-{
-    for (int i = 0; i < ui->tblMonthly->rowCount(); i++) {
-        fDbBind[":f_title"] = ui->tblMonthly->lineEdit(i, 1)->text();
-        fDbBind[":f_width"] = ui->tblMonthly->lineEdit(i, 2)->text();
-        fDbBind[":f_items"] = ui->tblMonthly->lineEdit(i, 3)->text();
-        fDb.update("serv_monthly", fDbBind, where_id(ui->tblMonthly->toString(i, 0)));
-    }
-    for (int i = 0; i < ui->tblCardexAnalysis->rowCount(); i++) {
-        fDbBind[":f_title"] = ui->tblCardexAnalysis->lineEdit(i, 1)->text();
-        fDbBind[":f_width"] = ui->tblCardexAnalysis->lineEdit(i, 2)->text();
-        fDbBind[":f_items"] = ui->tblCardexAnalysis->lineEdit(i, 3)->text();
-        fDb.update("serv_cardex_analysis", fDbBind, where_id(ui->tblCardexAnalysis->toString(i, 0)));
-    }
-    fDbBind[":f_key"] = def_daily_movement_items;
-    fDb.select("delete from f_global_settings where f_key=:f_key and f_settings=1", fDbBind, fDbRows);
-
-    fDbBind[":f_key"] = def_daily_movement_total_side;
-    fDb.select("delete from f_global_settings where f_key=:f_key and f_settings=1", fDbBind, fDbRows);
-
-    fDbBind[":f_key"] = def_daily_movement_order;
-    fDb.select("delete from f_global_settings where f_key=:f_key and f_settings=1", fDbBind, fDbRows);
-
-    fDbBind[":f_settings"] = 1;
-    fDbBind[":f_key"] = def_daily_movement_items;
-    fDbBind[":f_value"] = ui->teDailyMovement->toPlainText();
-    fDb.insert("f_global_settings", fDbBind);
-
-    fDbBind[":f_settings"] = 1;
-    fDbBind[":f_key"] = def_daily_movement_total_side;
-    fDbBind[":f_value"] = (int) ui->rbDailySubtotalDown->isChecked();
-    fDb.insert("f_global_settings", fDbBind);
-
-    fPreferences.setDb(def_daily_movement_items, ui->teDailyMovement->toPlainText());
-    fPreferences.setDb(def_daily_movement_total_side, (int) ui->rbDailySubtotalDown->isChecked());
-    message_info(tr("Saved"));
 }
 
 void WGlobalDbConfig::on_btnRemoveStation_clicked()
@@ -523,35 +300,6 @@ void WGlobalDbConfig::on_btnRemoveRest_clicked()
     fDb.select("delete from s_tax_print where f_comp=:f_comp", fDbBind, fDbRows);
     getCompSettings();
 }
-
-void WGlobalDbConfig::on_btnRefreshTax_clicked()
-{
-    getTax();
-}
-
-void WGlobalDbConfig::on_tblTax_cellDoubleClicked(int row, int column)
-{
-    if (row < 0 || column < 0) {
-        return;
-    }
-    DlgEditServTax *d = new DlgEditServTax(this);
-    d->setParams(ui->tblTax->toInt(row, 0),
-                 ui->tblTax->toString(row, 1),
-                 ui->tblTax->toInt(row, 2),
-                 ui->tblTax->toString(row, 3),
-                 ui->tblTax->toString(row, 4),
-                 ui->tblTax->toString(row, 5));
-    if (d->exec() == QDialog::Accepted) {
-        getTax();
-    }
-    delete d;
-}
-
-void WGlobalDbConfig::on_btnSaveApplication_clicked()
-{
-
-}
-
 
 void WGlobalDbConfig::on_chShowLogs_clicked(bool checked)
 {

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>686</width>
+    <width>768</width>
     <height>531</height>
    </rect>
   </property>
@@ -16,27 +16,15 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QWidget" name="widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="btnAdd">
-        <property name="minimumSize">
-         <size>
-          <width>25</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>25</width>
-          <height>25</height>
-         </size>
-        </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="6">
+       <widget class="QPushButton" name="btnChangePassword">
         <property name="text">
-         <string>+</string>
+         <string>Change password</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QPushButton" name="btnEdit">
         <property name="minimumSize">
          <size>
@@ -55,7 +43,33 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="btnAdd">
+        <property name="minimumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QCheckBox" name="chDirectConnection">
+        <property name="text">
+         <string>Use direct connection</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QPushButton" name="btnRemove">
         <property name="minimumSize">
          <size>
@@ -74,7 +88,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -86,20 +100,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chDirectConnection">
-        <property name="text">
-         <string>Use direct connection</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnChangePassword">
-        <property name="text">
-         <string>Change password</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

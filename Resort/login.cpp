@@ -227,6 +227,7 @@ void Login::on_btnLogin_clicked()
     fPreferences.setLocal(def_working_username, fDbRows.at(0).at(1).toString() + " " + fDbRows.at(0).at(2).toString());
     fPreferences.setLocal(def_working_user_group, fDbRows.at(0).at(3).toInt());
     fPreferences.setLocal(def_working_user_role, fDbRows.at(0).at(4).toInt());
+    fPreferences.setLocal("dbname", ui->cbDatabase->currentText());
     //setup new double database connection
     Db d = fPreferences.getDatabase(connName);
     __dd1Host = d.dc_main_host;

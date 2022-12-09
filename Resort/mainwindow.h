@@ -62,11 +62,8 @@ public slots:
     void on_actionChange_password_triggered();
     void on_actionGlobal_config_triggered();
     void on_actionComplex_dish_triggered();
-    void on_actionEvent_triggered();
     void on_actionComplimentary_comment_triggered();
     void on_actionReport_buillder_triggered();
-    void on_actionRestaurant_online_triggered();
-    void on_actionOpen_breakfast_triggered();
     void on_actionSales_by_storages_triggered();
     void on_actionModels_of_cars_triggered();
     void on_actionCostumers_cars_triggered();
@@ -99,7 +96,6 @@ private slots:
     void parseSocketCommand(const QString &command);
     void socketError(QAbstractSocket::SocketError f_cityLedger);
     void socketDisconnected();
-    void on_actionBreakfast_report_triggered();
     void on_actionT_Report_triggered();
     void on_tbEarning_clicked();
     void on_tbStore_clicked();
@@ -119,6 +115,16 @@ private slots:
     void on_actionEarnings_shop_triggered();
     void on_actionShop_index_triggered();
     void on_actionSalary_by_employes_triggered();
+
+    void on_actionCoupon_of_service_triggered();
+
+    void on_actionCoupon_of_service_documents_triggered();
+
+    void on_tbEarning_2_clicked();
+
+    void on_actionAttendance_triggered();
+
+    void on_actionArmSoftExport_triggered();
 
 private:
     Ui::MainWindow *ui;

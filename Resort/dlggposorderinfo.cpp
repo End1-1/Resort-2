@@ -18,10 +18,6 @@ DlgGPOSOrderInfo::DlgGPOSOrderInfo(QWidget *parent) :
     ui->setupUi(this);
     Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
                                 300, 80, 80, 0, 0, 0, 0, 30);
-    ui->btnSave->setVisible(RIGHT(WORKING_USERGROUP, cr__super_correction));
-    ui->deDate->setReadOnly(!r__(cr__super_correction));
-    ui->lePayment->setEnabled(r__(cr__super_correction));
-    connect(ui->lePayment, SIGNAL(customButtonClicked(bool)), this, SLOT(selectPaymentMode(bool)));
     fTrackControl = new TrackControl(TRACK_REST_ORDER);
 }
 

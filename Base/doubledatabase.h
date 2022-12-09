@@ -18,6 +18,7 @@ public:
     void close(bool commit = true);
     bool exec(const QString &sqlQuery);
     QList<QList<QVariant> > fDbRows;
+    QMap<int, QString> fDefColNames;
     QString fLastError;
     int rowCount();
 private:

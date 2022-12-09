@@ -7,7 +7,6 @@
 #include "rmessage.h"
 #include "rpaymenttype.h"
 #include "cachecar.h"
-#include "rselecttable.h"
 #include "rdishcomment.h"
 #include "dlgsmile.h"
 #include "rtools.h"
@@ -15,10 +14,14 @@
 #include "messagelist.h"
 #include "socketconnection.h"
 #include "baseuid.h"
+#include "printtaxn.h"
 #include "dlgsalary.h"
+#include "branchstoremap.h"
 #include "rlogin.h"
 #include "rnumbers.h"
 #include "cacherights.h"
+#include "database2.h"
+#include "logwriter.h"
 #include "rmodifiers.h"
 #include "dlgreservation.h"
 #include "pprintreceipt.h"
@@ -52,6 +55,8 @@
 #include <QElapsedTimer>
 #include <QScrollBar>
 #include <QInputDialog>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <QDir>
 
 QMap<int, DishStruct*> RDesk::fQuickDish;
@@ -134,7 +139,7 @@ protected:
         f.setPointSize(12);
         f.setBold(true);
         painter->setFont(f);
-        QString text = QString("%1 [%2]").arg(d->fName[def_lang], QString::number(d->fPrice, 'f', 0));
+        QString text = QString("%1 [%2]").arg(d->fName, QString::number(d->fPrice, 'f', 0));
         painter->drawText(textRect, text, o);
     }
 private:
@@ -172,7 +177,7 @@ protected:
         case 0: {
             QRect textRect = option.rect;
             textRect.adjust(2, 2, -2, -2);
-            painter->drawText(textRect, od->fName[def_lang], o);
+            painter->drawText(textRect, od->fName, o);
             f.setPointSize(8);
             painter->setFont(f);
             int h = QFontMetrics(f).height();
@@ -233,7 +238,7 @@ protected:
         if (!t) {
             return;
         }
-        if (t->fHall == 1) {
+        if (t->fHall == 1 || t->fHall == 5) {
             painter->fillRect(option.rect, Qt::black);
             painter->setPen(Qt::white);
             if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
@@ -323,10 +328,10 @@ RDesk::RDesk(QWidget *parent) :
     connect(SocketConnection::instance(), &SocketConnection::externalDataReady, this, &RDesk::externalDataReceived);
     connect(SocketConnection::instance(), &SocketConnection::connectionLost, this, &RDesk::connectionLost);
     connect(this, &RDesk::dataReady, SocketConnection::instance(), &SocketConnection::sendData);
-    SocketConnection::startConnection(defrest("s5ip"),
-                                      defrest("s5port").toInt(),
-                                      defrest("s5user"),
-                                      defrest("s5pass"));
+    SocketConnection::startConnection(defrest(dr_s5_ip),
+                                      defrest(dr_s5_port).toInt(),
+                                      defrest(dr_s5_user),
+                                      defrest(dr_s5_pass));
 }
 
 RDesk::~RDesk()
@@ -352,7 +357,7 @@ bool RDesk::setup(TableStruct *t)
         setBtnMenuText();
         setupType(0);
     }
-
+    setRecoverFrom(0);
 
     int colWidth = ui->tblDish->horizontalHeader()->defaultSectionSize();
     int colCount = ui->tblDish->width() / colWidth;
@@ -423,7 +428,7 @@ void RDesk::removeOrder()
     for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
         OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
         if (od->fState == DISH_STATE_READY && od->fQtyPrint > 0.1) {
-            fDbBind[":f_state"] = result.toInt();
+            fDbBind[":f_state"] = DISH_STATE_REMOVED_NOSTORE;
             fDbBind[":f_cancelUser"] = trackUser;
             fDbBind[":f_cancelDate"] = QDateTime::currentDateTime();
             fDb.update("o_dish", fDbBind, where_id(ap(od->fRecId)));
@@ -436,7 +441,7 @@ void RDesk::removeOrder()
         }
         if (od->fState == DISH_STATE_READY) {
             QString dish = QString("%1, %2/%3")
-                    .arg(od->fName["en"])
+                    .arg(od->fName)
                     .arg(od->fQty)
                     .arg(od->fQtyPrint);
             fTrackControl->insert("Dish removed with order", dish, "");
@@ -552,55 +557,9 @@ void RDesk::closeOrder(int state)
     fDbBind[":f_order"] = 0;
     fDb.update("r_table", fDbBind, where_id(ap(fTable->fId)));
 
-    if (fHall->fServiceItem > 0) {
-        DatabaseResult dr;
-        fDbBind[":f_header"] = fTable->fOrder;
-        fDbBind[":f_state"] = DISH_STATE_READY;
-        dr.select(fDb, "select sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", fDbBind);
-        double t = dr.value("f_total").toDouble();
 
-        OrderDishStruct *od = new OrderDishStruct();
-        od->fDishId = fHall->fServiceItem;
-        od->fState = DISH_STATE_READY;
-        od->fPrint1 = "";
-        od->fPrint2 = "";
-        od->fStore = 3;
-        od->fName["en"] = fHall->fServiceName;
-        od->fPrice = t * (fHall->fServiceValue / 100);
-        od->fTotal = od->fPrice;
-        od->fSvcValue = 0;
-        od->fSvcAmount = 0;
-        od->fDctValue = 0;
-        od->fDctAmount = 0;
-        od->fQty = 1;
-        od->fQtyPrint = 1;
-        od->fComplex = 0;
-        od->fComplexRecId = "";
-        od->fAdgt = "";
-
-        fDbBind[":f_header"] = fTable->fOrder;
-        fDbBind[":f_state"] = DISH_STATE_READY;
-        fDbBind[":f_dish"] = od->fDishId;
-        fDbBind[":f_qty"] = od->fQty;
-        fDbBind[":f_qtyPrint"] = od->fQtyPrint;
-        fDbBind[":f_price"] = od->fPrice;
-        fDbBind[":f_svcValue"] = od->fSvcValue;
-        fDbBind[":f_svcAmount"] = od->fSvcAmount;
-        fDbBind[":f_dctValue"] = od->fDctValue;
-        fDbBind[":f_dctAmount"] = od->fDctAmount;
-        fDbBind[":f_total"] = od->fTotal;
-        fDbBind[":f_totalUSD"] = od->fTotal;
-        fDbBind[":f_print1"] = od->fPrint1;
-        fDbBind[":f_print2"] = od->fPrint2;
-        fDbBind[":f_store"] = od->fStore;
-        fDbBind[":f_comment"] = od->fComment;
-        fDbBind[":f_staff"] = fStaff->fId;
-        fDbBind[":f_complex"] = od->fComplex;
-        fDbBind[":f_complexId"] = 0;
-        fDbBind[":f_adgt"] = od->fAdgt;
-        fDbBind[":f_complexRec"] = od->fComplexRecId;
-        od->fRecId = fDb.insert("o_dish", fDbBind);
-        fTrackControl->insert("New dish", od->fName["en"], "");
+    if (state == ORDER_STATE_REMOVED) {
+        printCanceledOrder(fTable->fOrder);
     }
     clearOrder();
 }
@@ -667,22 +626,6 @@ void RDesk::printTotalAnyDay()
         userName = u->fFull;
     }
     ReportPrint::printTotal(date, userName, fHall->fReceiptPrinter);
-}
-
-void RDesk::printTax(int cashMode)
-{
-
-}
-
-void RDesk::printTaxDialog()
-{
-    int trackUser = fStaff->fId;
-    if (!right(cr__print_any_tax, trackUser)) {
-        return;
-    }
-    DlgOrders *d = new DlgOrders(fStaff->fId, this);
-    d->exec();
-    delete d;
 }
 
 void RDesk::printReceiptByNumber()
@@ -947,19 +890,31 @@ void RDesk::checkCardAmount()
     if (!DlgList::getValue(tr("Card holder"), name, result, "select f_card, right(f_card, 5) from d_car_client where f_model=3")) {
         return;
     }
-    DatabaseResult dr;
-    fDbBind[":f_card"] = result;
-    dr.select(fDb, "select f_mode from d_car_client where f_card=:f_card", fDbBind);
-    if (dr.rowCount() == 0) {
+
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_code"] = result;
+    db2.exec("select sum(f_amount) from d_gift_cart_use where f_code=:f_code");
+    if (!db2.next()) {
         message_error(tr("Invalid card code"));
         return;
     }
-    QStringList l = dr.value(0, 0).toString().split(";");
-    if (l.count() < 0) {
-        message_error(tr("Card error"));
-        return;
-    }
-    message_info(tr("Balance") + "<br>" + l.at(2));
+    message_info(tr("Balance") + "<br>" + float_str(db2.doubleValue(0), 1));
+
+//    DatabaseResult dr;
+//    fDbBind[":f_card"] = result;
+//    dr.select(fDb, "select f_mode from d_car_client where f_card=:f_card", fDbBind);
+//    if (dr.rowCount() == 0) {
+//        message_error(tr("Invalid card code"));
+//        return;
+//    }
+//    QStringList l = dr.value(0, 0).toString().split(";");
+//    if (l.count() < 0) {
+//        message_error(tr("Card error"));
+//        return;
+//    }
+//    message_info(tr("Balance") + "<br>" + l.at(2));
 }
 
 void RDesk::cardStat()
@@ -978,8 +933,21 @@ void RDesk::cardStat()
                    "left join o_header h on h.f_id=hp.f_id "
                    "where hp.f_costumer = :f_costumer and h.f_state=2  "
                    "group by 1", fDbBind);
+
+
+//    Db b = Preferences().getDatabase(Base::fDbName);
+//    Database2 db2;
+//    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+//    db2[":f_id"] = fTable->fOrder;
+//    db2.exec("select sum(f_amount) from g_gift_card_use where f_code=:f_id");
+//    if (!db2.next()) {
+//        message_error(tr("Not valid order id"));
+//        return;
+//    }
+
+
     msg += "<br>" + tr("Cards") + "<br>";
-    msg += QString("%1 / %2 / %3 / %4<br>").arg(tr("Card")).arg(tr("Total qty")).arg(tr("Total amount")).arg(tr("Current visits"));
+    msg += QString("%1 / %2 / %3 / %4<br>").arg(tr("Card"), tr("Total qty"), tr("Total amount"), tr("Current visits"));
     for (int i = 0; i < dr.rowCount(); i++) {
         msg += dr.value(i, "card").toString() + ": " + dr.value(i, "qty").toString() + "/" + float_str(dr.value(i, "amount").toDouble(), 2) + "/";
         msg += QString("%1<br>").arg(dr.value(i, "qty").toInt() % 11);
@@ -1012,13 +980,14 @@ void RDesk::saledItem()
     fDbBind[":f_datecash"] = date;
     fDbBind[":f_ostate"] = ORDER_STATE_CLOSED;
     fDbBind[":f_dstate"] = DISH_STATE_READY;
+    fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     DatabaseResult dr;
     dr.select(fDb, "select d.f_en, od.f_store, sum(od.f_qty) as f_qty, sum(od.f_total) as f_total "
               "from o_dish od "
               "inner join o_header oh on oh.f_Id=od.f_header "
               "inner join r_dish d on d.f_id=od.f_dish "
               "where oh.f_state=:f_ostate and od.f_state=:f_dstate "
-              "and oh.f_datecash=:f_datecash "
+              "and oh.f_datecash=:f_datecash and oh.f_branch=:f_branch "
               "group by 1, 2 "
               "order by od.f_store ", fDbBind);
     if (dr.rowCount() == 0) {
@@ -1063,7 +1032,7 @@ void RDesk::saledItem()
         p.ltext(tr("Total"), 0);
         p.rtext(float_str(total, 2));
     }
-    p.print("p1", QPrinter::Custom);
+    p.print(defrest(dr_first_receipt_printer), QPrinter::Custom);
 }
 
 void RDesk::checkCardRegistration()
@@ -1092,6 +1061,260 @@ void RDesk::closeEvent(QCloseEvent *e)
     }
     checkEmpty();
     BaseExtendedDialog::closeEvent(e);
+}
+
+void RDesk::printCanceledOrder(int id)
+{
+    int trackUser = fStaff->fId;
+    QString userName = fStaff->fName;
+    CI_User *u = CacheUsers::instance()->get(trackUser);
+    if (u) {
+        userName = u->fFull;
+    } else {
+        userName = "#Username Error";
+    }
+
+    for (int i = 0, count = ui->tblOrder->rowCount(); i < count; i++) {
+        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        if (od->fComplex) {
+            od->fPrice = 0;
+            od->fTotal = 0;
+            updateDish(od);
+        }
+    }
+    ui->tblOrder->viewport()->update();
+
+    QList<PPrintScene*> lps;
+    PPrintScene *ps = new PPrintScene(Portrait);
+    lps.append(ps);
+    PTextRect th;
+    QFont f("Arial", 30);
+    th.setFont(f);
+    th.setBorders(false, false, false, false);
+    PTextRect thdc;
+    f.setPointSize(14);
+    thdc.setFont(f);
+    thdc.setBorders(false, false, false, false);
+    int top = 10;
+    th.setTextAlignment(Qt::AlignHCenter);
+    int rowHeight = 60;
+    PImage *logo = new PImage("logo_print.png");
+    ps->addItem(logo);
+    logo->setRect(QRectF(150, top, 400, 250));
+    top += 250;
+    f.setPointSize(36);
+    th.setFont(f);
+    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight + 10, fHall->fName, &th, f))->textHeight();
+    top += 20;
+    f.setBold(true);
+    th.setFont(f);
+    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("CANCELED"), &th))->textHeight();
+    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1 %2")
+                                     .arg(tr("Receipt S/N "))
+                                     .arg(fTable->fOrder),
+                                     &th, f))->textHeight();
+    f.setPointSize(24);
+    th.setFont(f);
+    th.setTextAlignment(Qt::AlignLeft);
+    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Table"), &th, f));
+    top += ps->addTextRect(new PTextRect(210, top, 200, rowHeight, fTable->fName, &th, f))->textHeight();
+    if (!fCarModel.isEmpty()) {
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Car"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 400, rowHeight, fCarModel + ": " + fCarGovNum, &th, f))->textHeight();
+    }
+    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Date"), &th, f));
+    top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, WORKING_DATE.toString(def_date_format), &th, f))
+            ->textHeight();
+
+
+    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Waiter"), &th, f));
+    top += ps->addTextRect(new PTextRect(210, top, 500, rowHeight, userName, &th, f))->textHeight();
+
+    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Opened"), &th, f));
+    top += ps->addTextRect(new PTextRect(210, top, 350, rowHeight, fTable->fOpened.toString(def_date_time_format), &th, f))->textHeight();
+    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Canceled"), &th, f));
+    top += ps->addTextRect(new PTextRect(210, top, 350, rowHeight, QDateTime::currentDateTime().toString(def_date_time_format), &th, f))->textHeight();
+
+    top += 2;
+    ps->addLine(10, top, 680, top);
+    top += 2;
+    ps->addTextRect(new PTextRect(10, top, 100, rowHeight, tr("Qty"), &th, f));
+    ps->addTextRect(new PTextRect(110, top, 390, rowHeight, tr("Description"), &th, f));
+    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, tr("Amount"), &th, f))->textHeight();
+    top ++;
+    ps->addLine(10, top, 680, top);
+    top += 2;
+    f.setPointSize(18);
+    f.setBold(true);
+    th.setFont(f);
+    for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
+        DishComplexStruct *dc = ui->tblComplex->item(i,0)->data(Qt::UserRole).value<DishComplexStruct*>();
+        if (!dc) {
+            message_error("Application error. Contact to developer. Message: dc==0, print receipt");
+            return;
+        }
+        ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(dc->fQty, 1), &th, f));
+        ps->addTextRect(new PTextRect(110, top, 390, rowHeight, dc->fName[def_lang], &th, f));
+        top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(dc->fPrice * dc->fQty, 2), &th, f))->textHeight();
+        if (top > sizePortrait.height()  - 200) {
+            top = 10;
+            ps = new PPrintScene(Portrait);
+            lps.append(ps);
+        }
+        foreach (DishStruct *ds, dc->fDishes) {
+            //ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(dc->fQty, 1), &thdc, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, "**" + ds->fName, &thdc, f));
+            QString total = float_str(ds->fPrice * dc->fQty, 2);
+            if (ds->fPrice < 0.1) {
+                total = tr("Present");
+            }
+            top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, total, &thdc, f))->textHeight();
+            if (top > sizePortrait.height()  - 200) {
+                top = 10;
+                ps = new PPrintScene(Portrait);
+                lps.append(ps);
+            }
+        }
+    }
+    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        if (!od) {
+            continue;
+        }
+        if (od->fState != DISH_STATE_READY) {
+            continue;
+        }
+        if (od->fComplex > 0) {
+            continue; //handle complex
+        }
+        ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
+        th.setWrapMode(QTextOption::WordWrap);
+        int t = ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f))->textHeight();
+        int k = ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
+        top += (t > k ? t : k);
+        if (top > sizePortrait.height()  - 200) {
+            top = 10;
+            ps = new PPrintScene(Portrait);
+            lps.append(ps);
+        }
+    }
+    if (!ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString().isEmpty()){
+        ps->addTextRect(new PTextRect(10, top, 400, rowHeight, ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString(), &th, f));
+        top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(2, 1)->data(Qt::DisplayRole).toString(), &th, f))->textHeight();
+    }
+    top += 2;
+    ps->addLine(10, top, 680, top);
+    top += 2;
+    f.setPointSize(24);
+    th.setFont(f);
+    ps->addTextRect(new PTextRect(10, top, 400, rowHeight, tr("Total, AMD"), &th, f));
+    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(1, 1)->data(Qt::EditRole).toString(), &th, f))->textHeight();
+
+
+    top += rowHeight;
+    f.setPointSize(28);
+    th.setFont(f);
+    th.setTextAlignment(Qt::AlignHCenter);
+
+    if (top > sizePortrait.height()  - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
+    if (!fTable->fRoomComment.isEmpty()) {
+       top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, fTable->fRoomComment, &th, f))->textHeight();
+       top += rowHeight;
+       top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("Signature"), &th, f))->textHeight();
+       top += rowHeight + 2;
+       ps->addLine(150, top, 680, top);
+    }
+
+    if (top > sizePortrait.height()  - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
+    if (fTable->fPaymentMode == PAYMENT_COMPLIMENTARY) {
+        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("COMPLIMENTARY"), &th, f))->textHeight();
+    } else {
+        //top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("SALES"), &th, f))->textHeight();
+    }
+
+
+    if (true) {
+        top += (rowHeight * 3);
+        top += ps->addTextRect(10, top, 600, rowHeight, tr("****VOID****"), &th)->textHeight();
+        for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+            OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+            if (!od) {
+                continue;
+            }
+            if (od->fState != DISH_STATE_REMOVED_STORE) {
+                continue;
+            }
+            if (od->fComplex > 0) {
+                continue; //handle complex
+            }
+            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
+            top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
+            if (top > sizePortrait.height()  - 200) {
+                top = 10;
+                ps = new PPrintScene(Portrait);
+                lps.append(ps);
+            }
+        }
+        top += rowHeight;
+        top += ps->addTextRect(10, top, 600, rowHeight, tr("****MISTAKE****"), &th)->textHeight();
+        for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+            OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+            if (!od) {
+                continue;
+            }
+            if (od->fState != DISH_STATE_REMOVED_NOSTORE) {
+                continue;
+            }
+            if (od->fComplex > 0) {
+                continue; //handle complex
+            }
+            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
+            top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
+            if (top > sizePortrait.height()  - 200) {
+                top = 10;
+                ps = new PPrintScene(Portrait);
+                lps.append(ps);
+            }
+        }
+    }
+
+    //Finish
+    top += rowHeight;
+    ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "_", &th, f));
+
+    QPrinter printer;
+    qDebug() << defrest(dr_second_receipt_printer);
+    qDebug() << defrest(dr_first_receipt_printer);
+    printer.setPrinterName("local");
+    QMatrix m;
+#ifdef QT_DEBUG
+    m.scale(1, 1);
+#else
+    m.scale(3, 3);
+#endif
+    QPainter painter(&printer);
+    painter.setMatrix(m);
+    for (int i = 0; i < lps.count(); i++) {
+        if (i > 0) {
+            printer.newPage();
+        }
+        lps[i]->render(&painter);
+    }
+
+    fTable->fPrint = abs(fTable->fPrint) + 1;
+    fDbBind[":f_print"] = fTable->fPrint;
+    fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
+    changeBtnState();
 }
 
 void RDesk::externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data)
@@ -1167,6 +1390,10 @@ void RDesk::onBtnQtyClicked()
     if (!od) {
         return;
     }
+    if (od->fDishId == fHall->fServiceItem) {
+        message_error(tr("This item is not editable"));
+        return;
+    }
     if (od->fState != DISH_STATE_READY) {
         message_error(tr("You cannot edit the quantity of selected item"));
         return;
@@ -1175,7 +1402,7 @@ void RDesk::onBtnQtyClicked()
         return;
     }
     if (od->fComplex == 0) {
-        QString oldQty = QString("%1, %2 / %3").arg(od->fName[def_lang])
+        QString oldQty = QString("%1, %2 / %3").arg(od->fName)
                 .arg(od->fQty)
                 .arg(od->fQtyPrint);
         if (od->fQtyPrint < 0.01) {
@@ -1191,7 +1418,7 @@ void RDesk::onBtnQtyClicked()
         } else {
             od->fQty += qty;
         }
-        QString newQty = QString("%1, %2 / %3").arg(od->fName[def_lang])
+        QString newQty = QString("%1, %2 / %3").arg(od->fName)
                 .arg(od->fQty)
                 .arg(od->fQtyPrint);
         countDish(od);
@@ -1218,7 +1445,7 @@ void RDesk::onBtnQtyClicked()
             if (od->fComplexRecId != dc->fRecId) {
                 continue;
             }
-            QString odOldQty = QString("%1, %2 / %3").arg(od->fName[def_lang])
+            QString odOldQty = QString("%1, %2 / %3").arg(od->fName)
                     .arg(od->fQty)
                     .arg(od->fQtyPrint);
             if (od->fQtyPrint < 0.01) {
@@ -1231,7 +1458,7 @@ void RDesk::onBtnQtyClicked()
                 od->fQty += qty;
             }
             complexQty = od->fQty;
-            QString odNewQty = QString("%1, %2 / %3").arg(od->fName[def_lang])
+            QString odNewQty = QString("%1, %2 / %3").arg(od->fName)
                     .arg(od->fQty)
                     .arg(od->fQtyPrint);
             fTrackControl->insert("Dish qty", odOldQty, odNewQty);
@@ -1337,7 +1564,7 @@ void RDesk::setupDish(int typeId)
     }
     ui->tblDish->setRowCount(rowCount);
     int col = 0, row = 0;
-    for (QMap<int, DishStruct*>::const_iterator it = dish.begin(); it != dish.end(); it++) {
+    for (QMap<int, DishStruct*>::const_iterator it = dish.constBegin(); it != dish.constEnd(); it++) {
         QTableWidgetItem *item = new QTableWidgetItem();
         item->setData(Qt::UserRole, qVariantFromValue(*it));
         ui->tblDish->setItem(row, col++, item);
@@ -1354,7 +1581,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     OrderDishStruct *od = new OrderDishStruct();
     if (d->fMod.count() > 0) {
         QStringList mods;
-        for (QList<QMap<QString, QString> >::const_iterator it = d->fMod.begin(); it != d->fMod.end(); it++) {
+        for (QList<QMap<QString, QString> >::const_iterator it = d->fMod.constBegin(); it != d->fMod.constEnd(); it++) {
             mods.append(it->value(def_lang));
         }
         RModifiers *m = new RModifiers(this);
@@ -1364,6 +1591,65 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
         }
         delete m;
     }
+
+    if (fHall->fServiceItem > 0) {
+        bool found = false;
+        for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+            OrderDishStruct *os = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+            if (os->fDishId == fHall->fServiceItem) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            OrderDishStruct *so = new OrderDishStruct();
+            so->fDishId = fHall->fServiceItem;
+            so->fState = DISH_STATE_READY;
+            so->fPrint1 = "";
+            so->fPrint2 = "";
+            so->fStore = d->fStore;
+            so->fName = fHall->fServiceName;
+            so->fPrice = 0;
+            so->fSvcValue = 0;
+            so->fSvcAmount = 0;
+            so->fDctValue = 0;
+            so->fDctAmount = 0;
+            so->fQty = 1;
+            so->fQtyPrint = 0;
+            so->fComplex = 0;
+            so->fComplexRecId = "";
+            so->fAdgt = d->fAdgt;
+            so->fTax = d->fTax;
+            so->fRow = 125;
+
+            fDbBind[":f_header"] = fTable->fOrder;
+            fDbBind[":f_state"] = DISH_STATE_READY;
+            fDbBind[":f_dish"] = so->fDishId;
+            fDbBind[":f_qty"] = so->fQty;
+            fDbBind[":f_qtyPrint"] = so->fQtyPrint;
+            fDbBind[":f_price"] = so->fPrice;
+            fDbBind[":f_svcValue"] = so->fSvcValue;
+            fDbBind[":f_svcAmount"] = so->fSvcAmount;
+            fDbBind[":f_dctValue"] = so->fDctValue;
+            fDbBind[":f_dctAmount"] = so->fDctAmount;
+            fDbBind[":f_total"] = so->fTotal;
+            fDbBind[":f_totalUSD"] = so->fTotal;
+            fDbBind[":f_print1"] = so->fPrint1;
+            fDbBind[":f_print2"] = so->fPrint2;
+            fDbBind[":f_store"] = so->fStore;
+            fDbBind[":f_comment"] = so->fComment;
+            fDbBind[":f_staff"] = fStaff->fId;
+            fDbBind[":f_complex"] = so->fComplex;
+            fDbBind[":f_complexId"] = 0;
+            fDbBind[":f_adgt"] = so->fAdgt;
+            fDbBind[":f_complexRec"] = so->fComplexRecId;
+            fDbBind[":f_row"] = so->fRow;
+            so->fRecId = fDb.insert("o_dish", fDbBind);
+            updateDishQtyHistory(so);
+            addDishToTable(so, counttotal, false);
+        }
+    }
+
     od->fDishId = d->fId;
     od->fState = DISH_STATE_READY;
     od->fPrint1 = d->fPrint1;
@@ -1381,6 +1667,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     od->fComplexRecId = d->fComplexRec;
     od->fAdgt = d->fAdgt;
     od->fTax = d->fTax;
+    od->fRow = ui->tblOrder->rowCount();
 
     countDish(od);
     fDbBind[":f_header"] = fTable->fOrder;
@@ -1404,23 +1691,40 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     fDbBind[":f_complexId"] = 0;
     fDbBind[":f_adgt"] = od->fAdgt;
     fDbBind[":f_complexRec"] = od->fComplexRecId;
+    fDbBind[":f_row"] = od->fRow;
     od->fRecId = fDb.insert("o_dish", fDbBind);
     updateDishQtyHistory(od);
-    addDishToTable(od, counttotal);
+    addDishToTable(od, counttotal, true);
+
     resetPrintQty();
-    fTrackControl->insert("New dish", od->fName["en"], "");
+    fTrackControl->insert("New dish", od->fName, "");
 }
 
-void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal)
+void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice)
 {
     int row = ui->tblOrder->rowCount();
     ui->tblOrder->setRowCount(row + 1);
     for (int i = 0; i < 3; i++) {
         ui->tblOrder->setItem(row, i, new QTableWidgetItem());
     }
-    ui->tblOrder->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(od));
-    ui->tblOrder->item(row, 1)->setData(Qt::UserRole, qVariantFromValue(od));
-    ui->tblOrder->item(row, 2)->setData(Qt::UserRole, qVariantFromValue(od));
+    if (od->fDishId == fHall->fServiceItem || !checkservice) {
+        ui->tblOrder->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(od));
+        ui->tblOrder->item(row, 1)->setData(Qt::UserRole, qVariantFromValue(od));
+        ui->tblOrder->item(row, 2)->setData(Qt::UserRole, qVariantFromValue(od));
+    } else {
+        if (fHall->fServiceItem > 0) {
+            ui->tblOrder->item(row, 0)->setData(Qt::UserRole, ui->tblOrder->item(row - 1, 0)->data(Qt::UserRole));
+            ui->tblOrder->item(row, 1)->setData(Qt::UserRole, ui->tblOrder->item(row - 1, 0)->data(Qt::UserRole));
+            ui->tblOrder->item(row, 2)->setData(Qt::UserRole, ui->tblOrder->item(row - 1, 0)->data(Qt::UserRole));
+            ui->tblOrder->item(row - 1, 0)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(row - 1, 1)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(row - 1, 2)->setData(Qt::UserRole, qVariantFromValue(od));
+        } else {
+            ui->tblOrder->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(row, 1)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(row, 2)->setData(Qt::UserRole, qVariantFromValue(od));
+        }
+    }
     ui->tblOrder->setCurrentCell(row, 0);
     setOrderRowHidden(row, od);
     if (counttotal) {
@@ -1455,7 +1759,7 @@ void RDesk::updateDish(OrderDishStruct *od)
 double RDesk::countTotal()
 {
     double total = 0;
-    double serviceValue = 0;
+    double servicevalue = 0;
     for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
         OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
         if (!od) {
@@ -1464,11 +1768,22 @@ double RDesk::countTotal()
         if (od->fState != DISH_STATE_READY) {
             continue;
         }
-        if (!od->fComplexRecId.isEmpty() ) {
+        if (!od->fComplexRecId.isEmpty()) {
+            continue;
+        }
+        if (fHall->fServiceItem != od->fDishId) {
+            servicevalue += od->fTotal * od->fSvcValue;
+        }
+        if (od->fDishId == fHall->fServiceItem) {
+            od->fPrice = servicevalue;
+            od->fTotal = servicevalue;
+            ui->tblOrder->item(i, 0)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(i, 1)->setData(Qt::UserRole, qVariantFromValue(od));
+            ui->tblOrder->item(i, 2)->setData(Qt::UserRole, qVariantFromValue(od));
+            updateDish(od);
             continue;
         }
         total += od->fTotal;
-        serviceValue += od->fSvcAmount;
     }
     for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
         DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct*>();
@@ -1479,20 +1794,10 @@ double RDesk::countTotal()
         total += dc->fPrice * dc->fQty;
     }
 
-    double grandTotal = total ;
+    double grandTotal = total + servicevalue ;
     qDebug() << fHall << fTable;
     fHall = Hall::getHallById(fTable->fHall);
-    ui->tblTotal->setItem(2, 0, new QTableWidgetItem(fHall->fServiceName));
-    if (fHall->fServiceItem > 0) {
-        ui->tblTotal->setItem(2, 1, new QTableWidgetItem(float_str(serviceValue, 2)));
-    }
 
-//    if ((int)grandTotal % 10 > 0) {
-//        double r = (int)grandTotal % 10;
-//        double serviceValue += 10 - r;
-//        grandTotal += 10 - r;
-//        ui->tblTotal->setItem(2, 1, new QTableWidgetItem(float_str(serviceValue, 2)));
-//    }
 
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
     fDbBind[":f_total"] = grandTotal;
@@ -1512,9 +1817,7 @@ void RDesk::countDish(OrderDishStruct *d)
 {
     d->fTotal = d->fQty * d->fPrice;
     d->fSvcAmount = (d->fTotal * d->fSvcValue);
-    d->fTotal += d->fSvcAmount;
     d->fDctAmount = d->fTotal * d->fDctValue;
-    d->fTotal -= d->fDctAmount;
 }
 
 bool RDesk::setTable(TableStruct *t, bool nosmile)
@@ -1621,6 +1924,7 @@ void RDesk::checkOrderHeader(TableStruct *t)
         fDb.queryDirect(query);
 
         fDbBind[":f_state"] = ORDER_STATE_OPENED;
+        fDbBind[":f_branch"] = defrest(dr_branch).toInt();
         fDbBind[":f_table"] = t->fId;
         fDbBind[":f_staff"] = fStaff->fId;
         fDbBind[":f_dateOpen"] = QDateTime::currentDateTime();
@@ -1645,6 +1949,7 @@ void RDesk::checkOrderHeader(TableStruct *t)
 
 void RDesk::clearOrder()
 {
+    setRecoverFrom(0);
     if (!fTable) {
         return;
     }
@@ -1686,7 +1991,7 @@ void RDesk::loadOrder(bool showwarning)
     User u;
     QString query = QString("select h.f_staff, h.f_comment, concat(u.f_firstName, ' ', u.f_lastName), h.f_print, "
                             "h.f_paymentMode, h.f_paymentModeComment, h.f_cityLedger, h.f_roomComment, h.f_dateOpen, "
-                            "h.f_tax "
+                            "h.f_tax, h.f_recoverfrom "
                              "from o_header h "
                              "left join users u on u.f_id=h.f_staff "
                              "where h.f_id=%1")
@@ -1706,7 +2011,7 @@ void RDesk::loadOrder(bool showwarning)
     fTable->fRoomComment = fDbRows.at(0).at(7).toString();
     fTable->fOpened = fDbRows.at(0).at(8).toDateTime();
     fTable->fTaxPrint = fDbRows.at(0).at(9).toInt();
-    logtime("LOAD ORDER HEADER " , et.elapsed());
+    setRecoverFrom(fDbRows.at(0).at(10).toInt());
     et.restart();
 //    if (showwarning) {
 //        if (u.fId != fStaff->fId) {
@@ -1723,10 +2028,9 @@ void RDesk::loadOrder(bool showwarning)
             "from o_dish od "
             "left join r_dish_complex dc on dc.f_id=od.f_complexId "
             "where od.f_header=:f_header and f_complex>0 and f_complexId>0 and f_state=1 "
-            "order by od.f_id ";
+            "order by od.f_row ";
     fDbBind[":f_header"] = fTable->fOrder;
     fDb.select(query, fDbBind, fDbRows);
-    logtime("LOAD ORDER COMPLEX QUERY", et.elapsed());
     et.restart();
     foreach_rows {
         DishComplexStruct *dc = new DishComplexStruct();
@@ -1743,28 +2047,25 @@ void RDesk::loadOrder(bool showwarning)
         ui->tblComplex->setItem(row, 0, new QTableWidgetItem());
         ui->tblComplex->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(dc));
     }
-    logtime("LOAD ORDER COMPLEX ", et.elapsed());
     et.restart();
 
-    query = "select od.f_id, od.f_dish, d.f_en, d.f_ru, d.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
+    query = "select od.f_id, od.f_dish, d.f_en, od.f_qty, od.f_qtyPrint, od.f_price, "
             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
             "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
             "od.f_adgt, od.f_complexRec "
             "from o_dish od "
             "left join r_dish d on d.f_id=od.f_dish "
             "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
-            "order by od.f_id ";
+            "order by od.f_row ";
     fDbBind[":f_header"] = fTable->fOrder;
     QList<QList<QVariant> > dbr;
     fDb.select(query, fDbBind, dbr);
-    for (QList<QList<QVariant> >::const_iterator it = dbr.begin(); it != dbr.end(); it++) {
+    for (QList<QList<QVariant> >::const_iterator it = dbr.constBegin(); it != dbr.constEnd(); it++) {
         OrderDishStruct *d = new OrderDishStruct();
         int c = 0;
         d->fRecId = it->at(c++).toInt();
         d->fDishId = it->at(c++).toInt();
-        d->fName["en"] = it->at(c++).toString();
-        d->fName["ru"] = it->at(c++).toString();
-        d->fName["am"] = it->at(c++).toString();
+        d->fName = it->at(c++).toString();
         d->fQty = it->at(c++).toFloat();
         d->fQtyPrint = it->at(c++).toFloat();
         d->fPrice = it->at(c++).toFloat();
@@ -1797,10 +2098,9 @@ void RDesk::loadOrder(bool showwarning)
             }
         }
         countDish(d);
-        addDishToTable(d, false);
+        addDishToTable(d, false, false);
         setOrderRowHidden(ui->tblOrder->rowCount() - 1, d);
     }
-    logtime("LOAD ORDER DISHES ", et.elapsed());
     et.restart();
     changeBtnState();
     countTotal();
@@ -1903,7 +2203,7 @@ void RDesk::printServiceCheck(const QString &prn, int side)
             continue;
         }
         ps->addTextRect(new PTextRect(10, top, 80, rowHeight, float_str(qty, 1), &th, f));
-        top += ps->addTextRect(new PTextRect(90, top, 680, rowHeight, od->fName[def_lang], &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(90, top, 680, rowHeight, od->fName, &th, f))->textHeight();
         if (!od->fComment.isEmpty()) {
             f.setPointSize(18);
             f.setBold(true);
@@ -1977,7 +2277,7 @@ void RDesk::printRemovedDish(OrderDishStruct *od, double removed, int user)
     ps.addLine(10, top, 680, top);
     th.setTextAlignment(Qt::AlignLeft);
     ps.addTextRect(new PTextRect(10, top, 80, rowHeight, float_str(removed, 1), &th, f));
-    top += ps.addTextRect(new PTextRect(90, top, 680, rowHeight, od->fName[def_lang], &th, f))->textHeight();
+    top += ps.addTextRect(new PTextRect(90, top, 680, rowHeight, od->fName, &th, f))->textHeight();
 
     QPrinterInfo pi;
     if (!od->fPrint1.isEmpty()) {
@@ -2016,6 +2316,7 @@ void RDesk::printRemovedDish(OrderDishStruct *od, double removed, int user)
 
 void RDesk::printReceipt(bool printModePayment)
 {
+    LogWriter::write(LogWriterLevel::verbose, "open database", "start receipt printing");
     int trackUser = fStaff->fId;
     if (!printModePayment) {
         if (fTable->fPrint > 0) {
@@ -2041,6 +2342,30 @@ void RDesk::printReceipt(bool printModePayment)
         }
     }
     ui->tblOrder->viewport()->update();
+
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_id"] = fTable->fOrder;
+    db2.exec("select f_tax from o_header where f_id=:f_id");
+    if (!db2.next()) {
+        message_error(tr("Not valid order id"));
+        return;
+    }
+    int fiscalnumber = db2.integer("f_tax");
+    QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
+    QString partnerTin;
+    if (fiscalnumber > 0 &&printModePayment) {
+        db2[":f_fiscal"] = fiscalnumber;
+        db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
+        if (!db2.next()) {
+            message_error(tr("Not valid fiscal number"));
+            return;
+        }
+        PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
+        QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
+        partnerTin = jo["partnerTin"].toString();
+    }
 
     QList<PPrintScene*> lps;
     PPrintScene *ps = new PPrintScene(Portrait);
@@ -2070,9 +2395,36 @@ void RDesk::printReceipt(bool printModePayment)
                                      .arg(tr("Receipt S/N "))
                                      .arg(fTable->fOrder),
                                      &th, f))->textHeight();
-    f.setPointSize(24);
-    th.setFont(f);
     th.setTextAlignment(Qt::AlignLeft);
+    if (fiscalnumber > 0) {
+        top += ps->addTextRect(new PTextRect(10, top, 200, rowHeight, firm, &th, f))->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Taxpayer id"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, hvhh, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Device number"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, devnum, &th, f))
+                ->textHeight();ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Serial"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, sn, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Fiscal"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, fiscal, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Receipt number"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, rseq, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Date"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, time, &th, f))
+                ->textHeight();
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, tr("(F)"), &th, f))
+                ->textHeight();
+        if (!partnerTin.isEmpty()) {
+            ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Partner tin"), &th, f));
+            top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, partnerTin, &th, f))
+                    ->textHeight();
+        }
+    }
+    f.setPointSize(24);
+    th.setFont(f);    
     ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Table"), &th, f));
     top += ps->addTextRect(new PTextRect(210, top, 200, rowHeight, fTable->fName, &th, f))->textHeight();
     if (!fCarModel.isEmpty()) {
@@ -2122,7 +2474,7 @@ void RDesk::printReceipt(bool printModePayment)
         }
         foreach (DishStruct *ds, dc->fDishes) {
             //ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(dc->fQty, 1), &thdc, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, "**" + ds->fName[def_lang], &thdc, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, "**" + ds->fName, &thdc, f));
             QString total = float_str(ds->fPrice * dc->fQty, 2);
             if (ds->fPrice < 0.1) {
                 total = tr("Present");
@@ -2148,7 +2500,7 @@ void RDesk::printReceipt(bool printModePayment)
         }
         ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
         th.setWrapMode(QTextOption::WordWrap);
-        int t = ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName[def_lang], &th, f))->textHeight();
+        int t = ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f))->textHeight();
         int k = ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
         top += (t > k ? t : k);
         if (top > sizePortrait.height()  - 200) {
@@ -2275,7 +2627,7 @@ void RDesk::printReceipt(bool printModePayment)
                 continue; //handle complex
             }
             ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName[def_lang], &th, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
             top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
             if (top > sizePortrait.height()  - 200) {
                 top = 10;
@@ -2297,7 +2649,7 @@ void RDesk::printReceipt(bool printModePayment)
                 continue; //handle complex
             }
             ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName[def_lang], &th, f));
+            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
             top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
             if (top > sizePortrait.height()  - 200) {
                 top = 10;
@@ -2493,19 +2845,6 @@ void RDesk::manualdisc(double val, int costumer)
     changeBtnState();
 }
 
-void RDesk::logtime(const QString &msg, int elapsed)
-{
-//    QDir d;
-//    QFile f(d.homePath() + "/SmartHotel/logtime.log");
-//    f.open(QIODevice::Append);
-//    f.write(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss ").toUtf8());
-//    f.write(msg.toUtf8());
-//    f.write(": ");
-//    f.write(QString::number(elapsed).toUtf8());
-//    f.write("\r\n");
-//    f.close();
-}
-
 TableStruct *RDesk::loadHall(int hall)
 {
     fCurrentHall = hall;
@@ -2582,6 +2921,7 @@ void RDesk::on_tblDish_clicked(const QModelIndex &index)
         return;
     }
     fCloseTimeout = 0;
+    d->fStore = storealias(d->fStore);
     addDishToOrder(d, true);
     repaintTables();
 }
@@ -2597,87 +2937,24 @@ void RDesk::on_btnTrash_clicked()
     if (!od) {
         return;
     }
+    if (od->fDishId == fHall->fServiceItem) {
+        message_error(tr("This item cannot be removed"));
+        return;
+    }
     if (!message_question(tr("Confirm to delete the selected item"))) {
         return;
     }
-    QString oldQty = QString("%1, %2/%3").arg(od->fName[def_lang]).arg(od->fQty).arg(od->fQtyPrint);
+    QString oldQty = QString("%1, %2/%3").arg(od->fName).arg(od->fQty).arg(od->fQtyPrint);
     int trackUser = fStaff->fId;
     if (od->fComplex == 0) {
         if (od->fQtyPrint < 0.01) {
             od->fState = DISH_STATE_EMPTY;
             ui->tblOrder->setRowHidden(sel.at(0).row(), true);
         } else {
-            float num = 0;
-            float qtyToPrint = 0;
-            QVariant reason;
-            if (RNumbers::getNumber(num, od->fQty, this)) {
-                qtyToPrint = od->fQtyPrint - (od->fQty - num);
-                if (qtyToPrint > 0.01) {
-                    if (!right(cr__o_cancelation, trackUser)) {
-                        message_error(tr("Access denied"));
-                        return;
-                    }
-                    QString name, sql = "select f_id, f_en from o_dish_state where f_id in (2, 3)";
-                    if (!DlgList::getValue(tr("REMOVE OPTION"), name, reason, sql)) {
-                        return;
-                    }
-                } else {
-                    reason = DISH_STATE_REMOVED_NOSTORE;
-                }
-                if (float_equal(od->fQty, num)) {
-                    od->fState = reason.toInt();
-                    od->fCancelUser = trackUser;
-                    od->fCancelDate = QDateTime::currentDateTime();
-                    setOrderRowHidden(sel.at(0).row(), od);
-                } else {
-                    float qtyEmpty = od->fQty - od->fQtyPrint;
-                    if (float_greaterOrEqual(qtyEmpty, num)) {
-                        od->fQty -= num;
-                    } else {
-                        od->fQty -= qtyEmpty;
-                        num -= qtyEmpty;
-                        //Log empty
-                        if (float_equal(od->fQty, num)) {
-                            od->fState = reason.toInt();
-                            od->fCancelUser = trackUser;
-                            od->fCancelDate = QDateTime::currentDateTime();
-                        } else {
-                            od->fQty -= num;
-                            od->fQtyPrint = od->fQty;
-                            OrderDishStruct *r = new OrderDishStruct();
-                            *r = *od;
-                            r->fState = reason.toInt();
-                            r->fQty = num;
-                            r->fQtyPrint = num;
-                            fDbBind[":f_header"] = fTable->fOrder;
-                            fDbBind[":f_state"] = r->fState;
-                            fDbBind[":f_dish"] = r->fDishId;
-                            fDbBind[":f_qty"] = r->fQty;
-                            fDbBind[":f_qtyPrint"] = r->fQtyPrint;
-                            fDbBind[":f_price"] = r->fPrice;
-                            fDbBind[":f_svcValue"] = r->fSvcValue;
-                            fDbBind[":f_svcAmount"] = r->fSvcAmount;
-                            fDbBind[":f_dctValue"] = r->fDctValue;
-                            fDbBind[":f_dctAmount"] = r->fDctAmount;
-                            fDbBind[":f_total"] = r->fTotal;
-                            fDbBind[":f_print1"] = r->fPrint1;
-                            fDbBind[":f_print2"] = r->fPrint2;
-                            fDbBind[":f_store"] = r->fStore;
-                            fDbBind[":f_comment"] = r->fComment;
-                            fDbBind[":f_staff"] = fStaff->fId;
-                            fDbBind[":f_cancelUser"] = trackUser;
-                            fDbBind[":f_cancelDate"] = QDateTime::currentDateTime();
-                            r->fRecId = fDb.insert("o_dish", fDbBind);
-                            addDishToTable(r, true);
-                        }
-                    }
-                }
-                if (qtyToPrint > 0.01) {
-                    printRemovedDish(od, qtyToPrint, trackUser);
-                }
-            }
+            message_error(tr("Cannot remove printed dish, use order correction tool"));
+            return;
         }
-        QString newQty = QString("%1, %2/%3").arg(od->fName[def_lang]).arg(od->fQty).arg(od->fQtyPrint);
+        QString newQty = QString("%1, %2/%3").arg(od->fName).arg(od->fQty).arg(od->fQtyPrint);
         fTrackControl->insert("Dish qty", oldQty, newQty);
         countDish(od);
         updateDish(od);
@@ -2704,7 +2981,7 @@ void RDesk::on_btnTrash_clicked()
                 o->fState = reason.toInt();
                 ui->tblOrder->setRowHidden(i, !fShowRemoved);
                 updateDish(o);
-                fTrackControl->insert("Remove complex component", o->fName["en"], "");
+                fTrackControl->insert("Remove complex component", o->fName, "");
             }
         }
         for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
@@ -2799,25 +3076,6 @@ void RDesk::on_btnPrint_clicked()
     }
     changeBtnState();
     repaintTables();
-}
-
-void RDesk::on_btnTable_clicked()
-{
-    RSelectTable *t = new RSelectTable(this);
-    t->setup(fTable->fHall);
-    if (t->exec() == QDialog::Accepted) {
-        if (setTable(t->table(), false)) {
-            fHall = Hall::getHallById(fTable->fHall);
-            if (fMenu != fHall->fDefaultMenu) {
-                fMenu = fHall->fDefaultMenu;
-                setBtnMenuText();
-                setupType(0);
-            }
-        }
-    }
-    delete t;
-    fCloseTimeout = 0;
-    changeBtnState();
 }
 
 void RDesk::on_btnComment_clicked()
@@ -2983,6 +3241,12 @@ void RDesk::repaintTables()
     ui->tblTables->viewport()->update();
 }
 
+void RDesk::setRecoverFrom(int from)
+{
+    ui->wRecoverFrom->setVisible(from > 0);
+    ui->leRecoverFrom->setInt(from);
+}
+
 void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
 {
     if (!item) {
@@ -3063,12 +3327,12 @@ void RDesk::on_btnPackage_clicked()
 
 void RDesk::on_btnHallWash_clicked()
 {
-    loadHall(1);
+    loadHall(1 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
 
 void RDesk::on_btnHallCafe_clicked()
 {
-    loadHall(2);
+    loadHall(2 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
 
 void RDesk::on_btnExit_2_clicked()
@@ -3083,10 +3347,43 @@ void RDesk::on_btnDiss50_clicked()
 
 void RDesk::on_btnHallVIP_clicked()
 {
-    loadHall(3);
+    loadHall(3 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
 
 void RDesk::on_btnShop_clicked()
 {
-    loadHall(4);
+    loadHall(4 + ((defrest(dr_branch).toInt() - 1) * 4));
+}
+
+void RDesk::on_btnSetRecoverFrom_clicked()
+{
+    if (!fTable) {
+        message_error(tr("Select table"));
+        return;
+    }
+    if (fTable->fOrder == 0) {
+        message_error(tr("Active order required"));
+        return;
+    }
+    float num;
+    if (RNumbers::getNumber(num, 99999999.0, this)) {
+        Db b = Preferences().getDatabase(Base::fDbName);
+        Database2 db2;
+        db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+
+        db2[":f_id"] = (int) num;
+        db2.exec("select f_state from o_header where f_id=:f_id");
+        if (!db2.next()) {
+            message_error(tr("Invalid order id"));
+            return;
+        }
+        if (db2.integer("f_state") != ORDER_STATE_REMOVED) {
+            message_error(tr("Order state must me removed"));
+            return;
+        }
+
+        db2[":f_recoverfrom"] = (int) num;
+        db2.update("o_header", "f_id", fTable->fOrder);
+        setRecoverFrom((int) num);
+    }
 }

@@ -15,14 +15,34 @@ RC_FILE = res.rc
 
 DEFINES += _RESORT_
 DEFINES += _HOTEL_
+DEFINES += _MODULE_=\\\"EliteCarwash\\\"
 
 SOURCES += main.cpp\
+    ../../NewTax/Src/printtaxn.cpp \
     ../Base/base.cpp \
     ../Base/baseorder.cpp \
+    ../Filter/fasexportsale.cpp \
+    ../Filter/fattendance.cpp \
+    ../Filter/fcoupondocuments.cpp \
+    ../Filter/fcouponsservice.cpp \
     ../Filter/fearningswash.cpp \
     ../Filter/fsalarybyemployes.cpp \
     ../Filter/wsalary.cpp \
+    ../RowEditor/dlgcouponservicedocument.cpp \
+    c5graphicsview.cpp \
+    c5printing.cpp \
+    c5printpreview.cpp \
+    database2.cpp \
+    dialog.cpp \
+    dlgaddattendance.cpp \
+    dlgconfigattendance.cpp \
+    dlgcouponserviceback.cpp \
+    dlgcouponservicedocumentplus.cpp \
+    dlgcouponservicefirstnumber.cpp \
+    dlgcouponservicepayment.cpp \
+    dlggetidname.cpp \
     dlgonetwoall.cpp \
+    logwriter.cpp \
         mainwindow.cpp \
     login.cpp \
     loginsettings.cpp \
@@ -31,6 +51,7 @@ SOURCES += main.cpp\
     databaseconnection.cpp \
     databasepasswordchange.cpp \
     recalculatestoreoutputs.cpp \
+    reportquery.cpp \
     storeoutput.cpp \
     wreportgrid.cpp \
     wcontacts.cpp \
@@ -53,7 +74,6 @@ SOURCES += main.cpp\
     wusersgroups.cpp \
     dlgusergroup.cpp \
     ../Base/command.cpp \
-    broadcastthread.cpp \
     ../Cache/cacheinvoiceitem.cpp \
     ../Selector/dwselector.cpp \
     ../Cache/cachebase.cpp \
@@ -142,13 +162,11 @@ SOURCES += main.cpp\
     ../Controls/edateedit.cpp \
     ../Filter/fcashreportsummary.cpp \
     ../Filter/fcashreport.cpp \
-    ../Base/vauchers.cpp \
     dlguserrights.cpp \
     ../Selector/dwselectorvaucher.cpp \
     ../Selector/dwtemplateselector.cpp \
     ../Cache/cachevaucher.cpp \
     ../Print/pprintvaucher.cpp \
-    ../Filter/fevents.cpp \
     ../Cache/cacheorderstate.cpp \
     ../Selector/dwselectororderstate.cpp \
     ../Selector/dwselectorresttable.cpp \
@@ -160,7 +178,6 @@ SOURCES += main.cpp\
     dlgprinttaxsideoption.cpp \
     dlgsearchinvoice.cpp \
     ../RowEditor/rebanquetcomment.cpp \
-    ../Filter/fcallhistory.cpp \
     ../Filter/fcommonfilterbydate.cpp \
     dlgprintrandomtax.cpp \
     ../RowEditor/recomplimentarycomment.cpp \
@@ -230,7 +247,6 @@ SOURCES += main.cpp\
     ../Filter/fdebtofcostumers.cpp \
     ../Cache/cachedebtcostumer.cpp \
     ../Selector/dwselectordebtcostumer.cpp \
-    ../Filter/fbreakfast.cpp \
     ../Filter/fdiscountreport.cpp \
     ../Filter/fsalesbycar.cpp \
     ../Filter/fdiscounttotal.cpp \
@@ -260,20 +276,39 @@ SOURCES += main.cpp\
     ../Filter/fbalanceoncard.cpp
 
 HEADERS  += mainwindow.h \
+    ../../NewTax/Src/printtaxn.h \
     ../Base/base.h \
     ../Base/baseorder.h \
+    ../Filter/fasexportsale.h \
+    ../Filter/fattendance.h \
+    ../Filter/fcoupondocuments.h \
+    ../Filter/fcouponsservice.h \
     ../Filter/fearningswash.h \
     ../Filter/fsalarybyemployes.h \
     ../Filter/wsalary.h \
+    ../RowEditor/dlgcouponservicedocument.h \
+    c5graphicsview.h \
+    c5printing.h \
+    c5printpreview.h \
+    database2.h \
+    dialog.h \
+    dlgaddattendance.h \
+    dlgconfigattendance.h \
+    dlgcouponserviceback.h \
+    dlgcouponservicedocumentplus.h \
+    dlgcouponservicefirstnumber.h \
+    dlgcouponservicepayment.h \
+    dlggetidname.h \
     dlgonetwoall.h \
     login.h \
     loginsettings.h \
+    logwriter.h \
     message.h \
     databasesconnections.h \
     databaseconnection.h \
     databasepasswordchange.h \
     recalculatestoreoutputs.h \
-    roles.h \
+    reportquery.h \
     storeoutput.h \
     wreportgrid.h \
     wcontacts.h \
@@ -297,7 +332,6 @@ HEADERS  += mainwindow.h \
     wusersgroups.h \
     dlgusergroup.h \
     ../Base/command.h \
-    broadcastthread.h \
     ../Cache/cachebase.h \
     ../Cache/cacheinvoiceitem.h \
     ../Selector/dwselector.h \
@@ -387,13 +421,11 @@ HEADERS  += mainwindow.h \
     ../Controls/edateedit.h \
     ../Filter/fcashreportsummary.h \
     ../Filter/fcashreport.h \
-    ../Base/vauchers.h \
     dlguserrights.h \
     ../Selector/dwselectorvaucher.h \
     ../Selector/dwtemplateselector.h \
     ../Cache/cachevaucher.h \
     ../Print/pprintvaucher.h \
-    ../Filter/fevents.h \
     ../Cache/cacheorderstate.h \
     ../Selector/dwselectororderstate.h \
     ../Selector/dwselectorresttable.h \
@@ -405,7 +437,6 @@ HEADERS  += mainwindow.h \
     dlgprinttaxsideoption.h \
     dlgsearchinvoice.h \
     ../RowEditor/rebanquetcomment.h \
-    ../Filter/fcallhistory.h \
     ../Filter/fcommonfilterbydate.h \
     dlgprintrandomtax.h \
     ../RowEditor/recomplimentarycomment.h \
@@ -476,7 +507,6 @@ HEADERS  += mainwindow.h \
     ../Filter/fdebtofcostumers.h \
     ../Cache/cachedebtcostumer.h \
     ../Selector/dwselectordebtcostumer.h \
-    ../Filter/fbreakfast.h \
     ../Filter/fdiscountreport.h \
     ../Filter/fsalesbycar.h \
     ../Filter/fdiscounttotal.h \
@@ -506,9 +536,22 @@ HEADERS  += mainwindow.h \
     ../Filter/fbalanceoncard.h
 
 FORMS    += mainwindow.ui \
+    ../Filter/fasexportsale.ui \
+    ../Filter/fattendance.ui \
+    ../Filter/fcoupondocuments.ui \
+    ../Filter/fcouponsservice.ui \
     ../Filter/fearningswash.ui \
     ../Filter/fsalarybyemployes.ui \
     ../Filter/wsalary.ui \
+    ../RowEditor/dlgcouponservicedocument.ui \
+    c5printpreview.ui \
+    dlgaddattendance.ui \
+    dlgconfigattendance.ui \
+    dlgcouponserviceback.ui \
+    dlgcouponservicedocumentplus.ui \
+    dlgcouponservicefirstnumber.ui \
+    dlgcouponservicepayment.ui \
+    dlggetidname.ui \
     dlgonetwoall.ui \
     login.ui \
     loginsettings.ui \
@@ -547,12 +590,10 @@ FORMS    += mainwindow.ui \
     ../Filter/fcashreportsummary.ui \
     ../Filter/fcashreport.ui \
     dlguserrights.ui \
-    ../Filter/fevents.ui \
     dlgpretax.ui \
     dlgprinttaxsideoption.ui \
     dlgsearchinvoice.ui \
     ../RowEditor/rebanquetcomment.ui \
-    ../Filter/fcallhistory.ui \
     ../Filter/fcommonfilterbydate.ui \
     dlgprintrandomtax.ui \
     ../RowEditor/recomplimentarycomment.ui \
@@ -595,7 +636,6 @@ FORMS    += mainwindow.ui \
     dlgcashop.ui \
     ../Filter/fcouponstatistics.ui \
     ../Filter/fdebtofcostumers.ui \
-    ../Filter/fbreakfast.ui \
     ../Filter/fdiscountreport.ui \
     ../Filter/fsalesbycar.ui \
     ../Filter/fdiscounttotal.ui \
@@ -635,7 +675,7 @@ INCLUDEPATH += ../GridOptionWidgets
 INCLUDEPATH += ../Vouchers
 INCLUDEPATH += /Soft/OpenSSL-Win32/include
 INCLUDEPATH += /Soft/OpenSSL-Win32/include/openssl
-INCLUDEPATH += /Projects/NewTax
+INCLUDEPATH += /Projects/NewTax/Src
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
 DEFINES += _APPLICATION_=\\\"SmartHotel\\\"

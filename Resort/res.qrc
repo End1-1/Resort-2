@@ -138,5 +138,8 @@
         <file>images/package.png</file>
         <file>images/earn.png</file>
         <file>images/salary.png</file>
+        <file>images/talon.png</file>
+        <file>images/returnbox.png</file>
+        <file>images/payment.png</file>
     </qresource>
 </RCC>

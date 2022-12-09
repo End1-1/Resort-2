@@ -25,6 +25,7 @@ public:
     static void openReport();
 private slots:
     void store(CI_RestStore *c);
+    void removeSelected();
     void copyDoc();
     void doubleClicked(const QList<QVariant> &row);
     void on_btnDateLeft_clicked();

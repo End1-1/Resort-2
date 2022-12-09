@@ -98,8 +98,8 @@ void DishesTable::init(Splash *s)
     }
     if (s) {
         s->setText(tr("Loading complex dishes components"));
-        query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, d.f_ru, d.f_am,"
-                "d.f_bgColor, d.f_textColor, d.f_text_en, d.f_text_ru, d.f_text_am,"
+        query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
+                "d.f_bgColor, d.f_textColor, d.f_text_en, "
                 "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, mc.f_complex "
                 "from r_menu m "
                 "inner join r_dish d on d.f_id=m.f_dish "
@@ -113,20 +113,16 @@ void DishesTable::init(Splash *s)
             d->fMenu = it->at(1).toInt();
             d->fPart = it->at(2).toInt();
             d->fType = it->at(3).toInt();
-            d->fName["en"] = it->at(4).toString();
-            d->fName["ru"] = it->at(5).toString();
-            d->fName["am"] = it->at(6).toString();
-            d->fBgColor = it->at(7).toInt();
-            d->fTextColor = it->at(8).toInt();
-            d->fText["en"] = it->at(9).toString();
-            d->fText["ru"] = it->at(10).toString();
-            d->fText["am"] = it->at(11).toString();
-            d->fPrint1 = it->at(12).toString();
-            d->fPrint2 = it->at(13).toString();
-            d->fStore = it->at(14).toInt();
-            d->fPrice = it->at(15).toFloat();
-            d->fQueue = it->at(16).toInt();
-            d->fComplex = it->at(17).toInt();
+            d->fName = it->at(4).toString();
+            d->fBgColor = it->at(5).toInt();
+            d->fTextColor = it->at(6).toInt();
+            d->fText = it->at(7).toString();
+            d->fPrint1 = it->at(8).toString();
+            d->fPrint2 = it->at(9).toString();
+            d->fStore = it->at(10).toInt();
+            d->fPrice = it->at(11).toFloat();
+            d->fQueue = it->at(12).toInt();
+            d->fComplex = it->at(13).toInt();
             for (int i = 0; i < fDishComplex.count(); i++) {
                 if (d->fComplex == fDishComplex.at(i)->fId) {
                     fDishComplex[i]->fDishes.append(d);
@@ -138,8 +134,8 @@ void DishesTable::init(Splash *s)
     if (s) {
         s->setText(tr("Loading menu..."));
     }
-    query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, d.f_ru, d.f_am,"
-            "d.f_bgColor, d.f_textColor, d.f_text_en, d.f_text_ru, d.f_text_am,"
+    query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
+            "d.f_bgColor, d.f_textColor, d.f_text_en,  "
             "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, m.f_complex, "
             "d.f_adgt, d.f_tax "
             "from r_menu m "
@@ -147,28 +143,24 @@ void DishesTable::init(Splash *s)
             "inner join r_dish_type t on d.f_type=t.f_id "
             "where m.f_state=1  and m.f_complex=0 and t.f_active=1";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for (QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         DishStruct *d = new DishStruct();
         d->fId = it->at(0).toInt();
         d->fMenu = it->at(1).toInt();
         d->fPart = it->at(2).toInt();
         d->fType = it->at(3).toInt();
-        d->fName["en"] = it->at(4).toString();
-        d->fName["ru"] = it->at(5).toString();
-        d->fName["am"] = it->at(6).toString();
-        d->fBgColor = it->at(7).toInt();
-        d->fTextColor = it->at(8).toInt();
-        d->fText["en"] = it->at(9).toString();
-        d->fText["ru"] = it->at(10).toString();
-        d->fText["am"] = it->at(11).toString();
-        d->fPrint1 = it->at(12).toString();
-        d->fPrint2 = it->at(13).toString();
-        d->fStore = it->at(14).toInt();
-        d->fPrice = it->at(15).toFloat();
-        d->fQueue = it->at(16).toInt();
-        d->fComplex = it->at(17).toBool();
-        d->fAdgt = it->at(18).toString();
-        d->fTax = it->at(19).toInt();
+        d->fName = it->at(4).toString();
+        d->fBgColor = it->at(5).toInt();
+        d->fTextColor = it->at(6).toInt();
+        d->fText = it->at(7).toString();
+        d->fPrint1 = it->at(8).toString();
+        d->fPrint2 = it->at(9).toString();
+        d->fStore = it->at(10).toInt();
+        d->fPrice = it->at(11).toFloat();
+        d->fQueue = it->at(12).toInt();
+        d->fComplex = it->at(13).toBool();
+        d->fAdgt = it->at(14).toString();
+        d->fTax = it->at(15).toInt();
         fDish.append(d);
     }
 

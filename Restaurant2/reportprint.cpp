@@ -1,6 +1,8 @@
 #include "reportprint.h"
 #include "pprintscene.h"
 #include "ptextrect.h"
+#include "defrest.h"
+#include "branchstoremap.h"
 #include "pimage.h"
 #include <QPrinter>
 #include <QPainter>
@@ -46,6 +48,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     th.setTextAlignment(Qt::AlignLeft);
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     rp.fDb.select("select h.f_name, '', t.f_name, oh.f_id, oh.f_paymentModeComment, "
                   "sum(d.f_total), sum(d.f_totalUSD), oc.f_govnumber, hp.f_discountcard "
                   "from o_Header oh "
@@ -54,8 +57,8 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                   "inner join r_table t on t.f_id=oh.f_table "
                   "inner join o_dish d on d.f_header=oh.f_id "
                   "left join o_car oc on oc.f_order=oh.f_id "
-                  "where oh.f_state=:f_state and d.f_state=1 and d.f_dish<>558 "
-                  "and oh.f_dateCash=:f_dateCash "
+                  "where oh.f_state=:f_state and d.f_state=1 "
+                  "and oh.f_dateCash=:f_dateCash and oh.f_branch=:f_branch "
                   "group by 1, 2, 3, 4, 5, 8 "
                   "order by h.f_id, 2, oh.f_id ",
                   rp.fDbBind, rp.fDbRows);
@@ -102,7 +105,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                         lps.append(ps);
                     }
                 }
-                if (currHall == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+                if (currHall.contains(QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ"))) {
                     top += ps->addTextRect(350, top, 200, rowHeight, "Աշ[" + float_str(totalff, 2) + "]", &th)->textHeight();
                 }
                 top += rowHeight;
@@ -184,7 +187,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         } else {
             top += ps->addTextRect(350, top, 200, rowHeight, float_str(total, 2), &th)->textHeight();
         }
-        if (currHall == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+        if (currHall.contains(QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ"))) {
             top += ps->addTextRect(350, top, 200, rowHeight, "Աշ[" + float_str(totalff, 2) + "]", &th)->textHeight();
         }
         top += rowHeight;
@@ -211,11 +214,12 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     DatabaseResult dr;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     dr.select(rp.fDb, "select sum(p.f_cash) as f_cash, sum(p.f_card) as f_card, "
               "sum(p.f_coupon) as f_coupon, sum(p.f_debt) as f_debt, sum(p.f_discount) as f_discount "
               "from o_header_payment p "
               "left join o_header h on h.f_id=p.f_id "
-              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash ", rp.fDbBind);
+              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and h.f_branch=:f_branch ", rp.fDbBind);
     th.setTextAlignment(Qt::AlignHCenter);
     f.setBold(true);
     th.setFont(f);
@@ -280,17 +284,19 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_state2"] = DISH_STATE_READY;
     rp.fDbBind[":f_dateCash"] =  date;
-    rp.fDbBind[":f_store"] = 2;
+    rp.fDbBind[":f_store"] = storealias(2);
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drsal.select(rp.fDb,
                  QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
-                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "
                 "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), rp.fDbBind);
     double minusfromsalary = drsal.value("f_deduction").toInt();
 
     rp.fDbBind[":f_date"] = date;
-    drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
+    drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_branch=:f_branch and f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
 //    drsal.select(rp.fDb, "select ug.f_en, sum(s2.f_amount) as f_amount from "
 //                 "salary2 s2 "
 //                 "inner join users u on u.f_id=s2.f_employee "
@@ -313,11 +319,12 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     DatabaseResult drFinalWash;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drFinalWash.select(rp.fDb, "select sum(p.f_cash) as f_cash, sum(p.f_card) as f_card, "
               "sum(p.f_coupon) as f_coupon, sum(p.f_debt) as f_debt, sum(p.f_discount) as f_discount "
               "from o_header_payment p "
               "left join o_header h on h.f_id=p.f_id "
-              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash ", rp.fDbBind);;
+              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and h.f_branch=:f_branch ", rp.fDbBind);;
 
     th.setTextAlignment(Qt::AlignCenter);
     if (top > sizePortrait.height() - 200) {
@@ -348,10 +355,11 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     /* i dont know why */
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_dateCash"] = date;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     rp.fDb.select(QString("select hp.f_id,  '%1' as bb "
                   "from o_Header oh "
                   "left join o_header_payment hp on hp.f_id=oh.f_id "
-                  "where oh.f_state=:f_state and oh.f_dateCash=:f_dateCash and hp.f_discountcard like '555%' ")
+                  "where oh.f_state=:f_state and oh.f_dateCash=:f_dateCash and hp.f_discountcard like '555%' and oh.f_branch=:f_branch ")
                   .arg(QString::fromUtf8("Նվեր քարդ")),
                   rp.fDbBind, rp.fDbRows);
     foreach (QList<QVariant> row, rp.fDbRows) {
@@ -450,12 +458,13 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     DatabaseResult dr;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     dr.select(rp.fDb, "select hh.f_name, count(distinct(h.f_id)) as qty, "
               "sum(d.f_total) as f_total, sum(d.f_totalusd) as f_total2 "
               "from o_dish d  "
               "inner join o_header h on h.f_id=d.f_header "
               "left join r_hall hh on hh.f_id=h.f_hall "
-              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and d.f_state=1 "
+              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and d.f_state=1 and h.f_branch=:f_branch "
               "group by 1 ", rp.fDbBind);
     th.setTextAlignment(Qt::AlignHCenter);
     f.setBold(true);
@@ -468,7 +477,7 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
         top += ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "f_name").toString(), &th)->textHeight();
         ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "qty").toString(), &trl);
         top += ps->addTextRect(10, top,  680, rowHeight, dr.value(i, "f_total").toString(), &trr)->textHeight();
-        if (dr.value(i, "f_name").toString() == QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ")) {
+        if (dr.value(i, "f_name").toString().contains(QString::fromUtf8("ԱՎՏՈԼՎԱՑՈՒՄ"), Qt::CaseInsensitive)) {
             top += ps->addTextRect(10, top,  680, rowHeight, "Աշխատավարձ[" + float_str(totalff, 2) + "]", &trr)->textHeight();
             top += ps->addTextRect(10, top,  680, rowHeight, "Պահում[" + float_str(dr.value(i, "f_total2").toDouble() - totalff, 2) + "]", &trr)->textHeight();
         }
@@ -491,7 +500,8 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     }
     DatabaseResult drsal;
     rp.fDbBind[":f_date"] = date;
-    drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
+    drsal.select(rp.fDb, "select c.f_comment, abs(c.f_amount) as f_amount from c_cash c where f_branch=:f_branch and f_date=:f_date and f_debit=1 and f_credit=2 ", rp.fDbBind);
 
     double totalSalary = 0;
     for (int i = 0; i < drsal.rowCount(); i++) {
@@ -511,11 +521,12 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     DatabaseResult drFinalWash;
     rp.fDbBind[":f_dateCash"] = date;
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drFinalWash.select(rp.fDb, "select sum(p.f_cash) as f_cash, sum(p.f_card) as f_card, "
               "sum(p.f_coupon) as f_coupon, sum(p.f_debt) as f_debt, sum(p.f_discount) as f_discount "
               "from o_header_payment p "
               "left join o_header h on h.f_id=p.f_id "
-              "where h.f_state=:f_state and h.f_dateCash=:f_dateCash ", rp.fDbBind);;
+              "where h.f_branch=:f_branch and h.f_state=:f_state and h.f_dateCash=:f_dateCash ", rp.fDbBind);;
 
     th.setTextAlignment(Qt::AlignCenter);
     top += ps->addTextRect(10, top, 680, rowHeight, tr("Total Finally"), &th)->textHeight();
@@ -585,10 +596,11 @@ double ReportPrint::totalx500(const QDate &date)
     rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_state2"] = DISH_STATE_READY;
     rp.fDbBind[":f_dateCash"] =  date;
-    rp.fDbBind[":f_store"] = 2;
+    rp.fDbBind[":f_store"] = storealias(2);
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drsal1.select(rp.fDb, "select sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
-                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+                 "where h.f_state=:f_state1 and d.f_state=:f_state2 and h.f_branch=:f_branch "
                  "and h.f_dateCash=:f_dateCash and d.f_store=:f_store", rp.fDbBind);
 
     double totalff = drsal1.value("f_total").toDouble();
@@ -596,12 +608,13 @@ double ReportPrint::totalx500(const QDate &date)
     rp.fDbBind[":f_state1"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_state2"] = DISH_STATE_READY;
     rp.fDbBind[":f_dateCash"] =  date;
-    rp.fDbBind[":f_store"] = 2;
+    rp.fDbBind[":f_store"] = storealias(2);
+    rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     drsal1.select(rp.fDb,
                  QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
-                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store "
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "
                 "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), rp.fDbBind);
     totalff -= drsal1.value("f_deduction").toDouble();
     return totalff;

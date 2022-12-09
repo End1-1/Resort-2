@@ -126,6 +126,10 @@ bool DoubleDatabase::exec(const QString &sqlQuery)
     }
     if (isSelect) {
         int colCount = q1->record().count();
+        fDefColNames.clear();
+        for (int i = 0; i < colCount; i++) {
+            fDefColNames[i] = q1->record().fieldName(i);
+        }
         fDbRows.clear();
         while (q1->next()) {
             QList<QVariant> row;

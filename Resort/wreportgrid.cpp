@@ -146,12 +146,12 @@ void WReportGrid::setTblTotalData(const QList<int> &columns, const QList<double>
 {
     ui->tblTotals->setVisible(true);
     ui->tblMain->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QStringList l;
+    l << QString::number(fModel->rowCount());
     ui->tblTotals->clear();
     for (int i = 0, count = columns.count(); i < count; i++) {
         ui->tblTotals->setItemWithValue(0, columns.at(i), values.at(i));
     }
-    QStringList l;
-    l << QString::number(fModel->rowCount());
     ui->tblTotals->setVerticalHeaderLabels(l);
 }
 

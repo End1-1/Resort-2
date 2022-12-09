@@ -6,7 +6,7 @@
 #include "roweditordialog.h"
 #include "wfilterbase.h"
 #include "pprintpreview.h"
-#include "roles.h"
+#include "cacherights.h"
 
 #define tr_col(lang, width) (def_lang == lang ? width : 0)
 
@@ -83,7 +83,7 @@ public:
         fModel->setSqlQuery(query);
         fModel->apply(this);
         T *t = 0;
-        if (showNewBtn && WORKING_USERROLE != role_viewer) {
+        if (showNewBtn) {
             t = new T(fRowValues, this);
             fRowEditorDialog = t;
             setBtnNewVisible(showNewBtn);
@@ -103,6 +103,7 @@ public:
     QStringList fJoins;
     QStringList fJoinConds;
     BaseWidget *fTitleWidget;
+    QMenu *fGridMenu;
     QMap<QString,bool> fIncludes;
     void dontResizeSave(bool v);
     void setBtnNewVisible(bool value = true);
@@ -148,7 +149,6 @@ private slots:
 private:
     Ui::WReportGrid *ui;
     QMenu *fTableMenu;
-    QMenu *fGridMenu;
     bool fSaveResizedColumn;
     void fillRowValues(int row);
 

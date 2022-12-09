@@ -18,12 +18,14 @@ public:
 private slots:
     void on_btnCancel_clicked();
     void on_btnOk_clicked();
-
     void on_chCheckUncheck_clicked(bool checked);
 
 private:
     Ui::DlgUserRights *ui;
     int fGroupId;
+    void checkAll(QObject *parent, bool checked);
+    void check(QObject *parent, bool checked, int tag);
+    void checkQuery(QObject *parent, QString &query, bool &first);
 };
 
 #endif // DLGUSERRIGHTS_H

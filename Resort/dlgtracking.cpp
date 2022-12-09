@@ -18,10 +18,6 @@ DlgTracking::~DlgTracking()
 
 void DlgTracking::showTracking(int trackId, const QString &windowId)
 {
-    if (!r__(cr__tracking_chnages_individual)) {
-        message_error(tr("Access denied"));
-        return;
-    }
     if (!fPreferences.getDb(def_show_logs).toBool()) {
         message_error(tr("Logs disabled"));
         return;

@@ -4,17 +4,45 @@
 #include "trackcontrol.h"
 #include "ptextrect.h"
 #include "pimage.h"
+#include "message.h"
 #include "paymentmode.h"
 #include "cacheusers.h"
+#include "printtaxn.h"
+#include "database2.h"
 #include <QMessageBox>
 #include <QPrinter>
 #include <QPainter>
 #include <QPrinterInfo>
 #include <QPrintDialog>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, int user) :
     Base()
 {
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_id"] = number;
+    db2.exec("select f_tax from o_header where f_id=:f_id");
+    if (!db2.next()) {
+        message_error(QObject::tr("Not valid order id"));
+        return;
+    }
+    int fiscalnumber = db2.integer("f_tax");
+    QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
+
+    db2[":f_fiscal"] = fiscalnumber;
+    db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
+    if (!db2.next()) {
+        message_error(QObject::tr("Not valid fiscal number"));
+        return;
+    }
+    PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
+    QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
+    QString partnerTin = jo["partnerTin"].toString();
+
+
     DatabaseResult drh;
     fDbBind[":f_id"] = number;
     drh.select(fDb, "select h.f_name as hname, t.f_name as tname, concat(u.f_firstName, ' ', u.f_lastName)  as staff,\
@@ -24,7 +52,7 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
                left join r_hall h on h.f_id=oh.f_hall \
                left join r_table t on t.f_id=oh.f_table \
                left join users u on u.f_id=oh.f_staff \
-               where oh.f_id=:f_id", fDbBind);
+               where oh.f_id=:f_id ", fDbBind);
 
     if (drh.rowCount() == 0) {
         QMessageBox::warning(0, QObject::tr("Print receipt"), QObject::tr("Incorrect order number"));
@@ -37,7 +65,8 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
                from o_dish od \
                left join r_dish d on d.f_id=od.f_dish \
                where od.f_header=:f_header and od.f_state in (1, 2, 3) \
-               and (od.f_complex=0 or (od.f_complexId=od.f_complex and od.f_complex>0))", fDbBind);
+               and (od.f_complex=0 or (od.f_complexId=od.f_complex and od.f_complex>0)) \
+               order by od.f_row ", fDbBind);
 
 
     QList<PPrintScene*> lps;
@@ -64,6 +93,35 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
                                      .arg(QObject::tr("Receipt S/N "))
                                      .arg(number),
                                      &th, f))->textHeight();
+    th.setTextAlignment(Qt::AlignLeft);
+    if (fiscalnumber > 0) {
+        top += ps->addTextRect(new PTextRect(10, top, 200, rowHeight, firm, &th, f))->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Taxpayer id"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, hvhh, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Device number"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, devnum, &th, f))
+                ->textHeight();ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Serial"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, sn, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Fiscal"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, fiscal, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Receipt number"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, rseq, &th, f))
+                ->textHeight();
+        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Date"), &th, f));
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, time, &th, f))
+                ->textHeight();
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, QObject::tr("(F)"), &th, f))
+                ->textHeight();
+        if (!partnerTin.isEmpty()) {
+            ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Partner tin"), &th, f));
+            top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, partnerTin, &th, f))
+                    ->textHeight();
+        }
+    }
+
     f.setPointSize(24);
     th.setFont(f);
     th.setTextAlignment(Qt::AlignLeft);
@@ -114,8 +172,6 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
     th.setFont(f);
     ps->addTextRect(new PTextRect(10, top, 400, rowHeight, QObject::tr("Total, AMD"), &th, f));
     top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(drh.value("f_total").toDouble(), 2), &th, f))->textHeight();
-    ps->addTextRect(new PTextRect(10, top, 400, rowHeight, QObject::tr("Total, USD"), &th, f));
-    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(drh.value("f_total").toDouble() / def_usd, 2), &th, f))->textHeight();
 
     top += rowHeight;
     f.setPointSize(28);
@@ -250,7 +306,11 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
 //    }
 //    //printer.setResolution(maxRes);
     QMatrix m;
+#ifdef QT_DEBUG
+    m.scale(1, 1);
+#else
     m.scale(3, 3);
+#endif
     QPainter painter(&printer);
     painter.setMatrix(m);
     for (int i = 0; i < lps.count(); i++) {

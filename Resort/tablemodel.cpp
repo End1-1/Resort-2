@@ -66,6 +66,11 @@ void TableModel::applyFinal(WReportGrid *rg, bool clearBefore)
         fRows.append(i);
     fTableView->setModel(this);
     if (fDD.rowCount() > 0) {
+        if (fColumns.count() == 0) {
+            for (int i = 0; i < fDD.fDbRows.at(0).count(); i++) {
+                setColumn(80, "", fDD.fDefColNames[i]);
+            }
+        }
         if (fColumns.count() != fDD.fDbRows.at(0).count()) {
             qDebug() << "Stop! Columns and fields is not equal!" << fColumns.count() << fDD.fDbRows.at(0).count();
         }
@@ -464,6 +469,9 @@ void TableModel::uniqueValuesForColumn(int column, QSet<QString> &values)
 void TableModel::sumOfColumns(const QList<int> columns, QList<double> &out)
 {
     out.clear();
+    if (columns.length() == 0) {
+        return;
+    }
     int count = columns.count();
     double *values = new double[count];
     for (int i = 0; i < count; i++) {

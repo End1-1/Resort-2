@@ -4,7 +4,6 @@
 #include "base.h"
 #include "mainwindow.h"
 #include "message.h"
-#include "broadcastthread.h"
 #include "trackcontrol.h"
 #include "cacherights.h"
 #include "pprintscene.h"

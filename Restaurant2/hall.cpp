@@ -1,4 +1,5 @@
 #include "hall.h"
+#include "defrest.h"
 
 QList<HallStruct*> Hall::fHallTable;
 QMap<int, HallStruct*> Hall::fHallMap;
@@ -23,13 +24,13 @@ void Hall::init()
     fHallTable.clear();
     qDeleteAll(fTables);
     fTables.clear();
-    QString query = "select h.f_id, h.f_name, h.f_defaultMenu, h.f_itemForInvoice, h.f_receiptPrinter, "
+    QString query = QString("select h.f_id, h.f_name, h.f_defaultMenu, h.f_itemForInvoice, h.f_receiptPrinter, "
             "h.f_vatDept, h.f_noVatDept, h.f_serviceitem, h.f_servicevalue, r.f_en as f_servicename "
             "from r_hall h "
             "left join r_dish r on r.f_id=h.f_serviceitem "
-            "where h.f_showhall=1 order by h.f_name";
+            "where h.f_showhall=1 and h.f_branch=%1 order by h.f_name").arg(defrest(dr_branch));
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for (QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         HallStruct *h = new HallStruct();
         h->fId = it->value(0).toInt();
         h->fName = it->value(1).toString();
@@ -51,7 +52,7 @@ void Hall::init()
             "left join r_dish r on r.f_id=h.f_serviceitem "
             "where h.f_showBanket=1 order by h.f_name";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for (QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         HallStruct *h = new HallStruct();
         h->fId = it->value(0).toInt();
         h->fName = it->value(1).toString();
@@ -75,7 +76,7 @@ void Hall::init()
             "left join d_car_model cm on cm.f_id=c.f_model "
             "order by f_hall, f_queue ";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for (QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         TableStruct *t = new TableStruct();
         t->fId = it->value(0).toInt();
         t->fHall = it->value(1).toInt();

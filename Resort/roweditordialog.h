@@ -2,7 +2,6 @@
 #define ROWEDITORDIALOG_H
 
 #include "baseextendeddialog.h"
-#include "broadcastthread.h"
 #include "cacherights.h"
 
 class RowEditorDialog : public BaseExtendedDialog

@@ -1,67 +1,36 @@
 #include "cacherights.h"
+#include "doubledatabase.h"
+#include "message.h"
+#include "database2.h"
 
-CacheRights *CacheRights::fInstance = 0;
-QMap<int, QMap<int, int> > CacheRights::fCacheRights;
+UserPermssions *UserPermssions::fInstance= nullptr;
 
-CacheRights *CacheRights::instance()
+UserPermssions::UserPermssions(int group)
 {
-    if (fInstance == 0) {
-        fInstance = new CacheRights();
-        fCacheOne[cid_user_rights] = fInstance;
+    Database2 db;
+    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+        message_error(db.lastDbError());
+        return;
     }
-    return fInstance;
-}
-
-void CacheRights::load()
-{
-    QSqlQuery *q = prepareDb();
-    while (q->next()) {
-        CI_UserRights *c = new CI_UserRights();
-        c->fCode = q->value(0).toString();
-        c->fFlag = q->value(1).toInt() == 1;
-        fCacheRights[q->value(2).toInt()][q->value(0).toInt()] = q->value(1).toInt();
-    }
-    closeDb(q);
-}
-
-void CacheRights::clear()
-{
-    fCacheRights.clear();
-}
-
-bool CacheRights::get(int group, int code)
-{
-    if (fCacheRights.contains(group)) {
-        if (fCacheRights[group].contains(code)) {
-            return fCacheRights[group][code] == 1;
-        }
-    }
-    return false;
-}
-
-CacheRights::CacheRights() :
-    CacheBase()
-{
-    fQuery = "select f_right, f_flag, f_group from users_rights";
-    fCacheId = cid_user_rights;
-    if (fCacheRights.isEmpty()) {
-        load();
+    db[":f_group"] = group;
+    db.exec("select f_right from users_rights where f_group=:f_group and f_flag=1");
+    while (db.next()) {
+        fPermissions.append(db.integer("f_right"));
     }
 }
 
-CacheRights::~CacheRights()
+void UserPermssions::init(int group)
 {
-    fInstance = 0;
+    if (fInstance) {
+        fInstance->deleteLater();
+    }
+    fInstance = new UserPermssions(group);
 }
 
-CI_UserRights *CacheRights::get(const QString &code)
+bool UserPermssions::checkpermission(int permission)
 {
-    Q_UNUSED(code)
-    return 0;
-}
-
-CI_UserRights *CacheRights::get(int code)
-{
-    Q_UNUSED(code)
-    return 0;
+    if (fInstance->fGroup == 1) {
+        return true;
+    }
+    return fInstance->fPermissions.contains(permission);
 }

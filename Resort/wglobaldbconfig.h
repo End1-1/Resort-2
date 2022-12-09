@@ -20,7 +20,6 @@ protected:
     virtual void setupTab();
 private slots:
     void hall(CI_RestHall *c);
-    void on_btnSave_clicked();
 
     void on_lwHost_clicked(const QModelIndex &index);
 
@@ -32,19 +31,11 @@ private slots:
 
     void on_btnSaveDatabases_clicked();
 
-    void on_btnSaveReports_clicked();
-
     void on_btnRemoveStation_clicked();
 
     void on_btnRefreshReset_clicked();
 
     void on_btnRemoveRest_clicked();
-
-    void on_btnRefreshTax_clicked();
-
-    void on_tblTax_cellDoubleClicked(int row, int column);
-
-    void on_btnSaveApplication_clicked();
 
     void on_chShowLogs_clicked(bool checked);
 
@@ -54,8 +45,6 @@ private:
     void getCompSettings();
     void getAccess();
     void getDatabases();
-    void getMonthly();
-    void getTax();
 };
 
 #endif // WGLOBALDBCONFIG_H

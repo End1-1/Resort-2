@@ -16,11 +16,11 @@
 #include "recouponseria.h"
 #include "ftstorereport.h"
 #include "fdiscounttotal.h"
+#include "fattendance.h"
 #include "fearningswash.h"
-#include "fbreakfast.h"
 #include "fsalesbycar.h"
 #include "fbalanceoncard.h"
-#include "roles.h"
+#include "fcouponsservice.h"
 #include "fcash.h"
 #include "fstoreentry.h"
 #include "fpartnersdebt.h"
@@ -34,8 +34,10 @@
 #include "frestsalebystore.h"
 #include "recashdesk.h"
 #include "fcouponstatistics.h"
+#include "fasexportsale.h"
 #include "ecomboboxcompleter.h"
 #include "fonlinebreakfast.h"
+#include "wfilterbase.h"
 #include "recarclient.h"
 #include "fstoredocs.h"
 #include "wcustomreports.h"
@@ -45,7 +47,7 @@
 #include "fstoremovement.h"
 #include "wusersgroups.h"
 #include "storedoc.h"
-#include "vauchers.h"
+#include "fcoupondocuments.h"
 #include "cachebase.h"
 #include "fsalarybyemployes.h"
 #include "fonlinerest.h"
@@ -63,12 +65,10 @@
 #include "ftrackchanges.h"
 #include "restorepartner.h"
 #include "cacherights.h"
-#include "fcallhistory.h"
 #include "dlguserpasswords.h"
 #include "wglobaldbconfig.h"
 #include "rerestdishcomplex.h"
 #include "frestauranttotal.h"
-#include "fevents.h"
 #include "fcashreportsummary.h"
 #include "fcommonfilterbydate.h"
 #include "fcashreport.h"
@@ -179,46 +179,7 @@ void MainWindow::login()
     fDb.setConnectionParams(db.dc_main_host, db.dc_main_path, db.dc_main_user, db.dc_main_pass);
     fDb.open();
     fSocket.disconnectFromHost();
-    fSocket.connectToHost(AppConfig::fServerAddress, 1250);
-    if (fSocket.waitForConnected()) {
-        QString data = QString("{\"db\" : {\"database\" : \"%1\", \"user\" : \"%2\", \"password\" : \"password\"}, "
-                               "\"command\" : {\"command\": \"identify\"}}")
-                .arg(fDb.fDb.databaseName())
-                .arg(WORKING_USERNAME);
-        int size = data.toUtf8().length();
-        QByteArray dataToSend;
-        dataToSend.append(reinterpret_cast<const char*>(&size), sizeof(size));
-        dataToSend.append(data.toUtf8(), data.toUtf8().length());
-        fSocket.write(dataToSend, dataToSend.length());
-        fSocket.flush();
-    } else {
-        message_error(QString("Cannot connect to broadcast server, force logout")
-                      + QString("<br>") + fSocket.errorString() +
-                      "<br>Host: " + AppConfig::fServerAddress);
-        logout();
-        return;
-    }
-    fSocketDraft.disconnectFromHost();
-    fSocketDraft.setProxy(QNetworkProxy::NoProxy);
-    fSocketDraft.connectToHost(AppConfig::fServerAddress, 1250);
-    if (fSocketDraft.waitForConnected()) {
-        QString data = QString("{\"db\" : {\"database\" : \"%1\", \"user\" : \"%2\", \"password\" : \"password\"}, "
-                               "\"command\" : {\"command\": \"draft\"}}")
-                .arg(fDb.fDb.databaseName())
-                .arg(WORKING_USERNAME);
-        int size = data.toUtf8().length();
-        QByteArray dataToSend;
-        dataToSend.append(reinterpret_cast<const char*>(&size), sizeof(size));
-        dataToSend.append(data.toUtf8(), data.toUtf8().length());
-        fSocketDraft.write(dataToSend, dataToSend.length());
-        fSocketDraft.flush();
-    } else {
-        message_error(QString("Cannot connect to broadcast server, force logout")
-                      + QString("<br>") + fSocket.errorString()
-                      + "<br>Host: " + AppConfig::fServerAddress);
-        logout();
-        return;
-    }
+
     buildMenuOfRole();
     CacheBase<CI_Base>::setDatabase(fDb.db());
     enableMainMenu(true);
@@ -228,6 +189,7 @@ void MainWindow::login()
         message_error(tr("Receipt voucher id not defined"));
         return;
     }
+    setWindowTitle(fPreferences.getLocal("dbname").toString());
 }
 
 void MainWindow::addTabWidget(BaseWidget *widget)
@@ -346,136 +308,95 @@ void MainWindow::disableMainMenu()
 
 void MainWindow::buildMenuOfRole()
 {
-    switch (WORKING_USERROLE) {
-    case role_admin:
-        if (fMenu.isEmpty()) {
+    UserPermssions::init(WORKING_USERGROUP);
             QList<QAction*> a1;
-            a1.append(ui->actionRestaurant);
-            a1.append(ui->actionEarnings_carwash);
-            a1.append(ui->actionEarnings_waitroom);
-            a1.append(ui->actionEarnings_shop);
-            a1.append(ui->actionSales_by_storages);
-            a1.append(ui->actionAccounts);
-            a1.append(ui->actionReport_by_payment);
-            a1.append(ui->actionSales_report_by_cars);
-            a1.append(ui->actionSalary_by_employes);
+            if (check_permission(pr_view_revenue)) {
+                a1.append(ui->actionRestaurant);
+                a1.append(ui->actionEarnings_carwash);
+                a1.append(ui->actionEarnings_waitroom);
+                a1.append(ui->actionEarnings_shop);
+                a1.append(ui->actionArmSoftExport);
+                a1.append(ui->actionSales_by_storages);
+                a1.append(ui->actionReport_by_payment);
+                a1.append(ui->actionSales_report_by_cars);
+            }
+            if (check_permission(pr_cashbox)) {
+                a1.append(ui->actionAccounts);
+            }
             fMenu.insert(0, a1);
+
             QList<QAction*> a2;
-            a2.append(ui->actionNew_store_document);
-            a2.append(ui->actionNew_store_checkpoint);
-            a2.append(ui->actionDocuments_list);
-            a2.append(ui->actionStore_movement);
-            a2.append(ui->actionT_Report);
-            a2.append(ui->actionStore_entries);
-            a2.append(ui->actionMaterials_in_the_store);
-            a2.append(ui->actionPartners_debts);
-            a2.append(ui->actionCalculate_output_of_restaurant);
+            if (check_permission(pr_edit_store_doc)) {
+                a2.append(ui->actionNew_store_document);
+                a2.append(ui->actionNew_store_checkpoint);
+            }
+            if (check_permission(pr_store_doc_journal)) {
+                a2.append(ui->actionDocuments_list);
+                a2.append(ui->actionStore_movement);
+                a2.append(ui->actionT_Report);
+                a2.append(ui->actionStore_entries);
+                a2.append(ui->actionMaterials_in_the_store);
+                a2.append(ui->actionPartners_debts);
+            }
+            if (check_permission(pr_make_store_output_of_sale)) {
+                a2.append(ui->actionCalculate_output_of_restaurant);
+            }
             fMenu.insert(1, a2);
+
             QList<QAction*> a3;
-            a3.append(ui->actionType_of_dishes);
-            a3.append(ui->actionCarwash_index);
-            a3.append(ui->actionWaiting_room_index);
-            a3.append(ui->actionShop_index);
-            a3.append(ui->actionStorage_goods_index);
-            a3.append(ui->actionComplex_dish);
+            if (check_permission(pr_goods_list)) {
+                a3.append(ui->actionType_of_dishes);
+                a3.append(ui->actionCarwash_index);
+                a3.append(ui->actionWaiting_room_index);
+                a3.append(ui->actionShop_index);
+                a3.append(ui->actionStorage_goods_index);
+                a3.append(ui->actionComplex_dish);
+            }
             fMenu.insert(2, a3);
+
             QList<QAction*> a4;
-            a4.append(ui->actionCoupons);
-            a4.append(ui->actionCoupons_seria);
-            a4.append(ui->actionCoupons_sales);
-            a4.append(ui->actionCoupons_statistics);
-            a4.append(ui->actionModels_of_cars);
-            a4.append(ui->actionCostumers);
-            a4.append(ui->actionCostumers_cars);
-            a4.append(ui->actionCoupons_one_off);
-            a4.append(ui->actionCoupons_present);
-            a4.append(ui->actionDiscount_report);
-            a4.append(ui->actionDiscount_total);
-            a4.append(ui->actionBalance_of_the_cards);
+            if (check_permission(pr_coupon_view)) {
+                a4.append(ui->actionCoupons);
+                a4.append(ui->actionCoupons_seria);
+                a4.append(ui->actionCoupons_sales);
+                a4.append(ui->actionCoupons_statistics);
+                a4.append(ui->actionModels_of_cars);
+                a4.append(ui->actionCostumers);
+                a4.append(ui->actionCostumers_cars);
+                a4.append(ui->actionCoupons_one_off);
+                a4.append(ui->actionCoupons_present);
+                a4.append(ui->actionDiscount_report);
+                a4.append(ui->actionDiscount_total);
+                a4.append(ui->actionBalance_of_the_cards);
+                a4.append(ui->actionCoupon_of_service);
+                a4.append(ui->actionCoupon_of_service_documents);
+                a4.append(ui->actionCoupon_of_service_actions);
+            }
             fMenu.insert(3, a4);
+
             QList<QAction*> a5;
-            a5.append(ui->actionHakk);
-            a5.append(ui->actionTables);
-            a5.append(ui->actionStorages);
-            a5.append(ui->actionAccounts_2);
-            a5.append(ui->actionCash_operation);
-            a5.append(ui->actionPartners_2);
-            a5.append(ui->actionUsers_groups);
-            a5.append(ui->actionUsers);
-            a5.append(ui->actionGlobal_config);
+            if (check_permission(pr_indexes)) {
+                a5.append(ui->actionHakk);
+                a5.append(ui->actionTables);
+                a5.append(ui->actionStorages);
+                a5.append(ui->actionAccounts_2);
+                a5.append(ui->actionCash_operation);
+                a5.append(ui->actionPartners_2);
+                a5.append(ui->actionUsers_groups);
+                a5.append(ui->actionUsers);
+            }
+            if (check_permission(pr_global_config)) {
+                a5.append(ui->actionGlobal_config);
+            }
             fMenu.insert(4, a5);
-        }
-        break;
-    case role_viewer:
-        if (fMenu.isEmpty()) {
-            QList<QAction*> a1;
-            a1.append(ui->actionRestaurant);
-            a1.append(ui->actionEarnings_carwash);
-            a1.append(ui->actionEarnings_waitroom);
-            a1.append(ui->actionEarnings_shop);
-            a1.append(ui->actionSales_by_storages);
-            a1.append(ui->actionAccounts);
-            a1.append(ui->actionReport_by_payment);
-            a1.append(ui->actionSales_report_by_cars);
-            a1.append(ui->actionSalary_by_employes);
-            fMenu.insert(0, a1);
-            QList<QAction*> a2;
-            a2.append(ui->actionDocuments_list);
-            a2.append(ui->actionStore_movement);
-            a2.append(ui->actionT_Report);
-            a2.append(ui->actionStore_entries);
-            a2.append(ui->actionMaterials_in_the_store);
-            a2.append(ui->actionPartners_debts);
-            a2.append(ui->actionCalculate_output_of_restaurant);
-            fMenu.insert(1, a2);
-            QList<QAction*> a3;
-            a3.append(ui->actionType_of_dishes);
-            a3.append(ui->actionCarwash_index);
-            a3.append(ui->actionWaiting_room_index);
-            a3.append(ui->actionShop_index);
-            a3.append(ui->actionStorage_goods_index);
-            a3.append(ui->actionComplex_dish);
-            fMenu.insert(2, a3);
-            QList<QAction*> a4;
-            a4.append(ui->actionCoupons);
-            a4.append(ui->actionCoupons_seria);
-            a4.append(ui->actionCoupons_sales);
-            a4.append(ui->actionCoupons_statistics);
-            a4.append(ui->actionModels_of_cars);
-            a4.append(ui->actionCostumers);
-            a4.append(ui->actionCostumers_cars);
-            a4.append(ui->actionCoupons_one_off);
-            a4.append(ui->actionCoupons_present);
-            a4.append(ui->actionDiscount_report);
-            a4.append(ui->actionDiscount_total);
-            a4.append(ui->actionBalance_of_the_cards);
-            fMenu.insert(3, a4);
-            QList<QAction*> a5;
-            a5.append(ui->actionHakk);
-            a5.append(ui->actionTables);
-            a5.append(ui->actionStorages);
-            a5.append(ui->actionAccounts_2);
-            a5.append(ui->actionCash_operation);
-            a5.append(ui->actionPartners_2);
-            a5.append(ui->actionUsers_groups);
-            a5.append(ui->actionUsers);
-            fMenu.insert(4, a5);
-        }
-        break;
-    case role_store:
-        QList<QAction*> a2;
-        a2.append(ui->actionNew_store_document);
-        a2.append(ui->actionNew_store_checkpoint);
-        a2.append(ui->actionDocuments_list);
-        a2.append(ui->actionStore_movement);
-        a2.append(ui->actionT_Report);
-        a2.append(ui->actionStore_entries);
-        a2.append(ui->actionMaterials_in_the_store);
-        a2.append(ui->actionPartners_debts);
-        a2.append(ui->actionCalculate_output_of_restaurant);
-        fMenu.insert(1, a2);
-        break;
-    }
+
+            QList<QAction*> a6;
+            if (check_permission(pr_attendance)){
+                a6.append(ui->actionAttendance);
+                a6.append(ui->actionSalary_by_employes);
+            }
+            fMenu.insert(5, a6);
+
 }
 
 void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
@@ -500,9 +421,7 @@ void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
 void MainWindow::dish(int t)
 {
     int ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
-    if (ot == 0) {
-        return;
-    }
+
     QString cond;
     switch (ot) {
     case 2:
@@ -528,7 +447,9 @@ void MainWindow::dish(int t)
            << 80
            << 80
            << 0
-           << 80   ;
+           << 80
+           << 0
+           << 80;
     QStringList fields;
     fields << "f_id"
            << "f_defstore"
@@ -545,6 +466,8 @@ void MainWindow::dish(int t)
            << "f_lastPrice"
            << "f_unit"
            << "f_unitName"
+           << "f_minreminder"
+           << "f_taxdebt"
               ;
     QStringList titles;
     titles << tr("Code")
@@ -562,12 +485,15 @@ void MainWindow::dish(int t)
            << tr("Input price")
            << tr("Unit code")
            << tr("Unit name")
+           << tr("Min. reminder")
+           << tr("Tax debt")
               ;
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
     QString query = "select d.f_id, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
             "d.f_en, d.f_text_en,  "
-            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName "
+            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
+            "d.f_minreminder, d.f_taxdebt "
             "from r_dish d "
             "inner join r_dish_type t on t.f_id=d.f_type "
             "inner join r_dish_part p on p.f_id=t.f_part "
@@ -970,11 +896,6 @@ void MainWindow::on_actionCash_repoort_detailed_triggered()
     FCashReport::open();
 }
 
-void MainWindow::on_actionEvent_triggered()
-{
-    FEvents::open();
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     bool canClose = true;
@@ -1044,11 +965,6 @@ void MainWindow::on_actionStatistics_triggered()
     addTab<WReportsSetOld>();
 }
 
-void MainWindow::on_actionRestaurant_online_triggered()
-{
-    FOnlineRest::openOnlineRestaurant();
-}
-
 void MainWindow::on_actionNew_store_document_triggered()
 {
     StoreDoc::openStoreDocument(0);
@@ -1077,11 +993,6 @@ void MainWindow::on_actionStore_movement_triggered()
 void MainWindow::on_actionCoupons_triggered()
 {
     RECoupon::openReport();
-}
-
-void MainWindow::on_actionOpen_breakfast_triggered()
-{
-    FOnlineBreakfast::openFilterReport<FOnlineBreakfast, WReportGrid>();
 }
 
 void MainWindow::on_actionSales_by_storages_triggered()
@@ -1152,11 +1063,6 @@ void MainWindow::on_actionCoupons_statistics_triggered()
 void MainWindow::on_actionDebts_triggered()
 {
     FDebtOfCostumers::openFilterReport<FDebtOfCostumers, WReportGrid>();
-}
-
-void MainWindow::on_actionBreakfast_report_triggered()
-{
-    FBreakfast::openFilterReport<FBreakfast, WReportGrid>();
 }
 
 void MainWindow::on_actionDiscount_report_triggered()
@@ -1270,4 +1176,29 @@ void MainWindow::on_actionShop_index_triggered()
 void MainWindow::on_actionSalary_by_employes_triggered()
 {
     FSalaryByEmployes::openFilterReport<FSalaryByEmployes, WReportGrid>();
+}
+
+void MainWindow::on_actionCoupon_of_service_triggered()
+{
+    FCouponsService::openFilterReport<FCouponsService, WReportGrid>();
+}
+
+void MainWindow::on_actionCoupon_of_service_documents_triggered()
+{
+    FCouponDocuments::openFilterReport<FCouponDocuments, WReportGrid>();
+}
+
+void MainWindow::on_tbEarning_2_clicked()
+{
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[5]);
+}
+
+void MainWindow::on_actionAttendance_triggered()
+{
+    FAttendance::openFilterReport<FAttendance, WReportGrid>();
+}
+
+void MainWindow::on_actionArmSoftExport_triggered()
+{
+    FAsExportSale::openFilterReport<FAsExportSale, WReportGrid>();
 }

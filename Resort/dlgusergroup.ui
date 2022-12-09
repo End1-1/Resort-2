@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>165</height>
+    <height>113</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,24 +16,17 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Name, en</string>
+        <string>Code</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="EQLineEdit" name="leNameAm">
        <property name="Field" stdset="0">
-        <string>f_am</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Code</string>
+        <string>f_en</string>
        </property>
       </widget>
      </item>
@@ -57,27 +50,6 @@
        </property>
        <property name="PrimaryKey" stdset="0">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Name, ru</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="EQLineEdit" name="leNameEn">
-       <property name="Field" stdset="0">
-        <string>f_en</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="EQLineEdit" name="leNameRu">
-       <property name="Field" stdset="0">
-        <string>f_ru</string>
        </property>
       </widget>
      </item>
@@ -143,8 +115,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>leNameAm</tabstop>
-  <tabstop>leNameEn</tabstop>
-  <tabstop>leNameRu</tabstop>
   <tabstop>btnOk</tabstop>
   <tabstop>btnCancel</tabstop>
  </tabstops>

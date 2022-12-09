@@ -4,7 +4,6 @@
 #include "dwselectorstorepartners.h"
 #include "dwselectorinvoiceitem.h"
 #include "dwselectorcashdoctype.h"
-#include "roles.h"
 
 #define SEL_DEBIT 1
 #define SEL_CREDIT 2
@@ -50,9 +49,8 @@ WCashEntry::WCashEntry(QWidget *parent) :
 
     on_chEnable_stateChanged(0);
     fIn = true;
-    if (WORKING_USERROLE != role_admin) {
-        ui->btnSave->setEnabled(false);
-    }
+    ui->btnSave->setEnabled(check_permission(pr_edit_cash_doc));
+
 }
 
 WCashEntry::~WCashEntry()

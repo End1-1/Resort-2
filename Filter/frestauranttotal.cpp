@@ -13,7 +13,7 @@
 #include "cacheusers.h"
 #include "cacheresttable.h"
 #include "cachepaymentmode.h"
-#include "roles.h"
+#include "dlggetidname.h"
 #include <QPrinter>
 
 #define sn_order_state 1
@@ -27,18 +27,13 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    switch (WORKING_USERROLE) {
-    case role_admin:
+    if (check_permission(pr_remove_order)) {
         fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeOrder()), this)->setFocusPolicy(Qt::ClickFocus);
-        fReportGrid->addToolBarButton(":/images/biohazard.png", tr("Eliminate!"), SLOT(removePermanently()), this)->setFocusPolicy(Qt::ClickFocus);
-        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
-        break;
-    case role_viewer:
-        break;
-    case role_store:
-        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
-        break;
     }
+    if (check_permission(pr_make_store_output_of_sale)) {
+        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
+    }
+
     fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);
@@ -82,6 +77,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     if (ds) {
         selector(sn_dish_state, qVariantFromValue(ds));
     }
+    connect(ui->leBranch, &EQLineEdit::customButtonClicked, this, &FRestaurantTotal::branchEditDoubleClick);
 
 
     fReportGrid->fIncludes.clear();
@@ -207,6 +203,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "oh.f_datecash"
            << "oh.f_dateopen"
            << "oh.f_dateclose"
+           << "br.f_name"
            << "oh.f_hall"
            << "h.f_name"
            << "oh.f_table"
@@ -259,6 +256,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["oh.f_dateclose"] = tr("Closed");
     rg->fFieldTitles["oh.f_hall"] = tr("Hall code");
     rg->fFieldTitles["h.f_name"] = tr("Hall");
+    rg->fFieldTitles["br.f_name"] = tr("Branch");
     rg->fFieldTitles["oh.f_table"] = tr("Table code");
     rg->fFieldTitles["t.f_name"] = tr("Table");
     rg->fFieldTitles["oh.f_staff"] = tr("Staff code");
@@ -306,7 +304,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "f_city_ledger cl"
            << "f_payment_type pm"
            << "o_dish_state ds"
-           << "o_header_payment op";
+           << "o_header_payment op"
+           << "r_branch br";
     rg->fJoins.clear();
     rg->fJoins << "from" //od
           << "inner" //oh
@@ -322,6 +321,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
           << "inner" //pm
           << "left" //ds
           << "left" //op
+          << "left" //br
              ;
     rg->fJoinConds.clear();
     rg->fJoinConds << ""
@@ -338,6 +338,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
               << "pm.f_id=oh.f_paymentMode"
               << "ds.f_id=od.f_state"
               << "op.f_id=oh.f_id"
+              << "br.f_id=oh.f_branch"
                  ;
 
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
@@ -358,7 +359,6 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         where += " and oh.f_staff in (" + ui->leStaff->fHiddenText + ") ";
     }
     if (!countAmount) {
-        where += " and od.f_dish<>558 ";
         if (!ui->leDishState->text().isEmpty()) {
             where += " and od.f_state in (" + ui->leDishState->fHiddenText + ") ";
         }
@@ -386,12 +386,21 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if (!ui->leDish->text().isEmpty()) {
         where += " and od.f_dish in (" + ui->leDish->fHiddenText + ") ";
     }
+    if (ui->leTax->text() == "+") {
+        where += " and oh.f_tax>0 ";
+    }
+    if (ui->leTax->text() == "-") {
+        where += " and oh.f_tax=0 ";
+    }
+    if (!ui->leBranch->isEmpty()) {
+        where += " and oh.f_branch in(" + ui->leBranch->fHiddenText + ") ";
+    }
 
 
     if (!ui->lePMComment->text().isEmpty()) {
         where += " and upper(oh.f_paymentModeComment) like '" + ui->lePMComment->text() + "%' ";
     }
-    if (!ui->leTax->text().isEmpty()) {
+    if (!ui->leTax->text().isEmpty() && ui->leTax->text() != "+" && ui->leTax->text() != "-") {
         where += " and oh.f_tax in (" + ui->leTax->text() + ") ";
     }
     if (ui->rbNoShowComplex->isChecked() && !countAmount) {
@@ -476,6 +485,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             rg->fModel->setBackgroundColor(i, currColor);
         }
     }
+    rg->fTableView->resizeColumnsToContents();
 }
 
 QWidget *FRestaurantTotal::firstElement()
@@ -547,6 +557,15 @@ void FRestaurantTotal::printNewPage(int &top, int &left, int &page, PPrintPrevie
             page++;
         }
         top = 20;
+    }
+}
+
+void FRestaurantTotal::branchEditDoubleClick(bool v)
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_branch, this)) {
+        ui->leBranch->setText(name);
+        ui->leBranch->fHiddenText = id;
     }
 }
 

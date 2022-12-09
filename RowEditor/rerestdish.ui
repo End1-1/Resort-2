@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>638</width>
-    <height>471</height>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,23 +26,19 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="5" column="1" colspan="3">
-          <widget class="EQTextEdit" name="teAm">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>40</height>
-            </size>
+         <item row="0" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leCode">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="PrimaryKey" stdset="0">
+            <bool>true</bool>
            </property>
            <property name="Field" stdset="0">
-            <string>f_text_en</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1" colspan="3">
-          <widget class="EQLineEdit" name="leQueue">
-           <property name="Field" stdset="0">
-            <string>f_queue</string>
+            <string>f_id</string>
            </property>
           </widget>
          </item>
@@ -53,10 +49,104 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_12">
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>Queue</string>
+            <string>Description, am</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="3">
+          <widget class="QPushButton" name="btnBgColor">
+           <property name="minimumSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../Resort/res.qrc">
+             <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leQueue">
+           <property name="Field" stdset="0">
+            <string>f_queue</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1" colspan="2">
+          <widget class="EColorLineEdit" name="leBgColor">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="Field" stdset="0">
+            <string>f_bgColor</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="EQLineEdit" name="leDefStore">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>Default store</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2" colspan="2">
+          <widget class="EQLineEdit" name="leUnitName">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leADGT">
+           <property name="Field" stdset="0">
+            <string>f_adgt</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="EQLineEdit" name="leDefStoreName">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Last input price</string>
            </property>
           </widget>
          </item>
@@ -69,6 +159,74 @@
             <enum>Qt::NoFocus</enum>
            </property>
            <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Unit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>ArmSoft code</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1" colspan="2">
+          <widget class="EColorLineEdit" name="leTextColor">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="Field" stdset="0">
+            <string>f_textColor</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>Min. reminder</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>ADGT</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="1">
+          <widget class="QCheckBox" name="chAutoPrintTax">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="EQLineEdit" name="leTypeCode">
+           <property name="maximumSize">
+            <size>
+             <width>70</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="Field" stdset="0">
+            <string>f_type</string>
+           </property>
+           <property name="ShowButton" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -99,87 +257,47 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_18">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>Default store</string>
+            <string>Code</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
+         <item row="12" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leLastPrice"/>
+         </item>
+         <item row="13" column="0">
+          <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>Type</string>
+            <string>Automaticaly print tax</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="2" colspan="2">
-          <widget class="EQLineEdit" name="leUnitName">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="3">
-          <widget class="EQLineEdit" name="leCode">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="PrimaryKey" stdset="0">
-            <bool>true</bool>
-           </property>
+         <item row="11" column="1" colspan="3">
+          <widget class="EQLineEdit" name="leArmSoft">
            <property name="Field" stdset="0">
-            <string>f_id</string>
+            <string>f_as</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_11">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Text color</string>
+            <string>Name</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="3">
-          <widget class="QPushButton" name="btnBgColor">
-           <property name="minimumSize">
-            <size>
-             <width>25</width>
-             <height>25</height>
-            </size>
-           </property>
+         <item row="5" column="1" colspan="3">
+          <widget class="EQTextEdit" name="teAm">
            <property name="maximumSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>16777215</width>
+             <height>40</height>
             </size>
            </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../Resort/res.qrc">
-             <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Background color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Description, am</string>
+           <property name="Field" stdset="0">
+            <string>f_text_en</string>
            </property>
           </widget>
          </item>
@@ -193,129 +311,57 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>Unit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Code</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="EQLineEdit" name="leTypeCode">
-           <property name="maximumSize">
-            <size>
-             <width>70</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="Field" stdset="0">
-            <string>f_type</string>
-           </property>
-           <property name="ShowButton" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>Automaticaly print tax</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="1">
-          <widget class="QCheckBox" name="chAutoPrintTax">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1" colspan="3">
-          <widget class="EQLineEdit" name="leADGT">
-           <property name="Field" stdset="0">
-            <string>f_adgt</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1" colspan="2">
-          <widget class="EColorLineEdit" name="leBgColor">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="Field" stdset="0">
-            <string>f_bgColor</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>ADGT</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1" colspan="3">
-          <widget class="EQLineEdit" name="leArmSoft">
-           <property name="Field" stdset="0">
-            <string>f_as</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="EQLineEdit" name="leDefStore">
+         <item row="14" column="1">
+          <widget class="EQLineEdit" name="leMinReminder">
            <property name="maximumSize">
             <size>
              <width>100</width>
              <height>16777215</height>
             </size>
            </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Name</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1" colspan="2">
-          <widget class="EColorLineEdit" name="leTextColor">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
            <property name="Field" stdset="0">
-            <string>f_textColor</string>
+            <string>f_minreminder</string>
            </property>
           </widget>
          </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_15">
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Last input price</string>
+            <string>Queue</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Text color</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Background color</string>
            </property>
           </widget>
          </item>
          <item row="10" column="0">
-          <widget class="QLabel" name="label_14">
+          <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>ArmSoft code</string>
+            <string>Fiscal debt</string>
            </property>
           </widget>
          </item>
-         <item row="11" column="1" colspan="3">
-          <widget class="EQLineEdit" name="leLastPrice"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="EQLineEdit" name="leDefStoreName">
-           <property name="enabled">
-            <bool>false</bool>
+         <item row="10" column="1">
+          <widget class="EQLineEdit" name="leFiscalDebt">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="Field" stdset="0">
+            <string>f_taxdebt</string>
            </property>
           </widget>
          </item>
@@ -745,23 +791,38 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>leDefStore</tabstop>
   <tabstop>leTypeCode</tabstop>
   <tabstop>leNameAm</tabstop>
+  <tabstop>leUnitCode</tabstop>
   <tabstop>teAm</tabstop>
   <tabstop>leBgColor</tabstop>
   <tabstop>leTextColor</tabstop>
   <tabstop>leQueue</tabstop>
-  <tabstop>btnBgColor</tabstop>
-  <tabstop>leTypeName</tabstop>
-  <tabstop>btnCancel</tabstop>
+  <tabstop>leADGT</tabstop>
+  <tabstop>leFiscalDebt</tabstop>
+  <tabstop>leArmSoft</tabstop>
+  <tabstop>leLastPrice</tabstop>
+  <tabstop>chAutoPrintTax</tabstop>
+  <tabstop>leMinReminder</tabstop>
+  <tabstop>btnRemove</tabstop>
   <tabstop>btnOk</tabstop>
-  <tabstop>btnTextColor</tabstop>
-  <tabstop>leCode</tabstop>
-  <tabstop>tabPage</tabstop>
-  <tabstop>tblMenu</tabstop>
-  <tabstop>tblModifier</tabstop>
-  <tabstop>btnAddModifier</tabstop>
+  <tabstop>btnCancel</tabstop>
+  <tabstop>leUnitName</tabstop>
   <tabstop>btnLoadImage</tabstop>
+  <tabstop>btnAddModifier</tabstop>
+  <tabstop>leDefStoreName</tabstop>
+  <tabstop>tabPage</tabstop>
+  <tabstop>tblModifier</tabstop>
+  <tabstop>btnTrack</tabstop>
+  <tabstop>btnAppendRecipe</tabstop>
+  <tabstop>btnRemoveRecipeRow</tabstop>
+  <tabstop>btnClearRecipe</tabstop>
+  <tabstop>chContainItself</tabstop>
+  <tabstop>tblRecipe</tabstop>
+  <tabstop>leReadScancode</tabstop>
+  <tabstop>lstScancodes</tabstop>
+  <tabstop>tblMenu</tabstop>
  </tabstops>
  <resources>
   <include location="../Resort/res.qrc"/>

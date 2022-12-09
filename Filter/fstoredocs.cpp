@@ -2,7 +2,8 @@
 #include "ui_fstoredocs.h"
 #include "wreportgrid.h"
 #include "storedoc.h"
-#include "roles.h"
+#include "cachecashdoc.h"
+#include <QMenu>
 
 #define SEL_DOC_STATE 1
 #define SEL_DOC_TYPE 2
@@ -14,11 +15,8 @@ FStoreDocs::FStoreDocs(QWidget *parent) :
 {
     ui->setupUi(this);
     fReportGrid->setupTabTextAndIcon(tr("Documents in store"), ":/images/storage.png");
-    switch (WORKING_USERROLE) {
-    case role_admin:
-    case role_store:
+    if (check_permission(pr_edit_store_doc)) {
         fReportGrid->addToolBarButton(":/images/copy.png", tr("Copy"), SLOT(copyDoc()), this)->setFocusPolicy(Qt::NoFocus);
-        break;
     }
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClicked(QList<QVariant>)));
 
@@ -41,6 +39,8 @@ FStoreDocs::FStoreDocs(QWidget *parent) :
     fDockPartner->configure();
     fDockPartner->setSelector(ui->lePartner);
     fDockPartner->setDialog(this, SEL_PARTNER);
+
+    fReportGrid->fGridMenu->addAction(QIcon(":/garbage.png"), tr("Remove selected"), this, SLOT(removeSelected()));
 }
 
 FStoreDocs::~FStoreDocs()
@@ -136,13 +136,47 @@ void FStoreDocs::store(CI_RestStore *c)
     dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, c);
 }
 
+void FStoreDocs::removeSelected()
+{
+    QModelIndexList sr = fReportGrid->fTableView->selectionModel()->selectedIndexes();
+    QSet<int> rows;
+    for (QModelIndex &mi: sr) {
+        rows.insert(mi.row());
+    }
+    QList<int> rl = rows.toList();
+    if (rl.count() > 0) {
+        if (message_confirm_tr("Confirm to delete document") != QDialog::Accepted) {
+            return;
+        }
+    } else {
+        return;
+    }
+    for (int i = rl.count() - 1; i > -1; i--) {
+        int docnum = fReportGrid->fModel->data(i, 0).toInt();
+
+        fDbBind[":f_doc"] = docnum;
+        fDb.select("delete from r_body where f_doc=:f_doc", fDbBind, fDbRows);
+
+        fDbBind[":f_id"] = docnum;
+        fDb.select("delete from r_docs where f_id=:f_id", fDbBind, fDbRows);
+
+        fDbBind[":f_docType"] = CASHDOC_STORE;
+        fDbBind[":f_docNum"] = docnum;
+        fDb.select("delete from c_cash where f_docType=:f_docType and f_docNum=:f_docNum", fDbBind, fDbRows);
+
+        fDbBind[":f_doc"] = docnum;
+        fDb.select("delete from r_store_acc where f_doc=:f_doc", fDbBind, fDbRows);
+    }
+    message_info(tr("Done"));
+}
+
 void FStoreDocs::copyDoc()
 {
     QList<QVariant> out;
     int row = fReportGrid->fillRowValuesOut(out);
     if (row < 0) {
-            message_error(tr("Nothing is seleted."));
-            return;
+        message_error(tr("Nothing is seleted."));
+        return;
     }
     StoreDoc *d = addTab<StoreDoc>();
     d->copyDoc(out.at(0).toInt());
@@ -154,13 +188,9 @@ void FStoreDocs::doubleClicked(const QList<QVariant> &row)
         message_error(tr("Nothing is seleted."));
         return;
     }
-    switch (WORKING_USERROLE) {
-    case role_admin:
-    case role_store:
-        StoreDoc *d = addTab<StoreDoc>();
-        d->loadDoc(row.at(0).toInt());
-        break;
-    }
+
+    StoreDoc *d = addTab<StoreDoc>();
+    d->loadDoc(row.at(0).toInt());
 
 }
 

@@ -46,6 +46,7 @@ private:
     void printNewPage(int &top, int &left, int &page, PPrintPreview *pp, PPrintScene *&ps, int nextHeight = 0);
 
 private slots:
+    void branchEditDoubleClick(bool v);
     void printReceipt();
     void recalculateStore();
     void removeOrder();

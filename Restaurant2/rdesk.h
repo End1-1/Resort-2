@@ -42,8 +42,6 @@ public:
     void printTotalToday();
     void printTotalYesterday();
     void printTotalAnyDay();
-    void printTax(int cashMode);
-    void printTaxDialog();
     void printReceiptByNumber();
     void voidBack();
     void printVoidReport();
@@ -62,11 +60,13 @@ public:
 protected:
     virtual void closeEvent(QCloseEvent *e);
 
+private:
+    void printCanceledOrder(int id);
+
 private slots:
     virtual void externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data);
     void socketConnected();
     virtual void connectionLost();
-
     void onBtnQtyClicked();
     void on_btnExit_clicked();
     void on_btnLanguage_clicked();
@@ -77,7 +77,6 @@ private slots:
     void on_btnTrash_clicked();
     void on_btnPayment_clicked();
     void on_btnPrint_clicked();
-    void on_btnTable_clicked();
     void on_btnComment_clicked();
     void on_btnTools_clicked();
     void on_btnCheckout_clicked();
@@ -100,6 +99,7 @@ private slots:
     void on_btnDiss50_clicked();
     void on_btnHallVIP_clicked();
     void on_btnShop_clicked();
+    void on_btnSetRecoverFrom_clicked();
 
 private:
     Ui::RDesk *ui;
@@ -124,7 +124,7 @@ private:
     void setupType(int partId);
     void setupDish(int typeId);
     void addDishToOrder(DishStruct* d, bool counttotal);
-    void addDishToTable(OrderDishStruct *od, bool counttotal);
+    void addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice);
     void updateDish(OrderDishStruct *od);
     double countTotal();
     void countDish(OrderDishStruct *d);
@@ -142,8 +142,8 @@ private:
     void updateDishQtyHistory(OrderDishStruct *od);
     void updateTableInfo();
     void manualdisc(double val, int costumer);
-    void logtime(const QString &msg, int elapsed);
     void repaintTables();
+    void setRecoverFrom(int from);
 
 signals:
     void dataReady(const QByteArray &);

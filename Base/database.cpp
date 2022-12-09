@@ -64,13 +64,15 @@ int Database::query(const QString &sql, QMap<QString, QVariant> &bindValues)
     if (!q.prepare(sql)) {
         logError(q);
         bindValues.clear();
+        Q_ASSERT(false);
         return -1;
     }
-    for (QMap<QString, QVariant>::const_iterator it = bindValues.begin(); it != bindValues.end(); it++)
+    for (QMap<QString, QVariant>::const_iterator it = bindValues.constBegin(); it != bindValues.constEnd(); it++)
         q.bindValue(it.key(), it.value());
     bindValues.clear();
     if (!q.exec()) {
         logError(q);
+        Q_ASSERT(false);
         return -1;
     }
     logQuery(q);
