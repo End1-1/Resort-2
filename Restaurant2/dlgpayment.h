@@ -14,7 +14,7 @@ class DlgPayment : public BaseExtendedDialog
 public:
     explicit DlgPayment(QWidget *parent = 0);
     ~DlgPayment();
-    static bool payment(int order);
+    static bool payment(int order, int hallid);
     virtual void accept();
     virtual void reject();
 
@@ -31,17 +31,21 @@ private slots:
     void on_btnPrintTax_clicked();
     void on_leDiscount_returnPressed();
     void on_leCard_textChanged(const QString &arg1);
-
     void on_btnTaxPayerId_clicked();
+    void on_btnCouponService_clicked(bool checked);
 
 private:
     Ui::DlgPayment *ui;
     int fOrder;
+    int fHall;
+    QString fDefaultFiscalMachine;
     bool fUpdateHeader;
     void calcCash();
     void calcCard();
     int fCountId;
     bool fCanReject;
+    QMap<QString, QMap<QString, QVariant> > fFiscalMachines;
+    void readFiscalMachines();
 };
 
 #endif // DLGPAYMENT_H

@@ -28,6 +28,8 @@ private slots:
     void on_deDate_dateChanged(const QDate &date);
     void on_btnCopyFromReal_clicked();
 
+    void on_btnPrint_clicked();
+
 private:
     Ui::DlgSalary *ui;
     bool fDay;

@@ -14,8 +14,6 @@ class DlgReservation : public BaseExtendedDialog
 public:
     explicit DlgReservation(QWidget *parent = 0);
     ~DlgReservation();
-    void loadRoom();
-    void loadCL();
     void loadCars();
     void loadEmployes();
     int fItemCode;

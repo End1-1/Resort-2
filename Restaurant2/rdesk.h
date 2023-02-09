@@ -33,6 +33,7 @@ public:
     void showHideRemovedItems();
     void setOrderComment();
     void removeOrder();
+    void removeOrderByNumber();
     void showTableOrders();
     void showMyTotal();
     void initialCash();
@@ -43,10 +44,8 @@ public:
     void printTotalYesterday();
     void printTotalAnyDay();
     void printReceiptByNumber();
-    void voidBack();
     void printVoidReport();
     void complimentary();
-    void changePassword();
     void openTools();
     void closeDay();
     void salary();
@@ -62,8 +61,10 @@ protected:
 
 private:
     void printCanceledOrder(int id);
+    void startService();
 
 private slots:
+    void timeout();
     virtual void externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data);
     void socketConnected();
     virtual void connectionLost();
@@ -86,7 +87,6 @@ private slots:
     void on_btnDishDown_clicked();
     void on_btnOrdDown_clicked();
     void on_btnOrdUp_clicked();
-    void on_btnSetRoom_clicked();
     void on_btnComplex_clicked();
     void on_tblTables_itemClicked(QTableWidgetItem *item);
     void on_btnPayment_2_clicked();
@@ -101,25 +101,26 @@ private slots:
     void on_btnShop_clicked();
     void on_btnSetRecoverFrom_clicked();
 
+    void on_btnPrintMultipleFiscal_clicked();
+
 private:
     Ui::RDesk *ui;
     static QMap<int, DishStruct*> fQuickDish;
     TrackControl *fTrackControl;
     TableStruct *fTable;
     HallStruct *fHall;
+    int fTimerCounter;
     User *fStaff;
     bool fCanClose;
     bool fShowRemoved;
     int fCurrentHall;
     int fMenu;
-    int fCloseTimeout;
     DishesTable fDishTable;
     int fCarId;
     QString fCarModel;
     QString fCarGovNum;
     int fCostumerId;
     QList<int> fMessages;
-    int right(int right, int &trackUser);
     void setBtnMenuText();
     void setupType(int partId);
     void setupDish(int typeId);

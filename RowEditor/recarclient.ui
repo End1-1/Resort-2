@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>352</height>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -199,6 +199,16 @@
    <item row="7" column="0" colspan="3">
     <widget class="QWidget" name="widget_3" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="EQLineEdit" name="leVisits"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="EQLineEdit" name="leValue">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
@@ -206,18 +216,18 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="EQLineEdit" name="leVisits"/>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_8">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>Value</string>
+         <string>Value (old)</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="EQLineEdit" name="leValue"/>
+      <item row="2" column="1">
+       <widget class="EQLineEdit" name="leItems"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_9">
@@ -226,8 +236,19 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="EQLineEdit" name="leItems"/>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Balance</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="EQLineEdit" name="leBalance">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

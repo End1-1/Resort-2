@@ -4,6 +4,7 @@
 #include "dwselectorcar.h"
 #include "dlggposorderinfo.h"
 #include "dwselectordiscounttype.h"
+#include "database2.h"
 
 #define SEL_CAR 1
 #define SEL_DISC_TYPE 2
@@ -42,6 +43,22 @@ void RECarClient::selector(int number, const QVariant &value)
         dockResponse<CI_DiscountType, CacheDiscountType>(ui->leDiscTypeCode, ui->leDiscTypeName, value.value<CI_DiscountType*>());
         break;
     }
+    }
+}
+
+void RECarClient::setValues()
+{
+    RowEditorDialog::setValues();
+    Database2 db;
+    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+        message_error(db.lastDbError());
+        return;
+    }
+    db[":f_code"] = ui->leCardcode->text();
+    db.exec("select sum(f_amount) as f_amount from d_gift_cart_use where f_code=:f_code");
+    ui->leBalance->setText("0");
+    if (db.next()) {
+        ui->leBalance->setDouble(db.doubleValue("f_amount"));
     }
 }
 

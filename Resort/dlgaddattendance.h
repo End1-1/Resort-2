@@ -23,7 +23,6 @@ private:
     Ui::DlgAddAttendance *ui;
 
 private slots:
-    void branchDoubleClicked(bool v);
     void user(CI_User *u);
     void userGroup(CI_UsersGroups* u);
     void on_btnAdd_clicked();

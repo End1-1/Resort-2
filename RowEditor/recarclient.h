@@ -15,6 +15,7 @@ public:
     explicit RECarClient(QList<QVariant> &values, QWidget *parent = 0);
     ~RECarClient();
     virtual void selector(int number, const QVariant &value);
+    virtual void setValues() override;
     static void openReport(const QString &num);
     static void openReport1();
     static void openReport2();

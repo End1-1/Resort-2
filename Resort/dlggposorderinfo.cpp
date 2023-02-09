@@ -8,8 +8,10 @@
 #include "cacheinvoiceitem.h"
 #include "paymentmode.h"
 #include "dlgtracking.h"
+#include "database2.h"
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QInputDialog>
 
 DlgGPOSOrderInfo::DlgGPOSOrderInfo(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -45,7 +47,7 @@ void DlgGPOSOrderInfo::setOrder(const QString &id)
         ui->tblData->addButton(i, 7, SLOT(showDishHistory(int)), this, QIcon(":/images/update.png"));
     }
     fDbBind[":f_header"] = id;
-    fDb.select("select oh.f_dateCash, u.f_username, oh.f_paymentMode, oh.f_paymentModeComment from o_header oh "
+    fDb.select("select oh.f_dateCash, u.f_username, oh.f_paymentMode, oh.f_paymentModeComment, oh.f_tax from o_header oh "
                "inner join users u on u.f_id=oh.f_staff "
                "where oh.f_id=:f_header", fDbBind, fDbRows);
     if (fDbRows.count() == 0) {
@@ -55,6 +57,7 @@ void DlgGPOSOrderInfo::setOrder(const QString &id)
     ui->deDate->setDate(fDbRows.at(0).at(0).toDate());
     ui->leStaff->setText(fDbRows.at(0).at(1).toString());
     ui->lePaymentComment->setText(fDbRows.at(0).at(3).toString());
+    ui->leFiscal->setText(fDbRows.at(0).at(4).toString());
     CI_PaymentMode *pm = CachePaymentMode::instance()->get(fDbRows.at(0).at(2).toString());
     if (pm) {
         dockResponse<CI_PaymentMode, CachePaymentMode>(ui->lePayment, pm);
@@ -128,7 +131,7 @@ void DlgGPOSOrderInfo::on_btnPrint_clicked()
     if (pd.exec() != QDialog::Accepted) {
         return;
     }
-    PPrintReceipt::printOrder(p.printerName(), ui->leOrder->text(), WORKING_USERID);
+    PPrintReceipt::printOrder(p.printerName(), ui->leOrder->text().toInt(), WORKING_USERID);
 }
 
 void DlgGPOSOrderInfo::on_btnPrintTax_clicked()
@@ -150,4 +153,22 @@ void DlgGPOSOrderInfo::on_btnPrintTax_clicked()
 void DlgGPOSOrderInfo::on_btnTracking_clicked()
 {
     DlgTracking::showTracking(TRACK_REST_ORDER, ui->leOrder->text());
+}
+
+void DlgGPOSOrderInfo::on_btnSetFiscalNumber_clicked()
+{
+    bool ok;
+    int num = QInputDialog::getInt(this, tr("Fiscal"), "", 0, 0, 2147483647, 1, &ok);
+    if (!ok) {
+        return;
+    }
+    Database2 db;
+    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+        message_error(db.lastDbError());
+        return;
+    }
+    ui->leFiscal->setText(QString::number(num));
+    db[":f_id"] = ui->leOrder->text().toInt();
+    db[":f_tax"] = ui->leFiscal->text().toInt();
+    db.exec("update o_header set f_tax=:f_tax where f_id=:f_id");
 }

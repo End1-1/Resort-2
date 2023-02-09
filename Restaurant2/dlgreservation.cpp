@@ -20,81 +20,6 @@ DlgReservation::~DlgReservation()
     delete ui;
 }
 
-void DlgReservation::loadRoom()
-{
-    fMode = 1;
-    ui->tblItem->setVisible(true);
-    ui->tblData->setColumnCount(7);
-    Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
-                                0, 80, 300, 200, 100, 50, 300);
-    Utils::tableSetHeaderCaptions(ui->tblData, ui->tblData->columnCount(),
-                                  tr("Reserve id"), tr("Room"), tr("Guest"),
-                                  tr("Departure"), tr("Pax"), tr("Nat"), tr("Remarks"));
-    QString query = "select r.f_id, r.f_room, concat(g.f_title, ' ', g.f_firstName, ' ', g.f_lastName), \
-            r.f_endDate, r.f_man + r.f_woman + r.f_child + r.f_baby, g.f_nation, r.f_remarks \
-            from f_reservation r \
-            inner join f_guests g on g.f_id=r.f_guest \
-            where r.f_state=1 "
-            "order by r.f_room ";
-    QSqlQuery *q = fDb.select(query);
-    if (!q) {
-        return;
-    }
-    while (q->next()) {
-        int row = ui->tblData->rowCount();
-        ui->tblData->setRowCount(row + 1);
-        for (int i = 0; i < ui->tblData->columnCount(); i++) {
-            ui->tblData->setItem(row, i, new QTableWidgetItem(q->value(i).toString()));
-        }
-    }
-    query = "select o.f_item, i.f_" + def_lang + " from o_reserve_item o "
-            "inner join f_invoice_item i on i.f_id=o.f_item ";
-    QMap<QString, QVariant> map;
-    q = fDb.select(q, query, map);
-    if (!q) {
-        return;
-    }
-    int col;
-    ui->tblItem->setRowCount(1);
-    while (q->next()) {
-        col = ui->tblItem->columnCount();
-        ui->tblItem->setColumnCount(col + 1);
-        QTableWidgetItem *item = new QTableWidgetItem(q->value(1).toString());
-        item->setData(Qt::UserRole, q->value(0));
-        ui->tblItem->setItem(0, col, item);
-    }
-    if (ui->tblItem->columnCount() > 0) {
-        ui->tblItem->setCurrentCell(0, 0);
-        fItemCode = ui->tblItem->item(0, 0)->data(Qt::UserRole).toInt();
-    }
-    delete q;
-}
-
-void DlgReservation::loadCL()
-{
-    fMode = 2;
-    ui->tblData->setColumnCount(2);
-    Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
-                                100, 400);
-    Utils::tableSetHeaderCaptions(ui->tblData, ui->tblData->columnCount(),
-                                  tr("City ledger"), tr("Name"));
-    QString query = "select f_id, f_name from f_city_ledger ";
-    fDbBind[":f_dateTo"] = WORKING_DATE;
-    QSqlQuery *q = 0;
-    q = fDb.select(q, query, fDbBind);
-    if (!q) {
-        return;
-    }
-    while (q->next()) {
-        int row = ui->tblData->rowCount();
-        ui->tblData->setRowCount(row + 1);
-        for (int i = 0; i < ui->tblData->columnCount(); i++) {
-            ui->tblData->setItem(row, i, new QTableWidgetItem(q->value(i).toString()));
-        }
-    }
-    delete q;
-}
-
 void DlgReservation::loadCars()
 {
     fMode = 3;
@@ -128,7 +53,7 @@ void DlgReservation::loadEmployes()
                                 0, 400);
     Utils::tableSetHeaderCaptions(ui->tblData, ui->tblData->columnCount(),
                                   tr("Code"), tr("Name"));
-    QString query = "select f_id, concat(f_firstName, ' ', f_lastName) from users order by 2";
+    QString query = "select f_id, concat(f_firstName, ' ', f_lastName) from users where f_state=1 order by 2";
     QSqlQuery *q = 0;
     q = fDb.select(q, query, fDbBind);
     if (!q) {

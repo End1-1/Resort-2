@@ -25,6 +25,8 @@ private slots:
     void on_btnPrintTax_clicked();
     void on_btnTracking_clicked();
 
+    void on_btnSetFiscalNumber_clicked();
+
 private:
     Ui::DlgGPOSOrderInfo *ui;
     void countTotal();

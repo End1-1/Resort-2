@@ -17,7 +17,9 @@ DlgPayment::DlgPayment(QWidget *parent) :
     ui->setupUi(this);
     fUpdateHeader = false;
     fCanReject = true;
+    ui->btnPrintTax->setChecked(true);
     ui->btnPrintTax->setStyleSheet("QPushButton:checked {background-color:green};");
+    ui->btnCouponService->setStyleSheet("QPushButton:checked {background-color:green};");
 }
 
 DlgPayment::~DlgPayment()
@@ -25,11 +27,13 @@ DlgPayment::~DlgPayment()
     delete ui;
 }
 
-bool DlgPayment::payment(int order)
+bool DlgPayment::payment(int order, int hallid)
 {
     bool result;
     DlgPayment *d = new DlgPayment();
     d->fOrder = order;
+    d->fHall = hallid;
+    d->readFiscalMachines();
     DatabaseResult dr;
     d->fDbBind[":f_id"] = order;
     dr.select(d->fDb, "select f_servicevalue from o_header where f_id=:f_id", d->fDbBind);
@@ -82,6 +86,15 @@ bool DlgPayment::payment(int order)
         d->ui->leCouponNumber->setProperty("cart", code);
     }
 
+    db2[":f_id"] = order;
+    db2.exec("select * from o_header where f_id=:f_id");
+    db2.next();
+    d->ui->leFiscalNumber->setText(db2.string("f_tax"));
+    if (d->ui->leFiscalNumber->asInt() > 0) {
+        d->ui->btnPrintTax->setEnabled(false);
+        d->ui->btnPrintTax->setChecked(false);
+    }
+
     result = d->exec() == QDialog::Accepted;
     delete d;
     return result;
@@ -117,7 +130,7 @@ void DlgPayment::on_btnOk_clicked()
 
     QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
     if (ui->btnPrintTax->isChecked()) {
-        QSettings s(QString("%1\\fiscal.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
+        QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
         PrintTaxN pn(s.value("ip").toString(),
                      s.value("port").toInt(),
                      s.value("password").toString(),
@@ -130,7 +143,7 @@ void DlgPayment::on_btnOk_clicked()
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt "
+        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id "
                 "from o_dish od "
                 "left join r_dish d on d.f_id=od.f_dish "
                 "where od.f_header=:f_header and od.f_state=:f_state ");
@@ -176,8 +189,9 @@ void DlgPayment::on_btnOk_clicked()
             return;
         }
     }
-    fDbBind[":f_cash"] = ui->leCash->asDouble();
+    fDbBind[":f_cash"] = ui->btnCouponService->isChecked() ? 0 : ui->leCash->asDouble();
     fDbBind[":f_card"] = ui->leCard->asDouble();
+    fDbBind[":f_couponservice"] = ui->btnCouponService->isChecked() ? ui->leCash->asDouble() : 0;
     fDbBind[":f_coupon"] = ui->leCouponAmount->asDouble();
     fDbBind[":f_discount"] = ui->leDiscountAmount->asDouble();
     fDbBind[":f_couponSeria"] = ui->leCouponSerial->text();
@@ -258,10 +272,41 @@ void DlgPayment::calcCard()
     }
 }
 
+void DlgPayment::readFiscalMachines()
+{
+    QSettings s(QString("%1\\fiscal.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
+    QStringList groups = s.childGroups();
+    for (const QString &g: qAsConst(groups)) {
+        ui->cbFiscalMachine->addItem(g);
+        s.beginGroup(g);
+        if (s.value("default").toBool()) {
+            fDefaultFiscalMachine = g;
+        }
+        QStringList keys = s.childKeys();
+        for (const QString &k: keys) {
+            fFiscalMachines[g][k] = s.value(k);
+        }
+        s.endGroup();
+    }
+    ui->cbFiscalMachine->setCurrentIndex(-1);
+    for (QMap<QString, QMap<QString, QVariant> >::const_iterator it = fFiscalMachines.constBegin(); it != fFiscalMachines.constEnd(); it++) {
+        if (it.value()["hall"].toInt() == fHall) {
+            ui->cbFiscalMachine->setCurrentIndex(ui->cbFiscalMachine->findText(it.key()));
+            return;
+        }
+    }
+    if (ui->cbFiscalMachine->count() == 1) {
+        ui->cbFiscalMachine->setCurrentIndex(0);
+    }
+    if (ui->cbFiscalMachine->currentIndex() == -1 && !fDefaultFiscalMachine.isEmpty()) {
+        ui->cbFiscalMachine->setCurrentIndex(ui->cbFiscalMachine->findText(fDefaultFiscalMachine));
+    }
+}
+
 void DlgPayment::on_btnDept_clicked()
 {
     float num = 0;
-    if (RNumbers::getNumber(num, 0, this)) {
+    if (RNumbers::getFloat(num, 0, "ԳՈՒՄԱՐ", this)) {
         if (num > ui->leCash->asInt()) {
             message_error(tr("Incorrect amount"));
             return;
@@ -294,7 +339,7 @@ void DlgPayment::on_btnCouponNumber_clicked()
         return;
     }
     float num = 0;
-    if (RNumbers::getNumber(num, 0, this)) {
+    if (RNumbers::getFloat(num, 0, "ԿՏՐՈՆԻ ԿՈԴ", this)) {
         ui->leCouponNumber->setText(QString::number(num, 'f', 0));
     }
     DatabaseResult dr;
@@ -415,6 +460,7 @@ void DlgPayment::on_leDiscount_returnPressed()
             } else {
                 ui->leCouponNumber->setProperty("card", QString("%1,%2").arg(ui->leCouponNumber->property("card").toString(), code));
             }
+            ui->btnPrintTax->setChecked(false);
             return;
         } else {
             message_info(tr("Cart amount spent"));
@@ -553,14 +599,43 @@ void DlgPayment::on_leCard_textChanged(const QString &arg1)
 //        ui->btnPrintTax->setChecked(true);
 //        ui->btnPrintTax->setEnabled(false);
     } else {
-        ui->btnPrintTax->setEnabled(true);
+    //\    ui->btnPrintTax->setEnabled(true);
     }
 }
 
 void DlgPayment::on_btnTaxPayerId_clicked()
 {
     QString num;
-    if (RNumbers::getString(num, this)) {
+    if (RNumbers::getString(num, "ԳՆՈՐԴԻ ՀՎՀՀ", this)) {
         ui->leTaxpayerId->setText(QString("%1").arg(num));
     }
+}
+
+void DlgPayment::on_btnCouponService_clicked(bool checked)
+{
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_order"] = fOrder;
+    if (checked) {
+        int debtId;
+        QString debtName;
+        if (!DlgDeptHolder::getHolder(debtId, debtName)) {
+            return;
+        }
+        db2[":f_costumer"] = debtId;
+        ui->leDeptHolder->fHiddenText = QString::number(debtId);
+        ui->leDeptHolder->setText(debtName);
+        ui->btnPrintTax->setChecked(false);
+        ui->btnCash->click();
+    } else {
+        db2[":f_costumer"] = 0;
+        ui->leDeptHolder->fHiddenText.clear();
+        ui->leDeptHolder->clear();
+    }
+    db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
+
+    db2[":f_couponservice"] = checked ? 1 : 0;
+    db2.update("o_header", "f_id", fOrder);
+    ui->btnPrintTax->setChecked(!checked);
 }

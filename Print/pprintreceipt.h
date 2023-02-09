@@ -6,8 +6,8 @@
 class PPrintReceipt : public Base
 {
 public:
-    PPrintReceipt(const QString &printerName, const QString &number, int user);
-    static void printOrder(const QString &printerName, const QString &number, int user);
+    PPrintReceipt(const QString &printerName, int number, int user);
+    static void printOrder(const QString &printerName, int number, int user);
 };
 
 #endif // PPRINTRECEIPT_H

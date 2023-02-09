@@ -216,7 +216,8 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     rp.fDbBind[":f_state"] = ORDER_STATE_CLOSED;
     rp.fDbBind[":f_branch"] = defrest(dr_branch).toInt();
     dr.select(rp.fDb, "select sum(p.f_cash) as f_cash, sum(p.f_card) as f_card, "
-              "sum(p.f_coupon) as f_coupon, sum(p.f_debt) as f_debt, sum(p.f_discount) as f_discount "
+              "sum(p.f_coupon) as f_coupon, sum(p.f_debt) as f_debt, sum(p.f_discount) as f_discount, "
+              "sum(p.f_couponservice) as f_couponservice "
               "from o_header_payment p "
               "left join o_header h on h.f_id=p.f_id "
               "where h.f_state=:f_state and h.f_dateCash=:f_dateCash and h.f_branch=:f_branch ", rp.fDbBind);
@@ -247,14 +248,24 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         ps = new PPrintScene(Portrait);
         lps.append(ps);
     }
-    ps->addTextRect(10, top, 680, rowHeight, tr("Coupon"), &trl);
 
+    ps->addTextRect(10, top, 680, rowHeight, "Նվեր քարտ", &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_coupon").toString(), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
         top = 10;
         ps = new PPrintScene(Portrait);
         lps.append(ps);
     }
+
+    ps->addTextRect(10, top, 680, rowHeight, "Ավտոլվացման կտրոն", &trl);
+    QString finalCoupoService = dr.value("f_couponservice").toString();
+    top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_couponservice").toString(), &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
+    }
+
     ps->addTextRect(10, top, 680, rowHeight, tr("Debt"), &trl);
     top += ps->addTextRect(10, top,  680, rowHeight, dr.value("f_debt").toString(), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
@@ -338,6 +349,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
                                                                +drFinalWash.value("f_card").toDouble()
                                                                +drFinalWash.value("f_debt").toDouble()
                                                                +drFinalWash.value("f_coupon").toDouble()
+                                                               +str_float(finalCoupoService)
                                                                , 2), &trr)->textHeight();
     if (top > sizePortrait.height() - 200) {
         top = 10;
@@ -369,6 +381,14 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
             ps = new PPrintScene(Portrait);
             lps.append(ps);
         }
+    }
+
+    ps->addTextRect(10, top, 680, rowHeight, "Ավտոլվացման կտրոն", &trl);
+    top += ps->addTextRect(10, top,  680, rowHeight, finalCoupoService, &trr)->textHeight();
+    if (top > sizePortrait.height() - 200) {
+        top = 10;
+        ps = new PPrintScene(Portrait);
+        lps.append(ps);
     }
 
     ps->addTextRect(10, top, 680, rowHeight, tr("Debt"), &trl);

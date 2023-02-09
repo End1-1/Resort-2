@@ -17,31 +17,47 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, int user) :
+PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
     Base()
 {
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2[":f_id"] = number;
-    db2.exec("select f_tax from o_header where f_id=:f_id");
+    db2.exec("select * from o_header where f_id=:f_id");
     if (!db2.next()) {
         message_error(QObject::tr("Not valid order id"));
         return;
     }
     int fiscalnumber = db2.integer("f_tax");
+    int orderstate = db2.integer("f_state");
     QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
-
-    db2[":f_fiscal"] = fiscalnumber;
-    db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
-    if (!db2.next()) {
-        message_error(QObject::tr("Not valid fiscal number"));
-        return;
+    QString partnerTin;
+    if (fiscalnumber > 0) {
+        db2[":f_fiscal"] = fiscalnumber;
+        db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
+        if (!db2.next()) {
+            message_error(QObject::tr("Not valid fiscal number"));
+            return;
+        }
+        PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
+        QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
+        partnerTin = jo["partnerTin"].toString();
     }
-    PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
-    QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
-    QString partnerTin = jo["partnerTin"].toString();
 
+    QString costumer;
+    db2[":f_order"] = number;
+    db2.exec("select * from o_car where f_order=:f_order");
+    if (db2.next()) {
+        int costname = db2.integer("f_costumer");
+        if (costname > 0) {
+            db2[":f_id"] = costname;
+            db2.exec("select * from o_debt_holder where f_id=:f_id");
+            if (db2.next()) {
+                costumer = db2.string("f_name");
+            }
+        }
+    }
 
     DatabaseResult drh;
     fDbBind[":f_id"] = number;
@@ -83,12 +99,15 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
     ps->addItem(logo);
     logo->setRect(QRectF(150, top, 400, 250));
     top += 250;
-    f.setPointSize(40);
+    f.setPointSize(30);
     th.setFont(f);
     top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight + 10, drh.value("hname").toString(), &th, f))->textHeight();
     top += 20;
     f.setPointSize(30);
     th.setFont(f);
+    if (orderstate == ORDER_STATE_REMOVED) {
+        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "ՉԵՂԱՐԿՎԱԾ", &th))->textHeight();
+    }
     top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1 %2")
                                      .arg(QObject::tr("Receipt S/N "))
                                      .arg(number),
@@ -231,7 +250,7 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
 
     bool voida = false;
     for (int i = 0; i < drd.rowCount(); i++) {
-        if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE) {
+        if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE && drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_NOSTORE) {
             continue;
         }
         voida = true;
@@ -239,37 +258,15 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
     if (voida) {
         top += (rowHeight * 3);
         top += ps->addTextRect(10, top, 600, rowHeight, QObject::tr("****VOID****"), &th)->textHeight();
+        f.setPointSize(22);
+        f.setBold(false);
+        th.setFont(f);
         for (int i = 0; i < drd.rowCount(); i++) {
-            if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE) {
+            if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE && drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_NOSTORE) {
                 continue;
             }
             ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(drd.value(i, "f_qty").toDouble(), 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, drd.value(i, "f_" + def_lang).toString(), &th, f));
-            top += ps->addTextRect(new PTextRect(400, top, 200, rowHeight, float_str(drd.value(i, "f_total").toDouble(), 2), &th, f))->textHeight();
-            if (top > sizePortrait.height()  - 200) {
-                top = 10;
-                ps = new PPrintScene(Portrait);
-                lps.append(ps);
-            }
-        }
-    }
-
-    bool mistakea = false;
-    for (int i = 0; i < drd.rowCount(); i++) {
-        if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE) {
-            continue;
-        }
-        mistakea = true;
-    }
-    if (mistakea) {
-        top += rowHeight;
-        top += ps->addTextRect(10, top, 600, rowHeight, QObject::tr("****MISTAKE****"), &th)->textHeight();
-        for (int i = 0; i < drd.rowCount(); i++) {
-            if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_NOSTORE) {
-                continue;
-            }
-            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(drd.value(i, "f_qty").toDouble(), 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, drd.value(i, "f_" + def_lang).toString(), &th, f));
+            top += ps->addTextRect(new PTextRect(110, top, 390, rowHeight, drd.value(i, "f_" + def_lang).toString(), &th, f))->textHeight();
             top += ps->addTextRect(new PTextRect(400, top, 200, rowHeight, float_str(drd.value(i, "f_total").toDouble(), 2), &th, f))->textHeight();
             if (top > sizePortrait.height()  - 200) {
                 top = 10;
@@ -322,10 +319,10 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, const QString &number, 
 
     fDbBind[":f_print"] = drh.value("f_print").toInt() + 1;
     fDb.update("o_header", fDbBind, where_id(ap(number)));
-    TrackControl::insert(TRACK_REST_ORDER, "Print receipt", "", "", "", number);
+    TrackControl::insert(TRACK_REST_ORDER, "Print receipt", "", "", "", QString::number(number));
 }
 
-void PPrintReceipt::printOrder(const QString &printerName, const QString &number, int user)
+void PPrintReceipt::printOrder(const QString &printerName, int number, int user)
 {
     PPrintReceipt(printerName, number, user);
 }

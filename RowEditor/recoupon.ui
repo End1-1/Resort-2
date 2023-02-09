@@ -14,6 +14,23 @@
    <string>Coupons generator</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="EDateEdit" name="deValid">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="1" colspan="2">
     <widget class="EQLineEdit" name="lePrefix">
      <property name="maximumSize">
@@ -24,34 +41,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Type</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Start at</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Serial</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="EQLineEdit" name="leSerial">
-     <property name="maximumSize">
-      <size>
-       <width>80</width>
-       <height>16777215</height>
-      </size>
      </property>
     </widget>
    </item>
@@ -62,23 +55,10 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Valid to</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="EQComboBox" name="cbType">
-     <property name="maximumSize">
-      <size>
-       <width>80</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="Cache" stdset="0">
-      <number>104</number>
+   <item row="1" column="2">
+    <widget class="EQLineEdit" name="leSeriaName">
+     <property name="enabled">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -93,43 +73,6 @@
     <widget class="QLabel" name="label_8">
      <property name="text">
       <string>Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leStart">
-     <property name="maximumSize">
-      <size>
-       <width>80</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leEnd">
-     <property name="maximumSize">
-      <size>
-       <width>80</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="EDateEdit" name="deValid">
-     <property name="maximumSize">
-      <size>
-       <width>80</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="EQLineEdit" name="leSeriaName">
-     <property name="enabled">
-      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -201,9 +144,71 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Serial</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="EQLineEdit" name="leSerial">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leStart">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Valid to</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="EQComboBox" name="cbType">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="Cache" stdset="0">
+      <number>104</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leEnd">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
   <customwidget>
    <class>EQLineEdit</class>
    <extends>QLineEdit</extends>
@@ -211,11 +216,6 @@
    <slots>
     <signal>customButtonClicked(bool)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>EDateEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">edateedit.h</header>
   </customwidget>
   <customwidget>
    <class>EQComboBox</class>

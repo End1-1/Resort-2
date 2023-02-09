@@ -40,8 +40,10 @@ void FCouponDocuments::apply(WReportGrid *rg)
     }
     if (ui->cbPartner->currentData().toInt() == 0) {
         query.replace("%partner%", "");
+        query.replace("%partner1%", " t.f_partner>0");
     } else {
         query.replace("%partner%", QString(" and d.f_partner=%1").arg(ui->cbPartner->currentData().toInt()));
+        query.replace("%partner1%", QString(" t.f_partner=%1").arg(ui->cbPartner->currentData().toInt()));
     }
     rg->fModel->clearColumns();
     rg->fModel->setSqlQuery(query);
@@ -51,6 +53,9 @@ void FCouponDocuments::apply(WReportGrid *rg)
     rg->setTblTotalData(fReportQuery->sumColumns, vals);
     for (QMap<int, int>::const_iterator it = fReportQuery->columnsWidths.constBegin(); it != fReportQuery->columnsWidths.constEnd(); it++) {
         rg->fTableView->setColumnWidth(it.key(), it.value());
+    }
+    if (fReportQuery->columnsWidths.isEmpty()) {
+        rg->fTableView->resizeColumnsToContents();
     }
 }
 

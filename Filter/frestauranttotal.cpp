@@ -120,6 +120,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(op.f_discount)"] = false;
     fReportGrid->fIncludes["sum(op.f_debt)"] = false;
     fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
+    fReportGrid->fIncludes["sum(op.f_couponservice)"] = false;
 
 }
 
@@ -154,6 +155,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         fReportGrid->fIncludes["sum(op.f_discount)"] = true;
         fReportGrid->fIncludes["sum(op.f_debt)"] = true;
         fReportGrid->fIncludes["sum(op.f_coupon)"] = true;
+        fReportGrid->fIncludes["sum(op.f_couponservice)"] = true;
     }
     rg->fFieldsWidths.clear();
 
@@ -194,6 +196,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths[tr("Debt")] = 80;
     rg->fFieldsWidths[tr("Discount")] = 80;
     rg->fFieldsWidths[tr("Coupon")] = 80;
+    rg->fFieldsWidths["Ավտոկտրոն"] = 80;
               ;
 
     rg->fFields.clear();
@@ -240,7 +243,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                         << "sum(op.f_card)"
                         << "sum(op.f_debt)"
                         << "sum(op.f_discount)"
-                        << "sum(op.f_coupon)";
+                        << "sum(op.f_coupon)"
+                        << "sum(op.f_couponservice)";
         }
     } else {
         rg->fFields
@@ -289,6 +293,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["sum(op.f_debt)"] = tr("Debt");
     rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount");
     rg->fFieldTitles["sum(op.f_coupon)"] = tr("Coupon");
+    rg->fFieldTitles["sum(op.f_couponservice)"] = "Ավտոկտրոն";
 
     rg->fTables.clear();
     rg->fTables << "o_header oh"
@@ -395,7 +400,9 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if (!ui->leBranch->isEmpty()) {
         where += " and oh.f_branch in(" + ui->leBranch->fHiddenText + ") ";
     }
-
+    if (ui->chCouponOfService->isChecked()) {
+        where += " and oh.f_couponservice=1 ";
+    }
 
     if (!ui->lePMComment->text().isEmpty()) {
         where += " and upper(oh.f_paymentModeComment) like '" + ui->lePMComment->text() + "%' ";
@@ -828,18 +835,20 @@ void FRestaurantTotal::removeOrder()
     fDbBind[":f_id"] = val.at(0);
     fDb.select("select f_discountcard, f_discount from o_header_payment where f_id=:f_id", fDbBind, fDbRows);
     double discamount = 0.0;
+    if (fDbRows.count() > 0) {
     QString disccard = fDbRows.at(0).at(0).toString();
-    if (disccard.isEmpty() == false){
-        discamount = fDbRows.at(0).at(1).toDouble();
-        fDbBind[":f_card"] = disccard;
-        fDb.select("select f_mode from d_car_client where f_card=:f_card", fDbBind, fDbRows);
-        if (fDbRows.count() > 0) {
-            QStringList params = fDbRows.at(0).at(0).toString().split(";", Qt::SkipEmptyParts);
-            if (params.count() == 4) {
-                params[2] = QString::number(params[2].toDouble() + discamount, 'f', 0);
-                fDbBind[":f_card"] = disccard;
-                fDbBind[":f_mode"] = params.join(";") + ";";
-                fDb.select("update d_car_client set f_mode=:f_mode where f_card=:f_card", fDbBind, fDbRows);
+        if (disccard.isEmpty() == false){
+            discamount = fDbRows.at(0).at(1).toDouble();
+            fDbBind[":f_card"] = disccard;
+            fDb.select("select f_mode from d_car_client where f_card=:f_card", fDbBind, fDbRows);
+            if (fDbRows.count() > 0) {
+                QStringList params = fDbRows.at(0).at(0).toString().split(";", Qt::SkipEmptyParts);
+                if (params.count() == 4) {
+                    params[2] = QString::number(params[2].toDouble() + discamount, 'f', 0);
+                    fDbBind[":f_card"] = disccard;
+                    fDbBind[":f_mode"] = params.join(";") + ";";
+                    fDb.select("update d_car_client set f_mode=:f_mode where f_card=:f_card", fDbBind, fDbRows);
+                }
             }
         }
     }

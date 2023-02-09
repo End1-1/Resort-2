@@ -94,17 +94,16 @@ void Hall::init()
 
 void Hall::refresh()
 {
-    fDbBind[":f_state"] = DISH_STATE_READY;
+    fDbBind[":f_state"] = ORDER_STATE_OPENED;
     QString query = "select t.f_id, t.f_lockHost, t.f_order, "
             "h.f_dateOpen, h.f_comment, u.f_firstName, "
-            "sum(d.f_total), c.f_govnumber, cm.f_model "
+            "h.f_total, c.f_govnumber, cm.f_model "
             "from r_table t "
             "left join o_header h on t.f_order=h.f_id "
             "left join users u on u.f_id=h.f_staff "
-            "left join o_dish d on t.f_order=d.f_header "
             "left join o_car c on t.f_order=c.f_order "
             "left join d_car_model cm on cm.f_id=c.f_model "
-            "where d.f_state=:f_state "
+            "where h.f_state=:f_state "
             "group by 1 ";
     fDb.select(query, fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {

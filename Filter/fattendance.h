@@ -27,6 +27,7 @@ private:
 private slots:
     void branchDoubleClicked(bool v);
     void newWorker();
+    void newWorkers();
     void removeWorker();
     void config();
 };

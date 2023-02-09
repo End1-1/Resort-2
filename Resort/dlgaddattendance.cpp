@@ -20,7 +20,16 @@ DlgAddAttendance::DlgAddAttendance(QWidget *parent) :
     dp->setSelector(ui->lePos);
     ui->lePos->setSelector(dp);
     connect(dp, SIGNAL(userGroup(CI_UsersGroups*)), this, SLOT(userGroup(CI_UsersGroups*)));
-    connect(ui->leBranch, &EQLineEdit::customButtonClicked, this, &DlgAddAttendance::branchDoubleClicked);
+
+    Database2 db;
+    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+        message_error(db.lastDbError());
+        return;
+    }
+    db.exec("select f_id, f_name from r_branch");
+    while (db.next()) {
+        ui->cbBranch->addItem(db.string("f_name"), db.integer("f_id"));
+    }
 }
 
 DlgAddAttendance::~DlgAddAttendance()
@@ -28,14 +37,6 @@ DlgAddAttendance::~DlgAddAttendance()
     delete ui;
 }
 
-void DlgAddAttendance::branchDoubleClicked(bool v)
-{
-    QString id, name;
-    if (DlgGetIDName::get(id, name, idname_branch, this)) {
-        ui->leBranch->setText(name);
-        ui->leBranch->fHiddenText = id;
-    }
-}
 
 void DlgAddAttendance::user(CI_User *u)
 {
@@ -56,7 +57,7 @@ void DlgAddAttendance::userGroup(CI_UsersGroups *u)
 
 void DlgAddAttendance::on_btnAdd_clicked()
 {
-    if (ui->leBranch->fHiddenText.toInt() == 0) {
+    if (ui->cbBranch->currentIndex() < 0) {
         message_error(tr("Branch was not selected"));
         return;
     }
@@ -70,7 +71,7 @@ void DlgAddAttendance::on_btnAdd_clicked()
         return;
     }
     db[":f_date"] = ui->leDate->date();
-    db[":f_branch"] = ui->leBranch->fHiddenText.toInt();
+    db[":f_branch"] = ui->cbBranch->currentData();
     db[":f_employee"] = ui->leWorker->asInt();
     db[":f_amount"] = 0;
     db.insert("salary2", fRecId);

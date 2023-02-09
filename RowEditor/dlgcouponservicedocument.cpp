@@ -139,8 +139,9 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
             }
             db[":f_id"] = d["id"];
             db[":f_trsale"] = docid;
+            db[":f_partner"] = ui->cbPartner->currentData();
             db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
-            db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount where f_id=:f_id");
+            db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, f_partner=:f_partner where f_id=:f_id");
         }
         db[":f_doc"] = docid;
         db[":f_group"] = ui->tbl->item(i, 1)->text();

@@ -31,13 +31,14 @@ INCLUDEPATH += c:/Soft/OpenSSL-Win32/include
 INCLUDEPATH += c:/Soft/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
-    ../../Cafe5/Classes/notificationwidget.cpp \
+    ../Resort/c5printing.cpp \
     ../Resort/database2.cpp \
     ../Resort/logwriter.cpp \
     ../Resort/message.cpp \
     ../Resort/storeoutput.cpp \
     branchstoremap.cpp \
     dlgcheckcard.cpp \
+    dlgprintmultiplefiscal.cpp \
     rawmessage.cpp \
     rface.cpp \
     rlogin.cpp \
@@ -106,7 +107,6 @@ SOURCES += main.cpp\
     ../Controls/eqcombobox.cpp \
     ../Cache/cachsex.cpp \
     dlgselecttaxcashmode.cpp \
-    dlgbreakfast.cpp \
     ../Base/command.cpp \
     dlgbanketitems.cpp \
     dlglist.cpp \
@@ -134,16 +134,16 @@ SOURCES += main.cpp\
     ../Base/appconfig.cpp \
     baseextendeddialog.cpp \
     c:/projects/NewTax/Src/printtaxn.cpp \
-    ../../Cafe5/Classes/c5printing.cpp \
     sslsocket.cpp
 
 HEADERS  += rface.h \
-    ../../Cafe5/Classes/notificationwidget.h \
+    ../Resort/c5printing.h \
     ../Resort/database2.h \
     ../Resort/logwriter.h \
     branchstoremap.h \
     c:/projects/NewTax/Src/printtaxn.h \
     dlgcheckcard.h \
+    dlgprintmultiplefiscal.h \
     messagelist.h \
     rawmessage.h \
     rlogin.h \
@@ -213,7 +213,6 @@ HEADERS  += rface.h \
     ../Controls/eqcombobox.h \
     ../Cache/cachsex.h \
     dlgselecttaxcashmode.h \
-    dlgbreakfast.h \
     ../Base/command.h \
     dlgbanketitems.h \
     ../Base/vauchers.h \
@@ -242,12 +241,11 @@ HEADERS  += rface.h \
     ../Base/appconfig.h \
     ../Resort/message.h \
     baseextendeddialog.h \
-     c:/projects/Cafe5/Classes/c5printing.h \
     sslsocket.h
 
 FORMS    += rface.ui \
-    ../../Cafe5/Classes/notificationwidget.ui \
     dlgcheckcard.ui \
+    dlgprintmultiplefiscal.ui \
     rlogin.ui \
     rmessage.ui \
     rdesk.ui \
@@ -266,7 +264,6 @@ FORMS    += rface.ui \
     dlgcomplexdish.ui \
     ../Print/pprintpreview.ui \
     dlgselecttaxcashmode.ui \
-    dlgbreakfast.ui \
     dlgbanketitems.ui \
     dlglist.ui \
     dlgdate.ui \
@@ -285,7 +282,8 @@ LIBS += -lVersion
 LIBS += -LC:/Soft/OpenSSL-Win64/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
-LIBS +=  -lwsock32
+LIBS += -lwsock32
+LIBS += -ladvapi32
 
 RESOURCES += \
     res.qrc

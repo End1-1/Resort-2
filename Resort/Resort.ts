@@ -685,6 +685,41 @@ name</source>
     </message>
 </context>
 <context>
+    <name>DlgAttendanceSelectWorkers</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished">-</translation>
+    </message>
+    <message>
+        <source>Ամսաթիվ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Մասնաճյուղ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Թաքցնել չնաշածները</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Worker id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished">Հաստիկ</translation>
+    </message>
+    <message>
+        <source>Worker name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DlgCashOp</name>
     <message>
         <source>Cash document</source>
@@ -920,6 +955,14 @@ name</source>
         <source>Saved</source>
         <translation>Պահպանված է</translation>
     </message>
+    <message>
+        <source>Գործընկեր</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error, partner not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DlgCouponServiceDocument</name>
@@ -1028,16 +1071,8 @@ name</source>
         <translation>Անվանում</translation>
     </message>
     <message>
-        <source>Unit</source>
-        <translation>Չափ․մ․</translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation>Գումար</translation>
-    </message>
-    <message>
-        <source>Hat</source>
-        <translation>Հատ</translation>
     </message>
     <message>
         <source>Deliver:</source>
@@ -3369,10 +3404,6 @@ ledger</source>
         <translation>Զեղչ․ գումար</translation>
     </message>
     <message>
-        <source>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Cash</source>
         <translation>Կանխիկ</translation>
     </message>
@@ -3480,6 +3511,14 @@ ledger</source>
     <message>
         <source>br.f_name</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponservice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coupon of service</source>
+        <translation type="unfinished">Կանխավճարային կտրոններ</translation>
     </message>
 </context>
 <context>
@@ -4891,10 +4930,6 @@ system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>****MISTAKE****</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>CORRECTION</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5121,10 +5156,6 @@ system</source>
         <translation>Այցելություն</translation>
     </message>
     <message>
-        <source>Value</source>
-        <translation>Առժեք</translation>
-    </message>
-    <message>
         <source>Items</source>
         <translation>Ապրանքներ</translation>
     </message>
@@ -5155,6 +5186,14 @@ system</source>
     <message>
         <source>Costumers, presend</source>
         <translation>Նվեր քարտեր</translation>
+    </message>
+    <message>
+        <source>Value (old)</source>
+        <translation>Առժեք /հին/</translation>
+    </message>
+    <message>
+        <source>Balance</source>
+        <translation>Բալանս</translation>
     </message>
 </context>
 <context>

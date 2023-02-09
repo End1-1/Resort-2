@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>529</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,16 +33,6 @@
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Cardholder</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="btnCouponSerail">
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>...</string>
         </property>
        </widget>
       </item>
@@ -277,56 +267,7 @@
          <property name="rightMargin">
           <number>0</number>
          </property>
-         <item row="1" column="4">
-          <widget class="EQLineEdit" name="leTaxpayerId">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>158</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="btnOk">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::ClickFocus</enum>
-           </property>
-           <property name="text">
-            <string>Save</string>
-           </property>
-           <property name="icon">
-            <iconset resource="res.qrc">
-             <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
+         <item row="4" column="1">
           <widget class="QPushButton" name="btnCancel">
            <property name="minimumSize">
             <size>
@@ -352,7 +293,36 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="5">
+         <item row="4" column="0">
+          <widget class="QPushButton" name="btnOk">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="text">
+            <string>Save</string>
+           </property>
+           <property name="icon">
+            <iconset resource="res.qrc">
+             <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="5" colspan="2">
+          <widget class="QComboBox" name="cbFiscalMachine"/>
+         </item>
+         <item row="1" column="6">
           <widget class="QToolButton" name="btnTaxPayerId">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -362,8 +332,24 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="4" colspan="2">
+         <item row="4" column="3">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>158</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="4" column="5" colspan="2">
           <widget class="QPushButton" name="btnPrintTax">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -397,10 +383,69 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="4" colspan="2">
+         <item row="1" column="5">
+          <widget class="EQLineEdit" name="leTaxpayerId">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
+          <widget class="QWidget" name="widget_3" native="true"/>
+         </item>
+         <item row="4" column="2">
+          <widget class="QPushButton" name="btnCouponService">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="text">
+            <string>Ծառայության կտրոն</string>
+           </property>
+           <property name="icon">
+            <iconset resource="res.qrc">
+             <normaloff>:/images/discount.png</normaloff>:/images/discount.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="EQLineEdit" name="leFiscalNumber">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
           <widget class="QLabel" name="label_12">
            <property name="text">
             <string>Taxpayer id</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="4">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>Fiscal number</string>
            </property>
           </widget>
          </item>
@@ -469,6 +514,16 @@
       </item>
       <item row="0" column="7">
        <widget class="QToolButton" name="btnCard">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="btnCouponSerail">
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>

@@ -4,10 +4,8 @@
 #include "rmessage.h"
 #include "rdesk.h"
 #include "splash.h"
-#include "dlgbreakfast.h"
 #include "cacherights.h"
 #include "rchangehall.h"
-#include "broadcastthread.h"
 #include <QPainter>
 #include <QScrollBar>
 #include <QItemDelegate>
@@ -82,8 +80,7 @@ RFace::RFace(QWidget *parent) :
     fCommand(0)
 {
     ui->setupUi(this);
-    ui->lbWorkingDate->setText(QString("%1\n%2").arg(tr("Working date"), WORKING_DATE.toString(def_date_format)));
-    ui->tblTables->setItemDelegate(new TableItemDelegate());
+
     fCurrenTableState = 0;
     fTimerCounter = 0;
     fSocket.setProxy(QNetworkProxy::NoProxy);
@@ -109,9 +106,6 @@ RFace::RFace(QWidget *parent) :
             qApp->quit();
         }
 
-        timeout();
-        connect(&fTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-        fTimer.start(2000);
     }
     fParent = this;
 
@@ -156,14 +150,6 @@ bool RFace::setup()
     s.show();
     s.setText(tr("Load hall..."));
     fHall.init();
-    int rowHeight = 60;
-    int rowCount = ui->tblTables->height() / rowHeight;
-    int delta = ui->tblTables->height() - (rowCount * rowHeight);
-    if (rowCount > 0) {
-        rowHeight += (delta / rowCount);
-    }
-    ui->tblTables->verticalHeader()->setDefaultSectionSize(rowHeight);
-    setupTables(fCurrentHall, 0);
     s.setText(tr("Load menu..."));
     DishesTable dt;
     dt.init(&s);
@@ -171,15 +157,6 @@ bool RFace::setup()
 
     s.hide();
     return true;
-}
-
-void RFace::timeout()
-{
-    fTimerCounter++;
-    if (fTimerCounter % hall_refresh_timeout == 0) {
-        fHall.refresh();
-        ui->tblTables->viewport()->update();
-    }
 }
 
 void RFace::socketReadyRead()
@@ -192,31 +169,6 @@ void RFace::socketDisconnected()
 {
     message_error(tr("Connection to the server lost. Application will quit"));
     qApp->quit();
-}
-
-void RFace::parseCommand(const QString &command)
-{
-    QJsonDocument jDoc = QJsonDocument::fromJson(command.toUtf8());
-    QJsonObject jObj = jDoc.object();
-    QString cmd = jObj.value("command").toString();
-    if (cmd == "refresh_reservations") {
-    } else if (cmd == "update_cache") {
-        int cacheId = jObj.value("cache").toInt();
-        QString item = jObj.value("item").toString();
-        CacheOne::updateCache(cacheId, item);
-    } else {
-        QVariantMap m = jObj.toVariantMap();
-        switch (m["command"].toInt()) {
-        case cmd_end_of_day:
-            message_info("Global configuration was changed. Applicationn will quit");
-            qApp->quit();
-            break;
-        case cmd_global_settings:
-            message_info("End of Day :) Application will now quit");
-            qApp->quit();
-            break;
-        }
-    }
 }
 
 void RFace::on_tableWidget_clicked(const QModelIndex &index)
@@ -249,98 +201,3 @@ User *RFace::login()
     }
 }
 
-void RFace::setupTables(int hallId, int busy)
-{
-    QList<TableStruct*> tables;
-    ui->tblTables->clearContents();
-    Hall::filterTables(hallId, busy, tables);
-    int tablesCount = tables.count();
-    Utils::setupTableFullColumnWidth(ui->tblTables, 150, tablesCount);
-    int row = 0, col = 0;
-    for (QList<TableStruct*>::const_iterator it = tables.begin(); it != tables.end(); it++) {
-        QTableWidgetItem *item = new QTableWidgetItem();
-        item->setData(Qt::UserRole, qVariantFromValue(*it));
-        ui->tblTables->setItem(row, col, item);
-        col++;
-        if (col > ui->tblTables->columnCount() - 1) {
-            col = 0;
-            row++;
-        }
-    }
-}
-
-void RFace::scrollTables(int direction)
-{
-    int value = (ui->tblTables->height() / ui->tblTables->verticalHeader()->defaultSectionSize()) - 1;
-    int currValue = ui->tblTables->verticalScrollBar()->value();
-    ui->tblTables->verticalScrollBar()->setValue(currValue + (value * direction));
-}
-
-void RFace::on_tblTables_clicked(const QModelIndex &index)
-{
-    if (!index.isValid())  {
-        return;
-    }
-    TableStruct *t = index.data(Qt::UserRole).value<TableStruct*>();
-    if (!t) {
-        return;
-    }
-    User *user = 0;
-    fTimer.stop();
-    if ((user = login())) {
-        RDesk *d = new RDesk(this);
-        d->prepareToShow();
-        d->setStaff(user);
-        t = d->loadHall(fPreferences.getDb(def_default_hall).toInt());
-        if (t && d->setup(t)) {
-            d->exec();
-            fHall.refresh();
-            ui->tblTables->viewport()->update();
-        }
-        delete d;
-    }
-    fTimer.start(2000);
-}
-
-void RFace::on_btnUp_clicked()
-{
-    scrollTables(-1);
-}
-
-void RFace::on_btnDown_clicked()
-{
-    scrollTables(1);
-}
-
-void RFace::on_btnChangeHall_clicked()
-{
-    setupTables(fCurrentHall, fCurrenTableState);
-    RChangeHall *h = new RChangeHall(this);
-    h->setup(Hall::fHallTable);
-    if (h->exec() == QDialog::Accepted)  {
-        fCurrentHall = h->hall();
-        setupTables(fCurrentHall, fCurrenTableState);
-    }
-    delete h;
-}
-
-void RFace::on_btnBreakFast_clicked()
-{
-
-}
-
-void RFace::on_btnBanket_clicked()
-{
-
-}
-
-void RFace::on_btnTools_clicked()
-{
-    User *user = 0;
-    if ((user = login())) {
-        RDesk *d = new RDesk(this);
-        d->setStaff(user);
-        d->openTools();
-        delete d;
-    }
-}

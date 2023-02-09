@@ -13,8 +13,6 @@ TEMPLATE = app
 
 RC_FILE = res.rc
 
-DEFINES += _RESORT_
-DEFINES += _HOTEL_
 DEFINES += _MODULE_=\\\"EliteCarwash\\\"
 
 SOURCES += main.cpp\
@@ -35,6 +33,7 @@ SOURCES += main.cpp\
     database2.cpp \
     dialog.cpp \
     dlgaddattendance.cpp \
+    dlgattendanceselectworkers.cpp \
     dlgconfigattendance.cpp \
     dlgcouponserviceback.cpp \
     dlgcouponservicedocumentplus.cpp \
@@ -264,7 +263,6 @@ SOURCES += main.cpp\
     ../Base/demo.cpp \
     ../Print/pprintstoredoc.cpp \
     ../Print/pprintstoreentry.cpp \
-    ../Filter/guestcheckin.cpp \
     dlgreservationguests.cpp \
     ../Base/doubledatabase.cpp \
     ../Cache/cachediscounttype.cpp \
@@ -293,6 +291,7 @@ HEADERS  += mainwindow.h \
     database2.h \
     dialog.h \
     dlgaddattendance.h \
+    dlgattendanceselectworkers.h \
     dlgconfigattendance.h \
     dlgcouponserviceback.h \
     dlgcouponservicedocumentplus.h \
@@ -524,7 +523,6 @@ HEADERS  += mainwindow.h \
     ../Base/demo.h \
     ../Print/pprintstoredoc.h \
     ../Print/pprintstoreentry.h \
-    ../Filter/guestcheckin.h \
     dlgreservationguests.h \
     ../Base/doubledatabase.h \
     ../Cache/cachediscounttype.h \
@@ -546,6 +544,7 @@ FORMS    += mainwindow.ui \
     ../RowEditor/dlgcouponservicedocument.ui \
     c5printpreview.ui \
     dlgaddattendance.ui \
+    dlgattendanceselectworkers.ui \
     dlgconfigattendance.ui \
     dlgcouponserviceback.ui \
     dlgcouponservicedocumentplus.ui \
@@ -644,7 +643,6 @@ FORMS    += mainwindow.ui \
     ../Widgets/wdate2.ui \
     dlgconfiggrid.ui \
     ../GridOptionWidgets/godaily.ui \
-    ../Filter/guestcheckin.ui \
     dlgreservationguests.ui \
     ../Filter/fdiscountfullstat.ui \
     ftstorereport.ui \

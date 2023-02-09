@@ -9,6 +9,7 @@
 #include "branchstoremap.h"
 #include "database2.h"
 #include "rmessage.h"
+#include "cacherights.h"
 #include <QApplication>
 #include <QLockFile>
 #include <QMessageBox>
@@ -87,6 +88,7 @@ int main(int argc, char *argv[])
             return 0;
         }
         __s.setValue("pin", login);
+        UserPermssions::init(u->fGroup);
 
     } else {
         return 0;

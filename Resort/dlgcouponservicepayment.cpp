@@ -49,6 +49,7 @@ void DlgCouponServicePayment::on_btnSave_clicked()
     db[":f_type"] = 4;
     db[":f_date"] = ui->leDate->date();
     db[":f_amount"] = ui->leAmount->asDouble();
+    db[":f_partner"] = ui->cbPartner->currentData();
     int docid = 0;
     db.insert("talon_documents_header", docid);
 

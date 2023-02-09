@@ -15,7 +15,6 @@ RTools::RTools(QWidget *parent) :
 void RTools::setNoTable()
 {
     ui->btnCompimentary->setEnabled(false);
-    ui->btnMoveTable->setEnabled(false);
     ui->btnRemoveOrder->setEnabled(false);
     ui->btnOrderComment->setEnabled(false);
     ui->btnShowHideRemovedItems->setEnabled(false);
@@ -93,12 +92,6 @@ void RTools::on_btnCompimentary_clicked()
     fDesk->complimentary();
 }
 
-void RTools::on_btnChangePassword_clicked()
-{
-    accept();
-    fDesk->changePassword();
-}
-
 void RTools::on_btnTotalReportAnyDay_clicked()
 {
     accept();
@@ -109,12 +102,6 @@ void RTools::on_btnPrintAnyReport_clicked()
 {
     accept();
     fDesk->printReceiptByNumber();
-}
-
-void RTools::on_btnVoidBack_clicked()
-{
-    accept();
-    fDesk->voidBack();
 }
 
 void RTools::on_btnPrintVoid_clicked()
@@ -176,4 +163,10 @@ void RTools::on_btnSalary_2_clicked()
 {
     accept();
     fDesk->employesOfDay();
+}
+
+void RTools::on_btnRemoveOrder_2_clicked()
+{
+    accept();
+    fDesk->removeOrderByNumber();
 }

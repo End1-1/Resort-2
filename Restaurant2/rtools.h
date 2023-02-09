@@ -30,10 +30,8 @@ private slots:
     void on_btnTotalReport_clicked();
     void on_btnTotalYesterday_clicked();
     void on_btnCompimentary_clicked();
-    void on_btnChangePassword_clicked();
     void on_btnTotalReportAnyDay_clicked();
     void on_btnPrintAnyReport_clicked();
-    void on_btnVoidBack_clicked();
     void on_btnPrintVoid_clicked();
     void on_btnCloseDay_clicked();
     void on_btnSalary_clicked();
@@ -44,6 +42,8 @@ private slots:
     void on_btnPrintDailySales_clicked();
     void on_btnCheckCardReg_clicked();
     void on_btnSalary_2_clicked();
+
+    void on_btnRemoveOrder_2_clicked();
 
 private:
     Ui::RTools *ui;

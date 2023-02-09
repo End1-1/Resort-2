@@ -19,6 +19,7 @@
 #include "branchstoremap.h"
 #include "rlogin.h"
 #include "rnumbers.h"
+#include "dlgprintmultiplefiscal.h"
 #include "cacherights.h"
 #include "database2.h"
 #include "logwriter.h"
@@ -46,8 +47,8 @@
 #include "rlogin.h"
 #include "databaseresult.h"
 #include "dlgdate.h"
-#include "vauchers.h"
 #include "dlgorders.h"
+#include <Windows.h>
 #include <QItemDelegate>
 #include <QPrintDialog>
 #include <QPrinter>
@@ -56,6 +57,7 @@
 #include <QScrollBar>
 #include <QInputDialog>
 #include <QJsonObject>
+#include <QTimer>
 #include <QJsonDocument>
 #include <QDir>
 
@@ -297,7 +299,7 @@ RDesk::RDesk(QWidget *parent) :
     fCanClose = false;
     fShowRemoved = false;
     fTable  = 0;
-    fCloseTimeout = 0;
+    fTimerCounter = 0;
     ui->tblType->setItemDelegate(new TypeItemDelegate());
     ui->tblDish->setItemDelegate(new DishItemDelegate(this));
     ui->tblOrder->setItemDelegate(new OrderDishDelegate());
@@ -332,6 +334,9 @@ RDesk::RDesk(QWidget *parent) :
                                       defrest(dr_s5_port).toInt(),
                                       defrest(dr_s5_user),
                                       defrest(dr_s5_pass));
+    auto *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &RDesk::timeout);
+    timer->start(3000);
 }
 
 RDesk::~RDesk()
@@ -413,9 +418,34 @@ void RDesk::setOrderComment()
 
 void RDesk::removeOrder()
 {
-    int trackUser = fStaff->fId;
-    if (!right(cr__o_cancelation, trackUser)) {
+    if (!fTable) {
         return;
+    }
+    if (fTable->fOrder == 0) {
+        return;
+    }
+    QString pwd;
+    if (RNumbers::getPassword(pwd, "ՄԵՆԵՋԵՐԻ ԳԱԽՏՆԱԲԱՌ", this) == false) {
+        return;
+    }
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_altpassword"] = pwd;
+    db2.exec("select f_id, f_group from users where f_altpassword=md5(:f_altpassword)");
+    if (db2.next() == false) {
+        message_error("Սխալ մենեջերի կոդ");
+        return;
+    }
+    int trackUser = db2.integer("f_id");
+        if (db2.integer("f_group") != 1) {
+        db2[":f_group"] = db2.integer("f_group");
+        db2[":f_right"] = pr_hall_manager;
+        db2.exec("select f_id from users_right where f_group=:f_group and f_right=:f_right and f_flag=1");
+        if (db2.next() == false) {
+            message_error("Արգելված է");
+            return;
+        }
     }
     if (message_question(tr("Confirm remove whole order")) != QDialog::Accepted) {
         return;
@@ -451,6 +481,59 @@ void RDesk::removeOrder()
     closeOrder(ORDER_STATE_REMOVED);
 }
 
+void RDesk::removeOrderByNumber()
+{
+    QString pwd;
+    if (RNumbers::getPassword(pwd, "ՄԵՆԵՋԵՐԻ ԳԱԽՏՆԱԲԱՌ", this) == false) {
+        return;
+    }
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_altpassword"] = pwd;
+    db2.exec("select f_id, f_group from users where f_altpassword=md5(:f_altpassword)");
+    if (db2.next() == false) {
+        message_error("Սխալ մենեջերի կոդ");
+        return;
+    }
+    int trackUser = db2.integer("f_id");
+        if (db2.integer("f_group") != 1) {
+        db2[":f_group"] = db2.integer("f_group");
+        db2[":f_right"] = pr_hall_manager;
+        db2.exec("select f_id from users_right where f_group=:f_group and f_right=:f_right and f_flag=1");
+        if (db2.next() == false) {
+            message_error("Արգելված է");
+            return;
+        }
+    }
+    int num = 0;
+    if (RNumbers::getInt(num, "ՊԱՏՎԵՐԻ ՀԱՄԱՐԸ", this) == false) {
+        return;
+    }
+    db2[":f_id"] = num;
+    db2.exec("select * from o_header where f_id=:f_id");
+    if (db2.next() == false) {
+        message_error("Նշված պատվերի համարը առկա չէ");
+        return;
+    }
+    if (db2.integer("f_state") != ORDER_STATE_CLOSED) {
+        message_error("Պատվերը հնարավոր չէ չեղարկել");
+        return;
+    }
+    if (message_question(tr("Confirm remove whole order")) != QDialog::Accepted) {
+        return;
+    }
+    db2[":f_id"] = num;
+    db2[":f_state"] = ORDER_STATE_REMOVED;
+    db2.exec("update o_header set f_state=:f_state where f_id=:f_id");
+    db2[":f_header"] = num;
+    db2[":f_oldstate"] = DISH_STATE_READY;
+    db2[":f_newstate"] = DISH_STATE_REMOVED_NOSTORE;
+    db2.exec("update o_dish set f_state=:f_newstate where f_state=:f_oldstate and f_header=:f_header");
+
+    PPrintReceipt::printOrder(fHall->fReceiptPrinter, num, trackUser);
+}
+
 void RDesk::showTableOrders()
 {
 
@@ -478,7 +561,7 @@ void RDesk::showMyTotal()
 void RDesk::initialCash()
 {
     float num;
-    if (RNumbers::getNumber(num, 100000, this)) {
+    if (RNumbers::getFloat(num, 100000, "ԳՈՒՄԱՐ", this)) {
         fDb.fDb.transaction();
         fDbBind[":f_date"] = fPreferences.getLocalDate(def_working_day);
         fDbBind[":f_staff"] = fStaff->fId;
@@ -568,9 +651,6 @@ void RDesk::printTotalShort()
 {
     int trackUser;
     QString userName = fStaff->fName;
-    if (!right(cr__print_reports_any_day, trackUser)) {
-        return;
-    }
     QDate date;
     if (!DlgDate::getDate(date)) {
         return;
@@ -586,9 +666,6 @@ void RDesk::printTotalToday()
 {
     int trackUser;
     QString userName = fStaff->fName;
-    if (!right(cr__o_print_reports, trackUser)) {
-        return;
-    }
     CI_User *u = CacheUsers::instance()->get(trackUser);
     if (u) {
         userName = u->fFull;
@@ -600,9 +677,6 @@ void RDesk::printTotalYesterday()
 {
     int trackUser;
     QString userName = fStaff->fName;
-    if (!right(cr__o_print_reports, trackUser)) {
-        return;
-    }
     CI_User *u = CacheUsers::instance()->get(trackUser);
     if (u) {
         userName = u->fFull;
@@ -614,9 +688,6 @@ void RDesk::printTotalAnyDay()
 {
     int trackUser;
     QString userName = fStaff->fName;
-    if (!right(cr__print_reports_any_day, trackUser)) {
-        return;
-    }
     QDate date;
     if (!DlgDate::getDate(date)) {
         return;
@@ -631,9 +702,6 @@ void RDesk::printTotalAnyDay()
 void RDesk::printReceiptByNumber()
 {
     int trackUser = fStaff->fId;
-    if (!right(cr__print_receipt_by_umber, trackUser)) {
-        return;
-    }
     QString userName = fStaff->fName;
     CI_User *u = CacheUsers::instance()->get(trackUser);
     if (u) {
@@ -641,35 +709,20 @@ void RDesk::printReceiptByNumber()
     } else {
         userName = "#Username Error";
     }
-    QString ordNum;
-    if (!DlgGetText::getText(ordNum, "")) {
+    int ordNum = 0;
+    if (!RNumbers::getInt(ordNum, "ՊԱՏՎԵՐԻ ՀԱՄԱՐԸ", this)) {
         return;
     }
-    if (ordNum.trimmed().isEmpty()) {
+    if (ordNum == 0) {
         return;
     }
     PPrintReceipt::printOrder(fHall->fReceiptPrinter, ordNum, trackUser);
 
 }
 
-void RDesk::voidBack()
-{
-    int trackUser = fStaff->fId;
-    if (!right(cr__o_cancelation, trackUser)) {
-        return;
-    }
-    DlgVoidBack::recover();
-    if (fTable) {
-        loadOrder(true);
-    }
-}
-
 void RDesk::printVoidReport()
 {
     int trackUser = fStaff->fId;
-    if (!right(cr__o_print_reports, trackUser)) {
-        return;
-    }
     DatabaseResult dr;
     fDbBind[":f_dateCash"] = WORKING_DATE;
     dr.select(fDb, "select oh.f_id, h.f_name as hname, t.f_name as tname, concat(u1.f_firstName, ' ' , u1.f_lastName) as staff, \
@@ -762,7 +815,8 @@ void RDesk::printVoidReport()
 void RDesk::complimentary()
 {
     int trackUser = fStaff->fId;
-    if (!right(cr__o_complimentary, trackUser)) {
+    if (!check_permission(pr_hall_manager)) {
+        message_error(tr("Access denied"));
         return;
     }
     QString comment, sql = "select f_id, f_name from r_complimentary_comment";
@@ -777,21 +831,6 @@ void RDesk::complimentary()
     fTable->fPaymentMode = PAYMENT_COMPLIMENTARY;
     printReceipt(true);
     closeOrder();
-}
-
-void RDesk::changePassword()
-{
-    QString login;
-    if (RLogin::getLogin(login, tr("Login"), this)) {
-        QString query = QString("update users set f_altPassword='' where f_altPassword=md5('%1')")
-                .arg(login);
-        fDb.queryDirect(query);
-        query = QString("update users set f_altPassword=md5('%1') where f_id=%2")
-                .arg(login)
-                .arg(fStaff->fId);
-        fDb.queryDirect(query);
-        message_info(tr("Your password was changed"));
-    }
 }
 
 void RDesk::openTools()
@@ -957,10 +996,6 @@ void RDesk::cardStat()
 
 void RDesk::saledItem()
 {
-    int trackUser;
-    if (!right(cr__print_reports_any_day, trackUser)) {
-        return;
-    }
     QDate date;
     if (!DlgDate::getDate(date)) {
         return;
@@ -1317,6 +1352,17 @@ void RDesk::printCanceledOrder(int id)
     changeBtnState();
 }
 
+void RDesk::timeout()
+{
+    fTimerCounter++;
+    if (fTimerCounter %3 == 0) {
+        startService();
+        if (fHall) {
+            Hall().refresh();
+        }
+    }
+}
+
 void RDesk::externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data)
 {
     qDebug() << "Incoming message " << cmd << messageId << data;
@@ -1346,7 +1392,9 @@ void RDesk::externalDataReceived(quint16 cmd, quint32 messageId, const QByteArra
         ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_on.png"));
         break;
     case op_update_tables:
-        repaintTables();
+        //repaintTables();
+        Hall().refresh();
+        ui->tblTables->viewport()->update();
         break;
     }
 }
@@ -1372,7 +1420,6 @@ void RDesk::connectionLost()
 
 void RDesk::onBtnQtyClicked()
 {
-    fCloseTimeout = 0;
     QModelIndexList sel = ui->tblOrder->selectionModel()->selectedRows();
     if (sel.count() == 0) {
         return;
@@ -1607,7 +1654,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
             so->fState = DISH_STATE_READY;
             so->fPrint1 = "";
             so->fPrint2 = "";
-            so->fStore = d->fStore;
+            so->fStore = storealias(d->fStore);
             so->fName = fHall->fServiceName;
             so->fPrice = 0;
             so->fSvcValue = 0;
@@ -1654,7 +1701,7 @@ void RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     od->fState = DISH_STATE_READY;
     od->fPrint1 = d->fPrint1;
     od->fPrint2 = d->fPrint2;
-    od->fStore = d->fStore;
+    od->fStore = storealias(d->fStore);
     od->fName = d->fName;
     od->fPrice = d->fPrice;
     od->fSvcValue = d->fId == 487 ? 0 : fHall->fServiceValue / 100;
@@ -1831,22 +1878,28 @@ bool RDesk::setTable(TableStruct *t, bool nosmile)
         }
     }
     //try lock new table
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     if (t) {
-        fDb.select(QString("select f_lockhost from r_table where f_id=%1").arg(t->fId), fDbBind, fDbRows);
-        if (fDbRows[0][0].toString().isEmpty()) {
-            fDb.select(QString("update r_table set f_lockhost='%1', f_locktime=unix_timestamp(now()) where f_id=%2")
-                       .arg(HOSTNAME, QString::number(t->fId)));
+        db2[":f_id"] = t->fId;
+        db2.exec("select f_lockhost from r_table where f_id=:f_id");
+        db2.next();
+        if (db2.string("f_lockhost").isEmpty()) {
+            db2[":f_id"] = t->fId;
+            db2[":f_lockhost"] = HOSTNAME;
+            db2.exec("update r_table set f_lockhost=:f_lockhost, f_locktime=unix_timestamp(now()) where f_id=:f_id");
         } else {
-            if (fDbRows[0][0].toString() != HOSTNAME) {
+            if (db2.string("f_lockhost") != HOSTNAME) {
                 if (!nosmile) {
                     message_error(tr("Table locked by other user"));
                 }
                 return false;
             }
         }
-        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_lockhost='%1' and f_id <>%2")
-                .arg(HOSTNAME, QString::number(t->fId));
-        fDb.queryDirect(query);
+        db2[":f_id"] = t->fId;
+        db2[":f_lockhost"] = HOSTNAME;
+        db2.exec("update r_table set f_lockTime=0, f_lockHost='' where f_lockhost=:f_lockhost and f_id <>:f_id");
     }
 
     if (fTable) {
@@ -2226,11 +2279,8 @@ void RDesk::printServiceCheck(const QString &prn, int side)
     top += 5;
     ps->addTextRect(10, top, 680, rowHeight, "_", &th);
     QPrinter printer;
-    //writelog("before set " + prn.toUpper());
     printer.setPrinterName(prn.toUpper());
-    //writelog("after set " + printer.printerName());
-    int scale = 3; //600 / printer.resolution();
-    //printer.setPrinterName("\\\\10.2.1.37\\HP LaserJet Professional P1102");
+    int scale = 3;
     QPainter painter(&printer);
     QPrintDialog pd(&printer, this);
     QMatrix m;
@@ -2320,7 +2370,8 @@ void RDesk::printReceipt(bool printModePayment)
     int trackUser = fStaff->fId;
     if (!printModePayment) {
         if (fTable->fPrint > 0) {
-            if (!right(cr__o_print_unlimited_receipt, trackUser)) {
+            if (!check_permission(pr_hall_manager)) {
+                message_error(tr("Access denied"));
                 return;
             }
         }
@@ -2365,6 +2416,20 @@ void RDesk::printReceipt(bool printModePayment)
         PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
         QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
         partnerTin = jo["partnerTin"].toString();
+    }
+
+    QString costumer;
+    db2[":f_order"] = fTable->fOrder;
+    db2.exec("select * from o_car where f_order=:f_order");
+    if (db2.next()) {
+        int costname = db2.integer("f_costumer");
+        if (costname > 0) {
+            db2[":f_id"] = costname;
+            db2.exec("select * from o_debt_holder where f_id=:f_id");
+            if (db2.next()) {
+                costumer = db2.string("f_name");
+            }
+        }
     }
 
     QList<PPrintScene*> lps;
@@ -2431,6 +2496,10 @@ void RDesk::printReceipt(bool printModePayment)
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Car"), &th, f));
         top += ps->addTextRect(new PTextRect(210, top, 400, rowHeight, fCarModel + ": " + fCarGovNum, &th, f))->textHeight();
     }
+    if (!costumer.isEmpty()) {
+        top += ps->addTextRect(new PTextRect(10, top, 400, rowHeight, costumer, &th, f))->textHeight();
+    }
+
     ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Date"), &th, f));
     top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, WORKING_DATE.toString(def_date_format), &th, f))
             ->textHeight();
@@ -2574,9 +2643,15 @@ void RDesk::printReceipt(bool printModePayment)
             top++;
         }
         if (dr.value("f_coupon").toDouble() > 0.1) {
-            ps->addTextRect(10, top, 600, rowHeight, tr("Coupon"), &th);
+            ps->addTextRect(10, top, 600, rowHeight, "Նվեր քարտ", &th);
             top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_coupon").toDouble(), 2), &thr)->textHeight();
             top += ps->addTextRect(10, top, 600, rowHeight, dr.value("f_couponSeria").toString() + "/" + dr.value("f_couponNumber").toString(), &thr)->textHeight();
+            ps->addLine(10, top, 680, top);
+            top++;
+        }
+        if (dr.value("f_couponservice").toDouble() > 0.1) {
+            ps->addTextRect(10, top, 600, rowHeight, "Ավտոլվացման կտրոն", &th);
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_couponservice").toDouble(), 2), &thr)->textHeight();
             ps->addLine(10, top, 680, top);
             top++;
         }
@@ -2920,8 +2995,6 @@ void RDesk::on_tblDish_clicked(const QModelIndex &index)
     if (!d) {
         return;
     }
-    fCloseTimeout = 0;
-    d->fStore = storealias(d->fStore);
     addDishToOrder(d, true);
     repaintTables();
 }
@@ -2962,7 +3035,7 @@ void RDesk::on_btnTrash_clicked()
     } else {
         //if od.f_complex > 0
         if (od->fQtyPrint > 0.1) {
-            if (!right(cr__o_cancelation, trackUser)) {
+            if (!check_permission(pr_hall_manager)) {
                 message_error(tr("Access denied"));
                 return;
             }
@@ -3005,8 +3078,6 @@ void RDesk::on_btnTrash_clicked()
 
 void RDesk::on_btnPayment_clicked()
 {
-    fCloseTimeout = 0;
-
     if (fTable->fHall == 1) {
         if (fCarModel.isEmpty()) {
             message_error(tr("Car model must be selected"));
@@ -3017,7 +3088,7 @@ void RDesk::on_btnPayment_clicked()
             return;
         }
     }
-    if (!DlgPayment::payment(fTable->fOrder)) {
+    if (!DlgPayment::payment(fTable->fOrder, fTable->fHall)) {
         return;
     }
     printReceipt(true);
@@ -3118,30 +3189,6 @@ void RDesk::on_btnTools_clicked()
 void RDesk::on_btnCheckout_clicked()
 {
     printReceipt(false);
-    fCloseTimeout = 0;
-}
-
-int RDesk::right(int right, int &trackUser)
-{
-    bool access = RIGHT(fStaff->fGroup, right);
-    trackUser = fStaff->fId;
-    if (!access) {
-        trackUser = 0;
-        QString login;
-        if (RLogin::getLogin(login, tr("Raise privileges"), this)) {
-            User u(login);
-            if (u.isValid()) {
-                access = RIGHT(u.fGroup, right);
-                if (access) {
-                    trackUser = u.fId;
-                }
-            }
-        }
-    }
-    if (!access) {
-        message_error(tr("Access denied"));
-    }
-    return access;
 }
 
 void RDesk::on_btnTypeUp_clicked()
@@ -3174,28 +3221,9 @@ void RDesk::on_btnOrdUp_clicked()
     ui->tblOrder->verticalScrollBar()->setValue(ui->tblOrder->verticalScrollBar()->value() - 6);
 }
 
-void RDesk::on_btnSetRoom_clicked()
-{
-    DlgReservation *d = new DlgReservation(this);
-    d->loadRoom();
-    if (d->exec() == QDialog::Accepted) {
-        fDbBind[":f_id"] = d->fReservationId;
-        fDb.select("select r.f_room, concat(g.f_title, ' ', g.f_firstName, ' ', g.f_lastName) "
-                   "from f_reservation r "
-                   "inner join f_guests g on g.f_id=r.f_guest "
-                   "where r.f_id=:f_id", fDbBind, fDbRows);
-        if (fDbRows.count() > 0) {
-            fDbBind[":f_roomComment"] = fDbRows.at(0).at(0).toString() + ", " + fDbRows.at(0).at(1).toString();
-            fTable->fRoomComment = fDbBind[":f_roomComment"].toString();
-            fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
-        }
-    }
-}
-
 void RDesk::on_btnComplex_clicked()
 {
     setComplexMode();
-    fCloseTimeout = 0;
 }
 
 void RDesk::repaintTables()
@@ -3210,15 +3238,14 @@ void RDesk::repaintTables()
             t->fAmount = "0";
         }
     }
-    fDbBind[":f_state"] = DISH_STATE_READY;
+    fDbBind[":f_state"] = ORDER_STATE_OPENED;
     QString query = "select t.f_id, t.f_lockHost, t.f_order, "
             "h.f_dateOpen, h.f_comment, u.f_firstName, "
-            "sum(d.f_total) "
+            "h.f_total "
             "from r_table t "
             "left join o_header h on t.f_order=h.f_id "
             "left join users u on u.f_id=h.f_staff "
-            "left join o_dish d on t.f_order=d.f_header "
-            "where d.f_state=:f_state and t.f_hall=" +  QString::number(fCurrentHall) +  " "
+            "where h.f_state=:f_state and t.f_hall=" +  QString::number(fCurrentHall) +  " "
             "group by 1 ";
     fDb.select(query, fDbBind, fDbRows);
     for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
@@ -3366,7 +3393,7 @@ void RDesk::on_btnSetRecoverFrom_clicked()
         return;
     }
     float num;
-    if (RNumbers::getNumber(num, 99999999.0, this)) {
+    if (RNumbers::getFloat(num, 99999999.0, "ԳՈՒՄԱՐ", this)) {
         Db b = Preferences().getDatabase(Base::fDbName);
         Database2 db2;
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
@@ -3386,4 +3413,226 @@ void RDesk::on_btnSetRecoverFrom_clicked()
         db2.update("o_header", "f_id", fTable->fOrder);
         setRecoverFrom((int) num);
     }
+}
+
+
+void RDesk::startService() {
+        SERVICE_STATUS_PROCESS ssStatus;
+        DWORD dwOldCheckPoint;
+        DWORD dwStartTickCount;
+        DWORD dwWaitTime;
+        DWORD dwBytesNeeded;
+        LPCWSTR szSvcName = L"Breeze";
+
+        // Get a handle to the SCM database.
+
+        SC_HANDLE schSCManager = OpenSCManager(
+            NULL,                    // local computer
+            NULL,                    // servicesActive database
+            SC_MANAGER_ALL_ACCESS);  // full access rights
+
+        if (NULL == schSCManager)
+        {
+            qDebug() << "OpenSCManager failed (%d)\n" << GetLastError();
+            return;
+        }
+
+        // Get a handle to the service.
+
+        SC_HANDLE schService = OpenService(
+            schSCManager,         // SCM database
+            szSvcName,            // name of service
+            SERVICE_ALL_ACCESS);  // full access
+
+        if (schService == NULL)
+        {
+            qDebug() << "OpenService failed (%d)\n" << GetLastError();
+            CloseServiceHandle(schSCManager);
+            return;
+        }
+
+        // Check the status in case the service is not stopped.
+
+        if (!QueryServiceStatusEx(
+                schService,                     // handle to service
+                SC_STATUS_PROCESS_INFO,         // information level
+                (LPBYTE) &ssStatus,             // address of structure
+                sizeof(SERVICE_STATUS_PROCESS), // size of structure
+                &dwBytesNeeded ) )              // size needed if buffer is too small
+        {
+            qDebug() << "QueryServiceStatusEx failed (%d)\n" << GetLastError();
+            CloseServiceHandle(schService);
+            CloseServiceHandle(schSCManager);
+            return;
+        }
+
+        // Check if the service is already running. It would be possible
+        // to stop the service here, but for simplicity this example just returns.
+
+        if(ssStatus.dwCurrentState != SERVICE_STOPPED && ssStatus.dwCurrentState != SERVICE_STOP_PENDING)
+        {
+            qDebug() << "Cannot start the service because it is already running\n";
+            CloseServiceHandle(schService);
+            CloseServiceHandle(schSCManager);
+            return;
+        }
+
+        // Save the tick count and initial checkpoint.
+
+        dwStartTickCount = GetTickCount();
+        dwOldCheckPoint = ssStatus.dwCheckPoint;
+
+        // Wait for the service to stop before attempting to start it.
+
+        while (ssStatus.dwCurrentState == SERVICE_STOP_PENDING)
+        {
+            // Do not wait longer than the wait hint. A good interval is
+            // one-tenth of the wait hint but not less than 1 second
+            // and not more than 10 seconds.
+
+            dwWaitTime = ssStatus.dwWaitHint / 10;
+
+            if( dwWaitTime < 1000 )
+                dwWaitTime = 1000;
+            else if ( dwWaitTime > 10000 )
+                dwWaitTime = 10000;
+
+            Sleep( dwWaitTime );
+
+            // Check the status until the service is no longer stop pending.
+
+            if (!QueryServiceStatusEx(
+                    schService,                     // handle to service
+                    SC_STATUS_PROCESS_INFO,         // information level
+                    (LPBYTE) &ssStatus,             // address of structure
+                    sizeof(SERVICE_STATUS_PROCESS), // size of structure
+                    &dwBytesNeeded ) )              // size needed if buffer is too small
+            {
+                qDebug() << "QueryServiceStatusEx failed (%d)\n" << GetLastError();
+                CloseServiceHandle(schService);
+                CloseServiceHandle(schSCManager);
+                return;
+            }
+
+            if ( ssStatus.dwCheckPoint > dwOldCheckPoint )
+            {
+                // Continue to wait and check.
+
+                dwStartTickCount = GetTickCount();
+                dwOldCheckPoint = ssStatus.dwCheckPoint;
+            }
+            else
+            {
+                if(GetTickCount()-dwStartTickCount > ssStatus.dwWaitHint)
+                {
+                    qDebug() << "Timeout waiting for service to stop\n";
+                    CloseServiceHandle(schService);
+                    CloseServiceHandle(schSCManager);
+                    return;
+                }
+            }
+        }
+
+        // Attempt to start the service.
+
+        if (!StartService(
+                schService,  // handle to service
+                0,           // number of arguments
+                NULL) )      // no arguments
+        {
+            qDebug() << "StartService failed (%d)\n" << GetLastError();
+            CloseServiceHandle(schService);
+            CloseServiceHandle(schSCManager);
+            return;
+        }
+        else printf("Service start pending...\n");
+
+        // Check the status until the service is no longer start pending.
+
+        if (!QueryServiceStatusEx(
+                schService,                     // handle to service
+                SC_STATUS_PROCESS_INFO,         // info level
+                (LPBYTE) &ssStatus,             // address of structure
+                sizeof(SERVICE_STATUS_PROCESS), // size of structure
+                &dwBytesNeeded ) )              // if buffer too small
+        {
+            qDebug() << "QueryServiceStatusEx failed (%d)\n" << GetLastError();
+            CloseServiceHandle(schService);
+            CloseServiceHandle(schSCManager);
+            return;
+        }
+
+        // Save the tick count and initial checkpoint.
+
+        dwStartTickCount = GetTickCount();
+        dwOldCheckPoint = ssStatus.dwCheckPoint;
+
+        while (ssStatus.dwCurrentState == SERVICE_START_PENDING)
+        {
+            // Do not wait longer than the wait hint. A good interval is
+            // one-tenth the wait hint, but no less than 1 second and no
+            // more than 10 seconds.
+
+            dwWaitTime = ssStatus.dwWaitHint / 10;
+
+            if( dwWaitTime < 1000 )
+                dwWaitTime = 1000;
+            else if ( dwWaitTime > 10000 )
+                dwWaitTime = 10000;
+
+            Sleep( dwWaitTime );
+
+            // Check the status again.
+
+            if (!QueryServiceStatusEx(
+                schService,             // handle to service
+                SC_STATUS_PROCESS_INFO, // info level
+                (LPBYTE) &ssStatus,             // address of structure
+                sizeof(SERVICE_STATUS_PROCESS), // size of structure
+                &dwBytesNeeded ) )              // if buffer too small
+            {
+                qDebug() << "QueryServiceStatusEx failed (%d)\n" << GetLastError();
+                break;
+            }
+
+            if ( ssStatus.dwCheckPoint > dwOldCheckPoint )
+            {
+                // Continue to wait and check.
+
+                dwStartTickCount = GetTickCount();
+                dwOldCheckPoint = ssStatus.dwCheckPoint;
+            }
+            else
+            {
+                if(GetTickCount()-dwStartTickCount > ssStatus.dwWaitHint)
+                {
+                    // No progress made within the wait hint.
+                    break;
+                }
+            }
+        }
+
+        // Determine whether the service is running.
+
+        if (ssStatus.dwCurrentState == SERVICE_RUNNING)
+        {
+            qDebug() << "Service started successfully.\n";
+        }
+        else
+        {
+            qDebug() << ("Service not started. \n")
+            << "  Current State: %d\n"  << ssStatus.dwCurrentState
+            << "  Exit Code: %d\n"      << ssStatus.dwWin32ExitCode
+            << "  Check Point: %d\n"    << ssStatus.dwCheckPoint
+            << "  Wait Hint: %d\n"      << ssStatus.dwWaitHint;
+        }
+
+        CloseServiceHandle(schService);
+        CloseServiceHandle(schSCManager);
+}
+
+void RDesk::on_btnPrintMultipleFiscal_clicked()
+{
+    DlgPrintMultipleFiscal d(this);
+    d.exec();
 }

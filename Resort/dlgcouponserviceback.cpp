@@ -55,8 +55,18 @@ void DlgCouponServiceBack::on_leCode_returnPressed()
     int r = ui->tbl->rowCount();
     ui->tbl->setRowCount(r + 1);
     ui->tbl->setItem(r, 0, new QTableWidgetItem(db.string("f_code")));
-    ui->tbl->setItem(r, 1, new QTableWidgetItem(db.string("groupname")));
-    ui->tbl->setItem(r, 2, new QTableWidgetItem(QString::number(db.doubleValue("f_price") - db.doubleValue("f_discount"))));
+    ui->tbl->setItem(r, 2, new QTableWidgetItem(db.string("groupname")));
+    ui->tbl->setItem(r, 3, new QTableWidgetItem(QString::number(db.doubleValue("f_price") - db.doubleValue("f_discount"))));
+    db[":f_id"] = db.integer("f_id");
+    db.exec("select p.f_name from talon_service t "
+           "left join talon_documents_header d on t.f_trsale=d.f_id "
+            "left join r_partners p on p.f_id=d.f_partner "
+            "where t.f_id=:f_id");
+    if (db.next() == false) {
+        message_error(tr("Error, partner not found"));
+        return;
+    }
+    ui->tbl->setItem(r, 1, new QTableWidgetItem(db.string("f_name")));
     countAmount();
 }
 

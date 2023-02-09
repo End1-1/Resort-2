@@ -20,6 +20,7 @@
 #define pr_indexes 13
 #define pr_global_config 14
 #define pr_edit_cash_doc 15
+#define pr_hall_manager 16
 
 class UserPermssions: public QObject {
     Q_OBJECT

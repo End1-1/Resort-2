@@ -9,6 +9,7 @@
 #include "cacheusers.h"
 #include "database2.h"
 #include "defrest.h"
+#include "c5printing.h"
 
 DlgSalary::DlgSalary(bool day, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -259,7 +260,7 @@ void DlgSalary::on_btnAmount_clicked()
         return;
     }
     float num = 0;
-    if (!RNumbers::getNumber(num, 1000000, this)) {
+    if (!RNumbers::getFloat(num, 1000000, "ԳՈՒՄԱՐ", this)) {
         return;
     }
     ui->tblData->setItemWithValue(rows.at(0).row(), 3, num);
@@ -281,4 +282,80 @@ void DlgSalary::on_btnCopyFromReal_clicked()
     for (int i = 0; i < ui->tblData->rowCount(); i++) {
         ui->tblData->setItemWithValue(i, 0, 0);
     }
+}
+
+void DlgSalary::on_btnPrint_clicked()
+{
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db;
+    db.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db[":f_id"] = defrest(dr_branch);
+    db.exec("select f_name from r_branch where f_id=:f_id");
+    db.next();
+    QString branchname = db.string("f_name");
+
+    C5Printing p;
+    p.setSceneParams(2000, 2700, QPrinter::Portrait);
+    QFont font(font());
+    int fontbase = 26;
+    font.setPointSize(fontbase);
+    font.setBold(true);
+    p.setFont(font);
+    p.setFontSize(fontbase + 4);
+    p.setFontBold(true);
+    p.ctext(tr("<<ԷԼԻՏ>> ԱՎՏՈԼՎԱՑՈՒՄ"));
+    p.br();
+
+    p.setFontSize(fontbase);
+    p.setFontBold(false);
+    p.ctext(tr("ԱՇԽԱՏԱՎԱՐՁԻ ՎՃԱՐՄԱՆ ՓԱՍԹԱԹՈՒՂԹ"));
+    p.br();
+    p.ctext(branchname);
+    p.setFontBold(false);
+    p.br();
+    p.ctext(ui->deDate->text());
+    p.br();
+    p.br();
+
+    QList<qreal> points;
+    points << 10 << 100 << 300 << 500 << 250 << 350;
+    QStringList vals;
+    vals << tr("NN") << tr("ՀԱՍՏԻԿ") << tr("ԱՆՈՒՆ") << tr("ԳՈՒՄԱՐ") <<  tr("ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ");
+    p.tableText(points, vals, p.fLineHeight + 30);
+    p.br(p.fLineHeight + 30);
+
+
+    db[":f_date"] = ui->deDate->date();
+    db[":f_branch"] = defrest(dr_branch);
+    db.exec("select ug.f_en as f_groupname, concat_ws(' ', u.f_lastname, u.f_firstname) as f_employeename, s.f_amount "
+            "from salary2 s "
+            "left join users u on u.f_id=s.f_employee "
+            "left join users_groups ug on ug.f_id=u.f_group "
+            "where s.f_branch=:f_branch and s.f_date=:f_date");
+
+    double total = 0;
+    int row = 1;
+    while (db.next()) {
+        total += db.doubleValue("f_amount");
+        vals.clear();
+        vals << QString::number(row++)
+             << db.string("f_groupname")
+             << db.string("f_employeename")
+             << float_str(db.doubleValue("f_amount"), 2)
+             << "";
+        p.tableText(points, vals, p.fLineHeight + 30);
+        p.br(p.fLineHeight + 30);
+    }
+    points.clear();
+    points << 910 << 250 << 350;
+    vals.clear();
+    vals << tr("ԸՆԴԱՄԵՆԸ") << float_str(total, 2);
+    p.tableText(points, vals, p.fLineHeight + 30);
+
+#ifdef QT_DEBUG
+    p.print("local", QPrinter::A4);
+#else
+    p.print("salary", QPrinter::A4);
+#endif
+
 }

@@ -6,6 +6,7 @@
 #include "database2.h"
 #include "dlgconfigattendance.h"
 #include "dlggetidname.h"
+#include "dlgattendanceselectworkers.h"
 
 FAttendance::FAttendance(QWidget *parent) :
     WFilterBase(parent),
@@ -16,6 +17,7 @@ FAttendance::FAttendance(QWidget *parent) :
     fReportQuery = new ReportQuery("attendance_1");
     if (check_permission(pr_edit_attendance_list)) {
         fReportGrid->addToolBarButton(":/images/new.png", tr("Add"), SLOT(newWorker()), this)->setFocusPolicy(Qt::NoFocus);
+        fReportGrid->addToolBarButton(":/images/new.png", "Ավելցանել ցանկով", SLOT(newWorkers()), this)->setFocusPolicy(Qt::NoFocus);
         fReportGrid->addToolBarButton(":/images/cancel.png", tr("Remove"), SLOT(removeWorker()), this)->setFocusPolicy(Qt::NoFocus);
         fReportGrid->addToolBarButton(":/images/update.png", tr("Config"), SLOT(config()), this)->setFocusPolicy(Qt::NoFocus);
     }
@@ -74,6 +76,14 @@ void FAttendance::newWorker()
     }
 }
 
+void FAttendance::newWorkers()
+{
+    DlgAttendanceSelectWorkers d(this);
+    if (d.exec() == QDialog::Accepted) {
+        apply(fReportGrid);
+    }
+}
+
 void FAttendance::removeWorker()
 {
     QModelIndexList sr = fReportGrid->fTableView->selectionModel()->selectedIndexes();
@@ -95,9 +105,23 @@ void FAttendance::removeWorker()
         return;
     }
     for (int i = rl.count() - 1; i > -1; i--) {
-        int docnum = fReportGrid->fModel->data(i, 0).toInt();
+        int docnum = fReportGrid->fModel->data(rl.at(i), 0).toInt();
         db[":f_id"] = docnum;
-        db.exec("delete from salary2 where f_id=:f_id");
+        db.exec("select * from salary2 where f_id=:f_id");
+        if (db.next() == false) {
+            message_error("Սխալ տող");
+        }
+        QDate date = db.date("f_date");
+        int branch = db.integer("f_branch");
+        int worker = db.integer("f_employee");
+        db[":f_date"] = date;
+        db[":f_branch"] = branch;
+        db[":f_employee"] = worker;
+        db.exec("delete from salary2 where f_date=:f_date and f_branch=:f_branch and f_employee=:f_employee");
+        db[":f_date"] = date;
+        db[":f_branch"] = branch;
+        db[":f_employee"] = worker;
+        db.exec("delete from salary where f_date=:f_date and f_branch=:f_branch and f_employee=:f_employee");
     }
     apply(fReportGrid);
 }
