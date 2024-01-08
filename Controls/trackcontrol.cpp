@@ -33,7 +33,7 @@ TrackControl::TrackControl(int table)
     fTable = table;
     if (!fDb) {
         fDb = new QSqlDatabase();
-        *fDb = QSqlDatabase::addDatabase("QMYSQL", "TrackControl");
+        *fDb = QSqlDatabase::addDatabase(_DBDRIVER_, "TrackControl");
         fDb->setHostName(fDbHost);
         fDb->setDatabaseName(fDbDb);
         fDb->setUserName(fDbUser);

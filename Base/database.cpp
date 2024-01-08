@@ -11,12 +11,12 @@ int Database::fDbNum = 0;
 Database::Database(QObject *parent) : QObject(parent)
 {
     fDbId = QString::number(fDbNum++);
-    fDb = QSqlDatabase::addDatabase("QMYSQL", fDbId);
+    fDb = QSqlDatabase::addDatabase(_DBDRIVER_, fDbId);
 }
 
 Database::~Database()
 {
-    fDb = QSqlDatabase::addDatabase("QMYSQL");
+    fDb = QSqlDatabase::addDatabase(_DBDRIVER_);
     QSqlDatabase::removeDatabase(fDbId);
 }
 

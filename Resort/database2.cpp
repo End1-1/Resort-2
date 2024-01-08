@@ -9,13 +9,13 @@ QMutex Database2::fMutex;
 int Database2::fDatabaseCounter = 0;
 
 Database2::Database2() :
-    Database2("QMYSQL")
+    Database2(_DBDRIVER_)
 {
 
 }
 
 Database2::Database2(Database2 &other) :
-    Database2("QMYSQL")
+    Database2(_DBDRIVER_)
 {
     open(other.fSqlDatabase.hostName(), other.fSqlDatabase.databaseName(), other.fSqlDatabase.userName(), other.fSqlDatabase.password());
 }

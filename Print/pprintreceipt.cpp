@@ -16,6 +16,7 @@
 #include <QPrintDialog>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QDateTime>
 
 PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
     Base()
@@ -31,8 +32,9 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
     }
     int fiscalnumber = db2.integer("f_tax");
     int orderstate = db2.integer("f_state");
-    QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
+    //QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
     QString partnerTin;
+    QJsonObject jh;
     if (fiscalnumber > 0) {
         db2[":f_fiscal"] = fiscalnumber;
         db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
@@ -40,8 +42,9 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
             message_error(QObject::tr("Not valid fiscal number"));
             return;
         }
-        PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
+        //PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
         QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
+        jh = QJsonDocument::fromJson(db2.string("f_out").toUtf8()).object();
         partnerTin = jo["partnerTin"].toString();
     }
 
@@ -114,23 +117,25 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
                                      &th, f))->textHeight();
     th.setTextAlignment(Qt::AlignLeft);
     if (fiscalnumber > 0) {
-        top += ps->addTextRect(new PTextRect(10, top, 200, rowHeight, firm, &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(10, top, 200, rowHeight, jh["taxpayer"].toString(), &th, f))->textHeight();
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Taxpayer id"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, hvhh, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["tin"].toString(), &th, f))
                 ->textHeight();
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Device number"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, devnum, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["crn"].toString(), &th, f))
                 ->textHeight();ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Serial"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, sn, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["sn"].toString(), &th, f))
                 ->textHeight();
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Fiscal"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, fiscal, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["fiscal"].toString(), &th, f))
                 ->textHeight();
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Receipt number"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, rseq, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["rseq"].toString(), &th, f))
                 ->textHeight();
         ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Date"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, time, &th, f))
+        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight,
+                                             QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(jh["time"].toDouble()))
+                                                 .addSecs(3600*4).toString("dd.MM.yyyy HH:mm:ss"), &th, f))
                 ->textHeight();
         top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, QObject::tr("(F)"), &th, f))
                 ->textHeight();

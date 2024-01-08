@@ -5,7 +5,7 @@
 
 #define cid_store_doc_state 103
 
-typedef struct : CI_Base {
+typedef struct CI_StoreDocState : CI_Base {
 
 } CI_StoreDocState;
 Q_DECLARE_METATYPE(CI_StoreDocState*)
