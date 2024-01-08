@@ -22,9 +22,11 @@ public:
 private:
     Ui::FAsExportSale *ui;
     ReportQuery *fReportQuery;
+    ReportQuery *fTotalQuery;
 
 private slots:
     void branchEditDoubleClick(bool v);
+    void hallEditDoubleClick(bool v);
 };
 
 #endif // FASEXPORTSALE_H

@@ -7,150 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>378</height>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Costumer</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="0" colspan="3">
-    <widget class="QWidget" name="widget_2" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QRadioButton" name="rbMode1">
-        <property name="text">
-         <string>Mode #1</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbMode2">
-        <property name="text">
-         <string>Mode #2</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbMode3">
-        <property name="text">
-         <string>Mode #3</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Discount type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Code</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="EQLineEdit" name="leDiscTypeCode">
-     <property name="maximumSize">
-      <size>
-       <width>70</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="Field" stdset="0">
-      <string>f_model</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Info</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Costumer name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Car gov. number</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Card code</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="EQLineEdit" name="leDiscTypeName">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leCostumer">
-     <property name="Field" stdset="0">
-      <string>f_name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leCode">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="Field" stdset="0">
-      <string>f_id</string>
-     </property>
-     <property name="PrimaryKey" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leCargovnumber">
-     <property name="Field" stdset="0">
-      <string>f_govNumber</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leInfo">
-     <property name="Field" stdset="0">
-      <string>f_info</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="EQLineEdit" name="leCardcode">
-     <property name="Field" stdset="0">
-      <string>f_card</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="3">
+   <item row="4" column="0" colspan="3">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -196,47 +60,50 @@
      </layout>
     </widget>
    </item>
-   <item row="7" column="0" colspan="3">
+   <item row="0" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leCode">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="Field" stdset="0">
+      <string>f_id</string>
+     </property>
+     <property name="PrimaryKey" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Card code</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Code</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
     <widget class="QWidget" name="widget_3" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="EQLineEdit" name="leVisits"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="EQLineEdit" name="leValue">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Count of visit</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Value (old)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="EQLineEdit" name="leItems"/>
+      <item row="1" column="1">
+       <widget class="EQLineEdit" name="leVisits"/>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Items</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
          <string>Balance</string>
@@ -244,13 +111,64 @@
        </widget>
       </item>
       <item row="3" column="1">
+       <widget class="EQLineEdit" name="leFiscal">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="Field" stdset="0">
+         <string>f_fiscal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>ՀԴՄ</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="EQLineEdit" name="leBalance">
         <property name="enabled">
          <bool>true</bool>
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Գին</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="EQLineEdit" name="lePrice"/>
+      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leCardcode">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="Field" stdset="0">
+      <string>f_code</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="EQLineEdit" name="leInfo">
+     <property name="Field" stdset="0">
+      <string>f_info</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Info</string>
+     </property>
     </widget>
    </item>
   </layout>

@@ -30,6 +30,8 @@ private slots:
 
     void on_btnPrint_clicked();
 
+    void on_btnTotal_clicked();
+
 private:
     Ui::DlgSalary *ui;
     bool fDay;

@@ -62,6 +62,7 @@ void DlgCouponServiceFirstNumber::setup(int type)
             ui->tbl->setItem(r, 1, new QTableWidgetItem(prevnumber));
             ui->tbl->setItem(r, 2, new QTableWidgetItem(QString::number(last - first + 1)));
             firstnumber = lastnumber;
+            prevnumber = lastnumber;
             r = ui->tbl->rowCount();
             ui->tbl->setRowCount(r + 1);
             ui->tbl->setItem(r, 0, new QTableWidgetItem(firstnumber));

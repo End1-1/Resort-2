@@ -5,7 +5,7 @@ CacheRestStore *CacheRestStore::fInstance = 0;
 CacheRestStore::CacheRestStore() :
     CacheBase()
 {
-    fQuery = "select f_id, f_name from r_store";
+    fQuery = "select f_id, f_name from r_store where f_state=1 order by f_name ";
     fCacheId = cid_rest_store;
     if (!fStaticCache.contains(fCacheId)) {
         load();

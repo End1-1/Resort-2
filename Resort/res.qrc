@@ -141,5 +141,6 @@
         <file>images/talon.png</file>
         <file>images/returnbox.png</file>
         <file>images/payment.png</file>
+        <file>images/xml.png</file>
     </qresource>
 </RCC>

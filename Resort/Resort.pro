@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     ../Filter/fcoupondocuments.cpp \
     ../Filter/fcouponsservice.cpp \
     ../Filter/fearningswash.cpp \
+    ../Filter/freportfromstoredproc.cpp \
     ../Filter/fsalarybyemployes.cpp \
+    ../Filter/goodsmovement.cpp \
     ../Filter/wsalary.cpp \
     ../RowEditor/dlgcouponservicedocument.cpp \
     c5graphicsview.cpp \
@@ -34,6 +36,7 @@ SOURCES += main.cpp\
     dialog.cpp \
     dlgaddattendance.cpp \
     dlgattendanceselectworkers.cpp \
+    dlgchangepassword.cpp \
     dlgconfigattendance.cpp \
     dlgcouponserviceback.cpp \
     dlgcouponservicedocumentplus.cpp \
@@ -41,6 +44,7 @@ SOURCES += main.cpp\
     dlgcouponservicepayment.cpp \
     dlggetidname.cpp \
     dlgonetwoall.cpp \
+    inventorization.cpp \
     logwriter.cpp \
         mainwindow.cpp \
     login.cpp \
@@ -282,7 +286,9 @@ HEADERS  += mainwindow.h \
     ../Filter/fcoupondocuments.h \
     ../Filter/fcouponsservice.h \
     ../Filter/fearningswash.h \
+    ../Filter/freportfromstoredproc.h \
     ../Filter/fsalarybyemployes.h \
+    ../Filter/goodsmovement.h \
     ../Filter/wsalary.h \
     ../RowEditor/dlgcouponservicedocument.h \
     c5graphicsview.h \
@@ -292,6 +298,7 @@ HEADERS  += mainwindow.h \
     dialog.h \
     dlgaddattendance.h \
     dlgattendanceselectworkers.h \
+    dlgchangepassword.h \
     dlgconfigattendance.h \
     dlgcouponserviceback.h \
     dlgcouponservicedocumentplus.h \
@@ -299,6 +306,7 @@ HEADERS  += mainwindow.h \
     dlgcouponservicepayment.h \
     dlggetidname.h \
     dlgonetwoall.h \
+    inventorization.h \
     login.h \
     loginsettings.h \
     logwriter.h \
@@ -539,12 +547,15 @@ FORMS    += mainwindow.ui \
     ../Filter/fcoupondocuments.ui \
     ../Filter/fcouponsservice.ui \
     ../Filter/fearningswash.ui \
+    ../Filter/freportfromstoredproc.ui \
     ../Filter/fsalarybyemployes.ui \
+    ../Filter/goodsmovement.ui \
     ../Filter/wsalary.ui \
     ../RowEditor/dlgcouponservicedocument.ui \
     c5printpreview.ui \
     dlgaddattendance.ui \
     dlgattendanceselectworkers.ui \
+    dlgchangepassword.ui \
     dlgconfigattendance.ui \
     dlgcouponserviceback.ui \
     dlgcouponservicedocumentplus.ui \
@@ -552,6 +563,7 @@ FORMS    += mainwindow.ui \
     dlgcouponservicepayment.ui \
     dlggetidname.ui \
     dlgonetwoall.ui \
+    inventorization.ui \
     login.ui \
     loginsettings.ui \
     message.ui \
@@ -671,9 +683,9 @@ INCLUDEPATH += ../Widgets
 INCLUDEPATH += ../RGDoubleClick
 INCLUDEPATH += ../GridOptionWidgets
 INCLUDEPATH += ../Vouchers
-INCLUDEPATH += /Soft/OpenSSL-Win32/include
-INCLUDEPATH += /Soft/OpenSSL-Win32/include/openssl
-INCLUDEPATH += /Projects/NewTax/Src
+INCLUDEPATH += c:/soft/OpenSSL-Win32/include
+INCLUDEPATH += c:/soft/OpenSSL-Win32/include/openssl
+INCLUDEPATH += c:/projects/NewTax/Src
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
 DEFINES += _APPLICATION_=\\\"SmartHotel\\\"

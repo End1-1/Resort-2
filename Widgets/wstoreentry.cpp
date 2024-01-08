@@ -4,6 +4,7 @@
 #include "defstore.h"
 #include "pprintstoreentry.h"
 #include "storedoc.h"
+#include "database2.h"
 
 #define SEL_DISH 1
 
@@ -102,6 +103,7 @@ void WStoreEntry::load(int doc)
         }
         ui->tblData->lineEdit(i, 6)->setDouble(dr.value(i, "f_amount").toDouble());
     }
+    storeQty(0);
 }
 
 void WStoreEntry::newGoods(CI_Dish *c)
@@ -131,7 +133,7 @@ void WStoreEntry::newGoods(CI_Dish *c)
     l->setValidator(new QDoubleValidator(0, 1000000000, 2));
     connect(l, SIGNAL(textEdited(QString)), this, SLOT(totalChange(QString)));
     ui->tblData->lineEdit(row, 3)->setFocus();
-
+    storeQty(c->fCode.toInt());
 }
 
 void WStoreEntry::countTotal()
@@ -141,6 +143,35 @@ void WStoreEntry::countTotal()
         total += ui->tblData->lineEdit(i, 6)->asDouble();
     }
     ui->leAmount->setDouble(total);
+}
+
+void WStoreEntry::storeQty(int goods)
+{
+    if (ui->leStore->asInt() == 0) {
+        return;
+    }
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_date"] = ui->deDate->date();
+    db2[":f_store"] = ui->leStore->asInt();
+    QString where ;
+    if (goods > 0){
+        where += QString("and r.f_material=%1 ").arg(goods);
+    }
+    db2.exec(QString("SELECT f_material, SUM(f_sign*f_qty) as f_qty "
+            "FROM r_body r "
+            "LEFT JOIN r_docs d ON d.f_id=r.f_doc "
+            "WHERE d.f_date<=:f_date AND r.f_store=:f_store %1 "
+            "GROUP BY 1 "
+            "having SUM(f_sign*f_qty)<>0").arg(where));
+    while (db2.next()) {
+        for (int i = 0; i < ui->tblData->rowCount(); i++) {
+            if (db2.integer("f_material") == ui->tblData->item(i, 1)->data(Qt::EditRole).toInt()) {
+                ui->tblData->setItemWithValue(i, 7, db2.doubleValue("f_qty"));
+            }
+        }
+    }
 }
 
 void WStoreEntry::qtyChange(const QString &arg1)
@@ -424,4 +455,9 @@ void WStoreEntry::on_btnExcel_clicked()
 
     e.setFontSize(e.address(0, 0), e.address(rowCount + 2, colCount), 10);
     e.show();
+}
+
+void WStoreEntry::on_deDate_editingFinished()
+{
+    storeQty(0);
 }

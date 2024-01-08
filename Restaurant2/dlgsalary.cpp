@@ -9,7 +9,9 @@
 #include "cacheusers.h"
 #include "database2.h"
 #include "defrest.h"
+#include "dlgsalarytotal.h"
 #include "c5printing.h"
+#include <QInputDialog>
 
 DlgSalary::DlgSalary(bool day, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -221,12 +223,17 @@ void DlgSalary::countSalary()
     fDbBind[":f_dateCash"] =  ui->deDate->date();
     fDbBind[":f_store"] = storealias(2);
     fDbBind[":f_branch"] = defrest(dr_branch).toInt();
+//    drsal.select(fDb,
+//                 QString("select sum(d.f_qty)*1000 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
+//                 "left join o_header h on h.f_id=d.f_header "
+//                 "where h.f_state=:f_state1 and d.f_state=:f_state2 "
+//                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "
+//                "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), fDbBind);
     drsal.select(fDb,
-                 QString("select sum(d.f_qty)*500 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
+                 QString("select sum(d.f_qty)*1000 as f_deduction, sum(d.f_totalUSD) as f_total from o_dish d "
                  "left join o_header h on h.f_id=d.f_header "
                  "where h.f_state=:f_state1 and d.f_state=:f_state2 "
-                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "
-                "and d.f_dish not in (%1)").arg("159,171,158,169,153,165,386,387,388,389,390,391"), fDbBind);
+                 "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "), fDbBind);
     total -= drsal.value("f_deduction").toDouble();
 
     if (total > 0.1) {
@@ -358,4 +365,16 @@ void DlgSalary::on_btnPrint_clicked()
     p.print("salary", QPrinter::A4);
 #endif
 
+}
+
+void DlgSalary::on_btnTotal_clicked()
+{
+    QString pwd;
+    if (RNumbers::getPassword(pwd, "ՄԵՆԵՋԵՐԻ ԳԱԽՏՆԱԲԱՌ", this) == false) {
+        return;
+    }
+    if (pwd != "1981") {
+        return;
+    }
+    DlgSalaryTotal(this).exec();
 }

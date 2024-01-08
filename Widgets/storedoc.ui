@@ -115,6 +115,23 @@
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="btnImportXML">
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resort/res.qrc">
+          <normaloff>:/images/xml.png</normaloff>:/images/xml.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -522,6 +539,16 @@
               <string>Total</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string>ԱԱՀ</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Ընդամենը ԱԱՀ</string>
+             </property>
+            </column>
            </widget>
           </item>
           <item>
@@ -561,6 +588,38 @@
              </item>
              <item>
               <widget class="EQLineEdit" name="leTotal">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>Ընդամենը ԱՀՀ</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="EQLineEdit" name="leTotalVat">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>100</width>
@@ -604,14 +663,14 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>EQTableWidget</class>
-   <extends>QTableWidget</extends>
-   <header location="global">eqtablewidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>EDateEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header location="global">eqtablewidget.h</header>
   </customwidget>
   <customwidget>
    <class>EQComboBox</class>

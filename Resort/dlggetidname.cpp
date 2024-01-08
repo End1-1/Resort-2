@@ -14,6 +14,9 @@ DlgGetIDName::DlgGetIDName(QWidget *parent) :
     ui->tbl->setColumnWidth(1, 400);
     if (fQueries.isEmpty()) {
         fQueries[idname_branch] = "select f_id, f_name from r_branch order by 2";
+        fQueries[idname_hall] = "select f_id, f_name from r_hall order by 2 ";
+        fQueries[idname_store] = "select f_id, f_name from r_store where f_state=1 order by 2";
+        fQueries[idname_dish] = "select f_id, f_en as f_name from r_dish order by 2";
     }
 }
 

@@ -727,6 +727,49 @@ name</source>
     </message>
 </context>
 <context>
+    <name>DlgChangePassword</name>
+    <message>
+        <source>Dialog</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <source>Old password</source>
+        <translation>Ընդացիկ գախտնաբառ</translation>
+    </message>
+    <message>
+        <source>New password</source>
+        <translation>Նոր գախտնաբառ</translation>
+    </message>
+    <message>
+        <source>Confirm password</source>
+        <translation>Հաստատեք գախտնաբառը</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Այո</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Հրաժարվել</translation>
+    </message>
+    <message>
+        <source>Password does not match</source>
+        <translation>Նոր գախտնաբառը և կրկնությունը նույնը չէ</translation>
+    </message>
+    <message>
+        <source>The password cannot be empty</source>
+        <translation>Գախտնաբառը չի կարող լինել դատարկ</translation>
+    </message>
+    <message>
+        <source>The old password is incorrect</source>
+        <translation>Ընդացիկ գախտնաբառը սխալ է</translation>
+    </message>
+    <message>
+        <source>Password was changed</source>
+        <translation>Գախտնաբառը փոխվել է</translation>
+    </message>
+</context>
+<context>
     <name>DlgChartDateRange</name>
     <message>
         <source>Date range</source>
@@ -1388,6 +1431,14 @@ name</source>
     </message>
     <message>
         <source>Payment comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ՀԴՄ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fiscal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2157,16 +2208,16 @@ for this operation</source>
         <translation>Քարտերի բալանս</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation>Անվանում</translation>
-    </message>
-    <message>
         <source>Info</source>
         <translation>Տեղեկություններ</translation>
     </message>
     <message>
         <source>Balance</source>
         <translation>Բալանս</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished">Կոդ</translation>
     </message>
 </context>
 <context>
@@ -3412,16 +3463,8 @@ ledger</source>
         <translation>Քարտ</translation>
     </message>
     <message>
-        <source>Debt</source>
-        <translation>Պարտք</translation>
-    </message>
-    <message>
         <source>Discount</source>
         <translation>Զեղչ</translation>
-    </message>
-    <message>
-        <source>Coupon</source>
-        <translation>Կտրոն</translation>
     </message>
     <message>
         <source>oh.f_staff;concat(u.f_firstname,&apos; &apos;,u.f_lastname)</source>
@@ -3513,12 +3556,12 @@ ledger</source>
         <translation></translation>
     </message>
     <message>
-        <source>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponservice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Coupon of service</source>
         <translation type="unfinished">Կանխավճարային կտրոններ</translation>
+    </message>
+    <message>
+        <source>oh.f_total;op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponservice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3918,49 +3961,6 @@ ledger</source>
     </message>
     <message>
         <source>Room, time</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>GuestCheckin</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checkin guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List of checkin guests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Departure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invoice</source>
-        <translation type="unfinished">ՀԱ</translation>
-    </message>
-    <message>
-        <source>Cardex</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nationality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guest</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4565,6 +4565,10 @@ system</source>
     <message>
         <source>Հայկական ծրագրեր</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change my password</source>
+        <translation>Փոխել գախտնաբառը</translation>
     </message>
 </context>
 <context>

@@ -14,12 +14,9 @@ class RECarClient : public RowEditorDialog
 public:
     explicit RECarClient(QList<QVariant> &values, QWidget *parent = 0);
     ~RECarClient();
-    virtual void selector(int number, const QVariant &value);
     virtual void setValues() override;
-    static void openReport(const QString &num);
+    static void openReport();
     static void openReport1();
-    static void openReport2();
-    static void openReport3();
     virtual void valuesToWidgets();
 private slots:
     void on_btnSave_clicked();

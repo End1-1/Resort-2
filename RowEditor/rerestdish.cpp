@@ -18,11 +18,13 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     ui->setupUi(this);
     ui->leTextColor->setText("-16777216");
     addWidget(ui->leCode, "Code");
+    addWidget(ui->leDishPart, "dishpart");
     addWidget(ui->leDefStore, "Store code");
     addWidget(ui->leDefStoreName, "Store name");
     addWidget(ui->leTypeCode, "");
     addWidget(ui->leTypeName, "Type");
     addWidget(ui->leNameAm, "Name");
+    addWidget(ui->leArmSoftName, "ՀԾ անվանում");
     addWidget(ui->teAm, "Text");
     addWidget(ui->leBgColor, "Backgroun color");
     addWidget(ui->leTextColor, "Text color");
@@ -610,16 +612,24 @@ void RERestDish::on_btnRemove_clicked()
     if (dr.rowCount() > 0) {
         err += tr("This code used in store") + "<BR>";
     }
-    fDbBind[":f_goods"] = ui->leCode->asInt();
-    dr.select("select * from r_body where f_goods=:f_goods", fDbBind);
-    if (dr.rowCount() > 0) {
-        err += tr("This code used in store entry") + "<BR>";
-    }
     fDbBind[":f_dish"] = ui->leCode->asInt();
     dr.select("select * from o_dish where f_dish=:f_dish", fDbBind);
     if (dr.rowCount() > 0) {
         err += tr("This code used in sales") + "<BR>";
     }
+
+    fDbBind[":f_goods"] = ui->leCode->asInt();
+    dr.select("select * from st_body where f_goods=:f_goods", fDbBind);
+    if (dr.rowCount() > 0) {
+        err += tr("Այս կոդը օգտագործվել է պահեստի գույքագրման մեջ") + "<BR>";
+    }
+
+    fDbBind[":f_goods"] = ui->leCode->asInt();
+    dr.select("select * from r_inventorization_qty where f_goods=:f_goods", fDbBind);
+    if (dr.rowCount() > 0) {
+        err += tr("Այս կոդը օգտագործվել է պահեստի գույքագրման մեջ") + "<BR>";
+    }
+
     if (!err.isEmpty()) {
         message_error(err);
         return;
@@ -627,6 +637,8 @@ void RERestDish::on_btnRemove_clicked()
     if (message_confirm(tr("Confirm to remove")) != QDialog::Accepted) {
         return;
     }
+    fDbBind[":f_id"] = ui->leCode->asInt();
+    dr.select("delete from r_recipe where f_dish=:f_id or f_part=:f_id", fDbBind);
     fDbBind[":f_id"] = ui->leCode->asInt();
     dr.select("delete from r_dish where f_id=:f_id", fDbBind);
     message_info(tr("Deleted"));

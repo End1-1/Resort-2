@@ -2,7 +2,7 @@
 #include "ui_fmaterialsinstore.h"
 #include "wreportgrid.h"
 #include "ftstorereport.h"
-
+#include "dlggetidname.h"
 #define SEL_DISH 1
 
 FMaterialsInStore::FMaterialsInStore(QWidget *parent) :
@@ -16,10 +16,7 @@ FMaterialsInStore::FMaterialsInStore(QWidget *parent) :
     fDockStore->configure();
     fDockStore->setSelector(ui->leStore);
     connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
-
-    fDockDish = new DWSelectorDish(this);
-    fDockDish->configure();
-    fDockDish->setDialog(this, SEL_DISH);
+    connect(ui->leMaterial, &EQLineEdit::customButtonClicked, this, &FMaterialsInStore::goodsClick);
 
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClickOnRow(QList<QVariant>)));
 }
@@ -56,7 +53,7 @@ void FMaterialsInStore::apply(WReportGrid *rg)
         where += " and b.f_store in (" + ui->leStore->fHiddenText + ") ";
     }
     if (!ui->leMaterial->isEmpty()) {
-        where += " and b.f_material in (" + ui->leMaterial->fHiddenText + ") ";
+        where += " and b.f_goods in (" + ui->leMaterial->fHiddenText + ") ";
     }
     QString query = "select s.f_name as f_store, b.f_goods, d.f_en as f_material, sum(b.f_qty*b.f_sign) as f_qty, "
             "sum(b.f_price*b.f_qty)/sum(b.f_qty) as f_price, sum(b.f_price*b.f_qty*b.f_sign) as f_total, "
@@ -83,24 +80,12 @@ void FMaterialsInStore::apply(WReportGrid *rg)
     }
 }
 
-void FMaterialsInStore::selector(int selectorNumber, const QVariant &value)
-{
-    switch (selectorNumber) {
-    case SEL_DISH: {
-        dockResponse<CI_Dish, CacheDish>(ui->leMaterial, value.value<CI_Dish*>());
-
-        break;
-    }
-    }
-}
-
 void FMaterialsInStore::store(CI_RestStore *c)
 {
     dockResponse<CI_RestStore, CacheRestStore>(ui->leStore, c);
     if (c) {
         QMap<int, QString> colFilter;
         colFilter[3] = c->fCode;
-        fDockDish->setFilterColumn(colFilter);
     }
 }
 
@@ -112,4 +97,13 @@ void FMaterialsInStore::doubleClickOnRow(const QList<QVariant> &row)
     FTStoreReport *f = FTStoreReport::openFilterReport<FTStoreReport, WReportGrid>();
     f->setParams(ui->leStore->fHiddenText, row.at(1).toString());
 
+}
+
+void FMaterialsInStore::goodsClick()
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_dish, this)) {
+        ui->leMaterial->setText(name);
+        ui->leMaterial->fHiddenText = id;
+    }
 }

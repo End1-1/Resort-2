@@ -19,6 +19,10 @@ public:
     virtual QWidget *firstElement();
 private:
     Ui::FReportByPayment *ui;
+
+private slots:
+    void branchEditDoubleClick(bool v);
+    void hallEditDoubleClick(bool v);
 };
 
 #endif // FREPORTBYPAYMENT_H

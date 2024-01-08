@@ -39,8 +39,8 @@ void EQLineEdit::setText(const QString &text)
     if (v) {
         if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             QLocale l;
-//            t.replace(".", l.decimalPoint());
-//            t.replace(",", l.decimalPoint());
+            t.replace(".", l.decimalPoint());
+            t.replace(",", l.decimalPoint());
             t.replace("․", l.decimalPoint());
         }
     }
@@ -68,7 +68,10 @@ QString EQLineEdit::text() const
         t.replace(mLocale.groupSeparator(), "");
         if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             const QDoubleValidator *dv = static_cast<const QDoubleValidator*>(v);
-            return float_str(QLocale().toDouble(t), dv->decimals());
+            t = float_str(QLocale().toDouble(t), dv->decimals());
+            qDebug() << mLocale.groupSeparator() << t;
+            t.replace(mLocale.groupSeparator(), "");
+            return t;
         } else if (!strcmp(v->metaObject()->className(), "QIntValidator")) {
             return QString::number(QLineEdit::text().toInt());
         }
@@ -321,6 +324,9 @@ void EQLineEdit::hiddenTextChanged(const QString &text)
         }
     } else {
         setText(fAlwaysUpper ? text.toUpper() : text);
+        if (text.isEmpty()) {
+            fHiddenText.clear();
+        }
     }
     setCursorPosition(cursPos);
 }

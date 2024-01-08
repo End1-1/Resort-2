@@ -2,7 +2,6 @@
 #define FSTOREMOVEMENT_H
 
 #include "wfilterbase.h"
-#include "dwselectordish.h"
 
 namespace Ui {
 class FStoreMovement;
@@ -21,12 +20,12 @@ public:
     virtual void apply(WReportGrid *rg);
 private:
     Ui::FStoreMovement *ui;
-    DWSelectorDish *fDockDish;
 
 private slots:
     void doubleClicked(const QList<QVariant> &row);
     void on_btnDateLeft_clicked();
     void on_btnDateRight_clicked();
+    void goodsClick();
 };
 
 #endif // FSTOREMOVEMENT_H

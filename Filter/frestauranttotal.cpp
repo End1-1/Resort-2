@@ -34,7 +34,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
         fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
     }
 
-    fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
+    //fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);
     fDockHall->configure();
@@ -109,7 +109,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["oh.f_paymentMode"] = false;
     fReportGrid->fIncludes["pm.f_" + def_lang] = false;
     fReportGrid->fIncludes["oc.f_govnumber"] = false;
-    fReportGrid->fIncludes["oh.f_paymentModeComment"] = false;
+    fReportGrid->fIncludes["oh.f_comment"] = false;
     fReportGrid->fIncludes["sum(od.f_qty)"] = true;
     fReportGrid->fIncludes["sum(od.f_total)"] = true;
     fReportGrid->fIncludes["count(oh.f_id)"] = false;
@@ -117,9 +117,12 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["op.f_discountcard"] = false;
     fReportGrid->fIncludes["sum(op.f_cash)"] = false;
     fReportGrid->fIncludes["sum(op.f_card)"] = false;
+    fReportGrid->fIncludes["sum(op.f_idram)"] = false;
+    fReportGrid->fIncludes["sum(op.f_prepaid)"] = false;
     fReportGrid->fIncludes["sum(op.f_discount)"] = false;
     fReportGrid->fIncludes["sum(op.f_debt)"] = false;
     fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
+    fReportGrid->fIncludes["sum(op.f_couponbank)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponservice)"] = false;
 
 }
@@ -149,12 +152,15 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     fReportGrid->fIncludes["count(oh.f_id)"] = countAmount;
     fReportGrid->fIncludes["sum(oh.f_total)"] = countAmount;
     if (countAmount && ui->chPaymentMode->isChecked()) {
-        fReportGrid->fIncludes["sum(oh.f_total)"] = false;
+        fReportGrid->fIncludes["sum(oh.f_total)"] = true;
         fReportGrid->fIncludes["sum(op.f_cash)"] = true;
         fReportGrid->fIncludes["sum(op.f_card)"] = true;
+        fReportGrid->fIncludes["sum(op.f_idram)"] = true;
+        fReportGrid->fIncludes["sum(op.f_prepaid)"] = true;
         fReportGrid->fIncludes["sum(op.f_discount)"] = true;
         fReportGrid->fIncludes["sum(op.f_debt)"] = true;
         fReportGrid->fIncludes["sum(op.f_coupon)"] = true;
+        fReportGrid->fIncludes["sum(op.f_couponbank)"] = true;
         fReportGrid->fIncludes["sum(op.f_couponservice)"] = true;
     }
     rg->fFieldsWidths.clear();
@@ -186,16 +192,19 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths[tr("Tax")] = 80;
     rg->fFieldsWidths[tr("Payment mode code")] = 0;
     rg->fFieldsWidths[tr("P/M")] = 150;
-    rg->fFieldsWidths[tr("P/M comment")] = 100;
+    rg->fFieldsWidths["Մեկնաբանություն"] = 100;
+    rg->fFieldsWidths["Կանխավճար"] = 100;
     rg->fFieldsWidths[tr("Discount card")] = 100;
     rg->fFieldsWidths[tr("Discount amount")] = 80;
     rg->fFieldsWidths[tr("Qty")] = 80;
     rg->fFieldsWidths[tr("Total")] = 80;
     rg->fFieldsWidths[tr("Cash")] = 80;
     rg->fFieldsWidths[tr("Card")] = 80;
-    rg->fFieldsWidths[tr("Debt")] = 80;
+    rg->fFieldsWidths["Idram"] = 80;
+    rg->fFieldsWidths["Փոխանցում"] = 80;
     rg->fFieldsWidths[tr("Discount")] = 80;
-    rg->fFieldsWidths[tr("Coupon")] = 80;
+    rg->fFieldsWidths["Նվեր քարտ"] = 80;
+    rg->fFieldsWidths["Նվեր փոխանցում"] = 80;
     rg->fFieldsWidths["Ավտոկտրոն"] = 80;
               ;
 
@@ -229,7 +238,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
            << "oh.f_paymentMode"
            << "pm.f_" + def_lang
            << "oc.f_govnumber"
-           << "oh.f_paymentModeComment"
+           << "oh.f_comment"
            << "op.f_discountcard"
               ;
     if (countAmount) {
@@ -239,11 +248,15 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                     << "sum(oh.f_total)";
         } else {
             rg->fFields << "count(oh.f_id)"
+                        << "sum(oh.f_total)"
                         << "sum(op.f_cash)"
                         << "sum(op.f_card)"
+                        << "sum(op.f_idram)"
+                        << "sum(op.f_prepaid)"
                         << "sum(op.f_debt)"
                         << "sum(op.f_discount)"
                         << "sum(op.f_coupon)"
+                        << "sum(op.f_couponbank)"
                         << "sum(op.f_couponservice)";
         }
     } else {
@@ -280,7 +293,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["oh.f_tax"] = tr("Tax");
     rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
     rg->fFieldTitles["pm.f_" + def_lang] = tr("P/M");
-    rg->fFieldTitles["oh.f_paymentModeComment"] = tr("P/M comment");
+    rg->fFieldTitles["oh.f_comment"] = "Մեկնաբանություն";
     rg->fFieldTitles["oc.f_govnumber"] = tr("Lisence plate");
     rg->fFieldTitles["op.f_discountcard"] = tr("Discount card");
     rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount amount");
@@ -290,9 +303,12 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["sum(od.f_total)"] = tr("Total");
     rg->fFieldTitles["sum(op.f_cash)"] = tr("Cash");
     rg->fFieldTitles["sum(op.f_card)"] = tr("Card");
-    rg->fFieldTitles["sum(op.f_debt)"] = tr("Debt");
+    rg->fFieldTitles["sum(op.f_idram)"] = "Idram";
+    rg->fFieldTitles["sum(op.f_prepaid)"] = "Կանխավճար";
+    rg->fFieldTitles["sum(op.f_debt)"] = "Փոխանցում";
     rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount");
-    rg->fFieldTitles["sum(op.f_coupon)"] = tr("Coupon");
+    rg->fFieldTitles["sum(op.f_coupon)"] = "Նվեր քարտ";
+    rg->fFieldTitles["sum(op.f_couponbank)"] = "Նվեր փոխանցում";
     rg->fFieldTitles["sum(op.f_couponservice)"] = "Ավտոկտրոն";
 
     rg->fTables.clear();
@@ -448,7 +464,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             }
         }
     }
-    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon,", "");
+    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon,op.f_couponbank,op.f_couponservice,,", "");
     if (group.length() > 0) {
         if (group.at(group.length() - 1) == ",") {
             group.remove(group.length() - 1, 1);
@@ -471,11 +487,16 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                  ;
     } else {
         colsTotal << rg->fModel->columnIndex(tr("Qty"))
+                  << rg->fModel->columnIndex(tr("Total"))
               << rg->fModel->columnIndex(tr("Cash"))
               << rg->fModel->columnIndex(tr("Card"))
-              << rg->fModel->columnIndex(tr("Debt"))
+                << rg->fModel->columnIndex("Idram")
+                << rg->fModel->columnIndex("Կանխավճար")
+              << rg->fModel->columnIndex("Փոխանցում")
               << rg->fModel->columnIndex(tr("Discount"))
-              << rg->fModel->columnIndex(tr("Coupon"));
+              << rg->fModel->columnIndex("Նվեր քարտ")
+                 << rg->fModel->columnIndex("Նվեր փոխանցում")
+              << rg->fModel->columnIndex("Ավտոկտրոն");
     }
     QList<double> valsTotal;
     rg->fModel->sumOfColumns(colsTotal, valsTotal);
@@ -493,6 +514,17 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         }
     }
     rg->fTableView->resizeColumnsToContents();
+    rg->fTableTotal->resizeColumnsToContents();
+    for (int i = 0; i < rg->fTableTotal->colorCount(); i++) {
+        if (rg->fTableView->columnWidth(i) < rg->fTableTotal->columnWidth(i)) {
+            rg->fTableView->setColumnWidth(i, rg->fTableTotal->columnWidth(i));
+        }
+    }
+    for (int i = 0; i < rg->fTableTotal->colorCount(); i++) {
+        if (rg->fTableView->columnWidth(i) > rg->fTableTotal->columnWidth(i)) {
+            rg->fTableTotal->setColumnWidth(i, rg->fTableView->columnWidth(i));
+        }
+    }
 }
 
 QWidget *FRestaurantTotal::firstElement()

@@ -2,6 +2,7 @@
 #include "defstore.h"
 #include "storeoutput.h"
 #include "databaseresult.h"
+#include "base.h"
 
 BaseOrder::BaseOrder(int id)
 {
@@ -26,7 +27,7 @@ void BaseOrder::calculateOutput(Database &db, int id)
     dr.select(db, "select o.f_id, o.f_dish, o.f_store, r.f_part, r.f_qty*o.f_qty as f_qty, h.f_datecash "
                    "from o_dish o "
                    "left join o_header h on h.f_id=o.f_header "
-                   "left join r_recipe r on o.f_dish=r.f_dish "
+                   "inner join r_recipe r on o.f_dish=r.f_dish "
                    "where o.f_header=:f_header and (o.f_state=:f_state1 or o.f_state=:f_state2)", fDbBind);
     if (dr.rowCount() == 0) {
         return;
@@ -52,7 +53,7 @@ void BaseOrder::calculateOutput(Database &db, int id)
     fDbBind[":f_invDate"] = QVariant();
     fDbBind[":f_amount"] = 0;
     fDbBind[":f_remarks"] = QString("%1 %2").arg(QObject::tr("Sale")).arg(id);
-    fDbBind[":f_op"] = 1;
+    fDbBind[":f_op"] = Base::fPreferences.getLocal(def_working_user_id);
     fDbBind[":f_fullDate"] = QDateTime::currentDateTime();
     fDbBind[":f_payment"] = 1;
     fDbBind[":f_rest"] = id;

@@ -27,6 +27,7 @@ private:
     void load(int doc);
     void newGoods(CI_Dish *c);
     void countTotal();
+    void storeQty(int goods);
 
 private slots:
     void qtyChange(const QString &arg1);
@@ -41,6 +42,7 @@ private slots:
     void on_btnPrint_clicked();
     void on_leSearch_textChanged(const QString &arg1);
     void on_btnExcel_clicked();
+    void on_deDate_editingFinished();
 };
 
 #endif // WSTOREENTRY_H

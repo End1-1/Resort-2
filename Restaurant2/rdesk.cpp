@@ -240,7 +240,7 @@ protected:
         if (!t) {
             return;
         }
-        if (t->fHall == 1 || t->fHall == 5) {
+        if (t->fHall == 1 || t->fHall == 5 || t->fHall == 9) {
             painter->fillRect(option.rect, Qt::black);
             painter->setPen(Qt::white);
             if (t->fAmount.toDouble() > 0.1 || t->fOrder > 0) {
@@ -631,8 +631,9 @@ void RDesk::setComplexMode()
 
 void RDesk::closeOrder(int state)
 {
-    BaseOrder bo(fTable->fOrder);
-    bo.calculateOutput(fDb);
+    //DISABLE AUTOMATIC OUTPUT
+    //BaseOrder bo(fTable->fOrder);
+    //bo.calculateOutput(fDb);
     fDbBind[":f_state"] = state;
     fDbBind[":f_dateCash"] = WORKING_DATE;
     fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
@@ -915,7 +916,7 @@ void RDesk::visitStat()
             debt += dr.value(i, "f_debt").toDouble();
         }
         if (debt > 1 || debt < -1) {
-            msg += "<br>" + tr("Debt") + ": " + float_str(debt, 2);
+            msg += "<br> Փոխանցում՝ " + float_str(debt, 2);
         }
     }
 
@@ -926,7 +927,7 @@ void RDesk::checkCardAmount()
 {
     QString name;
     QVariant result;
-    if (!DlgList::getValue(tr("Card holder"), name, result, "select f_card, right(f_card, 5) from d_car_client where f_model=3")) {
+    if (!DlgList::getValue(tr("Card holder"), name, result, "select f_code, right(f_code, 4) from d_gift_cart")) {
         return;
     }
 
@@ -1067,6 +1068,10 @@ void RDesk::saledItem()
         p.ltext(tr("Total"), 0);
         p.rtext(float_str(total, 2));
     }
+    p.br();
+    p.br();
+    p.setFontSize(18);
+    p.ltext(QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm:ss"), 0);
     p.print(defrest(dr_first_receipt_printer), QPrinter::Custom);
 }
 
@@ -1932,7 +1937,7 @@ bool RDesk::setTable(TableStruct *t, bool nosmile)
         ui->lbCar->setText(fCarModel + " " + fCarGovNum);
         s.close();
 
-        if (fTable->fHall == 3) {
+        if (fTable->fHall == 3 || fTable->fHall == 11) {
             OrderDishStruct *od = nullptr;
             for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
                 od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
@@ -2642,6 +2647,12 @@ void RDesk::printReceipt(bool printModePayment)
             ps->addLine(10, top, 680, top);
             top++;
         }
+        if (dr.value("f_idram").toDouble() > 0.01) {
+            ps->addTextRect(10, top, 600, rowHeight, "Idram", &th);
+            top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_idram").toDouble(), 2), &thr)->textHeight();
+            ps->addLine(10, top, 680, top);
+            top++;
+        }
         if (dr.value("f_coupon").toDouble() > 0.1) {
             ps->addTextRect(10, top, 600, rowHeight, "Նվեր քարտ", &th);
             top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_coupon").toDouble(), 2), &thr)->textHeight();
@@ -2662,7 +2673,7 @@ void RDesk::printReceipt(bool printModePayment)
             drh.select(fDb, "select f_name from o_debt_holder h "
                        "left join o_header_payment p on p.f_debtHolder=h.f_id "
                        "where p.f_id=:f_id", fDbBind);
-            ps->addTextRect(10, top, 600, rowHeight, tr("Debt"), &th);
+            ps->addTextRect(10, top, 600, rowHeight, tr("Փոխանցում"), &th);
             top += ps->addTextRect(10, top, 600, rowHeight, float_str(dr.value("f_debt").toDouble(), 2), &thr)->textHeight();
             if (drh.rowCount() > 0) {
                 top += ps->addTextRect(10, top, 680, rowHeight, drh.value("f_name").toString(), &th)->textHeight();
@@ -3289,6 +3300,10 @@ void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
 
 void RDesk::on_btnPayment_2_clicked()
 {
+    if (!fTable) {
+        message_info("Սեղանը նշված չէ");
+        return;
+    }
     if (fTable->fPrint > 0) {
         return;
     }
@@ -3339,6 +3354,17 @@ void RDesk::on_btnSetCar_clicked()
         fDbBind[":f_holder"] = costumer;
         fDbBind[":f_govNumber"] = govNum;
         fDb.insert("o_debt_holder_car", fDbBind);
+    }
+    Database2 db2;
+    Db b = Preferences().getDatabase(Base::fDbName);
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_govnumber"] = govNum;
+    db2[":f_order"] = fTable->fOrder;
+    db2.exec("select * from o_car "
+"where f_order in (select f_id from o_header where f_datecash=current_date() and f_order<>:f_order) "
+"and f_govnumber=:f_govnumber ");
+    if (db2.next()) {
+        message_info(QString("Այսօր մեքենան գրանցվել է %1 անգամ").arg(db2.rowCount()));
     }
 }
 

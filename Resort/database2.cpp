@@ -99,7 +99,7 @@ bool Database2::exec(const QString &query)
         return false;
     }
     LogWriter::write(LogWriterLevel::verbose, fSqlDatabase.databaseName(), lastQuery());
-    bool isSelect = fQuery->isSelect();
+    bool isSelect = fQuery->isSelect() || query.contains("call ", Qt::CaseInsensitive);
     if (isSelect) {
         //fQuery->first();
         fColumnsNames.clear();
@@ -115,9 +115,21 @@ bool Database2::exec(const QString &query)
 
 bool Database2::execDirect(const QString &query)
 {
-    if (!fQuery->exec(query)) {
+    if (!fQuery->prepare(query)) {
         LogWriter::write(LogWriterLevel::errors, "", fQuery->lastError().databaseText());
         LogWriter::write(LogWriterLevel::errors, "", query);
+        Q_ASSERT(false);
+        return false;
+    }
+    QStringList keys = fBindValues.keys();
+    for (const QString &key: qAsConst(keys)) {
+        fQuery->bindValue(key, fBindValues[key]);
+    }
+    fBindValues.clear();
+    if (!fQuery->exec()) {
+        LogWriter::write(LogWriterLevel::errors, "", fQuery->lastError().databaseText());
+        LogWriter::write(LogWriterLevel::errors, "", query);
+        Q_ASSERT(false);
         return false;
     }
     return true;

@@ -3,7 +3,6 @@
 
 #include "wfilterbase.h"
 #include "dwselectorreststore.h"
-#include "dwselectordish.h"
 
 namespace Ui {
 class FMaterialsInStore;
@@ -19,16 +18,15 @@ public:
     virtual QWidget *firstElement();
     virtual QString reportTitle();
     virtual void apply(WReportGrid *rg);
-    virtual void selector(int selectorNumber, const QVariant &value);
 
 private:
     Ui::FMaterialsInStore *ui;
     DWSelectorRestStore *fDockStore;
-    DWSelectorDish *fDockDish;
 
 private slots:
     void store(CI_RestStore *c);
     void doubleClickOnRow(const QList<QVariant> &row);
+    void goodsClick();
 };
 
 #endif // FMATERIALSINSTORE_H

@@ -27,10 +27,19 @@ QWidget *FBalanceOnCard::firstElement()
 void FBalanceOnCard::apply(WReportGrid *rg)
 {
     rg->fModel->clearColumns();
-    rg->fModel->setColumn(300, "", tr("Name"))
+    rg->fModel->setColumn(150, "", tr("Code"))
             .setColumn(200, "", tr("Info"))
             .setColumn(100, "", tr("Balance"));
-    QString sql = "select f_name, f_info, substring(f_mode,locate(';', f_mode, locate(';', f_mode) + 1) +1, locate(';', f_mode, locate(';', f_mode, locate(';', f_mode) + 1)+1)-locate(';', f_mode, locate(';', f_mode) + 1)-1) from d_car_client where f_model=3";
+    QString sql = "select c.f_code, c.f_info, coalesce(u.f_amount, '-') as f_balance "
+                "from d_gift_cart  c "
+                "left join (select f_code, sum(f_amount) as f_amount from d_gift_cart_use group by 1) u on u.f_code=c.f_code ";
+    if (ui->rbAll->isChecked()) {
+
+    } else if (ui->rbFree->isChecked()) {
+        sql += "where u.f_amount=c.f_initialamount ";
+    } else {
+        sql += "where coalesce(u.f_amount, 0)=0";
+    }
     rg->fModel->setSqlQuery(sql);
     rg->fModel->apply(rg);
     QList<int> cols;

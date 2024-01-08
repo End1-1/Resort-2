@@ -95,7 +95,7 @@ void DlgPrintMultipleFiscal::on_btnPrint_clicked()
                 "left join r_dish d on d.f_id=od.f_dish "
                 "where od.f_header=:f_header and od.f_state=:f_state and od.f_total>0 ");
         while (db.next()) {
-            pn.addGoods(db.string("f_taxdebt"),
+            pn.addGoods(db.string("f_taxdebt").toInt(),
                         db.string("f_adgt"),
                         db.string("f_id"),
                         db.string("f_name"),

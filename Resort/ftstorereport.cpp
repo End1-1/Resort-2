@@ -286,6 +286,9 @@ void FTStoreReport::doubleClickOnRow(int row, int column, const QList<QVariant> 
     default:
         return;
     }
+    if (ui->leStore->text().isEmpty() == false) {
+        addAnd += " and d.f_id in (select f_doc from r_body where f_store in (" + ui->leStore->fHiddenText + ")) ";
+    }
     DatabaseResult dr;
     fDbBind[":f_date"] = values.at(0).toDate();
     fDbBind[":f_material"] = ui->leGoods->fHiddenText.toInt();

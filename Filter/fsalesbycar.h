@@ -19,6 +19,10 @@ public:
     virtual void apply(WReportGrid *rg);
 private:
     Ui::FSalesByCar *ui;
+
+private slots:
+    void branchEditDoubleClick(bool v);
+    void hallEditDoubleClick(bool v);
 };
 
 #endif // FSALESBYCAR_H

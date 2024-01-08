@@ -12,7 +12,7 @@ class DlgPayment : public BaseExtendedDialog
     Q_OBJECT
 
 public:
-    explicit DlgPayment(QWidget *parent = 0);
+    explicit DlgPayment(int order, QWidget *parent = 0);
     ~DlgPayment();
     static bool payment(int order, int hallid);
     virtual void accept();
@@ -33,9 +33,14 @@ private slots:
     void on_leCard_textChanged(const QString &arg1);
     void on_btnTaxPayerId_clicked();
     void on_btnCouponService_clicked(bool checked);
+    void on_btnPrepaid_clicked();
+    void on_leGiftCardCode_returnPressed();
+
+    void on_btnCard_2_clicked();
 
 private:
     Ui::DlgPayment *ui;
+    bool fCannotContinue;
     int fOrder;
     int fHall;
     QString fDefaultFiscalMachine;
@@ -46,6 +51,7 @@ private:
     bool fCanReject;
     QMap<QString, QMap<QString, QVariant> > fFiscalMachines;
     void readFiscalMachines();
+    void getGiftAmount();
 };
 
 #endif // DLGPAYMENT_H

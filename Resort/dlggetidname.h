@@ -4,6 +4,9 @@
 #include "baseextendeddialog.h"
 
 #define idname_branch 1
+#define idname_hall 2
+#define idname_store 3
+#define idname_dish 4
 
 namespace Ui {
 class DlgGetIDName;

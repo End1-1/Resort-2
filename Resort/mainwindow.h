@@ -126,6 +126,14 @@ private slots:
 
     void on_actionArmSoftExport_triggered();
 
+    void on_btnChangeMyPassword_clicked();
+
+    void on_action_inventorization_triggered();
+
+    void on_action_goods_movement_triggered();
+
+    void on_actionAllDishes_triggered();
+
 private:
     Ui::MainWindow *ui;
     QTimer fTimer;

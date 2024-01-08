@@ -7,3 +7,37 @@ alter table talon_service_items remove column f_price;
 create table queries (f_id integer primary key auto_increment, f_name tinytext, f_query text);
 create table queries_sum(f_id integer primary key auto_increment, f_name tinytext, f_columns tinytext);
 create table queries_columns_widths (f_id integer primary key auto_increment, f_name tinytext, f_widths tinytext);
+
+create table talon_documents_header (f_id char(36) primary key, f_type tinyint, f_date date, f_user integer, f_partner integer, f_amount decimal(14,2));
+create table talon_documents_type (f_id tinyint primary key, f_name tinytext);
+insert into talon_documents_type (f_id, f_name) values (1, 'Մուտք'), (2, 'Վաճառք'), (3, 'Օգտագործում');
+create table queries_data(f_id integer primary key auto_increment, f_name tinytext, f_query text);
+alter table talon_documents_header modify f_id int not null, drop primary key, drop column f_id, add column f_id integer primary key auto_increment first;
+alter table talon_service drop column f_trregister, drop column f_trsale, drop column f_trback;
+alter table talon_service add column f_trregister integer after f_price;
+alter table talon_service add column f_trsale integer after f_trregister;
+alter table talon_service add column f_trback integer after f_trsale;
+
+update talon_service set f_trregister=1;
+alter table talon_service_items_group add column f_price decimal(14,2);
+update talon_service_items_group p set f_price=(select f_price from talon_service where f_group=p.f_id limit 1);
+alter table talon_service add column f_discount decimal(14,2) after f_price;
+create table talon_payment (f_id integer primary key auto_increment, f_document integer, f_refdocument integer, f_debit decimal (14,2), f_credit decimal(14,2));
+insert into talon_documents_type (f_id, f_name) values (4, 'Դրամարկղ');
+create table queries_names (f_id integer primary key auto_increment, f_name tinytext, f_query tinytext);
+
+
+/* 13.11.2022 */
+create table d_gift_cart (f_id integer primary key auto_increment, f_code varchar(12), f_info text, f_initialamount decimal(14,2));
+create table d_gift_cart_use (f_id integer primary key auto_increment, f_code varchar(12), f_order integer, f_amount decimal(14,2));
+ALTER TABLE `o_header_payment` CHANGE COLUMN `f_discountCard` `f_discountCard` TINYTEXT NULL DEFAULT NULL ;
+
+
+INSERT INTO d_gift_cart (f_code, f_info, f_initialamount) SELECT f_card, CONCAT(coalesce(f_name, ''), ', ', coalesce(f_info, '')), 0 FROM d_car_client WHERE f_mode <> '1;0;0;*;' AND f_model=3;
+UPDATE d_gift_cart c SET c.f_initialamount = (SELECT SUBSTRING(cc.f_mode, 5, POSITION(';*;' in cc.f_mode) - POSITION('1;0;' IN  cc.f_mode) - 4 ) FROM d_car_client cc WHERE cc.f_card=c.f_code);
+INSERT INTO d_gift_cart_use (f_code, f_amount) SELECT f_code, f_initialamount FROM d_gift_cart;
+
+create table o_tax_log (f_id integer primary key auto_increment, f_order integer, f_in text, f_out text, f_err text);
+alter table o_tax_log add column f_fiscal integer after f_order;
+
+create table salary2_config (f_id integer primary key auto_increment, f1 tinyint, f2 tinyint, f3 tinyint, f4 tinyint, f5 tinyint, f6 tinyint, f7 tinyint);

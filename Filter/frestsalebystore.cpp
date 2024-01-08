@@ -1,6 +1,7 @@
 #include "frestsalebystore.h"
 #include "ui_frestsalebystore.h"
 #include "wreportgrid.h"
+#include "dlggetidname.h"
 
 FRestSaleByStore::FRestSaleByStore(QWidget *parent) :
     WFilterBase(parent),
@@ -8,6 +9,8 @@ FRestSaleByStore::FRestSaleByStore(QWidget *parent) :
 {
     ui->setupUi(this);
     fReportGrid->setupTabTextAndIcon(tr("Sale by store"), ":/images/category.png");
+    connect(ui->leBranch, &EQLineEdit::customButtonClicked, this, &FRestSaleByStore::branchEditDoubleClick);
+    connect(ui->leHall, &EQLineEdit::customButtonClicked, this, &FRestSaleByStore::hallEditDoubleClick);
 }
 
 FRestSaleByStore::~FRestSaleByStore()
@@ -54,12 +57,15 @@ void FRestSaleByStore::apply(WReportGrid *rg)
     if (ui->chShowDates->isChecked()) {
         group += ",h.f_dateCash ";
     }
+    QString where;
+    where += ui->leBranch->fHiddenText.isEmpty() ? "" : QString(" and h.f_branch in (%1) ").arg(ui->leBranch->fHiddenText);
+    where += ui->leHall->fHiddenText.isEmpty() ? "" : QString(" and h.f_hall in (%1) ").arg(ui->leHall->fHiddenText);
     if (ui->chShowItems->isChecked()) {
         sql += " from o_dish d "
                 "left join o_header h on d.f_header=h.f_id "
                 "left join r_dish dish on dish.f_id=d.f_dish "
                 "left join r_store s on s.f_id=d.f_store "
-                "where h.f_state=2 and d.f_state=1 "
+                "where h.f_state=2 and d.f_state=1 " + where +
                 "and h.f_dateCash between " + ui->leDateStart->dateMySql() + " and " + ui->leDateEnd->dateMySql();
         if (ui->chShowItems->isChecked()) {
             group += ",dish.f_en ";
@@ -70,7 +76,7 @@ void FRestSaleByStore::apply(WReportGrid *rg)
                 "left join r_dish dish on dish.f_id=d.f_dish "
                 "left join r_store s on s.f_id=d.f_store "
                 "where h.f_state=2 and d.f_state=1 "
-                "and h.f_dateCash between " + ui->leDateStart->dateMySql() + " and " + ui->leDateEnd->dateMySql();
+                "and h.f_dateCash between " + ui->leDateStart->dateMySql() + " and " + ui->leDateEnd->dateMySql() + where;
     }
     sql += group;
     rg->fModel->setSqlQuery(sql);
@@ -109,4 +115,22 @@ void FRestSaleByStore::on_btnBack_clicked()
     ui->leDateStart->setDate(ui->leDateStart->date().addDays(-1));
     ui->leDateEnd->setDate(ui->leDateEnd->date().addDays(-1));
     apply(fReportGrid);
+}
+
+void FRestSaleByStore::branchEditDoubleClick(bool v)
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_branch, this)) {
+        ui->leBranch->setText(name);
+        ui->leBranch->fHiddenText = id;
+    }
+}
+
+void FRestSaleByStore::hallEditDoubleClick(bool v)
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_hall, this)) {
+        ui->leHall->setText(name);
+        ui->leHall->fHiddenText = id;
+    }
 }

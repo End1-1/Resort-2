@@ -339,6 +339,11 @@
        <string>Amount</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Պահեստ</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
@@ -353,14 +358,14 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>EQTableWidget</class>
-   <extends>QTableWidget</extends>
-   <header location="global">eqtablewidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>EDateEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header location="global">eqtablewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

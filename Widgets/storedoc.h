@@ -49,7 +49,7 @@ private slots:
     void docType(CI_StoreDocType *c);
     void on_btnSaveDoc_clicked();
     void on_btnNewMaterial_clicked();
-    void newGoods(CI_Dish *c);
+    int newGoods(CI_Dish *c);
     void on_btnAddMaterial_clicked();
     void on_btnDraftDoc_clicked();
     void on_btnRemoveDoc_clicked();
@@ -60,6 +60,7 @@ private slots:
     void on_leComments_textChanged(const QString &arg1);
     void on_btnPrintDoc_clicked();
     void on_btnExcel_clicked();
+    void on_btnImportXML_clicked();
 };
 
 #endif // STOREDOC_H

@@ -11,9 +11,9 @@
 #include "dlgonetwoall.h"
 #include "recoupon.h"
 #include "freportbypayment.h"
-#include "guestcheckin.h"
 #include "fdiscountreport.h"
 #include "recouponseria.h"
+#include "inventorization.h"
 #include "ftstorereport.h"
 #include "fdiscounttotal.h"
 #include "fattendance.h"
@@ -22,6 +22,7 @@
 #include "fbalanceoncard.h"
 #include "fcouponsservice.h"
 #include "fcash.h"
+#include "goodsmovement.h"
 #include "fstoreentry.h"
 #include "fpartnersdebt.h"
 #include "fcouponsales.h"
@@ -75,6 +76,7 @@
 #include "recomplimentarycomment.h"
 #include "databaseresult.h"
 #include "wreportbuilder.h"
+#include "dlgchangepassword.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -113,8 +115,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(shortcut12, SIGNAL(activated()), this, SLOT(on_actionLogout_triggered()));
     QShortcut *shortcat11 = new QShortcut(QKeySequence("F11"), this);
     connect(shortcat11, SIGNAL(activated()), this, SLOT(shortcutFullScreen()));
-
-
 
     QString bgpath = qApp->applicationDirPath() + "/bg.png";
     qDebug() << bgpath;
@@ -329,6 +329,7 @@ void MainWindow::buildMenuOfRole()
             if (check_permission(pr_edit_store_doc)) {
                 a2.append(ui->actionNew_store_document);
                 a2.append(ui->actionNew_store_checkpoint);
+                a2.append(ui->action_inventorization);
             }
             if (check_permission(pr_store_doc_journal)) {
                 a2.append(ui->actionDocuments_list);
@@ -337,10 +338,9 @@ void MainWindow::buildMenuOfRole()
                 a2.append(ui->actionStore_entries);
                 a2.append(ui->actionMaterials_in_the_store);
                 a2.append(ui->actionPartners_debts);
+                a2.append(ui->action_goods_movement);
             }
-            if (check_permission(pr_make_store_output_of_sale)) {
-                a2.append(ui->actionCalculate_output_of_restaurant);
-            }
+
             fMenu.insert(1, a2);
 
             QList<QAction*> a3;
@@ -351,6 +351,7 @@ void MainWindow::buildMenuOfRole()
                 a3.append(ui->actionShop_index);
                 a3.append(ui->actionStorage_goods_index);
                 a3.append(ui->actionComplex_dish);
+                a3.append(ui->actionAllDishes);
             }
             fMenu.insert(2, a3);
 
@@ -420,7 +421,10 @@ void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
 
 void MainWindow::dish(int t)
 {
-    int ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
+    int ot = 0;
+    if (t > 0) {
+        ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
+    }
 
     QString cond;
     switch (ot) {
@@ -431,13 +435,18 @@ void MainWindow::dish(int t)
         cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
         break;
     }
+    if (t > 0) {
+        cond += " and p.f_id=" + QString("%1 ").arg(t);
+    }
 
     QList<int> widths;
     widths << 100
-           << 0
            << 120
            << 0
            << 120
+           << 0
+           << 120
+           << 150
            << 150
            << 0
            << 0
@@ -452,11 +461,13 @@ void MainWindow::dish(int t)
            << 80;
     QStringList fields;
     fields << "f_id"
+           << "f_partname"
            << "f_defstore"
            << "f_defstorename"
            << "f_type"
            << "f_type_name"
            << "f_en"
+<< "f_armsoftname"
            << "f_den"
            << "f_bgColor"
            << "f_textColor"
@@ -471,11 +482,13 @@ void MainWindow::dish(int t)
               ;
     QStringList titles;
     titles << tr("Code")
+               << tr("Տեսակ")
            << tr("Part")
            << tr("Store")
            << tr("Type code")
            << tr("Type")
            << tr("Name")
+              << "ՀԾ անվանում"
            << tr("Description")
            << tr("Background color")
            << tr("Text color")
@@ -490,8 +503,8 @@ void MainWindow::dish(int t)
               ;
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
-    QString query = "select d.f_id, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
-            "d.f_en, d.f_text_en,  "
+    QString query = "select d.f_id, p.f_en as f_partname, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
+            "d.f_en, d.f_armsoftname, d.f_text_en,  "
             "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
             "d.f_minreminder, d.f_taxdebt "
             "from r_dish d "
@@ -499,7 +512,7 @@ void MainWindow::dish(int t)
             "inner join r_dish_part p on p.f_id=t.f_part "
             "inner join r_unit u on u.f_id=d.f_unit "
             "left join r_store st on st.f_id=d.f_defstore "
-            "where p.f_id=" + QString("%1 ").arg(t) + cond +
+            "where 1=1 " + cond +
             "order by p.f_en, t.f_en, d.f_queue ";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);
@@ -767,6 +780,7 @@ void MainWindow::on_actionMenu_review_triggered()
            << 0
            << 100
            << 250
+           << 250
            << 80
            << 0
            << 100
@@ -783,6 +797,7 @@ void MainWindow::on_actionMenu_review_triggered()
            << "f_type_id"
            << "f_type_name"
            << "f_dish_name"
+            << "f_armsoftname"
            << "f_price"
            << "f_store_id"
            << "f_store_name"
@@ -799,6 +814,7 @@ void MainWindow::on_actionMenu_review_triggered()
            << tr("Type code")
            << tr("Type")
            << tr("Dish")
+           << "ՀԾ անվանւոմ"
            << tr("Price")
            << tr("Store code")
            << tr("Store")
@@ -807,7 +823,7 @@ void MainWindow::on_actionMenu_review_triggered()
            << tr("ArmSoft")
               ;
     QString query = "select  d.f_id, m.f_id, mn.f_" + def_lang + ", t.f_part, p.f_" + def_lang + ", "
-            "d.f_type, t.f_" + def_lang + ", d.f_" + def_lang + ", m.f_price, "
+            "d.f_type, t.f_" + def_lang + ", d.f_" + def_lang + ", d.f_armsoftname, m.f_price, "
             "m.f_store, s.f_name, m.f_print1, m.f_print2, d.f_as "
             "from r_menu m "
             "inner join r_menu_names mn on mn.f_id=m.f_menu "
@@ -1117,12 +1133,12 @@ void MainWindow::on_actionCostumers_triggered()
 
 void MainWindow::on_actionCoupons_one_off_triggered()
 {
-    RECarClient::openReport2();
+    RECarClient::openReport1();
 }
 
 void MainWindow::on_actionCoupons_present_triggered()
 {
-    RECarClient::openReport3();
+    RECarClient::openReport1();
 }
 
 void MainWindow::on_actionBalance_of_the_cards_triggered()
@@ -1201,4 +1217,24 @@ void MainWindow::on_actionAttendance_triggered()
 void MainWindow::on_actionArmSoftExport_triggered()
 {
     FAsExportSale::openFilterReport<FAsExportSale, WReportGrid>();
+}
+
+void MainWindow::on_btnChangeMyPassword_clicked()
+{
+    DlgChangePassword(this).exec();
+}
+
+void MainWindow::on_action_inventorization_triggered()
+{
+    addTab<Inventorization>();
+}
+
+void MainWindow::on_action_goods_movement_triggered()
+{
+    addTab<goodsmovement>();
+}
+
+void MainWindow::on_actionAllDishes_triggered()
+{
+    dish(0);
 }

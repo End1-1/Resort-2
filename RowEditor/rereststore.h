@@ -15,6 +15,10 @@ public:
     explicit RERestStore(QList<QVariant> &values, QWidget *parent = 0);
     ~RERestStore();
 
+protected:
+    virtual void valuesToWidgets();
+    virtual void save();
+
 private slots:
     void on_btnCancel_clicked();
 

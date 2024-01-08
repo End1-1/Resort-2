@@ -5,6 +5,7 @@
 #include "dwselectorreststore.h"
 #include "dwselectorstoredoctype.h"
 #include "dwselectorstorepartners.h"
+#include "dlggetidname.h"
 
 #define SEL_DOC_TYPE 1
 #define SEL_DISH 2
@@ -23,10 +24,7 @@ FStoreMovement::FStoreMovement(QWidget *parent) :
     dt->setSelector(ui->leAction);
     dt->setDialog(this, SEL_DOC_TYPE);
 
-    fDockDish = new DWSelectorDish(this);
-    fDockDish->configure();
-    fDockDish->setSelector(ui->leMaterial);
-    fDockDish->setDialog(this, SEL_DISH);
+    connect(ui->leMaterial, &EQLineEdit::customButtonClicked, this, &FStoreMovement::goodsClick);
 
     DWSelectorRestStore *fDockStore = new DWSelectorRestStore(this);
     fDockStore->configure();
@@ -36,7 +34,6 @@ FStoreMovement::FStoreMovement(QWidget *parent) :
        if (c) {
            QMap<int, QString> colFilter;
            colFilter[3] = c->fCode;
-           fDockDish->setFilterColumn(colFilter);
        }
     });
 
@@ -151,4 +148,13 @@ void FStoreMovement::on_btnDateRight_clicked()
     ui->deStart->setDate(ui->deStart->date().addDays(1));
     ui->deEnd->setDate(ui->deEnd->date().addDays(1));
     apply(fReportGrid);
+}
+
+void FStoreMovement::goodsClick()
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_dish, this)) {
+        ui->leMaterial->setText(name);
+        ui->leMaterial->fHiddenText = id;
+    }
 }

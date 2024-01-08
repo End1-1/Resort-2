@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>314</width>
-    <height>113</height>
+    <height>132</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,21 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Code</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="EQLineEdit" name="leName">
+       <property name="Field" stdset="0">
+        <string>f_name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
       <widget class="QWidget" name="widget" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -75,13 +89,6 @@
        </layout>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Code</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -89,10 +96,17 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="EQLineEdit" name="leName">
-       <property name="Field" stdset="0">
-        <string>f_name</string>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Ակտիվ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="chActive">
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>

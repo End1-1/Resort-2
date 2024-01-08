@@ -127,7 +127,7 @@
       <number>9</number>
      </property>
      <property name="Field" stdset="0">
-      <string>op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponservice</string>
+      <string>oh.f_total;op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponbank;op.f_couponservice;</string>
      </property>
      <property name="RequireLang" stdset="0">
       <bool>false</bool>
@@ -602,7 +602,7 @@ ledger</string>
       <number>10</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_paymentModeComment</string>
+      <string>oh.f_comment</string>
      </property>
     </widget>
    </item>
@@ -960,14 +960,14 @@ ledger</string>
    </slots>
   </customwidget>
   <customwidget>
-   <class>EQCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header location="global">eqcheckbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>EDateEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

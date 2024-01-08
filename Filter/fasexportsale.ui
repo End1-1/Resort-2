@@ -46,6 +46,37 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Սրահ</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="EQLineEdit" name="leHall">
+     <property name="ShowButton" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="r1">
+     <property name="text">
+      <string>Ընդհանուր</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="r2">
+     <property name="text">
+      <string>Ամփոփ</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

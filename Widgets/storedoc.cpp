@@ -6,7 +6,11 @@
 #include "excel.h"
 #include "storeoutput.h"
 #include "pprintstoredoc.h"
+#include "database2.h"
 #include <QInputDialog>
+#include <QFileDialog>
+#include <qxml.h>
+#include <QXmlStreamReader>
 
 #define SEL_DOC_TYPE 10
 #define SEL_PARTNER 2
@@ -127,11 +131,8 @@ void StoreDoc::loadDoc(int id)
 
     fDbBind[":f_doc"] = ui->leDocNumber->text();
     QString add;
-    if (ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
-        add = "and b.f_sign=1";
-    }
     dh.select(fDb, "select b.f_id, b.f_material, m.f_en, b.f_qty, b.f_price, b.f_total, "
-              "u.f_name as f_unitName, b.f_sign, b.f_store "
+              "u.f_name as f_unitName, b.f_sign, b.f_store, b.f_vat "
               "from r_body b "
               "left join r_dish m on m.f_id=b.f_material "
               "left join r_unit u on u.f_id=m.f_unit "
@@ -140,7 +141,7 @@ void StoreDoc::loadDoc(int id)
         CI_Dish *d = CacheDish::instance()->get(dh.value(i, "f_material").toString());
         if (!d) {
             message_error(tr("Program error. Please, contact with developer. Message: CI_Dish==0, loadDoc"));
-            return;
+            continue;
         }
         newGoods(d);
         ui->tblGoods->setItemWithValue(i, 0, dh.value(i, "f_id"));
@@ -148,11 +149,17 @@ void StoreDoc::loadDoc(int id)
         ui->tblGoods->setItemWithValue(i, 4, dh.value(i, "f_unitName"));
         ui->tblGoods->lineEdit(i, 5)->setDouble(dh.value(i, "f_price").toDouble());
         ui->tblGoods->lineEdit(i, 6)->setDouble(dh.value(i, "f_total").toDouble());
+        ui->tblGoods->lineEdit(i, 7)->setDouble(dh.value(i, "f_vat").toDouble());
+        ui->tblGoods->lineEdit(i, 8)->setDouble(dh.value(i, "f_qty").toDouble() * dh.value(i, "f_vat").toDouble());
         if (dh.value(i, "f_sign").toInt() == 1) {
             CI_RestStore *rs = CacheRestStore::instance()->get(dh.value(i, "f_store").toString());
             store(rs);
         } else {
             CI_RestStore *rs = CacheRestStore::instance()->get(dh.value(i, "f_store").toString());
+            if (ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
+                continue;
+            }
+
             store2(rs);
         }
     }
@@ -219,11 +226,13 @@ void StoreDoc::prepareDoc()
 
 void StoreDoc::countTotal()
 {
-    float total = 0;
+    float total = 0, totalVat = 0;
     for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
         total += ui->tblGoods->lineEdit(i, 6)->asDouble();
+        totalVat += ui->tblGoods->lineEdit(i, 8)->asDouble();
     }
     ui->leTotal->setDouble(total);
+    ui->leTotalVat->setDouble(totalVat);
 }
 
 void StoreDoc::saveDoc(int docState)
@@ -309,27 +318,81 @@ void StoreDoc::saveDoc(int docState)
     }
 
     for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
-        fDbBind[":f_doc"] = ui->leDocNumber->text();
-        fDbBind[":f_store"] =  store;
-        fDbBind[":f_material"] = ui->tblGoods->toInt(i, 1);
-        fDbBind[":f_sign"] = ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT ? -1 : 1;
-        fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
-        fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
-        fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
-        if (ui->tblGoods->toInt(i, 0) == 0) {
-            int newid = fDb.insert("r_body", fDbBind);
-            if (newid < 0) {
+        if (ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT ||
+                ui->leAction->fHiddenText.toInt() == STORE_DOC_IN) {
+            fDbBind[":f_doc"] = ui->leDocNumber->text();
+            fDbBind[":f_store"] =  store;
+            fDbBind[":f_material"] = ui->tblGoods->toInt(i, 1);
+            fDbBind[":f_sign"] = ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT ? -1 : 1;
+            fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            if (ui->tblGoods->toInt(i, 0) == 0) {
+                int newid = fDb.insert("r_body", fDbBind);
+                if (newid < 0) {
+                    fDb.fDb.rollback();
+                    message_error(fDb.fLastError);
+                    return;
+                }
+                ui->tblGoods->setItemWithValue(i, 0, newid);
+            } else if (!fDb.update("r_body", fDbBind, where_id(ui->tblGoods->toInt(i, 0)))) {
                 fDb.fDb.rollback();
                 message_error(fDb.fLastError);
                 return;
             }
-            ui->tblGoods->setItemWithValue(i, 0, newid);
-        } else if (!fDb.update("r_body", fDbBind, where_id(ui->tblGoods->toInt(i, 0)))) {
-            fDb.fDb.rollback();
-            message_error(fDb.fLastError);
-            return;
+            if (ui->leAction->fHiddenText.toInt() == STORE_DOC_IN) {
+             fDbBind[":f_lastprice"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+             fDb.update("r_dish", fDbBind, where_id(ui->tblGoods->toInt(i, 1)));
+            }
+        } else {
+            fDbBind[":f_doc"] = ui->leDocNumber->text();
+            fDbBind[":f_store"] =  ui->leStore->fHiddenText.toInt();
+            fDbBind[":f_material"] = ui->tblGoods->toInt(i, 1);
+            fDbBind[":f_sign"] = 1;
+            fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            if (ui->tblGoods->toInt(i, 0) == 0) {
+                int newid = fDb.insert("r_body", fDbBind);
+                if (newid < 0) {
+                    fDb.fDb.rollback();
+                    message_error(fDb.fLastError);
+                    return;
+                }
+                //ui->tblGoods->setItemWithValue(i, 0, newid);
+            } else if (!fDb.update("r_body", fDbBind, where_id(ui->tblGoods->toInt(i, 0)))) {
+                fDb.fDb.rollback();
+                message_error(fDb.fLastError);
+                return;
+            }
+
+            fDbBind[":f_doc"] = ui->leDocNumber->text();
+            fDbBind[":f_store"] = ui->leStoreout->fHiddenText.toInt();
+            fDbBind[":f_material"] = ui->tblGoods->toInt(i, 1);
+            fDbBind[":f_sign"] = -1;
+            fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            if (ui->tblGoods->toInt(i, 0) == 0) {
+                int newid = fDb.insert("r_body", fDbBind);
+                if (newid < 0) {
+                    fDb.fDb.rollback();
+                    message_error(fDb.fLastError);
+                    return;
+                }
+                ui->tblGoods->setItemWithValue(i, 0, newid);
+            } else if (!fDb.update("r_body", fDbBind, where_id(ui->tblGoods->toInt(i, 0)))) {
+                fDb.fDb.rollback();
+                message_error(fDb.fLastError);
+                return;
+            }
+
         }
     }
+
 
     if (ui->leAction->fHiddenText.toInt() == 1) {
         if (docState == 1) {
@@ -354,26 +417,28 @@ void StoreDoc::saveDoc(int docState)
     fDb.select("delete from r_store_acc where f_doc=:f_doc", fDbBind, fDbRows);
     if (docState == 1) {
         for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
-            if (ui->leAction->fHiddenText.toInt() == STORE_DOC_IN) {
+            if (ui->leAction->fHiddenText.toInt() == STORE_DOC_IN
+                    || ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
                 fDbBind[":f_doc"] = ui->leDocNumber->asInt();
                 fDbBind[":f_docrow"] = ui->tblGoods->itemValue(i, 0).toInt();
                 fDbBind[":f_base"] = ui->tblGoods->itemValue(i, 0).toInt();
                 fDbBind[":f_store"] = ui->leStore->fHiddenText.toInt();
                 fDbBind[":f_goods"] = ui->tblGoods->itemValue(i, 1).toInt();
-                fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asInt();
+                fDbBind[":f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
                 fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
                 fDbBind[":f_sign"] = 1;
                 fDb.insert("r_store_acc", fDbBind);
             }
-            if (ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT) {
-                QMap<int, double> priceList;
-                StoreOutput so(fDb, ui->leDocNumber->asInt());
-                so.output(priceList);
-                for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
-                    int code = ui->tblGoods->toInt(i, 0);
-                    ui->tblGoods->lineEdit(i, 5)->setDouble(priceList[code]);
-                    ui->tblGoods->lineEdit(i, 5)->textEdited(ui->tblGoods->lineEdit(i, 5)->text());
-                }
+        }
+        if (ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT
+                || ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
+            QMap<int, double> priceList;
+            StoreOutput so(fDb, ui->leDocNumber->asInt());
+            so.output(priceList);
+            for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
+                int code = ui->tblGoods->toInt(i, 0);
+                ui->tblGoods->lineEdit(i, 5)->setDouble(priceList[code]);
+                ui->tblGoods->lineEdit(i, 5)->textEdited(ui->tblGoods->lineEdit(i, 5)->text());
             }
         }
     }
@@ -477,10 +542,10 @@ void StoreDoc::on_btnNewMaterial_clicked()
     }
 }
 
-void StoreDoc::newGoods(CI_Dish *c)
+int StoreDoc::newGoods(CI_Dish *c)
 {
     if (!c) {
-        return;
+        return -1;
     }
     int row = ui->tblGoods->rowCount();
     ui->tblGoods->setRowCount(row + 1);
@@ -494,10 +559,27 @@ void StoreDoc::newGoods(CI_Dish *c)
     l = ui->tblGoods->addLineEdit(row, 5, false);
     l->setValidator(new QDoubleValidator(0, 1000000000, 2));
     connect(l, SIGNAL(textEdited(QString)), this, SLOT(priceChange(QString)));
+    EQLineEdit *price = l;
     l = ui->tblGoods->addLineEdit(row, 6, false);
     l->setValidator(new QDoubleValidator(0, 1000000000, 2));
     connect(l, SIGNAL(textEdited(QString)), this, SLOT(totalChange(QString)));
     ui->tblGoods->lineEdit(row, 3)->setFocus();
+    if (ui->leAction->fHiddenText.toInt() == STORE_DOC_IN) {
+        fDbBind[":f_id"] = c->fCode;
+        fDb.select("select f_lastprice from r_dish where f_id=:f_id", fDbBind, fDbRows);
+        if (fDbRows.count() > 0) {
+            price->setDouble( fDbRows.at(0)[0].toDouble());
+        }
+    }
+    l = ui->tblGoods->addLineEdit(row, 7, false);
+    l->setValidator(new QDoubleValidator(0, 1000000000, 2));
+    connect(l, &EQLineEdit::textChanged, [=](const QString &str) {
+
+    });
+    l = ui->tblGoods->addLineEdit(row, 8, false);
+    l->setValidator(new QDoubleValidator(0, 1000000000, 2));
+    l->setReadOnly(true);
+    return row;
 }
 
 void StoreDoc::on_btnAddMaterial_clicked()
@@ -643,4 +725,83 @@ void StoreDoc::on_btnExcel_clicked()
 
     e.setFontSize(e.address(0, 0), e.address(rowCount + 2, colCount ), 10);
     e.show();
+}
+
+void StoreDoc::on_btnImportXML_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "XML File", "", "*.xml");
+    if (fileName.isEmpty()) {
+        return;
+    }
+    QFile xmlFile(fileName);
+    if (!xmlFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2.exec("select f_id, f_armsoftname from r_dish where length(f_armsoftname) >0");
+    QMap<QString, int> nameMap;
+    while (db2.next()) {
+        nameMap[db2.string("f_armsoftname")] = db2.integer("f_id");
+    }
+    auto *xmlReader = new QXmlStreamReader(&xmlFile);
+    QString name, price, qty, priceVat, vatRate;
+    bool good = false;
+    while (!xmlReader->atEnd() && !xmlReader->hasError()) {
+        QXmlStreamReader::TokenType tt = xmlReader->readNext();
+        if (tt == QXmlStreamReader::StartDocument) {
+            continue;
+        }
+        if (tt == QXmlStreamReader::StartElement) {
+            if (xmlReader->name() == "Good") {
+                good = true;
+            } else if (xmlReader->name() == "Description") {
+                name = xmlReader->readElementText();
+            } else if (xmlReader->name() == "PricePerUnit") {
+                price = xmlReader->readElementText();
+            } else if (xmlReader->name() == "Amount") {
+                qty = xmlReader->readElementText();
+            } else if (xmlReader->name() == "Price") {
+                priceVat = xmlReader->readElementText();
+            } else if (xmlReader->name() == "VATRate") {
+                vatRate = xmlReader->readElementText();
+            }
+        } else
+        if (tt == QXmlStreamReader::EndElement) {
+            if (xmlReader->name() == "Good") {
+               good = false;
+               if (!nameMap.contains(name.toUpper())) {
+                   message_error(name + "<br> Անհայտ անվանում");
+               } else {
+                   fDbBind[":f_id"] = nameMap[name.toUpper()];
+                   DatabaseResult dr;
+                   dr.select(fDb, "select f_id from r_dish where f_id=:f_id", fDbBind);
+                   if (dr.rowCount() == 0) {
+                       message_error(tr("Code not found"));
+                       return;
+                   }
+                   CI_Dish *d = CacheDish::instance()->get(dr.value("f_dish").toString());
+                   if (d) {
+                       int row = newGoods(d);
+                       ui->tblGoods->lineEdit(row, 3)->setText(qty);
+                       ui->tblGoods->lineEdit(row, 5)->setText(price);
+                       ui->tblGoods->lineEdit(row, 6)->setText(float_str(qty.toDouble() * price.toDouble(), 2));
+                       ui->tblGoods->lineEdit(row, 7)->setText(float_str(price.toDouble() + (price.toDouble() * vatRate.toDouble() / 100), 2));
+                       ui->tblGoods->lineEdit(row, 8)->setText(float_str(qty.toDouble() * ui->tblGoods->lineEdit(row, 7)->asDouble(), 2));
+                   }
+               }
+            }
+        }
+    }
+    if(xmlReader->hasError()) {
+            QMessageBox::critical(this,
+            "xmlFile.xml Parse Error",xmlReader->errorString(),
+            QMessageBox::Ok);
+            return;
+    }
+
+    xmlReader->clear();
+    xmlFile.close();
+    countTotal();
 }

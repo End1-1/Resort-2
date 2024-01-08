@@ -22,6 +22,9 @@ private slots:
 
     void on_btnBack_clicked();
 
+    void branchEditDoubleClick(bool v);
+    void hallEditDoubleClick(bool v);
+
 private:
     Ui::FRestSaleByStore *ui;
 };
