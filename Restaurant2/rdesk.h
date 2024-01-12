@@ -103,6 +103,8 @@ private slots:
 
     void on_btnPrintMultipleFiscal_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::RDesk *ui;
     static QMap<int, DishStruct*> fQuickDish;

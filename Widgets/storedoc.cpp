@@ -7,6 +7,7 @@
 #include "storeoutput.h"
 #include "pprintstoredoc.h"
 #include "database2.h"
+#include "dlggetidname.h"
 #include <QInputDialog>
 #include <QFileDialog>
 #include <qxml.h>
@@ -25,10 +26,7 @@ StoreDoc::StoreDoc(QWidget *parent) :
     fGoodsTab = ui->tabWidget->widget(1);
     fAccTab = ui->tabWidget->widget(2);
 
-    fDockStore = new DWSelectorRestStore(this);
-    fDockStore->configure();
-    fDockStore->setSelector(ui->leStore);
-    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
+    connect(ui->leStore, &EQLineEdit::customButtonClicked, this, &StoreDoc::editStoreClicked);
 
     fDockStore2 = new DWSelectorRestStore(this);
     fDockStore2->configure();
@@ -466,6 +464,15 @@ void StoreDoc::saveDoc(int docState)
     }
 }
 
+void StoreDoc::editStoreClicked()
+{
+    QString id, name;
+    if (DlgGetIDName::get(id, name, idname_store, this)) {
+        ui->leStore->setText(name);
+        ui->leStore->fHiddenText = id;
+    }
+}
+
 void StoreDoc::qtyChange(const QString &arg1)
 {
     Q_UNUSED(arg1)
@@ -584,15 +591,15 @@ int StoreDoc::newGoods(CI_Dish *c)
 
 void StoreDoc::on_btnAddMaterial_clicked()
 {
-    QMap<int, QString> colFilter;
-    switch (ui->leAction->fHiddenText.toInt()) {
-    case STORE_DOC_IN:
-        colFilter[3] = ui->leStore->fHiddenText;
-        break;
-        colFilter[3] = ui->leStoreout->fHiddenText;
-        break;
-    }
-    fDockDish->setFilterColumn(colFilter);
+    // QMap<int, QString> colFilter;
+    // switch (ui->leAction->fHiddenText.toInt()) {
+    // case STORE_DOC_IN:
+    //     colFilter[3] = ui->leStore->fHiddenText;
+    //     break;
+    //     colFilter[3] = ui->leStoreout->fHiddenText;
+    //     break;
+    // }
+    // fDockDish->setFilterColumn(colFilter);
     fDockDish->on_lineEdit_textEdited("");
     fDockDish->show();
     fDockDish->activateWindow();

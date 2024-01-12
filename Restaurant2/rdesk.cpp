@@ -3662,3 +3662,9 @@ void RDesk::on_btnPrintMultipleFiscal_clicked()
     DlgPrintMultipleFiscal d(this);
     d.exec();
 }
+
+void RDesk::on_pushButton_clicked()
+{
+
+}
+

@@ -1,14 +1,15 @@
 #include "mainwindow.h"
-#include "login.h"
 #include "utils.h"
 #include <QApplication>
 #include <QFontDatabase>
 #include <QFile>
 #include <QStyleFactory>
 #include <QTranslator>
+#include <QTextCodec>
 
 int main(int argc, char *argv[])
 {
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8") );
     def_station = "SmartHotel: ";
     Utils::initNumbersWords();
     QApplication a(argc, argv);

@@ -34,3 +34,5 @@ RESOURCES += \
     res.qrc
 
 INCLUDEPATH += $$PWD/../Base
+
+DEFINES += _DBDRIVER_=\\\"QMARIADB\\\"

@@ -41,6 +41,7 @@ private:
     void saveDoc(int docState);
 
 private slots:
+    void editStoreClicked();
     void qtyChange(const QString &arg1);
     void priceChange(const QString &arg1);
     void totalChange(const QString &arg1);

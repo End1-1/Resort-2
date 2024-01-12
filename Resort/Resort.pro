@@ -664,7 +664,7 @@ RESOURCES += \
     res.qrc
 
 LIBS += -lVersion
-LIBS += -LC:/Soft/OpenSSL-Win32/lib
+LIBS += -LC:/Soft/OpenSSL-Win64/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS +=  -lwsock32
@@ -683,8 +683,8 @@ INCLUDEPATH += ../Widgets
 INCLUDEPATH += ../RGDoubleClick
 INCLUDEPATH += ../GridOptionWidgets
 INCLUDEPATH += ../Vouchers
-INCLUDEPATH += c:/soft/OpenSSL-Win32/include
-INCLUDEPATH += c:/soft/OpenSSL-Win32/include/openssl
+INCLUDEPATH += c:/soft/OpenSSL-Win64/include
+INCLUDEPATH += c:/soft/OpenSSL-Win64/include/openssl
 INCLUDEPATH += c:/projects/NewTax/Src
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
