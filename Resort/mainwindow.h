@@ -9,7 +9,8 @@
 #include <QLabel>
 #include <QUdpSocket>
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -146,8 +147,8 @@ private:
     void enableMainMenu(bool value);
     void disableMainMenu();
     void buildMenuOfRole();
-    void buildMenu(QToolButton *btn, const QList<QAction*> &l);
-    QMap<QAction*, int> fCustomReports;
+    void buildMenu(QToolButton *btn, const QList<QAction *> &l);
+    QMap<QAction *, int> fCustomReports;
     void dish(int t);
 };
 

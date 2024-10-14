@@ -15,6 +15,7 @@ DlgCouponServiceDocument::DlgCouponServiceDocument(ReportQuery *rq, QWidget *par
     ui->setupUi(this);
     rq->costumizeCombo(ui->cbPartner, "partners");
     fReportQuery = rq;
+    ui->tbl->setColumnWidth(8, 0);
 }
 
 DlgCouponServiceDocument::~DlgCouponServiceDocument()
@@ -42,7 +43,6 @@ void DlgCouponServiceDocument::openDocument(int id)
     ui->btnMinus->setEnabled(false);
     ui->btnPlus->setEnabled(false);
     ui->btnSave->setEnabled(false);
-
     db[":f_doc"] = ui->leDoc->asInt();
     db.exec("select * from talon_body where f_doc=:f_doc");
     while (db.next()) {
@@ -63,19 +63,21 @@ void DlgCouponServiceDocument::on_btnPlus_clicked()
 {
     DlgCouponServiceDocumentPlus d(fReportQuery, this);
     if (d.exec() == QDialog::Accepted) {
-        QString couponType, first, last;
-        double qty, price, discount, total;
-        d.getResult(couponType, first, last, qty, price, discount, total);
+        QString couponType, first;
+        double qty = 1, price, discount, total;
+        int group;
+        d.getResult(couponType, first, price, discount, total, group);
         int r = ui->tbl->rowCount();
         ui->tbl->setRowCount(r + 1);
         ui->tbl->setItem(r, 0, new QTableWidgetItem());
         ui->tbl->setItem(r, 1, new QTableWidgetItem(couponType));
         ui->tbl->setItem(r, 2, new QTableWidgetItem(first));
-        ui->tbl->setItem(r, 3, new QTableWidgetItem(last));
+        ui->tbl->setItem(r, 3, new QTableWidgetItem(first));
         ui->tbl->setItem(r, 4, new QTableWidgetItem(QString::number(qty)));
         ui->tbl->setItem(r, 5, new QTableWidgetItem(QString::number(price)));
         ui->tbl->setItem(r, 6, new QTableWidgetItem(QString::number(discount)));
         ui->tbl->setItem(r, 7, new QTableWidgetItem(QString::number(total)));
+        ui->tbl->setItem(r, 8, new QTableWidgetItem(QString::number(group)));
         countAmount();
     }
 }
@@ -109,40 +111,13 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
     db.insert("talon_documents_header", docid);
     for (int i = 0; i < ui->tbl->rowCount(); i++) {
         db[":f_code"] = ui->tbl->item(i, 2)->text();
-        db.exec("select f_id from talon_service where f_code=:f_code");
-        db.next(true);
-        int firstId = db.integer("f_id");
-        db[":f_code"] = ui->tbl->item(i, 3)->text();
-        db.exec("select f_id from talon_service where f_code=:f_code");
-        db.next(true);
-        int lastId = db.integer("f_id");
-        db[":f_id1"] = firstId;
-        db[":f_id2"] = lastId;
-        if (!db.exec("select f_id, f_trsale from talon_service where f_id between :f_id1 and :f_id2 for update")) {
-            message_error(tr("Document save error") + "\r\n" + db.lastDbError());
-            db.rollback();
-            return;
-        }
-        QList<QMap<QString, QVariant> > datacheck;
-        while (db.next()) {
-            QMap<QString, QVariant> d;
-            d["id"] = db.integer("f_id");
-            d["tr"] = db.integer("f_trsale");
-            datacheck.append(d);
-        }
-        for (int j = 0; j < datacheck.count(); j++) {
-            const QMap<QString, QVariant> &d = datacheck.at(j);
-            if (d["tr"].toInt() > 0) {
-                message_error(tr("Some coupons already saled. Check document"));
-                db.rollback();
-                return;
-            }
-            db[":f_id"] = d["id"];
-            db[":f_trsale"] = docid;
-            db[":f_partner"] = ui->cbPartner->currentData();
-            db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
-            db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, f_partner=:f_partner where f_id=:f_id");
-        }
+        db[":f_trsale"] = docid;
+        db[":f_group"]  = ui->tbl->item(i, 8)->text().toInt();
+        db[":f_partner"] = ui->cbPartner->currentData();
+        db[":f_price"] = str_float(ui->tbl->item(i, 5)->text());
+        db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
+        db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, "
+                "f_price=:f_price, f_trback=null, f_partner=:f_partner, f_group=:f_group where f_code=:f_code");
         db[":f_doc"] = docid;
         db[":f_group"] = ui->tbl->item(i, 1)->text();
         db[":f_first"] = ui->tbl->item(i, 2)->text();
@@ -153,7 +128,6 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
         db[":f_total"] = str_float(ui->tbl->item(i, 7)->text());
         db.insert("talon_body");
     }
-
     db[":f_type"] = 4;
     db[":f_date"] = ui->leDate->date();
     db[":f_partner"] = ui->cbPartner->currentData();
@@ -165,7 +139,6 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
     db[":f_debit"] = ui->lePaid->asDouble();
     db[":f_credit"] = ui->leTotal->asDouble();
     db.insert("talon_payment");
-
     db.commit();
     ui->leDoc->setInt(docid);
     ui->leDate->setEnabled(false);
@@ -182,7 +155,6 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
         message_error(tr("Document wasnt saved"));
         return;
     }
-
     C5Printing p;
     p.setSceneParams(2800, 2000, QPrinter::Landscape);
     QFont font(font());
@@ -233,7 +205,6 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
     p.ltext(ui->lePaid->text(), sl + 450);
     p.br();
     p.br();
-
     QList<qreal> points;
     points << baseleft << 100 << 450 << 150 << 150 << 150 << 250;
     QList<qreal> points2 = points;
@@ -243,8 +214,6 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
     p.tableText(points, vals, p.fLineHeight + 30);
     p.tableText(points2, vals, p.fLineHeight + 30);
     p.br(p.fLineHeight + 30);
-
-
     for (int i = 0; i < ui->tbl->rowCount(); i++) {
         vals.clear();
         vals << QString::number(i + 1)
@@ -269,7 +238,6 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
     p.br();
     p.br();
     p.br(p.fLineHeight + 20);
-
     p.ltext(tr("Receiver:"), baseleft);
     p.ltext(tr("Receiver:"), baseleft + sl);
     p.ltext(tr("Deliver:"), baseleft + 750);
@@ -287,8 +255,7 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
     p.br();
     p.ltext(QString("%1 %2").arg(tr("Printed:"), QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm")), baseleft);
     p.ltext(QString("%1 %2").arg(tr("Printed:"), QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm")), sl + baseleft);
-
-    C5PrintPreview pp(&p, this);
+    C5PrintPreview pp( &p, this);
     pp.exec();
 }
 

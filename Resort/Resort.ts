@@ -1066,14 +1066,6 @@ name</source>
         <translation>Գործըները նշված չէ</translation>
     </message>
     <message>
-        <source>Document save error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Some coupons already saled. Check document</source>
-        <translation>Որոշ կտրոնների վաճարված են, ստուգոք փասթաթուղթը</translation>
-    </message>
-    <message>
         <source>Saved</source>
         <translation>Պահպանված է</translation>
     </message>
@@ -1129,6 +1121,10 @@ name</source>
         <source>Printed:</source>
         <translation>Տպված</translation>
     </message>
+    <message>
+        <source>group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DlgCouponServiceDocumentPlus</name>
@@ -1137,28 +1133,12 @@ name</source>
         <translation>Կտրոն</translation>
     </message>
     <message>
-        <source>End number</source>
-        <translation>Վերջին համար</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Coupon type</source>
         <translation>Կտրոնի տեսակ</translation>
     </message>
     <message>
-        <source>Qty</source>
-        <translation>Քնկ</translation>
-    </message>
-    <message>
         <source>Price</source>
         <translation>Գին</translation>
-    </message>
-    <message>
-        <source>Start number</source>
-        <translation>Արաջին համար</translation>
     </message>
     <message>
         <source>Discount</source>
@@ -1175,10 +1155,6 @@ name</source>
     <message>
         <source>Cancel</source>
         <translation>Հրաժարվել</translation>
-    </message>
-    <message>
-        <source>Max</source>
-        <translation>Առավելագույնը</translation>
     </message>
     <message>
         <source>Partner is not selected</source>
@@ -1203,6 +1179,10 @@ name</source>
     <message>
         <source>This coupon already saled</source>
         <translation>Կտրոնը օգտագործված է</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Համար</translation>
     </message>
 </context>
 <context>
@@ -2165,6 +2145,18 @@ for this operation</source>
         <source>ArmSoft export</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Սրահ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ընդհանուր</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ամփոփ</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FAttendance</name>
@@ -2218,6 +2210,18 @@ for this operation</source>
     <message>
         <source>Code</source>
         <translation type="unfinished">Կոդ</translation>
+    </message>
+    <message>
+        <source>Բոլորը</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ազատ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Սպառված</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3080,8 +3084,23 @@ for this operation</source>
         <translation>Զեղչ</translation>
     </message>
     <message>
-        <source>Debt</source>
-        <translation>Պարտք</translation>
+        <source>Branch</source>
+        <translation type="unfinished">Մասնաճյուղ</translation>
+    </message>
+    <message>
+        <source>Hall</source>
+        <translation type="unfinished">Սրահ</translation>
+    </message>
+</context>
+<context>
+    <name>FReportFromStoredProc</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Row</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3137,6 +3156,14 @@ for this operation</source>
     <message>
         <source>Date start</source>
         <translation>Սկիզբ</translation>
+    </message>
+    <message>
+        <source>Branch</source>
+        <translation type="unfinished">Մասնաճյուղ</translation>
+    </message>
+    <message>
+        <source>Hall</source>
+        <translation type="unfinished">Սրահ</translation>
     </message>
 </context>
 <context>
@@ -3200,10 +3227,6 @@ ledger</source>
     </message>
     <message>
         <source>oh.f_table;t.f_name</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>oh.f_paymentModeComment</source>
         <translation></translation>
     </message>
     <message>
@@ -3273,10 +3296,6 @@ ledger</source>
     <message>
         <source>Remove</source>
         <translation>Հեռացնել</translation>
-    </message>
-    <message>
-        <source>Print receipts</source>
-        <translation>Տպել հաշիվները</translation>
     </message>
     <message>
         <source>State code</source>
@@ -3560,7 +3579,11 @@ ledger</source>
         <translation type="unfinished">Կանխավճարային կտրոններ</translation>
     </message>
     <message>
-        <source>oh.f_total;op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponservice</source>
+        <source>oh.f_total;op.f_cash;op.f_card;op.f_discount;op.f_debt;op.f_coupon;op.f_couponbank;op.f_couponservice;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>oh.f_comment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3628,6 +3651,14 @@ ledger</source>
     <message>
         <source>Amount</source>
         <translation>Գումար</translation>
+    </message>
+    <message>
+        <source>Branch</source>
+        <translation type="unfinished">Մասնաճյուղ</translation>
+    </message>
+    <message>
+        <source>Hall</source>
+        <translation type="unfinished">Սրահ</translation>
     </message>
 </context>
 <context>
@@ -3965,6 +3996,89 @@ ledger</source>
     </message>
 </context>
 <context>
+    <name>Inventorization</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հաշվ․ համար</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հաշվարկային ժամանակաշրջան</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Պահեստ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Բեռնել</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գրանցել ելք փասթաթուղթ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հեռացնել ելքի փասթաթուղթը</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ապրանքի կոդ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ապրանքի անվանում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Չ/Մ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Սկզբնական քանակ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Մուտք</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ծախս ըստ բաղ․</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Փաստացի ծախս</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գերածախս/տնտեսում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Փաստացի մնացորդ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հաշվ․ մնացորդ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գին</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գումար</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Login</name>
     <message>
         <source>Login</source>
@@ -4086,10 +4200,6 @@ ledger</source>
         <translation>Ճաշացանկի բաժիններ</translation>
     </message>
     <message>
-        <source>Type of dishes</source>
-        <translation>Ապրանքի տեսակներ</translation>
-    </message>
-    <message>
         <source>Dishes</source>
         <translation>Ապրանքների ցանկ</translation>
     </message>
@@ -4180,10 +4290,6 @@ ledger</source>
     <message>
         <source>Coupons</source>
         <translation>Կտրոններ</translation>
-    </message>
-    <message>
-        <source>Calculate output of restaurant</source>
-        <translation>Հաշվարկել ապրանքի ելքը</translation>
     </message>
     <message>
         <source>Lost connection to broadcast server, force logout</source>
@@ -4369,16 +4475,6 @@ ledger</source>
     <message>
         <source>Accounts</source>
         <translation>Դրամարկղ</translation>
-    </message>
-    <message>
-        <source>Store entries</source>
-        <translation>Պահեստի 
-մնացորդ</translation>
-    </message>
-    <message>
-        <source>New store checkpoint</source>
-        <translation>Նոր պահեստի 
-մնացորդ</translation>
     </message>
     <message>
         <source>Partner payments</source>
@@ -4569,6 +4665,34 @@ system</source>
     <message>
         <source>Change my password</source>
         <translation>Փոխել գախտնաբառը</translation>
+    </message>
+    <message>
+        <source>Ապրանքների խմբեր</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գույքագրման փասթաթղթեր</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Նոր գույքագրում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գույքագրում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ՆԱ տեղաշարժ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Բոլոր ապրանքները</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Տեսակ</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5084,18 +5208,6 @@ system</source>
         <translation>Կոդ</translation>
     </message>
     <message>
-        <source>Car gov. number</source>
-        <translation>Պետ․ համարանիշ</translation>
-    </message>
-    <message>
-        <source>f_model</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Costumer name</source>
-        <translation>Հաճախորդի անուն</translation>
-    </message>
-    <message>
         <source>Info</source>
         <translation>Տեղեկություններ</translation>
     </message>
@@ -5108,19 +5220,7 @@ system</source>
         <translation></translation>
     </message>
     <message>
-        <source>f_govNumber</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>f_name</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>f_info</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>f_card</source>
         <translation></translation>
     </message>
     <message>
@@ -5132,72 +5232,28 @@ system</source>
         <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <source>Model</source>
-        <translation>Մատնիշ</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Անվանում</translation>
-    </message>
-    <message>
-        <source>Costumers</source>
-        <translation>Հաճախորդներ</translation>
-    </message>
-    <message>
-        <source>Mode #1</source>
-        <translation>Տարբ 1</translation>
-    </message>
-    <message>
-        <source>Mode #2</source>
-        <translation>Տարբ 2</translation>
-    </message>
-    <message>
-        <source>Mode #3</source>
-        <translation>Տարբ 3</translation>
-    </message>
-    <message>
         <source>Count of visit</source>
         <translation>Այցելություն</translation>
     </message>
     <message>
-        <source>Items</source>
-        <translation>Ապրանքներ</translation>
-    </message>
-    <message>
-        <source>Mode of discount was not selected</source>
-        <translation>Զեղչի տարբերակը ընտրված չէ</translation>
-    </message>
-    <message>
-        <source>Saved</source>
-        <translation>Պահպանված է</translation>
-    </message>
-    <message>
-        <source>Discount type</source>
-        <translation>Զեղչի տեսակ</translation>
-    </message>
-    <message>
-        <source>Discount type was not selected</source>
-        <translation>Զեղչի տարբերակը ընտրված չէ</translation>
-    </message>
-    <message>
-        <source>Costumers, dep</source>
-        <translation>Կուտակային քարտեր</translation>
-    </message>
-    <message>
-        <source>Costumers, one</source>
-        <translation>Մանգամյա քարտեր</translation>
-    </message>
-    <message>
-        <source>Costumers, presend</source>
-        <translation>Նվեր քարտեր</translation>
-    </message>
-    <message>
-        <source>Value (old)</source>
-        <translation>Առժեք /հին/</translation>
-    </message>
-    <message>
         <source>Balance</source>
         <translation>Բալանս</translation>
+    </message>
+    <message>
+        <source>f_fiscal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ՀԴՄ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Գին</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>f_code</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5689,10 +5745,6 @@ system</source>
         <translation>Այս կոդը օգտագործվում է պահեստում</translation>
     </message>
     <message>
-        <source>This code used in store entry</source>
-        <translation>Այս կոդը օգտագործվում է պահեստի մնացորդներում</translation>
-    </message>
-    <message>
         <source>This code used in sales</source>
         <translation>Այս կոդը օգտագործվում է վաճառքներում</translation>
     </message>
@@ -5723,6 +5775,26 @@ system</source>
     <message>
         <source>Fiscal department cannot be empty</source>
         <translation>ՀԴՄ բաժինը նշված չէ</translation>
+    </message>
+    <message>
+        <source>f_armsoftname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ՀԾ անվանում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Բաժին</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Այս կոդը օգտագործվել է պահեստի գույքագրման մեջ</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6265,6 +6337,10 @@ deviation</source>
         <source>f_name</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Ակտիվ</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RERestTable</name>
@@ -6623,6 +6699,18 @@ deviation</source>
     <message>
         <source>Amount</source>
         <translation>Գումար</translation>
+    </message>
+    <message>
+        <source>ԱԱՀ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ընդամենը ԱԱՀ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ընդամենը ԱՀՀ</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7135,6 +7223,10 @@ if empty</source>
         <source>Options</source>
         <translation type="unfinished">Կարգավորումներ</translation>
     </message>
+    <message>
+        <source>Empty report!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WReportsSetOld</name>
@@ -7420,6 +7512,10 @@ if empty</source>
         <source>Autocorrection, input</source>
         <translation>Մնացորդի ուղղում, մուտք</translation>
     </message>
+    <message>
+        <source>Պահեստ</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WUsers</name>
@@ -7482,6 +7578,57 @@ if empty</source>
     <message>
         <source>Permissions</source>
         <translation>Իրավասություններ</translation>
+    </message>
+</context>
+<context>
+    <name>goodsmovement</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հաշվ․ համար</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Հաշվարկային ժամանակաշրջան</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Պահեստ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Բեռնել</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ապրանքի կոդ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ապրանքի անվանում</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Նախնական</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Մուտք</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ելք</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Վերջնական</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

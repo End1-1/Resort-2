@@ -41,6 +41,7 @@ typedef struct {
     QString fPrint2;
     int fStore;
     float fPrice;
+    float fSvcValue;
     int fQueue;
     int fComplex;
     QString fComplexRec;

@@ -3,7 +3,8 @@
 
 #include "baseextendeddialog.h"
 
-namespace Ui {
+namespace Ui
+{
 class DlgPayment;
 }
 
@@ -35,7 +36,6 @@ private slots:
     void on_btnCouponService_clicked(bool checked);
     void on_btnPrepaid_clicked();
     void on_leGiftCardCode_returnPressed();
-
     void on_btnCard_2_clicked();
 
 private:

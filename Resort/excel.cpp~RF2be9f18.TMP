@@ -1,14 +1,11 @@
 #include "excel.h"
-#include <QDebug>
 
 const QString alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 Excel::Excel()
 {
-    QString path = QDir::currentPath() + "/excel.dll";
-    fLib = new QLibrary(path);
+    fLib = new QLibrary(QDir::currentPath() + "/excel");
     if (!fLib->load()) {
-        qDebug() << fLib->errorString();
         delete fLib;
         fLib = 0;
         return;

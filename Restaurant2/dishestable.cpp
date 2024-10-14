@@ -100,7 +100,8 @@ void DishesTable::init(Splash *s)
         s->setText(tr("Loading complex dishes components"));
         query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
                 "d.f_bgColor, d.f_textColor, d.f_text_en, "
-                "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, mc.f_complex "
+                "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, mc.f_complex, "
+                "d.f_service "
                 "from r_menu m "
                 "inner join r_dish d on d.f_id=m.f_dish "
                 "inner join r_dish_type t on d.f_type=t.f_id "
@@ -123,6 +124,7 @@ void DishesTable::init(Splash *s)
             d->fPrice = it->at(11).toFloat();
             d->fQueue = it->at(12).toInt();
             d->fComplex = it->at(13).toInt();
+            d->fSvcValue = it->at(14).toDouble();
             for (int i = 0; i < fDishComplex.count(); i++) {
                 if (d->fComplex == fDishComplex.at(i)->fId) {
                     fDishComplex[i]->fDishes.append(d);
@@ -137,7 +139,7 @@ void DishesTable::init(Splash *s)
     query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
             "d.f_bgColor, d.f_textColor, d.f_text_en,  "
             "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, m.f_complex, "
-            "d.f_adgt, d.f_tax "
+            "d.f_adgt, d.f_tax, d.f_service "
             "from r_menu m "
             "inner join r_dish d on d.f_id=m.f_dish "
             "inner join r_dish_type t on d.f_type=t.f_id "
@@ -161,6 +163,7 @@ void DishesTable::init(Splash *s)
         d->fComplex = it->at(13).toBool();
         d->fAdgt = it->at(14).toString();
         d->fTax = it->at(15).toInt();
+        d->fSvcValue = it->at(16).toDouble();
         fDish.append(d);
     }
 

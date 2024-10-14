@@ -260,9 +260,7 @@ void WReportGrid::on_btnExcel_clicked()
         d.style()->addBackgrounFill("footer", color);
         //d.style()->addHAlignment("footer", xls_alignment_right);
         for (int i = 0; i < colCount; i++) {
-            s->addCell(1 + fModel->rowCount() + 1, i + 1,
-                       ui->tblTotals->item(0, i) ?
-                                                              ui->tblTotals->itemValue(0, i) : "", d.style()->styleNum("footer"));
+            s->addCell(1 + fModel->rowCount() + 1, i + 1, ui->tblTotals->itemValue(0, i), d.style()->styleNum("footer"));
         }
     }
     QString err;

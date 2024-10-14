@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class DlgCouponServiceDocumentPlus;
 }
 
@@ -16,17 +17,19 @@ class DlgCouponServiceDocumentPlus : public QDialog
 public:
     explicit DlgCouponServiceDocumentPlus(ReportQuery *rq, QWidget *parent = nullptr);
     ~DlgCouponServiceDocumentPlus();
-    void getResult(QString &couponType, QString &first, QString &last, double &qty, double &price, double &discount, double &total);
+    void getResult(QString &couponType, QString &first, double &price, double &discount,
+                   double &total, int &group);
     virtual void keyPressEvent(QKeyEvent *e);
 
 private slots:
+    void startNumFocusOut();
     void on_btnCancel_clicked();
     void on_btnOk_clicked();
-    void on_leQty_textChanged(const QString &arg1);
     void on_btnFirstNumber_clicked();
     void on_cbType_currentIndexChanged(int index);
     void on_leDiscount_textChanged(const QString &arg1);
     void on_leStartNumber_returnPressed();
+    void on_lePrice_textChanged(const QString &arg1);
 
 private:
     Ui::DlgCouponServiceDocumentPlus *ui;

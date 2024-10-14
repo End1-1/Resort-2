@@ -10,7 +10,8 @@
 #include "trackcontrol.h"
 #include <QPainter>
 
-namespace Ui {
+namespace Ui
+{
 class RDesk;
 }
 
@@ -62,9 +63,11 @@ protected:
 private:
     void printCanceledOrder(int id);
     void startService();
+    void removeRow(int index, bool confirm);
 
 private slots:
     void timeout();
+    void changeMenu();
     virtual void externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data);
     void socketConnected();
     virtual void connectionLost();
@@ -100,14 +103,13 @@ private slots:
     void on_btnHallVIP_clicked();
     void on_btnShop_clicked();
     void on_btnSetRecoverFrom_clicked();
-
     void on_btnPrintMultipleFiscal_clicked();
 
-    void on_pushButton_clicked();
+    void on_btnQr_clicked();
 
 private:
     Ui::RDesk *ui;
-    static QMap<int, DishStruct*> fQuickDish;
+    static QMap<int, DishStruct *> fQuickDish;
     TrackControl *fTrackControl;
     TableStruct *fTable;
     HallStruct *fHall;
@@ -117,6 +119,8 @@ private:
     bool fShowRemoved;
     int fCurrentHall;
     int fMenu;
+    bool fNoService;
+    bool fNeedCar;
     DishesTable fDishTable;
     int fCarId;
     QString fCarModel;
@@ -126,7 +130,7 @@ private:
     void setBtnMenuText();
     void setupType(int partId);
     void setupDish(int typeId);
-    void addDishToOrder(DishStruct* d, bool counttotal);
+    int addDishToOrder(DishStruct *d, bool counttotal);
     void addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice);
     void updateDish(OrderDishStruct *od);
     double countTotal();

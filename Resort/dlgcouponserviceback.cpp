@@ -18,6 +18,29 @@ DlgCouponServiceBack::~DlgCouponServiceBack()
     delete ui;
 }
 
+void DlgCouponServiceBack::openDoc(int id)
+{
+    Database2 db;
+    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+        message_error(db.lastDbError());
+        return;
+    }
+    db[":f_trback"] = id;
+    db.exec("select t.*, g.f_name as groupname, p.f_name as partnername "
+            "from talon_service t  "
+            "left join talon_service_items_group g on g.f_id=t.f_group  "
+            "left join r_partners p on p.f_id=t.f_partner "
+            "where f_trback=:f_trback");
+    while (db.next()) {
+        int r = ui->tbl->rowCount();
+        ui->tbl->setRowCount(r + 1);
+        ui->tbl->setItem(r, 0, new QTableWidgetItem(db.string("f_code")));
+        ui->tbl->setItem(r, 2, new QTableWidgetItem(db.string("groupname")));
+        ui->tbl->setItem(r, 3, new QTableWidgetItem(QString::number(db.doubleValue("f_price") - db.doubleValue("f_discount"))));
+        ui->tbl->setItem(r, 1, new QTableWidgetItem(db.string("partnername")));
+    }
+}
+
 void DlgCouponServiceBack::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
@@ -59,7 +82,7 @@ void DlgCouponServiceBack::on_leCode_returnPressed()
     ui->tbl->setItem(r, 3, new QTableWidgetItem(QString::number(db.doubleValue("f_price") - db.doubleValue("f_discount"))));
     db[":f_id"] = db.integer("f_id");
     db.exec("select p.f_name from talon_service t "
-           "left join talon_documents_header d on t.f_trsale=d.f_id "
+            "left join talon_documents_header d on t.f_trsale=d.f_id "
             "left join r_partners p on p.f_id=d.f_partner "
             "where t.f_id=:f_id");
     if (db.next() == false) {

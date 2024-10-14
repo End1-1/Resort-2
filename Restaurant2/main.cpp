@@ -10,6 +10,7 @@
 #include "database2.h"
 #include "rmessage.h"
 #include "cacherights.h"
+#include <QTextCodec>
 #include <QApplication>
 #include <QLockFile>
 #include <QMessageBox>
@@ -17,6 +18,7 @@
 
 int main(int argc, char *argv[])
 {
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8") );
     logEnabled = true;
     QApplication a(argc, argv);
 

@@ -15,6 +15,7 @@ DEFINES += _WASH_
 DEFINES += _RESTAURANT_
 DEFINES += _APPLICATION_=\\\"ELITEWASH\\\"
 DEFINES += _MODULE_=\\\"SALES\\\"
+DEFINES += _DBDRIVER_=\\\"QMARIADB\\\"
 
 RC_FILE = res.rc
 
@@ -282,7 +283,7 @@ FORMS    += rface.ui \
     ../Resort/message.ui \
 
 LIBS += -lVersion
-LIBS += -LC:/Soft/OpenSSL-Win64/lib
+LIBS += -LC:/soft/OpenSSLWin64/lib/VC/x64/MD
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS += -lwsock32

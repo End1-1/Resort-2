@@ -191,10 +191,6 @@ void WReportGrid::on_btnExcel_clicked()
         message_info(tr("Empty report!"));
         return;
     }
-    int fXlsxFitToPage = 0;
-    QString fXlsxPageOrientation = xls_page_orientation_portrait;
-    int fXlsxPageSize = xls_page_size_a4;
-
     XlsxDocument d;
     XlsxSheet *s = d.workbook()->addSheet("Sheet1");
     s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
@@ -251,7 +247,7 @@ void WReportGrid::on_btnExcel_clicked()
         }
     }
     /* TOTALS ROWS */
-    if (ui->tblTotals->isVisible()) {
+    if (ui->tblTotal->isVisible()) {
         QFont totalFont(qApp->font());
         totalFont.setBold(true);
         d.style()->addFont("footer", headerFont);
@@ -260,9 +256,7 @@ void WReportGrid::on_btnExcel_clicked()
         d.style()->addBackgrounFill("footer", color);
         //d.style()->addHAlignment("footer", xls_alignment_right);
         for (int i = 0; i < colCount; i++) {
-            s->addCell(1 + fModel->rowCount() + 1, i + 1,
-                       ui->tblTotals->item(0, i) ?
-                                                              ui->tblTotals->itemValue(0, i) : "", d.style()->styleNum("footer"));
+            s->addCell(1 + fModel->rowCount() + 1, i + 1, ui->tblTotal->getData(0, i), d.style()->styleNum("footer"));
         }
     }
     QString err;

@@ -5,6 +5,7 @@
 #include "dlgcouponservicedocument.h"
 #include "dlgcouponserviceback.h"
 #include "dlgcouponservicepayment.h"
+#include "database2.h"
 
 FCouponDocuments::FCouponDocuments(QWidget *parent) :
     WFilterBase(parent),
@@ -18,8 +19,10 @@ FCouponDocuments::FCouponDocuments(QWidget *parent) :
     fReportQuery->costumizeCombo(ui->cbTemplate, "coupon_doc_templates", false, 0);
     if (check_permission(pr_coupon_sale)) {
         fReportGrid->addToolBarButton(":/images/new.png", tr("Sale"), SLOT(newDoc()), this)->setFocusPolicy(Qt::NoFocus);
-        fReportGrid->addToolBarButton(":/images/returnbox.png", tr("Return"), SLOT(returnDoc()), this)->setFocusPolicy(Qt::NoFocus);
-        fReportGrid->addToolBarButton(":/images/payment.png", tr("Payment"), SLOT(paymentDoc()), this)->setFocusPolicy(Qt::NoFocus);
+        fReportGrid->addToolBarButton(":/images/returnbox.png", tr("Return"), SLOT(returnDoc()),
+                                      this)->setFocusPolicy(Qt::NoFocus);
+        fReportGrid->addToolBarButton(":/images/payment.png", tr("Payment"), SLOT(paymentDoc()),
+                                      this)->setFocusPolicy(Qt::NoFocus);
     }
     connect(fReportGrid, &WReportGrid::doubleClickOnRow, this, &FCouponDocuments::doubleClickOnRow);
 }
@@ -51,7 +54,8 @@ void FCouponDocuments::apply(WReportGrid *rg)
     QList<double> vals;
     rg->fModel->sumOfColumns(fReportQuery->sumColumns, vals);
     rg->setTblTotalData(fReportQuery->sumColumns, vals);
-    for (QMap<int, int>::const_iterator it = fReportQuery->columnsWidths.constBegin(); it != fReportQuery->columnsWidths.constEnd(); it++) {
+    for (QMap<int, int>::const_iterator it = fReportQuery->columnsWidths.constBegin();
+            it != fReportQuery->columnsWidths.constEnd(); it++) {
         rg->fTableView->setColumnWidth(it.key(), it.value());
     }
     if (fReportQuery->columnsWidths.isEmpty()) {
@@ -72,6 +76,29 @@ QString FCouponDocuments::reportTitle()
 void FCouponDocuments::doubleClickOnRow(const QList<QVariant> &values)
 {
     if (values.count() > 0) {
+        Database2 db;
+        if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+            message_error(db.lastDbError());
+            return;
+        }
+        db[":f_id"] = values.at(0).toInt();
+        db.exec("select * from talon_documents_header where f_id=:f_id");
+        int t = 0;
+        if (db.next()) {
+            t = db.integer("f_type");
+        }
+        if (t == 0) {
+            message_error("No document with this id");
+            return;
+        }
+        switch (t) {
+            case 3: {
+                DlgCouponServiceBack d(fReportQuery, this);
+                d.openDoc(values.at(0).toInt());
+                d.exec();
+            }
+            return;
+        }
         DlgCouponServiceDocument d(fReportQuery, this);
         d.openDocument(values.at(0).toInt());
         d.exec();

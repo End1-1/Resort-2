@@ -83,8 +83,7 @@
 #include <QShortcut>
 #include <QNetworkProxy>
 
-static QMap<int, QList<QAction*> > fMenu;
-
+static QMap<int, QList<QAction *> > fMenu;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -92,8 +91,6 @@ MainWindow::MainWindow(QWidget *parent) :
     fCommand(0)
 {
     ui->setupUi(this);
-
-
     QFont f(qApp->font());
     f.setBold(true);
     f.setPointSize(f.pointSize() + 1);
@@ -103,19 +100,17 @@ MainWindow::MainWindow(QWidget *parent) :
     fTab = ui->tabWidget;
     logout();
     fSocket.setProxy(QNetworkProxy::NoProxy);
-    fCommand.setSocket(&fSocket);
-    connect(&fSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
-    connect(&fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
-    connect(&fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    connect(&fCommand, SIGNAL(parseCommand(QString)), this, SLOT(parseSocketCommand(QString)));
-
+    fCommand.setSocket( &fSocket);
+    connect( &fSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+    connect( &fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+    connect( &fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
+    connect( &fCommand, SIGNAL(parseCommand(QString)), this, SLOT(parseSocketCommand(QString)));
     QShortcut *shortcut = new QShortcut(QKeySequence("F2"), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(shortcutSlot()));
     QShortcut *shortcut12 = new QShortcut(QKeySequence("F12"), this);
     connect(shortcut12, SIGNAL(activated()), this, SLOT(on_actionLogout_triggered()));
     QShortcut *shortcat11 = new QShortcut(QKeySequence("F11"), this);
     connect(shortcat11, SIGNAL(activated()), this, SLOT(shortcutFullScreen()));
-
     QString bgpath = qApp->applicationDirPath() + "/bg.png";
     qDebug() << bgpath;
     QPixmap bkgnd(bgpath);
@@ -123,16 +118,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     ui->wbg->setPalette(palette);
-
     ui->wbg->setStyleSheet(QString(".QWidget{border-image:url(%1)0 0 0 0 stretch stretch;}").arg(qApp->applicationDirPath()
-                                                                                        + "/bg.jpg"));
-
+                           + "/bg.jpg"));
 }
 
 MainWindow::~MainWindow()
 {
-    disconnect(&fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    disconnect(&fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+    disconnect( &fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
+    disconnect( &fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+                SLOT(socketError(QAbstractSocket::SocketError)));
     delete ui;
 }
 
@@ -175,11 +169,10 @@ void MainWindow::login()
         return;
     }
     logout();
-    Db db = fPreferences.getDatabase(fDbName);    
+    Db db = fPreferences.getDatabase(fDbName);
     fDb.setConnectionParams(db.dc_main_host, db.dc_main_path, db.dc_main_user, db.dc_main_pass);
     fDb.open();
     fSocket.disconnectFromHost();
-
     buildMenuOfRole();
     CacheBase<CI_Base>::setDatabase(fDb.db());
     enableMainMenu(true);
@@ -212,7 +205,7 @@ void MainWindow::expandTab()
 
 void MainWindow::tabCloseRequested(int index)
 {
-    BaseWidget *w = static_cast<BaseWidget*>(ui->tabWidget->widget(index));
+    BaseWidget *w = static_cast<BaseWidget *>(ui->tabWidget->widget(index));
     if (!w->canClose()) {
         return;
     }
@@ -226,7 +219,7 @@ void MainWindow::tabCloseRequested(int index)
 
 void MainWindow::socketReadyRead()
 {
-    QTcpSocket *s = static_cast<QTcpSocket*>(sender());
+    QTcpSocket *s = static_cast<QTcpSocket *>(sender());
     fCommand.readBytes(s->readAll());
 }
 
@@ -236,7 +229,6 @@ void MainWindow::parseSocketCommand(const QString &command)
     QJsonObject jObj = jDoc.object();
     QString cmd = jObj.value("command").toString();
     if (cmd == "refresh_reservations") {
-
     } else if (cmd == "update_cache") {
         int cacheId = jObj.value("cache").toInt();
         QString item = jObj.value("item").toString();
@@ -244,7 +236,7 @@ void MainWindow::parseSocketCommand(const QString &command)
     } else {
         QVariantMap m = jObj.toVariantMap();
         for (int i = 0, count = ui->tabWidget->count(); i < count; i++) {
-            BaseWidget *b = static_cast<BaseWidget*>(ui->tabWidget->widget(i));
+            BaseWidget *b = static_cast<BaseWidget *>(ui->tabWidget->widget(i));
             if (!b) {
                 return;
             }
@@ -309,101 +301,94 @@ void MainWindow::disableMainMenu()
 void MainWindow::buildMenuOfRole()
 {
     UserPermssions::init(WORKING_USERGROUP);
-            QList<QAction*> a1;
-            if (check_permission(pr_view_revenue)) {
-                a1.append(ui->actionRestaurant);
-                a1.append(ui->actionEarnings_carwash);
-                a1.append(ui->actionEarnings_waitroom);
-                a1.append(ui->actionEarnings_shop);
-                a1.append(ui->actionArmSoftExport);
-                a1.append(ui->actionSales_by_storages);
-                a1.append(ui->actionReport_by_payment);
-                a1.append(ui->actionSales_report_by_cars);
-            }
-            if (check_permission(pr_cashbox)) {
-                a1.append(ui->actionAccounts);
-            }
-            fMenu.insert(0, a1);
-
-            QList<QAction*> a2;
-            if (check_permission(pr_edit_store_doc)) {
-                a2.append(ui->actionNew_store_document);
-                a2.append(ui->actionNew_store_checkpoint);
-                a2.append(ui->action_inventorization);
-            }
-            if (check_permission(pr_store_doc_journal)) {
-                a2.append(ui->actionDocuments_list);
-                a2.append(ui->actionStore_movement);
-                a2.append(ui->actionT_Report);
-                a2.append(ui->actionStore_entries);
-                a2.append(ui->actionMaterials_in_the_store);
-                a2.append(ui->actionPartners_debts);
-                a2.append(ui->action_goods_movement);
-            }
-
-            fMenu.insert(1, a2);
-
-            QList<QAction*> a3;
-            if (check_permission(pr_goods_list)) {
-                a3.append(ui->actionType_of_dishes);
-                a3.append(ui->actionCarwash_index);
-                a3.append(ui->actionWaiting_room_index);
-                a3.append(ui->actionShop_index);
-                a3.append(ui->actionStorage_goods_index);
-                a3.append(ui->actionComplex_dish);
-                a3.append(ui->actionAllDishes);
-            }
-            fMenu.insert(2, a3);
-
-            QList<QAction*> a4;
-            if (check_permission(pr_coupon_view)) {
-                a4.append(ui->actionCoupons);
-                a4.append(ui->actionCoupons_seria);
-                a4.append(ui->actionCoupons_sales);
-                a4.append(ui->actionCoupons_statistics);
-                a4.append(ui->actionModels_of_cars);
-                a4.append(ui->actionCostumers);
-                a4.append(ui->actionCostumers_cars);
-                a4.append(ui->actionCoupons_one_off);
-                a4.append(ui->actionCoupons_present);
-                a4.append(ui->actionDiscount_report);
-                a4.append(ui->actionDiscount_total);
-                a4.append(ui->actionBalance_of_the_cards);
-                a4.append(ui->actionCoupon_of_service);
-                a4.append(ui->actionCoupon_of_service_documents);
-                a4.append(ui->actionCoupon_of_service_actions);
-            }
-            fMenu.insert(3, a4);
-
-            QList<QAction*> a5;
-            if (check_permission(pr_indexes)) {
-                a5.append(ui->actionHakk);
-                a5.append(ui->actionTables);
-                a5.append(ui->actionStorages);
-                a5.append(ui->actionAccounts_2);
-                a5.append(ui->actionCash_operation);
-                a5.append(ui->actionPartners_2);
-                a5.append(ui->actionUsers_groups);
-                a5.append(ui->actionUsers);
-            }
-            if (check_permission(pr_global_config)) {
-                a5.append(ui->actionGlobal_config);
-            }
-            fMenu.insert(4, a5);
-
-            QList<QAction*> a6;
-            if (check_permission(pr_attendance)){
-                a6.append(ui->actionAttendance);
-                a6.append(ui->actionSalary_by_employes);
-            }
-            fMenu.insert(5, a6);
-
+    QList<QAction *> a1;
+    if (check_permission(pr_view_revenue)) {
+        a1.append(ui->actionRestaurant);
+        a1.append(ui->actionEarnings_carwash);
+        a1.append(ui->actionEarnings_waitroom);
+        a1.append(ui->actionEarnings_shop);
+        a1.append(ui->actionArmSoftExport);
+        a1.append(ui->actionSales_by_storages);
+        a1.append(ui->actionReport_by_payment);
+        a1.append(ui->actionSales_report_by_cars);
+    }
+    if (check_permission(pr_cashbox)) {
+        a1.append(ui->actionAccounts);
+    }
+    fMenu.insert(0, a1);
+    QList<QAction *> a2;
+    if (check_permission(pr_edit_store_doc)) {
+        a2.append(ui->actionNew_store_document);
+        a2.append(ui->actionNew_store_checkpoint);
+        a2.append(ui->action_inventorization);
+    }
+    if (check_permission(pr_store_doc_journal)) {
+        a2.append(ui->actionDocuments_list);
+        a2.append(ui->actionStore_movement);
+        a2.append(ui->actionT_Report);
+        a2.append(ui->actionStore_entries);
+        a2.append(ui->actionMaterials_in_the_store);
+        a2.append(ui->actionPartners_debts);
+        a2.append(ui->action_goods_movement);
+    }
+    fMenu.insert(1, a2);
+    QList<QAction *> a3;
+    if (check_permission(pr_goods_list)) {
+        a3.append(ui->actionType_of_dishes);
+        a3.append(ui->actionCarwash_index);
+        a3.append(ui->actionWaiting_room_index);
+        a3.append(ui->actionShop_index);
+        a3.append(ui->actionStorage_goods_index);
+        a3.append(ui->actionComplex_dish);
+        a3.append(ui->actionAllDishes);
+    }
+    fMenu.insert(2, a3);
+    QList<QAction *> a4;
+    if (check_permission(pr_coupon_view)) {
+        a4.append(ui->actionCoupons);
+        a4.append(ui->actionCoupons_seria);
+        a4.append(ui->actionCoupons_sales);
+        a4.append(ui->actionCoupons_statistics);
+        a4.append(ui->actionModels_of_cars);
+        a4.append(ui->actionCostumers);
+        a4.append(ui->actionCostumers_cars);
+        a4.append(ui->actionCoupons_one_off);
+        a4.append(ui->actionCoupons_present);
+        a4.append(ui->actionDiscount_report);
+        a4.append(ui->actionDiscount_total);
+        a4.append(ui->actionBalance_of_the_cards);
+        a4.append(ui->actionCoupon_of_service);
+        a4.append(ui->actionCoupon_of_service_documents);
+        a4.append(ui->actionCoupon_of_service_actions);
+    }
+    fMenu.insert(3, a4);
+    QList<QAction *> a5;
+    if (check_permission(pr_indexes)) {
+        a5.append(ui->actionHakk);
+        a5.append(ui->actionTables);
+        a5.append(ui->actionStorages);
+        a5.append(ui->actionAccounts_2);
+        a5.append(ui->actionCash_operation);
+        a5.append(ui->actionPartners_2);
+        a5.append(ui->actionUsers_groups);
+        a5.append(ui->actionUsers);
+    }
+    if (check_permission(pr_global_config)) {
+        a5.append(ui->actionGlobal_config);
+    }
+    fMenu.insert(4, a5);
+    QList<QAction *> a6;
+    if (check_permission(pr_attendance)) {
+        a6.append(ui->actionAttendance);
+        a6.append(ui->actionSalary_by_employes);
+    }
+    fMenu.insert(5, a6);
 }
 
 void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
 {
     ui->lstMenu->clear();
-    for (QAction *a: l)  {
+    for (QAction *a : l)  {
         QToolButton *b = new QToolButton();
         b->setText(a->text());
         b->setIcon(a->icon());
@@ -425,20 +410,18 @@ void MainWindow::dish(int t)
     if (t > 0) {
         ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
     }
-
     QString cond;
     switch (ot) {
-    case 2:
-        cond = " and d.f_id in (select f_dish from r_menu where f_state=1) ";
-        break;
-    case 3:
-        cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
-        break;
+        case 2:
+            cond = " and d.f_id in (select f_dish from r_menu where f_state=1) ";
+            break;
+        case 3:
+            cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
+            break;
     }
     if (t > 0) {
         cond += " and p.f_id=" + QString("%1 ").arg(t);
     }
-
     QList<int> widths;
     widths << 100
            << 120
@@ -467,7 +450,7 @@ void MainWindow::dish(int t)
            << "f_type"
            << "f_type_name"
            << "f_en"
-<< "f_armsoftname"
+           << "f_armsoftname"
            << "f_den"
            << "f_bgColor"
            << "f_textColor"
@@ -479,16 +462,16 @@ void MainWindow::dish(int t)
            << "f_unitName"
            << "f_minreminder"
            << "f_taxdebt"
-              ;
+           ;
     QStringList titles;
     titles << tr("Code")
-               << tr("Տեսակ")
+           << tr("Տեսակ")
            << tr("Part")
            << tr("Store")
            << tr("Type code")
            << tr("Type")
            << tr("Name")
-              << "ՀԾ անվանում"
+           << "ՀԾ անվանում"
            << tr("Description")
            << tr("Background color")
            << tr("Text color")
@@ -500,20 +483,20 @@ void MainWindow::dish(int t)
            << tr("Unit name")
            << tr("Min. reminder")
            << tr("Tax debt")
-              ;
+           ;
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
     QString query = "select d.f_id, p.f_en as f_partname, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
-            "d.f_en, d.f_armsoftname, d.f_text_en,  "
-            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
-            "d.f_minreminder, d.f_taxdebt "
-            "from r_dish d "
-            "inner join r_dish_type t on t.f_id=d.f_type "
-            "inner join r_dish_part p on p.f_id=t.f_part "
-            "inner join r_unit u on u.f_id=d.f_unit "
-            "left join r_store st on st.f_id=d.f_defstore "
-            "where 1=1 " + cond +
-            "order by p.f_en, t.f_en, d.f_queue ";
+                    "d.f_en, d.f_armsoftname, d.f_text_en,  "
+                    "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
+                    "d.f_minreminder, d.f_taxdebt "
+                    "from r_dish d "
+                    "inner join r_dish_type t on t.f_id=d.f_type "
+                    "inner join r_dish_part p on p.f_id=t.f_part "
+                    "inner join r_unit u on u.f_id=d.f_unit "
+                    "left join r_store st on st.f_id=d.f_defstore "
+                    "where 1=1 " + cond +
+                    "order by p.f_en, t.f_en, d.f_queue ";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);
 }
@@ -556,7 +539,7 @@ void MainWindow::on_actionHakk_triggered()
            << 30
            << 30
            << 30
-              ;
+           ;
     QStringList fields;
     fields << "f_id"
            << "f_name"
@@ -569,31 +552,31 @@ void MainWindow::on_actionHakk_triggered()
            << "f_noVatDept"
            << "f_showBanket"
            << "f_showHall"
-            << "f_serviceitem"
-            << "f_servicevalue"
-              ;
+           << "f_serviceitem"
+           << "f_servicevalue"
+           ;
     QStringList titles;
     titles << tr("Code")
-             << tr("Name")
-             << tr("Menu code")
-             << tr("Menu")
-             << tr("Service")
-             << tr("Invoice id")
-             << tr("Printer")
-             << tr("VAT dept")
-             << tr("No VAT dept")
-             << tr("Banket")
-             << tr("Hall")
-               << tr("Service item")
-               << tr("Serivce value")
-                ;
+           << tr("Name")
+           << tr("Menu code")
+           << tr("Menu")
+           << tr("Service")
+           << tr("Invoice id")
+           << tr("Printer")
+           << tr("VAT dept")
+           << tr("No VAT dept")
+           << tr("Banket")
+           << tr("Hall")
+           << tr("Service item")
+           << tr("Serivce value")
+           ;
     QString title = tr("Hall");
     QString icon = ":/images/hall.png";
     QString query = "select h.f_id, h.f_name, h.f_defaultMenu, m.f_" + def_lang + ", h.f_defaultSvc, "
-            "h.f_itemForInvoice, h.f_receiptPrinter, f_vatDept, f_noVatDept, f_showBanket, f_showHall, "
-            "f_serviceitem, f_servicevalue "
-            "from r_hall h "
-            "inner join r_menu_names m on m.f_id=h.f_defaultMenu ";
+                    "h.f_itemForInvoice, h.f_receiptPrinter, f_vatDept, f_noVatDept, f_showBanket, f_showHall, "
+                    "f_serviceitem, f_servicevalue "
+                    "from r_hall h "
+                    "inner join r_menu_names m on m.f_id=h.f_defaultMenu ";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestHall>(widths, fields, titles, title, icon, query);
 }
@@ -621,9 +604,9 @@ void MainWindow::on_actionTables_triggered()
     QString title = tr("Tables");
     QString icon = ":/images/table.png";
     QString query = "select t.f_id, t.f_name, t.f_hall, h.f_name, t.f_queue "
-            "from r_table t "
-            "inner join r_hall h on h.f_id = t.f_hall "
-            "order by f_hall, f_queue ";
+                    "from r_table t "
+                    "inner join r_hall h on h.f_id = t.f_hall "
+                    "order by f_hall, f_queue ";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestTable>(widths, fields, titles, title, icon, query);
 }
@@ -714,10 +697,10 @@ void MainWindow::on_actionType_of_dishes_triggered()
     QString title = tr("Type of dish");
     QString icon = ":/images/cutlery.png";
     QString query = "select t.f_id, t.f_part, p.f_" + def_lang + ", t.f_am, t.f_en, t.f_ru, "
-            "f_bgColor, f_textColor, t.f_queue, f_active "
-            "from r_dish_type t "
-            "inner join r_dish_part p on p.f_id=t.f_part "
-            "order by p.f_" + def_lang + ", t.f_" + def_lang;
+                    "f_bgColor, f_textColor, t.f_queue, f_active "
+                    "from r_dish_type t "
+                    "inner join r_dish_part p on p.f_id=t.f_part "
+                    "order by p.f_" + def_lang + ", t.f_" + def_lang;
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDishType>(widths, fields, titles, title, icon, query);
 }
@@ -787,7 +770,7 @@ void MainWindow::on_actionMenu_review_triggered()
            << 100
            << 100
            << 80
-              ;
+           ;
     QStringList fields;
     fields << "f_id"
            << "f_menu_id"
@@ -797,14 +780,14 @@ void MainWindow::on_actionMenu_review_triggered()
            << "f_type_id"
            << "f_type_name"
            << "f_dish_name"
-            << "f_armsoftname"
+           << "f_armsoftname"
            << "f_price"
            << "f_store_id"
            << "f_store_name"
            << "f_print1"
            << "f_print2"
            << "f_as"
-              ;
+           ;
     QStringList titles;
     titles << tr("Code")
            << tr("Menu code")
@@ -821,17 +804,17 @@ void MainWindow::on_actionMenu_review_triggered()
            << tr("Printer 1")
            << tr("Printer 2")
            << tr("ArmSoft")
-              ;
+           ;
     QString query = "select  d.f_id, m.f_id, mn.f_" + def_lang + ", t.f_part, p.f_" + def_lang + ", "
-            "d.f_type, t.f_" + def_lang + ", d.f_" + def_lang + ", d.f_armsoftname, m.f_price, "
-            "m.f_store, s.f_name, m.f_print1, m.f_print2, d.f_as "
-            "from r_menu m "
-            "inner join r_menu_names mn on mn.f_id=m.f_menu "
-            "inner join r_store s on s.f_id=m.f_store "
-            "inner join r_dish d on d.f_id=m.f_dish "
-            "inner join r_dish_type t on t.f_id=d.f_type "
-            "inner join r_dish_part p on p.f_id=t.f_part "
-            "order by 2, 4, 6, 7";
+                    "d.f_type, t.f_" + def_lang + ", d.f_" + def_lang + ", d.f_armsoftname, m.f_price, "
+                    "m.f_store, s.f_name, m.f_print1, m.f_print2, d.f_as "
+                    "from r_menu m "
+                    "inner join r_menu_names mn on mn.f_id=m.f_menu "
+                    "inner join r_store s on s.f_id=m.f_store "
+                    "inner join r_dish d on d.f_id=m.f_dish "
+                    "inner join r_dish_type t on t.f_id=d.f_type "
+                    "inner join r_dish_part p on p.f_id=t.f_part "
+                    "order by 2, 4, 6, 7";
     QString title = tr("Review of menu");
     QString icon = ":/images/cutlery.png";
     WReportGrid *r = addTab<WReportGrid>();
@@ -894,7 +877,7 @@ void MainWindow::on_actionComplex_dish_triggered()
 
 QString MainWindow::actionTitle(QObject *a)
 {
-    return static_cast<QAction*>(a)->text();
+    return static_cast<QAction *>(a)->text();
 }
 
 void MainWindow::on_actionRestaurant_triggered()
@@ -916,7 +899,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     bool canClose = true;
     for (int i = 1; i < ui->tabWidget->count(); i++) {
-        BaseWidget *w = static_cast<BaseWidget*>(ui->tabWidget->widget(i));
+        BaseWidget *w = static_cast<BaseWidget *>(ui->tabWidget->widget(i));
         if (!w->canClose()) {
             canClose = false;
             break;
@@ -952,7 +935,7 @@ void MainWindow::shortcutSlot()
 
 void MainWindow::customReport()
 {
-    QAction *a = static_cast<QAction*>(sender());
+    QAction *a = static_cast<QAction *>(sender());
     if (!fCustomReports.contains(a)) {
         message_error_tr("Application error. Contact with developer. Message custom action == 0");
         return;
@@ -1103,27 +1086,27 @@ void MainWindow::on_actionT_Report_triggered()
 
 void MainWindow::on_tbEarning_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[0]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[0]);
 }
 
 void MainWindow::on_tbStore_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[1]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[1]);
 }
 
 void MainWindow::on_tbStore_2_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[2]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[2]);
 }
 
 void MainWindow::on_tbStore_3_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[3]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[3]);
 }
 
 void MainWindow::on_tbStore_4_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[4]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[4]);
 }
 
 void MainWindow::on_actionCostumers_triggered()
@@ -1206,7 +1189,7 @@ void MainWindow::on_actionCoupon_of_service_documents_triggered()
 
 void MainWindow::on_tbEarning_2_clicked()
 {
-    buildMenu(static_cast<QToolButton*>(sender()), fMenu[5]);
+    buildMenu(static_cast<QToolButton *>(sender()), fMenu[5]);
 }
 
 void MainWindow::on_actionAttendance_triggered()

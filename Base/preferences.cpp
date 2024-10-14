@@ -215,7 +215,7 @@ void Preferences::initFromConfig()
 {
     if (fConfigPreferences.count() == 0) {
         QDir dir;
-        QString s = QString("%1/%2").arg(dir.homePath()).arg("HotelResort");
+        QString s = QString("%1/%2").arg(dir.homePath()).arg("Wash");
         fConfigPreferences[def_home_path] = s;
         if (!dir.exists(s))
             dir.mkpath(s);

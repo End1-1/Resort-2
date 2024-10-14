@@ -11,6 +11,9 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <qxml.h>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QXmlStreamReader>
 
 #define SEL_DOC_TYPE 10
@@ -291,6 +294,9 @@ void StoreDoc::saveDoc(int docState)
 
     fDb.fDb.transaction();
 
+    QJsonObject jdoc;
+    QJsonArray jgoods;
+
     fDbBind[":f_date"] = ui->deDate->date();
     fDbBind[":f_type"] = ui->leAction->fHiddenText.toInt();
     fDbBind[":f_state"] = docState;
@@ -302,6 +308,18 @@ void StoreDoc::saveDoc(int docState)
     fDbBind[":f_op"] = WORKING_USERID;
     fDbBind[":f_fullDate"] = QDateTime::currentDateTime();
     fDbBind[":f_payment"] = ui->cbPayment->currentData();
+
+    jdoc["f_date"] = ui->deDate->date().toString("yyyy-MM-dd");
+    jdoc["f_type"] = ui->leAction->fHiddenText.toInt();
+    jdoc["f_state"] = docState;
+    jdoc["f_partner"] = ui->lePartnerCode->asInt();
+    jdoc["f_inv"] = ui->leInvoiceNo->text();
+    jdoc["f_invDate"] = ui->deInvoiceDate->date().toString("yyyy-MM-dd");
+    jdoc["f_amount"] = ui->leTotal->asDouble();
+    jdoc["f_remarks"] = ui->leComments->text();
+    jdoc["f_op"] = WORKING_USERID;
+    jdoc["f_fulldate"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    jdoc["f_payment"] = ui->cbPayment->currentData().toInt();
     if (ui->leDocNumber->asInt() == 0) {
         ui->leDocNumber->setInt(fDb.insert("r_docs", fDbBind));
         if (ui->leDocNumber->asInt() == 0) {
@@ -316,6 +334,7 @@ void StoreDoc::saveDoc(int docState)
     }
 
     for (int i = 0; i < ui->tblGoods->rowCount(); i++) {
+        QJsonObject jg;
         if (ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT ||
                 ui->leAction->fHiddenText.toInt() == STORE_DOC_IN) {
             fDbBind[":f_doc"] = ui->leDocNumber->text();
@@ -326,6 +345,16 @@ void StoreDoc::saveDoc(int docState)
             fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
             fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
             fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+
+            jg["f_doc"] = ui->leDocNumber->text();
+            jg["f_store"] = store;
+            jg["f_material"] = ui->tblGoods->toInt(i, 1);
+            jg["f_sign"] = ui->leAction->fHiddenText.toInt() == STORE_DOC_OUT ? -1 : 1;
+            jg["f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            jg["f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            jg["f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            jg["f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            jgoods.append(jg);
             if (ui->tblGoods->toInt(i, 0) == 0) {
                 int newid = fDb.insert("r_body", fDbBind);
                 if (newid < 0) {
@@ -352,6 +381,16 @@ void StoreDoc::saveDoc(int docState)
             fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
             fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
             fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+
+            jg["f_doc"] = ui->leDocNumber->text();
+            jg["f_store"] = store;
+            jg["f_material"] = ui->tblGoods->toInt(i, 1);
+            jg["f_sign"] = 1;
+            jg["f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            jg["f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            jg["f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            jg["f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            jgoods.append(jg);
             if (ui->tblGoods->toInt(i, 0) == 0) {
                 int newid = fDb.insert("r_body", fDbBind);
                 if (newid < 0) {
@@ -374,6 +413,16 @@ void StoreDoc::saveDoc(int docState)
             fDbBind[":f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
             fDbBind[":f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
             fDbBind[":f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+
+            jg["f_doc"] = ui->leDocNumber->text();
+            jg["f_store"] = store;
+            jg["f_material"] = ui->tblGoods->toInt(i, 1);
+            jg["f_sign"] = -1;
+            jg["f_qty"] = ui->tblGoods->lineEdit(i, 3)->asDouble();
+            jg["f_price"] = ui->tblGoods->lineEdit(i, 5)->asDouble();
+            jg["f_total"] = ui->tblGoods->lineEdit(i, 6)->asDouble();
+            jg["f_vat"] = ui->tblGoods->lineEdit(i, 7)->asDouble();
+            jgoods.append(jg);
             if (ui->tblGoods->toInt(i, 0) == 0) {
                 int newid = fDb.insert("r_body", fDbBind);
                 if (newid < 0) {
@@ -390,6 +439,10 @@ void StoreDoc::saveDoc(int docState)
 
         }
     }
+    jdoc["goods"] = jgoods;
+    fDbBind[":f_doc"] = ui->leDocNumber->text();
+    fDbBind[":f_body"] = QString(QJsonDocument(jdoc).toJson(QJsonDocument::Compact));
+    fDb.insert("r_docs_json", fDbBind);
 
 
     if (ui->leAction->fHiddenText.toInt() == 1) {

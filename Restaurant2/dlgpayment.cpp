@@ -9,6 +9,9 @@
 #include "database2.h"
 #include "printtaxn.h"
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -21,7 +24,6 @@ DlgPayment::DlgPayment(int order, QWidget *parent) :
     ui->btnPrintTax->setChecked(true);
     ui->btnPrintTax->setStyleSheet("QPushButton:checked {background-color:green};");
     ui->btnCouponService->setStyleSheet("QPushButton:checked {background-color:green};");
-
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     if (!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
@@ -47,7 +49,6 @@ DlgPayment::DlgPayment(int order, QWidget *parent) :
         message_error("Անթուլատրելի վաճառքի տեսակ");
         fCannotContinue = true;
     }
-
     ui->btnPrepaid->setEnabled(hasgift);
     ui->leGiftCardCode->setEnabled(hasgift);
     ui->leDiscount->setEnabled(!hasgift);
@@ -55,7 +56,6 @@ DlgPayment::DlgPayment(int order, QWidget *parent) :
     if (hasgift) {
         ui->btnDeptHolder->setEnabled(true);
     }
-
 }
 
 DlgPayment::~DlgPayment()
@@ -77,15 +77,15 @@ bool DlgPayment::payment(int order, int hallid)
     DatabaseResult dr;
     d->fDbBind[":f_id"] = order;
     dr.select(d->fDb, "select f_servicevalue from o_header where f_id=:f_id", d->fDbBind);
-
     d->fDbBind[":f_id"] = order;
     dr.select(d->fDb, "select f_id from o_header_payment where f_id=:f_id", d->fDbBind);
-
     d->ui->leCard->setDouble(0);
     if (dr.rowCount() == 0) {
         d->fDbBind[":f_header"] = order;
         d->fDbBind[":f_state"] = DISH_STATE_READY;
-        dr.select(d->fDb, "select sum(f_svcamount) as f_svcamount, sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state", d->fDbBind);
+        dr.select(d->fDb,
+                  "select sum(f_svcamount) as f_svcamount, sum(f_total) as f_total from o_dish where f_header=:f_header and f_state=:f_state",
+                  d->fDbBind);
         if (dr.rowCount() > 0) {
             d->ui->leFinalAmount->setDouble(dr.value("f_total").toDouble());
             d->ui->leCash->setDouble(dr.value("f_total").toDouble());
@@ -93,9 +93,7 @@ bool DlgPayment::payment(int order, int hallid)
     } else {
         d->fUpdateHeader = true;
     }
-
     d->getGiftAmount();
-
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     if (!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
@@ -110,9 +108,6 @@ bool DlgPayment::payment(int order, int hallid)
         d->ui->btnPrintTax->setEnabled(false);
         d->ui->btnPrintTax->setChecked(false);
     }
-
-
-
     result = d->exec() == QDialog::Accepted;
     delete d;
     return result;
@@ -153,7 +148,6 @@ void DlgPayment::on_btnOk_clicked()
         message_error(tr("Amount greater than need to pay"));
         return;
     }
-
     QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
     if (ui->btnPrintTax->isChecked()) {
         QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
@@ -163,17 +157,22 @@ void DlgPayment::on_btnOk_clicked()
                      s.value("extpos").toString(),
                      s.value("opcode").toString(),
                      s.value("oppin").toString());
-
         Db b = Preferences().getDatabase(Base::fDbName);
         Database2 db2;
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id "
-                "from o_dish od "
-                "left join r_dish d on d.f_id=od.f_dish "
-                "where od.f_header=:f_header and od.f_state=:f_state ");
+        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark "
+                 "from o_dish od "
+                 "left join r_dish d on d.f_id=od.f_dish "
+                 "where od.f_header=:f_header and od.f_state=:f_state ");
         while (db2.next()) {
+            if (db2.doubleValue("f_price") < 0.01) {
+                continue;
+            }
+            if (db2.string("f_emark").isEmpty() == false) {
+                pn.fEmarks.append(db2.string("f_emark"));
+            }
             pn.addGoods(db2.string("f_taxdebt").toInt(),
                         db2.string("f_adgt"),
                         db2.string("f_id"),
@@ -191,7 +190,7 @@ void DlgPayment::on_btnOk_clicked()
                                          ui->leGiftFiscal->asInt() == 0 ? 0 : ui->leCouponAmount->asDouble(),
                                          in, out, err);
         db2[":f_order"] = fOrder;
-        db2[":f_in"] = in;
+        db2[":f_in"] = QByteArray(in.toUtf8()).toBase64();
         db2[":f_out"] = out;
         db2[":f_err"] = err;
         db2.insert("o_tax_log", fiscalrecid);
@@ -199,18 +198,15 @@ void DlgPayment::on_btnOk_clicked()
             message_error(tr("Fiscal error.") + "\r\n" + err);
             return;
         }
-        pn.parseResponse(out, firm, hvhh, fiscal, rseq, sn, address, devnum, time);
-        db2[":f_fiscal"] = rseq.toInt();
+        QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+        db2[":f_fiscal"] = jo["rseq"].toInt();
         db2.update("o_tax_log", "f_id", fiscalrecid);
-        db2[":f_tax"] = rseq.toInt();
+        db2[":f_tax"] = jo["rseq"].toInt();
         db2.update("o_header", "f_id", fOrder);
     }
-
-
     fDbBind[":f_id"] = fOrder;
     DatabaseResult drDisc;
     drDisc.select(fDb, "select * from o_temp_disc where f_id=:f_id", fDbBind);
-
     if (ui->leDept->asDouble() > 0.1) {
         if (ui->leDeptHolder->fHiddenText.toInt() == 0) {
             message_error(tr("Costumer is not defined"));
@@ -251,9 +247,9 @@ void DlgPayment::on_btnOk_clicked()
     if (ui->leCouponNumber->asInt() > 0) {
         fDbBind[":f_seria"] = ui->leCouponSerial->fHiddenText.toInt();
         fDbBind[":f_number"] = ui->leCouponNumber->asInt();
-        fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind, fDbRows);
+        fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind,
+                   fDbRows);
     }
-
     accept();
 }
 
@@ -290,7 +286,8 @@ void DlgPayment::calcCash()
 
 void DlgPayment::calcCard()
 {
-    ui->leCard->setDouble(ui->leFinalAmount->asDouble() - ui->leCash->asDouble() - ui->leDept->asDouble() - ui->leCouponAmount->asDouble());
+    ui->leCard->setDouble(ui->leFinalAmount->asDouble() - ui->leCash->asDouble() - ui->leDept->asDouble() -
+                          ui->leCouponAmount->asDouble());
     if (ui->leCard->asDouble() < -0.01) {
         ui->leCash->setText(ui->leFinalAmount->text());
         ui->leCouponAmount->setText("0");
@@ -312,20 +309,21 @@ void DlgPayment::readFiscalMachines()
 {
     QSettings s(QString("%1\\fiscal.ini").arg(qApp->applicationDirPath()), QSettings::IniFormat);
     QStringList groups = s.childGroups();
-    for (const QString &g: qAsConst(groups)) {
+    for (const QString &g : qAsConst(groups)) {
         ui->cbFiscalMachine->addItem(g);
         s.beginGroup(g);
         if (s.value("default").toBool()) {
             fDefaultFiscalMachine = g;
         }
         QStringList keys = s.childKeys();
-        for (const QString &k: keys) {
+        for (const QString &k : keys) {
             fFiscalMachines[g][k] = s.value(k);
         }
         s.endGroup();
     }
     ui->cbFiscalMachine->setCurrentIndex(-1);
-    for (QMap<QString, QMap<QString, QVariant> >::const_iterator it = fFiscalMachines.constBegin(); it != fFiscalMachines.constEnd(); it++) {
+    for (QMap<QString, QMap<QString, QVariant> >::const_iterator it = fFiscalMachines.constBegin();
+            it != fFiscalMachines.constEnd(); it++) {
         if (it.value()["hall"].toInt() == fHall) {
             ui->cbFiscalMachine->setCurrentIndex(ui->cbFiscalMachine->findText(it.key()));
             return;
@@ -357,9 +355,9 @@ void DlgPayment::getGiftAmount()
         }
         db2[":f_order"] = fOrder;
         db2.exec("select distinct(g.f_info) as f_info, u.f_code "
-                          "from d_gift_cart_use u "
-                          "left join d_gift_cart g on g.f_code=u.f_code "
-                          "where u.f_order=:f_order" );
+                 "from d_gift_cart_use u "
+                 "left join d_gift_cart g on g.f_code=u.f_code "
+                 "where u.f_order=:f_order" );
         QString name, code;
         while (db2.next()) {
             if (!name.isEmpty()) {
@@ -377,9 +375,8 @@ void DlgPayment::getGiftAmount()
 void DlgPayment::on_btnDept_clicked()
 {
     float num = 0;
-
-        ui->leDept->setInt(ui->leFinalAmount->asInt());
-        calcCash();
+    ui->leDept->setInt(ui->leFinalAmount->asInt());
+    calcCash();
     ui->btnPrintTax->setChecked(false);
 }
 
@@ -412,7 +409,9 @@ void DlgPayment::on_btnCouponNumber_clicked()
     DatabaseResult dr;
     fDbBind[":f_seria"] = ui->leCouponSerial->fHiddenText.toInt();
     fDbBind[":f_number"] = ui->leCouponNumber->asInt();
-    dr.select(fDb, "select f_id, f_value from d_coupon where f_seria=:f_seria and cast(f_number as signed)=:f_number and f_used=0", fDbBind);
+    dr.select(fDb,
+              "select f_id, f_value from d_coupon where f_seria=:f_seria and cast(f_number as signed)=:f_number and f_used=0",
+              fDbBind);
     if (dr.rowCount() == 0) {
         message_error(tr("Invalid coupon number"));
         ui->leCouponNumber->clear();
@@ -472,7 +471,6 @@ void DlgPayment::on_btnCash_clicked()
 
 void DlgPayment::on_btnPrintTax_clicked()
 {
-
 }
 
 void DlgPayment::on_leDiscount_returnPressed()
@@ -483,15 +481,58 @@ void DlgPayment::on_leDiscount_returnPressed()
     }
     QString code = ui->leDiscount->text().replace("?", "").replace(";", "");
     ui->leDiscount->clear();
-
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    //COUPON OF SERIVCE?
+    db2[":f_code"] = code;
+    db2.exec("select t.*, p.f_name as f_partnername "
+             "from talon_service t "
+             "left join r_partners p on p.f_id=t.f_partner "
+             "where f_code=:f_code");
+    if (db2.next()) {
+        if (db2.integer("f_trsale") == 0) {
+            message_error(tr("This coupon not sold"));
+            return;
+        }
+        if (db2.integer("f_trback") > 0) {
+            message_error(tr("This coupon used"));
+            return;
+        }
+        int partnerid = db2.integer("f_partner");
+        double price = db2.doubleValue("f_price");
+        ui->btnCouponService->setChecked(true);
+        ui->leDeptHolder->fHiddenText = QString::number(db2.integer("f_partner"));
+        ui->leDeptHolder->setText(db2.string("f_partnername"));
+        ui->btnCash->click();
+        ui->btnPrintTax->setChecked(false);
+        db2[":f_costumer"] = db2.integer("f_partner");
+        db2[":f_order"] = fOrder;
+        db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
+        db2[":f_couponservice"] = 1;
+        db2.update("o_header", "f_id", fOrder);
+        db2[":f_date"] = QDate::currentDate();
+        db2[":f_partner"] = partnerid;
+        db2[":f_amount"] = price;
+        int docid = db2.insert("talon_documents_header");
+        db2[":f_doc"] = docid;
+        db2[":f_group"] = "";
+        db2[":f_first"] = code;
+        db2[":f_last"] = code;
+        db2[":f_qty"] = 1;
+        db2[":f_price"] = price;
+        db2[":f_total"] = price;
+        db2.insert("talon_body");
+        db2[":f_trback"] = docid;
+        db2[":f_code"] = code;
+        db2.exec("update talon_service set f_trback=:f_trback where f_code=:f_code");
+        return;
+    }
     db2[":f_code"] = code;
     db2.exec("select di.f_info , di.f_fiscal, sum(du.f_amount)as f_sum "
-                    "from d_gift_cart_use du "
-                    "inner join d_gift_cart di on di.f_code=du.f_code "
-                    "where du.f_code=:f_code HAVING SUM(du.f_amount) IS NOT NULL ");
+             "from d_gift_cart_use du "
+             "inner join d_gift_cart di on di.f_code=du.f_code "
+             "where du.f_code=:f_code HAVING SUM(du.f_amount) IS NOT NULL ");
     double amountneeded = ui->leFinalAmount->asDouble() - ui->leCouponAmount->asDouble();
     if (db2.next()) {
         if (db2.doubleValue("f_sum") > 0.001) {
@@ -507,7 +548,7 @@ void DlgPayment::on_leDiscount_returnPressed()
                 db2[":f_code"] = code;
                 db2[":f_amount"] = amountneeded * -1;
                 db2[":f_order"] = fOrder;
-                db2.insert("d_gift_cart_use");                
+                db2.insert("d_gift_cart_use");
             } else {
                 ui->leCouponAmount->setDouble(amount);
                 db2[":f_code"] = code;
@@ -533,8 +574,6 @@ void DlgPayment::on_leDiscount_returnPressed()
             return;
         }
     }
-
-
     ui->leDiscount->setText(code);
     DatabaseResult dr;
     fDbBind[":f_card"] = code;
@@ -554,76 +593,77 @@ void DlgPayment::on_leDiscount_returnPressed()
     DatabaseResult dri;
     fDbBind[":f_header"] = fOrder;
     fDbBind[":f_state"] = DISH_STATE_READY;
-    dri.select(fDb, "select f_id, f_dish, f_qty, f_price, f_total from o_dish where f_header=:f_header and f_state=:f_state", fDbBind);
+    dri.select(fDb,
+               "select f_id, f_dish, f_qty, f_price, f_total from o_dish where f_header=:f_header and f_state=:f_state", fDbBind);
     QString visit = mode.at(1);
     QString value = mode.at(2);
     QStringList items = mode.at(3).split(",", QString::SkipEmptyParts);
     bool disc = false;
     double totalDisc = 0;
     switch (m) {
-    case 1:
-    case 2: {
-        DatabaseResult drv;
-        fDbBind[":f_costumer"] = dr.value("f_id");
-        fDbBind[":f_state"] = ORDER_STATE_CLOSED;
-        drv.select(fDb, "select count(h.f_id) as visits from o_header_payment h "
-                   "left join o_header o on o.f_id=h.f_id where f_costumer=:f_costumer and o.f_state=:f_state", fDbBind);
-        int v = drv.value("visits").toInt();
-        int cur = 0;
-        if (visit.toInt() > 0) {
-            cur = (v + 1) % (visit.toInt());
-        }
-        ui->lbVisit->setText(QString::number(cur));
-        if ((dr.value("visits").toInt() > 0) && (cur == 0)) {
-            disc = true;
-        }
-        if (disc) {
-        for (int i = 0; i < dri.rowCount(); i++) {
-                if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
-                    double newPrice = dri.value(i, "f_price").toDouble() - (dri.value(i, "f_price").toDouble() * (value.toDouble() / 100));
-                    totalDisc += dri.value(i, "f_total").toDouble() - (dri.value(i, "f_qty").toDouble() * newPrice);
-                    fDbBind[":f_price"] = newPrice;
-                    fDbBind[":f_total"] = newPrice * dri.value(i, "f_qty").toDouble();
-                    //fDbBind[":f_totalUSD"] = newPrice * def_usd;
-                    fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
-                }
+        case 1:
+        case 2: {
+            DatabaseResult drv;
+            fDbBind[":f_costumer"] = dr.value("f_id");
+            fDbBind[":f_state"] = ORDER_STATE_CLOSED;
+            drv.select(fDb, "select count(h.f_id) as visits from o_header_payment h "
+                       "left join o_header o on o.f_id=h.f_id where f_costumer=:f_costumer and o.f_state=:f_state", fDbBind);
+            int v = drv.value("visits").toInt();
+            int cur = 0;
+            if (visit.toInt() > 0) {
+                cur = (v + 1) % (visit.toInt());
             }
-        }
-        break;
-    }
-    case 3: {
-        if (value.toDouble() < 0.001) {
-            disc = false;
-            return;
-        }
-        disc = true;
-        double balance = value.toDouble();
-        if (disc) {
-            for (int i = 0; i < dri.rowCount(); i++) {
-                if (balance < 0.01) {
-                    continue;
-                }
-                if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
-                    double itemTotal = dri.value(i, "f_qty").toDouble() * dri.value(i, "f_price").toDouble();
-                    if (balance >= itemTotal) {
-                        balance -= itemTotal;
-                        totalDisc += itemTotal;
-                        itemTotal = 0;
-                    } else {
-                        itemTotal -= balance;
-                        totalDisc += balance;
-                        balance = 0;
+            ui->lbVisit->setText(QString::number(cur));
+            if ((dr.value("visits").toInt() > 0) && (cur == 0)) {
+                disc = true;
+            }
+            if (disc) {
+                for (int i = 0; i < dri.rowCount(); i++) {
+                    if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
+                        double newPrice = dri.value(i, "f_price").toDouble() - (dri.value(i, "f_price").toDouble() * (value.toDouble() / 100));
+                        totalDisc += dri.value(i, "f_total").toDouble() - (dri.value(i, "f_qty").toDouble() * newPrice);
+                        fDbBind[":f_price"] = newPrice;
+                        fDbBind[":f_total"] = newPrice *dri.value(i, "f_qty").toDouble();
+                        //fDbBind[":f_totalUSD"] = newPrice * def_usd;
+                        fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
                     }
-                    fDbBind[":f_price"] = itemTotal / dri.value(i, "f_qty").toDouble();
-                    fDbBind[":f_total"] = itemTotal;
-                    //fDbBind[":f_totalUSD"] = newPrice * def_usd;
-                    fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
                 }
             }
-            fDbBind[":f_mode"] = QString("%1;%2;%3;%4;").arg("1", "0", QString::number(balance,'f', 0), items.at(0));
-            fDb.update("d_car_client", fDbBind, where_id(dr.value(0).toInt()));
+            break;
         }
-    }
+        case 3: {
+            if (value.toDouble() < 0.001) {
+                disc = false;
+                return;
+            }
+            disc = true;
+            double balance = value.toDouble();
+            if (disc) {
+                for (int i = 0; i < dri.rowCount(); i++) {
+                    if (balance < 0.01) {
+                        continue;
+                    }
+                    if (items.contains(dri.value(i, "f_dish").toString(), Qt::CaseInsensitive) || items.at(0) == "*") {
+                        double itemTotal = dri.value(i, "f_qty").toDouble() * dri.value(i, "f_price").toDouble();
+                        if (balance >= itemTotal) {
+                            balance -= itemTotal;
+                            totalDisc += itemTotal;
+                            itemTotal = 0;
+                        } else {
+                            itemTotal -= balance;
+                            totalDisc += balance;
+                            balance = 0;
+                        }
+                        fDbBind[":f_price"] = itemTotal / dri.value(i, "f_qty").toDouble();
+                        fDbBind[":f_total"] = itemTotal;
+                        //fDbBind[":f_totalUSD"] = newPrice * def_usd;
+                        fDb.update("o_dish", fDbBind, where_id(ap(dri.value(i, "f_id").toString())));
+                    }
+                }
+                fDbBind[":f_mode"] = QString("%1;%2;%3;%4;").arg("1", "0", QString::number(balance, 'f', 0), items.at(0));
+                fDb.update("d_car_client", fDbBind, where_id(dr.value(0).toInt()));
+            }
+        }
         break;
     }
     if (!disc) {
@@ -643,7 +683,6 @@ void DlgPayment::on_leDiscount_returnPressed()
     } else {
         ui->leCouponNumber->setProperty("card", QString("%1,%2").arg(ui->leCouponNumber->property("card").toString(), code));
     }
-
     fDbBind[":f_total"] = totalDisc;
     fDbBind[":f_id"] = fOrder;
     fDb.select("update o_header set f_total=f_total-:f_total where f_id=:f_id", fDbBind, fDbRows);
@@ -664,7 +703,6 @@ void DlgPayment::on_leCard_textChanged(const QString &arg1)
     if (arg1.toDouble() > 0.01) {
         ui->btnPrintTax->setChecked(true);
     } else {
-
     }
 }
 
@@ -699,7 +737,6 @@ void DlgPayment::on_btnCouponService_clicked(bool checked)
         ui->leDeptHolder->clear();
     }
     db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
-
     db2[":f_couponservice"] = checked ? 1 : 0;
     db2.update("o_header", "f_id", fOrder);
     ui->btnPrintTax->setChecked(!checked);
@@ -715,16 +752,16 @@ void DlgPayment::on_btnPrepaid_clicked()
         message_error("Անցկացրեք քարտը");
         return;
     }
-    if (ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() < ui->leFinalAmount->asDouble()) {
+    if (ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() <
+            ui->leFinalAmount->asDouble()) {
         message_error(tr("Payment not complete"));
         return;
     }
-    if (ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() > ui->leFinalAmount->asDouble()) {
+    if (ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() >
+            ui->leFinalAmount->asDouble()) {
         message_error(tr("Amount greater than need to pay"));
         return;
     }
-
-    QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;    
     QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
     PrintTaxN pn(s.value("ip").toString(),
                  s.value("port").toInt(),
@@ -732,17 +769,14 @@ void DlgPayment::on_btnPrepaid_clicked()
                  s.value("extpos").toString(),
                  s.value("opcode").toString(),
                  s.value("oppin").toString());
-
     QString in, out, err;
     int result = pn.printAdvanceJson(ui->leCash->asDouble(), ui->leCard->asDouble(), in, out, err);
-
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     if (ui->leTaxpayerId->asInt() > 0) {
         pn.fPartnerTin = ui->leTaxpayerId->text();
     }
-
     int fiscalrecid;
     db2[":f_order"] = fOrder;
     db2[":f_in"] = in;
@@ -753,22 +787,18 @@ void DlgPayment::on_btnPrepaid_clicked()
         message_error(tr("Fiscal error.") + "\r\n" + err);
         return;
     }
-    pn.parseResponse(out, firm, hvhh, fiscal, rseq, sn, address, devnum, time);
-    db2[":f_fiscal"] = rseq.toInt();
+    QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+    db2[":f_fiscal"] = jo["rseq"].toInt();
     db2.update("o_tax_log", "f_id", fiscalrecid);
-    db2[":f_tax"] = rseq.toInt();
+    db2[":f_tax"] = jo["rseq"].toInt();
     db2.update("o_header", "f_id", fOrder);
-
     db2[":f_code"] = ui->leGiftCardCode->text();
-    db2[":f_fiscal"] = rseq;
+    db2[":f_fiscal"] = jo["rseq"].toInt();
     db2[":f_holder"] = ui->leDeptHolder->text();
     db2.exec("update d_gift_cart set f_fiscal=:f_fiscal, f_info=concat_ws(' ', f_info, :f_holder) where f_code=:f_code");
-
-
     fDbBind[":f_id"] = fOrder;
     DatabaseResult drDisc;
     drDisc.select(fDb, "select * from o_temp_disc where f_id=:f_id", fDbBind);
-
     if (ui->leDept->asDouble() > 0.1) {
         if (ui->leDeptHolder->fHiddenText.toInt() == 0) {
             message_error(tr("Dept holder is not defined"));
@@ -808,9 +838,9 @@ void DlgPayment::on_btnPrepaid_clicked()
     if (ui->leCouponNumber->asInt() > 0) {
         fDbBind[":f_seria"] = ui->leCouponSerial->fHiddenText.toInt();
         fDbBind[":f_number"] = ui->leCouponNumber->asInt();
-        fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind, fDbRows);
+        fDb.select("update d_coupon set f_used=1 where f_seria=:f_seria and cast(f_number as signed)=:f_number", fDbBind,
+                   fDbRows);
     }
-
     accept();
 }
 

@@ -480,9 +480,6 @@ void RERestDish::on_btnCancel_clicked()
 
 void RERestDish::on_btnOk_clicked()
 {
-    if (ui->leMinReminder->isEmpty()) {
-        ui->leMinReminder->setText("0");
-    }
     if (!isDataCorrect()) {
         message_error(fDataErrors.join("<br>"));
         fDataErrors.clear();

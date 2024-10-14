@@ -29,20 +29,6 @@ SOURCES += main.cpp\
     ../Filter/goodsmovement.cpp \
     ../Filter/wsalary.cpp \
     ../RowEditor/dlgcouponservicedocument.cpp \
-    ../Xlsx/src/xlsx.cpp \
-    ../Xlsx/src/xlsxborder.cpp \
-    ../Xlsx/src/xlsxcell.cpp \
-    ../Xlsx/src/xlsxcontenttype.cpp \
-    ../Xlsx/src/xlsxdocpropsapp.cpp \
-    ../Xlsx/src/xlsxdocpropscore.cpp \
-    ../Xlsx/src/xlsxdocument.cpp \
-    ../Xlsx/src/xlsxrels.cpp \
-    ../Xlsx/src/xlsxsharedstring.cpp \
-    ../Xlsx/src/xlsxsheet.cpp \
-    ../Xlsx/src/xlsxstyles.cpp \
-    ../Xlsx/src/xlsxtheme.cpp \
-    ../Xlsx/src/xlsxworkbook.cpp \
-    ../Xlsx/src/xlsxwriter.cpp \
     c5graphicsview.cpp \
     c5printing.cpp \
     c5printpreview.cpp \
@@ -695,7 +681,7 @@ RESOURCES += \
     res.qrc
 
 LIBS += -lVersion
-LIBS += -LC:/soft/OpenSSLWin64/lib/VC/x64/MD
+LIBS += -LC:/Soft/OpenSSL-Win64/lib
 LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS +=  -lwsock32
@@ -713,10 +699,9 @@ INCLUDEPATH += ../Print
 INCLUDEPATH += ../Widgets
 INCLUDEPATH += ../RGDoubleClick
 INCLUDEPATH += ../GridOptionWidgets
-INCLUDEPATH += ../Xlsx/Src
 INCLUDEPATH += ../Vouchers
-INCLUDEPATH += c:/soft/OpenSSLWin64/include
-INCLUDEPATH += c:/soft/OpenSSLWin64/include/openssl
+INCLUDEPATH += c:/soft/OpenSSL-Win64/include
+INCLUDEPATH += c:/soft/OpenSSL-Win64/include/openssl
 INCLUDEPATH += c:/projects/NewTax/Src
 
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"

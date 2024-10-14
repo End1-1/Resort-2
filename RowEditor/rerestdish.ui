@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>638</width>
-    <height>549</height>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -396,12 +396,6 @@
            </property>
            <property name="readOnly">
             <bool>true</bool>
-           </property>
-           <property name="PrimaryKey" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="Field" stdset="0">
-            <string>f_id</string>
            </property>
           </widget>
          </item>

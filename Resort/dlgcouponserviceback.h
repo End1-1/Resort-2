@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class DlgCouponServiceBack;
 }
 
@@ -16,6 +17,7 @@ class DlgCouponServiceBack : public QDialog
 public:
     explicit DlgCouponServiceBack(ReportQuery *rq, QWidget *parent = nullptr);
     ~DlgCouponServiceBack();
+    void openDoc(int id);
     virtual void keyPressEvent(QKeyEvent *e);
 
 private slots:

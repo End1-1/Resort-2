@@ -3,6 +3,7 @@
 
 #include "base.h"
 #include <QObject>
+#include <QDateTime>
 
 typedef struct {
     int fId;

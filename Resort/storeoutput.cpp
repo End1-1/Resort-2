@@ -104,8 +104,8 @@ void StoreOutput::output(QMap<int, double> &priceList)
         }
         priceList[v.at(0).toInt()] = qs / qp;
         bind[":f_id"] = v.at(0).toInt();
-        bind[":f_price"] = (qs / qp);
-        bind[":f_total"] = (qs / qp) * qty_total;
+        bind[":f_price"] = qp > 0.001 ? (qs / qp) : 0;
+        bind[":f_total"] = qp > 0.001 ? (qs / qp) * qty_total : 0;
         fDb.update("r_body", bind, where_id(v.at(0).toInt()));
 
         docamount += qs;

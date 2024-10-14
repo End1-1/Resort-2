@@ -220,9 +220,9 @@ void WStoreEntry::store(CI_RestStore *c)
 
 void WStoreEntry::on_toolButton_clicked()
 {
-    QMap<int, QString> colFilter;
-    colFilter[3] = ui->leStore->text();
-    fDockDish->setFilterColumn(colFilter);
+    // QMap<int, QString> colFilter;
+    // colFilter[3] = ui->leStore->text();
+    // fDockDish->setFilterColumn(colFilter);
     fDockDish->on_lineEdit_textEdited("");
     fDockDish->show();
 }

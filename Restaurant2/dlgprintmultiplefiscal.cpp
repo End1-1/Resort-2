@@ -4,6 +4,9 @@
 #include "defrest.h"
 #include "message.h"
 #include "printtaxn.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 DlgPrintMultipleFiscal::DlgPrintMultipleFiscal(QWidget *parent) :
     BaseDialog(parent, Qt::FramelessWindowHint),
@@ -118,11 +121,13 @@ void DlgPrintMultipleFiscal::on_btnPrint_clicked()
             accept();
             return;
         }
-        QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
-        pn.parseResponse(out, firm, hvhh, fiscal, rseq, sn, address, devnum, time);
-        db[":f_fiscal"] = rseq.toInt();
+
+        QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+
+
+        db[":f_fiscal"] = jo["rseq"].toInt();
         db.update("o_tax_log", "f_id", fiscalrecid);
-        db[":f_tax"] = rseq.toInt();
+        db[":f_tax"] = jo["rseq"].toInt();
         db.update("o_header", "f_id", order);
     }
     accept();
