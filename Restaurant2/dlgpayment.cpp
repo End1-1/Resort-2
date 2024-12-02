@@ -187,8 +187,15 @@ void DlgPayment::on_btnOk_clicked()
         QString in, out, err;
         int fiscalrecid;
         int result = pn.makeJsonAndPrint(ui->leCard->asDouble() + ui->leIdram->asDouble(),
-                                         ui->leGiftFiscal->asInt() == 0 ? 0 : ui->leCouponAmount->asDouble(),
+                                         ui->leGiftFiscal->text().isEmpty() ? 0 : ui->leCouponAmount->asDouble(),
                                          in, out, err);
+#ifdef QT_DEBUG
+        out =
+            "{\"rseq\":77,\"crn\":\"63219817\",\"sn\":\"V98745506068\",\"tin\":\"01588771\",\"taxpayer\":\"«Ռոգա էնդ կոպիտա ՍՊԸ»\",\"address\":\"Արշակունյանց 34\",\"time\":1676794194840,\"fiscal\":\"98198105\",\"lottery\":\"00000000\",\"prize\":0,\"total\":1540.0,\"change\":0.0}";
+        out =
+            "{\"address\":\"ԿԵՆՏՐՈՆ ԹԱՂԱՄԱՍ Ամիրյան 4/3 \",\"change\":0.0,\"crn\":\"53235782\",\"fiscal\":\"54704153\",\"lottery\":\"\",\"prize\":0,\"rseq\":1327,\"sn\":\"00022154380\",\"taxpayer\":\"«ՊԼԱԶԱ ՍԻՍՏԵՄՍ»\",\"time\":1709630105632,\"tin\":\"02596277\",\"total\":93600.0}";
+        result = 0;
+#endif
         db2[":f_order"] = fOrder;
         db2[":f_in"] = QByteArray(in.toUtf8()).toBase64();
         db2[":f_out"] = out;
@@ -256,6 +263,11 @@ void DlgPayment::on_btnOk_clicked()
 void DlgPayment::on_btnCard_clicked()
 {
     ui->leCard->setInt(ui->leCash->asInt() + ui->leIdram->asInt());
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_order"] = fOrder;
+    db2.exec("delete from d_gift_cart_use where f_order=:f_order");
     calcCash();
 }
 
@@ -369,6 +381,11 @@ void DlgPayment::getGiftAmount()
         }
         ui->leCouponNumber->setText(name);
         ui->leCouponNumber->setProperty("cart", code);
+        db2[":f_order"] = fOrder;
+        db2.exec("select group_concat(right(f_code, 4)) as f_code from d_gift_cart_use where f_order=:f_order");
+        if (db2.next()) {
+            ui->leGiftFiscal->setText(db2.string("f_code"));
+        }
     }
 }
 
@@ -466,6 +483,11 @@ void DlgPayment::on_btnCash_clicked()
 {
     ui->leDept->setInt(0);
     ui->leCash->setInt(ui->leFinalAmount->asInt());
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_order"] = fOrder;
+    db2.exec("delete from d_gift_cart_use where f_order=:f_order");
     calcCard();
 }
 
@@ -492,10 +514,12 @@ void DlgPayment::on_leDiscount_returnPressed()
              "where f_code=:f_code");
     if (db2.next()) {
         if (db2.integer("f_trsale") == 0) {
+            ui->leDiscount->clear();
             message_error(tr("This coupon not sold"));
             return;
         }
         if (db2.integer("f_trback") > 0) {
+            ui->leDiscount->clear();
             message_error(tr("This coupon used"));
             return;
         }
@@ -536,10 +560,11 @@ void DlgPayment::on_leDiscount_returnPressed()
     double amountneeded = ui->leFinalAmount->asDouble() - ui->leCouponAmount->asDouble();
     if (db2.next()) {
         if (db2.doubleValue("f_sum") > 0.001) {
-            ui->leGiftFiscal->setText(db2.string("f_fiscal"));
+            ui->leGiftFiscal->setText(ui->leGiftFiscal->text()  + db2.string("f_fiscal"));
             double amount = db2.doubleValue("f_sum");
             QString name = db2.string("f_info");
             if (amountneeded < 0.01) {
+                ui->leDiscount->clear();
                 message_info(tr("No more gift card required"));
                 return;
             }
@@ -570,6 +595,7 @@ void DlgPayment::on_leDiscount_returnPressed()
             ui->btnPrintTax->setChecked(true);
             return;
         } else {
+            ui->leDiscount->clear();
             message_info(tr("Cart amount spent"));
             return;
         }
@@ -579,6 +605,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     fDbBind[":f_card"] = code;
     dr.select(fDb, "select f_id, f_name, f_mode, f_model from d_car_client where f_card=:f_card", fDbBind);
     if (dr.rowCount() == 0) {
+        ui->leDiscount->clear();
         message_error(tr("Invalid card"));
         return;
     }
@@ -587,6 +614,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     ui->leCardHolder->fHiddenText = dr.value("f_id").toString();
     QStringList mode = dr.value("f_mode").toString().split(";", QString::SkipEmptyParts);
     if (mode.count() == 0) {
+        ui->leDiscount->clear();
         message_error(tr("Card params is not defined"));
         return;
     }
@@ -874,5 +902,10 @@ void DlgPayment::on_leGiftCardCode_returnPressed()
 void DlgPayment::on_btnCard_2_clicked()
 {
     ui->leIdram->setInt(ui->leCash->asInt() + ui->leCard->asInt());
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_order"] = fOrder;
+    db2.exec("delete from d_gift_cart_use where f_order=:f_order");
     calcCash();
 }

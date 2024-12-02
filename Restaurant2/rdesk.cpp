@@ -318,12 +318,6 @@ RDesk::RDesk(QWidget *parent) :
     }
     fTrackControl = new TrackControl(TRACK_REST_ORDER);
     fHall = Hall::getHallById(fPreferences.getDb(def_default_hall).toInt());
-    /*
-    fMenu = fHall->fDefaultMenu;
-    setBtnMenuText();
-    setupType(0);
-    */
-    //ui->tblTables->setMaximumHeight((ui->tblTables->rowCount() * ui->tblTables->verticalHeader()->defaultSectionSize()) + 10);
     fPreferences.setDb(def_working_day, QDate::currentDate().toString(def_date_format));
     DatabaseResult dr;
     fDbBind[":f_comp"] = QHostInfo::localHostName();
@@ -384,12 +378,6 @@ bool RDesk::setup(TableStruct *t)
     if (!t) {
         t = ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct *>();
     }
-    //    if (t) {
-    //        fMenu = Hall::fHallMap[t->fHall]->fDefaultMenu;
-    //        setBtnMenuText();
-    //        setupType(0);
-    //    }
-    setRecoverFrom(0);
     int colWidth = ui->tblDish->horizontalHeader()->defaultSectionSize();
     int colCount = ui->tblDish->width() / colWidth;
     int delta = ui->tblDish->width() - (colCount *colWidth);
@@ -1356,6 +1344,7 @@ void RDesk::printCanceledOrder(int id)
 void RDesk::timeout()
 {
     fTimerCounter++;
+    ui->leCmd->setFocus();
     if (fTimerCounter % 3 == 0) {
         startService();
         if (fHall) {
@@ -1446,6 +1435,10 @@ void RDesk::onBtnQtyClicked()
         qty = b->text().toFloat();
     }
     OrderDishStruct *od = sel.at(0).data(Qt::UserRole).value<OrderDishStruct *>();
+    if (!od->fEmark.isEmpty()) {
+        message_error(tr("Cannot change quantity of dish thats contains emarks"));
+        return;
+    }
     if (!od) {
         return;
     }
@@ -1681,6 +1674,7 @@ int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     od->fAdgt = d->fAdgt;
     od->fTax = d->fTax;
     od->fRow = ui->tblOrder->rowCount();
+    od->fEmark = d->tempEmark;
     countDish(od);
     fDbBind[":f_header"] = fTable->fOrder;
     fDbBind[":f_state"] = DISH_STATE_READY;
@@ -1704,6 +1698,7 @@ int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     fDbBind[":f_adgt"] = od->fAdgt;
     fDbBind[":f_complexRec"] = od->fComplexRecId;
     fDbBind[":f_row"] = od->fRow;
+    fDbBind[":f_emark"] = od->fEmark;
     od->fRecId = fDb.insert("o_dish", fDbBind);
     updateDishQtyHistory(od);
     addDishToTable(od, counttotal, true);
@@ -1724,7 +1719,7 @@ void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservi
     for (int i = 0; i < ui->tblOrder->rowCount() - 1; i++) {
         OrderDishStruct *odd = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct *>();
         if (odd) {
-            if (odd->fDishId == fHall->fServiceItem) {
+            if (odd->fDishId == fHall->fServiceItem && odd->fState == DISH_STATE_READY) {
                 addService = false;
                 serviceItemExists = true;
                 break;
@@ -1820,6 +1815,7 @@ void RDesk::updateDish(OrderDishStruct *od)
     fDbBind[":f_comment"] = od->fComment;
     fDbBind[":f_cancelUser"] = od->fCancelUser;
     fDbBind[":f_cancelDate"] = od->fCancelDate;
+    fDbBind[":f_emark"] = od->fEmark;
     fDb.update("o_dish", fDbBind, QString("where f_id=%1").arg(od->fRecId));
     //    if (!od->fComplexRecId.isEmpty()) {
     //        fDbBind[":f_id"] = od->fComplexRecId;
@@ -2025,7 +2021,6 @@ void RDesk::checkOrderHeader(TableStruct *t)
 
 void RDesk::clearOrder()
 {
-    setRecoverFrom(0);
     if (!fTable) {
         return;
     }
@@ -2086,7 +2081,6 @@ void RDesk::loadOrder(bool showwarning)
     fTable->fRoomComment = fDbRows.at(0).at(7).toString();
     fTable->fOpened = fDbRows.at(0).at(8).toDateTime();
     fTable->fTaxPrint = fDbRows.at(0).at(9).toInt();
-    setRecoverFrom(fDbRows.at(0).at(10).toInt());
     et.restart();
     //    if (showwarning) {
     //        if (u.fId != fStaff->fId) {
@@ -2099,7 +2093,7 @@ void RDesk::loadOrder(bool showwarning)
     query = "select od.f_id, od.f_dish, dc.f_en, dc.f_ru, dc.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
             "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-            "dc.f_adgt "
+            "dc.f_adgt, od.f_emark  "
             "from o_dish od "
             "left join r_dish_complex dc on dc.f_id=od.f_complexId "
             "where od.f_header=:f_header and f_complex>0 and f_complexId>0 and f_state=1 "
@@ -2126,7 +2120,7 @@ void RDesk::loadOrder(bool showwarning)
     query = "select od.f_id, od.f_dish, d.f_en, od.f_qty, od.f_qtyPrint, od.f_price, "
             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
             "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-            "od.f_adgt, od.f_complexRec "
+            "od.f_adgt, od.f_complexRec, od.f_emark "
             "from o_dish od "
             "left join r_dish d on d.f_id=od.f_dish "
             "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
@@ -2157,6 +2151,7 @@ void RDesk::loadOrder(bool showwarning)
         c++; //complexId
         d->fAdgt = it->at(c++).toString();
         d->fComplexRecId = it->at(c++).toString();
+        d->fEmark = it->at(c++).toString();
         if (!d->fComplexRecId.isEmpty()) {
             for (int i = 0; i < ui->tblComplex->rowCount(); i++) {
                 DishComplexStruct *ds = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct *>();
@@ -2774,7 +2769,8 @@ void RDesk::printReceipt(bool printModePayment)
     printer.setPrinterName("local");
     QMatrix m;
 #ifdef QT_DEBUG
-    m.scale(1, 1);
+    //m.scale(1, 1);
+    m.scale(3, 3);
 #else
     m.scale(3, 3);
 #endif
@@ -3032,16 +3028,6 @@ void RDesk::on_btnTrash_clicked()
 
 void RDesk::on_btnPayment_clicked()
 {
-    //    if (fTable->fHall == 1) {
-    //        if (fCarModel.isEmpty()) {
-    //            message_error(tr("Car model must be selected"));
-    //            return;
-    //        }
-    //        if (fCostumerId == 0) {
-    //            message_error(tr("Costumer must be selected"));
-    //            return;
-    //        }
-    //    }
     if (!DlgPayment::payment(fTable->fOrder, fTable->fHall)) {
         return;
     }
@@ -3221,12 +3207,6 @@ void RDesk::repaintTables()
     ui->tblTables->viewport()->update();
 }
 
-void RDesk::setRecoverFrom(int from)
-{
-    ui->wRecoverFrom->setVisible(from > 0);
-    ui->leRecoverFrom->setInt(from);
-}
-
 void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
 {
     if (!item) {
@@ -3349,37 +3329,6 @@ void RDesk::on_btnHallVIP_clicked()
 void RDesk::on_btnShop_clicked()
 {
     loadHall(4 + ((defrest(dr_branch).toInt() - 1) * 4));
-}
-
-void RDesk::on_btnSetRecoverFrom_clicked()
-{
-    if (!fTable) {
-        message_error(tr("Select table"));
-        return;
-    }
-    if (fTable->fOrder == 0) {
-        message_error(tr("Active order required"));
-        return;
-    }
-    float num;
-    if (RNumbers::getFloat(num, 99999999.0, "ԳՈՒՄԱՐ", this)) {
-        Db b = Preferences().getDatabase(Base::fDbName);
-        Database2 db2;
-        db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-        db2[":f_id"] = (int) num;
-        db2.exec("select f_state from o_header where f_id=:f_id");
-        if (!db2.next()) {
-            message_error(tr("Invalid order id"));
-            return;
-        }
-        if (db2.integer("f_state") != ORDER_STATE_REMOVED) {
-            message_error(tr("Order state must me removed"));
-            return;
-        }
-        db2[":f_recoverfrom"] = (int) num;
-        db2.update("o_header", "f_id", fTable->fOrder);
-        setRecoverFrom((int) num);
-    }
 }
 
 void RDesk::startService()
@@ -3545,26 +3494,6 @@ void RDesk::removeRow(int index, bool confirm)
         return;
     }
     if (od->fDishId == fHall->fServiceItem) {
-        //        bool removeService = true;
-        //        int row = -1;
-        //        for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        //            OrderDishStruct *odd = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-        //            if (!odd) {
-        //                continue;
-        //            }
-        //            if (odd->fState != DISH_STATE_READY) {
-        //                continue;
-        //            }
-        //            if (!odd->fComplexRecId.isEmpty()) {
-        //                continue;
-        //            }
-        //            if (odd->fSvcValue > 0.01) {
-        //                removeService = false;
-        //            }
-        //            if (fHall->fServiceItem == odd->fDishId) {
-        //                row = i;
-        //            }
-        //        }
         if (od->fPrice > 0.01) {
             message_error(tr("This item cannot be removed"));
             return;
@@ -3580,6 +3509,7 @@ void RDesk::removeRow(int index, bool confirm)
     if (od->fComplex == 0) {
         if (od->fQtyPrint < 0.01) {
             od->fState = DISH_STATE_EMPTY;
+            od->fEmark.clear();
             ui->tblOrder->setRowHidden(index, true);
         } else {
             message_error(tr("Cannot remove printed dish, use order correction tool"));
@@ -3619,6 +3549,7 @@ void RDesk::removeRow(int index, bool confirm)
             DishComplexStruct *dc = ui->tblComplex->item(i, 0)->data(Qt::UserRole).value<DishComplexStruct *>();
             if (dc->fRecId == od->fComplexRecId) {
                 fDbBind[":f_state"] = reason.toInt();
+                fDbBind[":f_emark"] = QVariant();
                 fDb.update("o_dish", fDbBind, where_id(ap(dc->fRecId)));
                 ui->tblComplex->removeRow(i);
                 fTrackControl->insert("Remove complex", dc->fName["en"], "");
@@ -3627,6 +3558,7 @@ void RDesk::removeRow(int index, bool confirm)
             }
         }
         fDbBind[":f_state"] = reason;
+        fDbBind[":f_emark"] = QVariant();
         fDb.update("o_dish", fDbBind, where_id(od->fComplexRecId));
     }
     int serviceIndex = -1;
@@ -3711,4 +3643,69 @@ void RDesk::on_btnQr_clicked()
         db2.exec("update o_dish set f_emark=:f_emark where f_id=:f_id");
     }
     repaintTables();
+}
+
+void RDesk::on_leCmd_returnPressed()
+{
+    QString code = ui->leCmd->text();
+    ui->leCmd->clear();
+    if (fTable == nullptr) {
+        message_error(tr("Please, select table"));
+        return;
+    }
+    if (code.length() == 13) {
+        DishStruct *d = fDishTable.getDishStructByBarcode(code, fMenu);
+        if (d) {
+            addDishToOrder(d, true);
+        }
+    } else  if (code.length() >= 29) {
+        QString emarks = code;
+        QString barcode;
+        DishStruct *d = nullptr;
+        if (code.mid(0, 6) == "000000") {
+            barcode = code.mid(6, 8);
+        } else if (code.mid(0, 3) == "010") {
+            barcode = code.mid(3, 13);
+        } else {
+            barcode = code.mid(1, 8);
+            d = fDishTable.getDishStructByBarcode(barcode, fMenu);
+            if (!d) {
+                barcode.clear();
+            }
+            if (barcode.isEmpty()) {
+                barcode = code.mid(1, 13);
+            }
+            if (!(d = fDishTable.getDishStructByBarcode(barcode, fMenu))) {
+                barcode = "";
+            }
+        }
+        emarks = code;
+        code = barcode;
+        if (barcode.isEmpty()) {
+            message_error(tr("Invalid emarks"));
+            return;
+        }
+        d = fDishTable.getDishStructByBarcode(barcode, fMenu);
+        if (!d) {
+            barcode.clear();
+        }
+        if (!d) {
+            message_error(tr("Invalid barcode"));
+            return;
+        }
+        Db b = Preferences().getDatabase(Base::fDbName);
+        Database2 db2;
+        db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+        db2[":f_emark"] = emarks;
+        db2.exec("select f_id from o_dish where f_emark=:f_emark");
+        if (db2.next()) {
+            message_error(tr("Used emarks detected"));
+            return;
+        }
+        d->tempEmark = emarks;
+        int recid = addDishToOrder(d, true);
+        db2[":f_emark"] = emarks;
+        db2[":f_id"] = recid;
+        db2.exec("update o_dish set f_emark=:f_emark where f_id=:f_id");
+    }
 }

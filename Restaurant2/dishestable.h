@@ -9,13 +9,13 @@ typedef struct {
     int fId;
     QMap<QString, QString> fName;
 } MenuStruct;
-Q_DECLARE_METATYPE(MenuStruct*)
+Q_DECLARE_METATYPE(MenuStruct *)
 
 typedef struct {
     int fId;
     QMap<QString, QString> fName;
 } DishPartStruct;
-Q_DECLARE_METATYPE(DishPartStruct*)
+Q_DECLARE_METATYPE(DishPartStruct *)
 
 typedef struct {
     int fId;
@@ -25,7 +25,7 @@ typedef struct {
     int fTextColor;
     int fQueue;
 } TypeStruct;
-Q_DECLARE_METATYPE(TypeStruct*)
+Q_DECLARE_METATYPE(TypeStruct *)
 
 typedef struct {
     int fId;
@@ -47,8 +47,10 @@ typedef struct {
     QString fComplexRec;
     QString fAdgt;
     int fTax;
+    QString barcode;
+    QString tempEmark;
 } DishStruct;
-Q_DECLARE_METATYPE(DishStruct*)
+Q_DECLARE_METATYPE(DishStruct *)
 
 typedef struct {
     int fRecId;
@@ -75,10 +77,11 @@ typedef struct {
     QString fAdgt;
     int fTax;
     int fRow;
+    QString fEmark;
 } OrderDishStruct;
-Q_DECLARE_METATYPE(OrderDishStruct*)
+Q_DECLARE_METATYPE(OrderDishStruct *)
 
-struct DishComplexStruct{
+struct DishComplexStruct {
     int fRecId;
     int fId;
     QMap<QString, QString> fName;
@@ -88,8 +91,9 @@ struct DishComplexStruct{
     double fPrice;
     QString fAdgt;
     double fPriceDeviation;
-    QList<DishStruct*> fDishes;
-    DishComplexStruct &operator= (const DishComplexStruct &d) {
+    QList<DishStruct *> fDishes;
+    DishComplexStruct &operator= (const DishComplexStruct &d)
+    {
         if (this == &d) {
             return *this;
         }
@@ -110,7 +114,7 @@ struct DishComplexStruct{
         return *this;
     }
 } ;
-Q_DECLARE_METATYPE(DishComplexStruct*)
+Q_DECLARE_METATYPE(DishComplexStruct *)
 
 typedef struct {
     int fId;
@@ -122,7 +126,7 @@ typedef struct {
     QString fComment;
     int fPrint;
 } OrderHeaderStruct;
-Q_DECLARE_METATYPE(OrderHeaderStruct*)
+Q_DECLARE_METATYPE(OrderHeaderStruct *)
 
 typedef struct {
     QMap<QString, QString> fName;
@@ -134,17 +138,18 @@ class DishesTable : public QObject, Base
 public:
     explicit DishesTable(QObject *parent = 0);
     void init(Splash *s = 0);
-    void filterType(int menuId, int partId, QMap<int, TypeStruct*> &type);
-    void filterDish(int menuId, int typeId, QMap<int, DishStruct*> &dish);
+    void filterType(int menuId, int partId, QMap<int, TypeStruct *> &type);
+    void filterDish(int menuId, int typeId, QMap<int, DishStruct *> &dish);
     static QList<QMap<QString, QString> > fMods;
-    static QMap<int, MenuStruct*> fMenu;
-    static QList<DishPartStruct*> fDishPart;
-    static QMap<int, TypeStruct*> fType;
-    static QMap<int, QSet<TypeStruct*> > fTypeMenu;
-    static QMap<QString, TypeStruct*> fTypeProxy;
-    static QList<DishStruct*> fDish;
-    static QMap<int, QList<DishStruct*> > fDishMenu;
-    static QList<DishComplexStruct*> fDishComplex;
+    static QMap<int, MenuStruct *> fMenu;
+    static QList<DishPartStruct *> fDishPart;
+    static QMap<int, TypeStruct *> fType;
+    static QMap<int, QSet<TypeStruct *> > fTypeMenu;
+    static QMap<QString, TypeStruct *> fTypeProxy;
+    static QList<DishStruct *> fDish;
+    static QMap<int, QList<DishStruct *> > fDishMenu;
+    static QList<DishComplexStruct *> fDishComplex;
+    static DishStruct *getDishStructByBarcode(const QString &barcode, int menuId);
 signals:
 
 public slots:

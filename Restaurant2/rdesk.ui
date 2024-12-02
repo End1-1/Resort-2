@@ -19,6 +19,9 @@
    </property>
    <item>
     <widget class="QWidget" name="wInfo" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <property name="leftMargin">
        <number>0</number>
@@ -37,6 +40,9 @@
    </item>
    <item>
     <widget class="QWidget" name="wbtn" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_6">
       <property name="leftMargin">
        <number>0</number>
@@ -63,6 +69,9 @@
           <width>200</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
          <string>CAFE</string>
@@ -99,6 +108,9 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>WASH</string>
         </property>
@@ -123,6 +135,9 @@
           <pointsize>10</pointsize>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
          <string>CAFE</string>
@@ -149,6 +164,9 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>VIP</string>
         </property>
@@ -174,6 +192,9 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>SHOP</string>
         </property>
@@ -181,6 +202,9 @@
       </item>
       <item>
        <widget class="QLabel" name="lbStaff">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>Staff</string>
         </property>
@@ -188,6 +212,9 @@
       </item>
       <item>
        <widget class="QLabel" name="lbCar">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>Car</string>
         </property>
@@ -195,8 +222,11 @@
       </item>
       <item>
        <spacer name="horizontalSpacer_5">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -215,7 +245,7 @@
          </size>
         </property>
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::NoFocus</enum>
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
          <string>-20%</string>
@@ -241,7 +271,7 @@
          </size>
         </property>
         <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::NoFocus</enum>
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
          <string/>
@@ -259,11 +289,14 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::StyledPanel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Shadow::Raised</enum>
+      <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
@@ -295,6 +328,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="leftMargin">
           <number>0</number>
@@ -322,17 +358,20 @@
              <height>300</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+            <enum>Qt::ScrollBarAlwaysOn</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+            <enum>QAbstractItemView::SingleSelection</enum>
            </property>
            <attribute name="horizontalHeaderVisible">
             <bool>false</bool>
@@ -428,17 +467,20 @@
              <verstretch>1</verstretch>
             </sizepolicy>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+            <enum>QAbstractItemView::NoSelection</enum>
            </property>
            <attribute name="horizontalHeaderVisible">
             <bool>false</bool>
@@ -469,6 +511,9 @@
              <height>55</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="leftMargin">
              <number>0</number>
@@ -497,7 +542,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -529,7 +574,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -548,8 +593,11 @@
             </item>
             <item>
              <spacer name="horizontalSpacer_2">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -572,6 +620,9 @@
                 <width>50</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -602,6 +653,9 @@
                 <height>50</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -625,6 +679,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QWidget" name="wCenter" native="true">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="leftMargin">
           <number>0</number>
@@ -640,17 +697,20 @@
          </property>
          <item>
           <widget class="QTableWidget" name="tblDish">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+            <enum>QAbstractItemView::SingleSelection</enum>
            </property>
            <attribute name="horizontalHeaderVisible">
             <bool>false</bool>
@@ -667,7 +727,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="treeView"/>
+          <widget class="QTreeView" name="treeView">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QWidget" name="widget_5" native="true">
@@ -676,6 +740,9 @@
              <width>16777215</width>
              <height>55</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <property name="leftMargin">
@@ -705,7 +772,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -737,7 +804,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -769,7 +836,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -788,8 +855,11 @@
             </item>
             <item>
              <spacer name="horizontalSpacer_3">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -819,6 +889,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <property name="leftMargin">
           <number>0</number>
@@ -834,6 +907,9 @@
          </property>
          <item>
           <widget class="QWidget" name="widget" native="true">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <layout class="QGridLayout" name="gridLayout_2">
             <property name="leftMargin">
              <number>0</number>
@@ -847,8 +923,8 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="btn4">
+            <item row="2" column="4">
+             <widget class="QPushButton" name="btnPrint">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -862,120 +938,20 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>4</string>
+               <string/>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="btnPlusTen">
-              <property name="minimumSize">
+              <property name="icon">
+               <iconset resource="res.qrc">
+                <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+              </property>
+              <property name="iconSize">
                <size>
-                <width>50</width>
-                <height>50</height>
+                <width>32</width>
+                <height>32</height>
                </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>+10</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="btn9">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>9</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QPushButton" name="btn8">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>8</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QPushButton" name="btn6">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>6</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="btn2">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>2</string>
               </property>
              </widget>
             </item>
@@ -997,7 +973,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -1014,8 +990,8 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="btn7">
+            <item row="2" column="2">
+             <widget class="QPushButton" name="btn9">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1029,64 +1005,10 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>7</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="4">
-             <widget class="QPushButton" name="btnHalfMinus">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>-0.5</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="btnTrash">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="res.qrc">
-                <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
+               <string>9</string>
               </property>
              </widget>
             </item>
@@ -1105,15 +1027,15 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string>3</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="btn5">
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btn7">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1127,15 +1049,15 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>5</string>
+               <string>7</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="4">
-             <widget class="QPushButton" name="btnPrint">
+            <item row="1" column="3">
+             <widget class="QPushButton" name="btnPlusTen">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1149,20 +1071,54 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string/>
+               <string>+10</string>
               </property>
-              <property name="icon">
-               <iconset resource="res.qrc">
-                <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
-              </property>
-              <property name="iconSize">
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="btn6">
+              <property name="minimumSize">
                <size>
-                <width>32</width>
-                <height>32</height>
+                <width>50</width>
+                <height>50</height>
                </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="btn8">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>8</string>
               </property>
              </widget>
             </item>
@@ -1181,10 +1137,108 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string>1</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="btn2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="btn5">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="btnTrash">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="res.qrc">
+                <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btn4">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>4</string>
               </property>
              </widget>
             </item>
@@ -1203,64 +1257,64 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string>+0.5</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="5">
-             <widget class="QWidget" name="wRecoverFrom" native="true">
+            <item row="0" column="4">
+             <widget class="QPushButton" name="btnHalfMinus">
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>50</width>
                 <height>50</height>
                </size>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>Recover from</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="EQLineEdit" name="leRecoverFrom">
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>-0.5</string>
+              </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
          <item>
+          <widget class="QLineEdit" name="leCmd">
+           <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QTableWidget" name="tblOrder">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+            <enum>QAbstractItemView::SingleSelection</enum>
            </property>
            <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+            <enum>QAbstractItemView::SelectRows</enum>
            </property>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -1287,6 +1341,9 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tblComplex">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <column>
             <property name="text">
              <string>ItemCode</string>
@@ -1323,17 +1380,20 @@
              <height>90</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+            <enum>QAbstractItemView::NoSelection</enum>
            </property>
            <attribute name="horizontalHeaderVisible">
             <bool>false</bool>
@@ -1404,6 +1464,9 @@
              <height>55</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <property name="leftMargin">
              <number>0</number>
@@ -1432,7 +1495,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -1464,7 +1527,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::FocusPolicy::NoFocus</enum>
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -1483,8 +1546,11 @@
             </item>
             <item>
              <spacer name="horizontalSpacer_4">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1507,6 +1573,9 @@
                 <width>50</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
@@ -1537,6 +1606,9 @@
                 <height>50</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -1563,13 +1635,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>EQLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">eqlineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>

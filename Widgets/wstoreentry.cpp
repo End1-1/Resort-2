@@ -12,7 +12,8 @@ struct goods {
     int id;
     double qty;
     double price;
-    goods() {
+    goods()
+    {
         id = 0;
         qty = 0.0;
         price = 0.0;
@@ -25,16 +26,14 @@ WStoreEntry::WStoreEntry(QWidget *parent) :
 {
     ui->setupUi(this);
     Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
-                                     0, 0, 300, 80, 80, 80, 80);
-
+                                0, 0, 300, 80, 80, 80, 80);
     fDockDish = new DWSelectorDish(this);
     fDockDish->configure();
     fDockDish->setDialog(this, SEL_DISH);
-
     fDockStore = new DWSelectorRestStore(this);
     fDockStore->configure();
     fDockStore->setSelector(ui->leStore);
-    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
+    connect(fDockStore, SIGNAL(store(CI_RestStore *)), this, SLOT(store(CI_RestStore *)));
 }
 
 WStoreEntry::~WStoreEntry()
@@ -50,15 +49,15 @@ void WStoreEntry::setup()
 void WStoreEntry::selector(int selectorNumber, const QVariant &value)
 {
     switch (selectorNumber) {
-    case SEL_DISH: {
-        CI_Dish *c = value.value<CI_Dish*>();
-        if (c) {
-            newGoods(c);
-            ui->tblData->setVisible(false);
-            ui->tblData->setVisible(true);
-            ui->tblData->scrollToBottom();
+        case SEL_DISH: {
+            CI_Dish *c = value.value<CI_Dish *>();
+            if (c) {
+                newGoods(c);
+                ui->tblData->setVisible(false);
+                ui->tblData->setVisible(true);
+                ui->tblData->scrollToBottom();
+            }
         }
-    }
     }
 }
 
@@ -156,20 +155,27 @@ void WStoreEntry::storeQty(int goods)
     db2[":f_date"] = ui->deDate->date();
     db2[":f_store"] = ui->leStore->asInt();
     QString where ;
-    if (goods > 0){
-        where += QString("and r.f_material=%1 ").arg(goods);
+    if (goods > 0) {
+        where += QString("and r.f_goods=%1 ").arg(goods);
     }
-    db2.exec(QString("SELECT f_material, SUM(f_sign*f_qty) as f_qty "
-            "FROM r_body r "
-            "LEFT JOIN r_docs d ON d.f_id=r.f_doc "
-            "WHERE d.f_date<=:f_date AND r.f_store=:f_store %1 "
-            "GROUP BY 1 "
-            "having SUM(f_sign*f_qty)<>0").arg(where));
+    db2.exec(QString("SELECT f_goods, SUM(f_sign*f_qty) as f_qty "
+                     "FROM r_store_acc r "
+                     "LEFT JOIN r_docs d ON d.f_id=r.f_doc "
+                     "WHERE d.f_date<=:f_date AND r.f_store=:f_store %1 "
+                     "GROUP BY 1 "
+                     "having SUM(f_sign*f_qty)<>0").arg(where));
     while (db2.next()) {
+        bool found = false;
         for (int i = 0; i < ui->tblData->rowCount(); i++) {
-            if (db2.integer("f_material") == ui->tblData->item(i, 1)->data(Qt::EditRole).toInt()) {
+            if (db2.integer("f_goods") == ui->tblData->item(i, 1)->data(Qt::EditRole).toInt()) {
+                found = true;
                 ui->tblData->setItemWithValue(i, 7, db2.doubleValue("f_qty"));
             }
+        }
+        if (!found) {
+            CI_Dish *c = CacheDish::instance()->get(db2.integer("f_goods"));
+            newGoods(c);
+            ui->tblData->setItemWithValue(ui->tblData->rowCount() - 1, 7, db2.doubleValue("f_qty"));
         }
     }
 }
@@ -177,31 +183,31 @@ void WStoreEntry::storeQty(int goods)
 void WStoreEntry::qtyChange(const QString &arg1)
 {
     Q_UNUSED(arg1)
-    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
+    EQLineEdit *l = static_cast<EQLineEdit *>(sender());
     int row, col;
     if (!ui->tblData->findWidgetCell(l, row, col)) {
         return;
     }
-    ui->tblData->lineEdit(row, 6)->setDouble(l->asDouble() * ui->tblData->lineEdit(row, 5)->asDouble());
+    ui->tblData->lineEdit(row, 6)->setDouble(l->asDouble() *ui->tblData->lineEdit(row, 5)->asDouble());
     countTotal();
 }
 
 void WStoreEntry::priceChange(const QString &arg1)
 {
     Q_UNUSED(arg1)
-    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
+    EQLineEdit *l = static_cast<EQLineEdit *>(sender());
     int row, col;
     if (!ui->tblData->findWidgetCell(l, row, col)) {
         return;
     }
-    ui->tblData->lineEdit(row, 6)->setDouble(l->asDouble() * ui->tblData->lineEdit(row, 3)->asDouble());
+    ui->tblData->lineEdit(row, 6)->setDouble(l->asDouble() *ui->tblData->lineEdit(row, 3)->asDouble());
     countTotal();
 }
 
 void WStoreEntry::totalChange(const QString &arg1)
 {
     Q_UNUSED(arg1)
-    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
+    EQLineEdit *l = static_cast<EQLineEdit *>(sender());
     int row, col;
     if (!ui->tblData->findWidgetCell(l, row, col)) {
         return;
@@ -289,17 +295,15 @@ void WStoreEntry::on_btnCalculate_clicked()
         message_error(tr("Store must be defined"));
         return;
     }
-
     fDbBind[":f_date"] = ui->deDate->date();
     fDbBind[":f_store"] = ui->leStore->asInt();
     fDb.select("select b.f_goods, sum(b.f_qty*b.f_sign) as f_qty, "
-            "abs(sum(b.f_price*b.f_qty)/sum(b.f_qty)) as f_price "
-            "from r_store_acc b "
-            "left join r_docs bd on bd.f_id=b.f_doc "
-            "where bd.f_date<=:f_date and bd.f_state=1 "
-            "and b.f_store=:f_store "
-            "group by 1", fDbBind, fDbRows);
-
+               "abs(sum(b.f_price*b.f_qty)/sum(b.f_qty)) as f_price "
+               "from r_store_acc b "
+               "left join r_docs bd on bd.f_id=b.f_doc "
+               "where bd.f_date<=:f_date and bd.f_state=1 "
+               "and b.f_store=:f_store "
+               "group by 1", fDbBind, fDbRows);
     QList<goods> over;
     QList<goods> miss;
     // if all fDbRows exists in tblData
@@ -342,7 +346,6 @@ void WStoreEntry::on_btnCalculate_clicked()
             over.append(g);
         }
     }
-
     if (miss.count() > 0) {
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_type"] = STORE_DOC_OUT;
@@ -357,21 +360,19 @@ void WStoreEntry::on_btnCalculate_clicked()
         fDbBind[":f_payment"] = 1;
         fDbBind[":f_rest"] = 0;
         int docid = fDb.insert("r_docs", fDbBind);
-
-        for (goods &g: miss){
+        for (goods &g : miss) {
             fDbBind[":f_doc"] = docid;
             fDbBind[":f_store"] =  ui->leStore->asInt();
             fDbBind[":f_material"] = g.id;
             fDbBind[":f_sign"] = -1;
             fDbBind[":f_qty"] = g.qty;
             fDbBind[":f_price"] = g.price;
-            fDbBind[":f_total"] = g.qty * g.price;
+            fDbBind[":f_total"] = g.qty *g.price;
             fDb.insert("r_body", fDbBind);
         }
         StoreDoc *d = addTab<StoreDoc>();
         d->loadDoc(docid);
     }
-
     if (over.count() > 0) {
         fDbBind[":f_date"] = ui->deDate->date();
         fDbBind[":f_type"] = STORE_DOC_IN;
@@ -386,15 +387,14 @@ void WStoreEntry::on_btnCalculate_clicked()
         fDbBind[":f_payment"] = 1;
         fDbBind[":f_rest"] = 0;
         int docid = fDb.insert("r_docs", fDbBind);
-
-        for (goods &g: over){
+        for (goods &g : over) {
             fDbBind[":f_doc"] = docid;
             fDbBind[":f_store"] =  ui->leStore->asInt();
             fDbBind[":f_material"] = g.id;
             fDbBind[":f_sign"] = 1;
             fDbBind[":f_qty"] = g.qty;
             fDbBind[":f_price"] = g.price;
-            fDbBind[":f_total"] = g.qty * g.price;
+            fDbBind[":f_total"] = g.qty *g.price;
             fDb.insert("r_body", fDbBind);
         }
         StoreDoc *d = addTab<StoreDoc>();
@@ -437,13 +437,11 @@ void WStoreEntry::on_btnExcel_clicked()
     }
     QColor color = QColor::fromRgb(200, 200, 250);
     e.setBackground(e.address(1, 0), e.address(1, colCount - 1),
-                     color.red(), color.green(), color.blue());
+                    color.red(), color.green(), color.blue());
     e.setFontBold(e.address(0, 0), e.address(0, colCount - 1));
     e.setHorizontalAlignment(e.address(0, 0), e.address(0, colCount - 1), Excel::hCenter);
-
     e.setValue(ui->leDocNum->text(), 1, 1);
     e.setValue(ui->deDate->text(), 1, 2);
-
     for (int j = 0; j < ui->tblData->rowCount(); j++) {
         e.setValue(ui->tblData->item(j, 1)->text(), j + 3, 1);
         e.setValue(ui->tblData->item(j, 2)->text(), j + 3, 2);
@@ -452,7 +450,6 @@ void WStoreEntry::on_btnExcel_clicked()
         e.setValue(ui->tblData->lineEdit(j, 5)->text(), j + 3, 5);
         e.setValue(ui->tblData->lineEdit(j, 6)->text(), j + 3, 6);
     }
-
     e.setFontSize(e.address(0, 0), e.address(rowCount + 2, colCount), 10);
     e.show();
 }

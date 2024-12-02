@@ -26,20 +26,20 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     ui(new Ui::FRestaurantTotal)
 {
     ui->setupUi(this);
-
     if (check_permission(pr_remove_order)) {
-        fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeOrder()), this)->setFocusPolicy(Qt::ClickFocus);
+        fReportGrid->addToolBarButton(":/images/garbage.png", tr("Remove"), SLOT(removeOrder()),
+                                      this)->setFocusPolicy(Qt::ClickFocus);
     }
     if (check_permission(pr_make_store_output_of_sale)) {
-        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()), this)->setFocusPolicy(Qt::ClickFocus);
+        fReportGrid->addToolBarButton(":/images/puzzle.png", tr("Recalculate store"), SLOT(recalculateStore()),
+                                      this)->setFocusPolicy(Qt::ClickFocus);
     }
-
     //fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);
     fDockHall->configure();
     fDockHall->setSelector(ui->leHall);
-    connect(fDockHall, SIGNAL(hall(CI_RestHall*)), this, SLOT(hall(CI_RestHall*)));
+    connect(fDockHall, SIGNAL(hall(CI_RestHall *)), this, SLOT(hall(CI_RestHall *)));
     fDockOrderState = new DWSelectorOrderState(this);
     fDockOrderState->configure();
     fDockOrderState->setSelector(ui->leState);
@@ -51,15 +51,15 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fDockUsers = new DWSelectorUsers(this);
     fDockUsers->configure();
     fDockUsers->setSelector(ui->leStaff);
-    connect(fDockUsers, SIGNAL(user(CI_User*)), this, SLOT(user(CI_User*)));
+    connect(fDockUsers, SIGNAL(user(CI_User *)), this, SLOT(user(CI_User *)));
     fDockStore = new DWSelectorRestStore(this);
     fDockStore->configure();
     fDockStore->setSelector(ui->leStore);
-    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
+    connect(fDockStore, SIGNAL(store(CI_RestStore *)), this, SLOT(store(CI_RestStore *)));
     fDockDishType = new DWSelectorDishType(this);
     fDockDishType->configure();
     fDockDishType->setSelector(ui->leDishType);
-    connect(fDockDishType, SIGNAL(dishType(CI_RestDishType*)), this, SLOT(dishType(CI_RestDishType*)));
+    connect(fDockDishType, SIGNAL(dishType(CI_RestDishType *)), this, SLOT(dishType(CI_RestDishType *)));
     DWSelectorDish *dwDish = new DWSelectorDish(this);
     dwDish->configure();
     dwDish->setSelector(ui->leDish);
@@ -68,7 +68,6 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     dwDishState->configure();
     dwDishState->setSelector(ui->leDishState);
     dwDishState->setDialog(this, sn_dish_state);
-
     CI_OrderState *os = CacheOrderState::instance()->get(ORDER_STATE_CLOSED);
     if (os) {
         selector(sn_order_state, qVariantFromValue(os));
@@ -78,8 +77,6 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
         selector(sn_dish_state, qVariantFromValue(ds));
     }
     connect(ui->leBranch, &EQLineEdit::customButtonClicked, this, &FRestaurantTotal::branchEditDoubleClick);
-
-
     fReportGrid->fIncludes.clear();
     fReportGrid->fIncludes["oh.f_id"] = false;
     fReportGrid->fIncludes["oh.f_state"] = false;
@@ -124,7 +121,6 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponbank)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponservice)"] = false;
-
 }
 
 FRestaurantTotal::~FRestaurantTotal()
@@ -136,14 +132,14 @@ void FRestaurantTotal::apply(WReportGrid *rg)
 {
     QString order;
     bool countAmount = !ui->chDish->isChecked()
-            && !ui->rb500No->isChecked()
-            && !ui->rb500Yes->isChecked()
-            && !ui->chStore->isChecked()
-            && !ui->chDishType->isChecked()
-            && !ui->chDishState->isChecked()
-            && ui->leDish->fHiddenText.isEmpty()
-            && ui->leStore->text().isEmpty()
-            && ui->leDishType->text().isEmpty();;
+                       && !ui->rb500No->isChecked()
+                       && !ui->rb500Yes->isChecked()
+                       && !ui->chStore->isChecked()
+                       && !ui->chDishType->isChecked()
+                       && !ui->chDishState->isChecked()
+                       && ui->leDish->fHiddenText.isEmpty()
+                       && ui->leStore->text().isEmpty()
+                       && ui->leDishType->text().isEmpty();;
     if (ui->chPaymentMode->isChecked()) {
         countAmount = true;
     }
@@ -164,7 +160,6 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         fReportGrid->fIncludes["sum(op.f_couponservice)"] = true;
     }
     rg->fFieldsWidths.clear();
-
     rg->fFieldsWidths[tr("Order #")] = 100;
     rg->fFieldsWidths[tr("State code")] = 0;
     rg->fFieldsWidths[tr("State")] = 80;
@@ -206,41 +201,40 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths["Նվեր քարտ"] = 80;
     rg->fFieldsWidths["Նվեր փոխանցում"] = 80;
     rg->fFieldsWidths["Ավտոկտրոն"] = 80;
-              ;
-
+    ;
     rg->fFields.clear();
     rg->fFields << "oh.f_id"
-           << "oh.f_state"
-           << "os.f_" + def_lang
-           << "oh.f_datecash"
-           << "oh.f_dateopen"
-           << "oh.f_dateclose"
-           << "br.f_name"
-           << "oh.f_hall"
-           << "h.f_name"
-           << "oh.f_table"
-           << "t.f_name"
-           << "oh.f_staff"
-           << "concat(u.f_firstName,' ',u.f_lastName)"
-           << "oh.f_cityledger"
-           << "cl.f_name"
-           << "od.f_store"
-           << "od.f_state"
-           << "s.f_name"
-           << "ds.f_en"
-           << "d.f_type"
-           << "dt.f_" + def_lang
-           << "od.f_dish"
-           << "d.f_" + def_lang
-           << "od.f_price"
-           << "d.f_as"
-           << "oh.f_tax"
-           << "oh.f_paymentMode"
-           << "pm.f_" + def_lang
-           << "oc.f_govnumber"
-           << "oh.f_comment"
-           << "op.f_discountcard"
-              ;
+                << "oh.f_state"
+                << "os.f_" + def_lang
+                << "oh.f_datecash"
+                << "oh.f_dateopen"
+                << "oh.f_dateclose"
+                << "br.f_name"
+                << "oh.f_hall"
+                << "h.f_name"
+                << "oh.f_table"
+                << "t.f_name"
+                << "oh.f_staff"
+                << "concat(u.f_firstName,' ',u.f_lastName)"
+                << "oh.f_cityledger"
+                << "cl.f_name"
+                << "od.f_store"
+                << "od.f_state"
+                << "s.f_name"
+                << "ds.f_en"
+                << "d.f_type"
+                << "dt.f_" + def_lang
+                << "od.f_dish"
+                << "d.f_" + def_lang
+                << "od.f_price"
+                << "d.f_as"
+                << "oh.f_tax"
+                << "oh.f_paymentMode"
+                << "pm.f_" + def_lang
+                << "oc.f_govnumber"
+                << "oh.f_comment"
+                << "op.f_discountcard"
+                ;
     if (countAmount) {
         if (!ui->chPaymentMode->isChecked()) {
             rg->fFields
@@ -261,8 +255,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         }
     } else {
         rg->fFields
-           << "sum(od.f_qty)"
-           << "sum(od.f_total)";
+                << "sum(od.f_qty)"
+                << "sum(od.f_total)";
     }
     rg->fFieldTitles.clear();
     rg->fFieldTitles["oh.f_id"] = tr("Order #");
@@ -310,60 +304,58 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["sum(op.f_coupon)"] = "Նվեր քարտ";
     rg->fFieldTitles["sum(op.f_couponbank)"] = "Նվեր փոխանցում";
     rg->fFieldTitles["sum(op.f_couponservice)"] = "Ավտոկտրոն";
-
     rg->fTables.clear();
     rg->fTables << "o_header oh"
-           << "o_dish od"
-           << "o_state os"
-           << "r_hall h"
-           << "r_table t"
-            << "o_car oc"
-           << "r_store s"
-           << "r_dish_type dt"
-           << "r_dish d"
-           << "users u"
-           << "f_city_ledger cl"
-           << "f_payment_type pm"
-           << "o_dish_state ds"
-           << "o_header_payment op"
-           << "r_branch br";
+                << "o_dish od"
+                << "o_state os"
+                << "r_hall h"
+                << "r_table t"
+                << "o_car oc"
+                << "r_store s"
+                << "r_dish_type dt"
+                << "r_dish d"
+                << "users u"
+                << "f_city_ledger cl"
+                << "f_payment_type pm"
+                << "o_dish_state ds"
+                << "o_header_payment op"
+                << "r_branch br";
     rg->fJoins.clear();
     rg->fJoins << "from" //od
-          << "inner" //oh
-          << "inner" //os
-          << "inner" //h
-          << "inner" //t
-          << "left" //oc
-          << "inner" //s
-          << "inner" //dt
-          << "inner" // d
-          << "inner" //u
-          << "left" //cl
-          << "inner" //pm
-          << "left" //ds
-          << "left" //op
-          << "left" //br
-             ;
+               << "inner" //oh
+               << "inner" //os
+               << "inner" //h
+               << "inner" //t
+               << "left" //oc
+               << "inner" //s
+               << "inner" //dt
+               << "inner" // d
+               << "inner" //u
+               << "left" //cl
+               << "inner" //pm
+               << "left" //ds
+               << "left" //op
+               << "left" //br
+               ;
     rg->fJoinConds.clear();
     rg->fJoinConds << ""
-              << "od.f_header=oh.f_id"
-              << "os.f_id=oh.f_state"
-              << "h.f_id=oh.f_hall"
-              << "t.f_id=oh.f_table"
-              << "oc.f_order=oh.f_id "
-              << "s.f_id=od.f_store"
-              << "dt.f_id=d.f_type"
-              << "d.f_id=od.f_dish"
-              << "u.f_id=oh.f_staff"
-              << "cl.f_id=oh.f_cityLedger"
-              << "pm.f_id=oh.f_paymentMode"
-              << "ds.f_id=od.f_state"
-              << "op.f_id=oh.f_id"
-              << "br.f_id=oh.f_branch"
-                 ;
-
+                   << "od.f_header=oh.f_id"
+                   << "os.f_id=oh.f_state"
+                   << "h.f_id=oh.f_hall"
+                   << "t.f_id=oh.f_table"
+                   << "oc.f_order=oh.f_id "
+                   << "s.f_id=od.f_store"
+                   << "dt.f_id=d.f_type"
+                   << "d.f_id=od.f_dish"
+                   << "u.f_id=oh.f_staff"
+                   << "cl.f_id=oh.f_cityLedger"
+                   << "pm.f_id=oh.f_paymentMode"
+                   << "ds.f_id=od.f_state"
+                   << "op.f_id=oh.f_id"
+                   << "br.f_id=oh.f_branch"
+                   ;
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
-            + " and '" + ui->deEnd->date().toString(def_mysql_date_format) + "') ";
+                    + " and '" + ui->deEnd->date().toString(def_mysql_date_format) + "') ";
     if (!ui->leOrder->text().isEmpty()) {
         where += " and oh.f_id in (" + ui->leOrder->text() + ") ";
     }
@@ -419,7 +411,6 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if (ui->chCouponOfService->isChecked()) {
         where += " and oh.f_couponservice=1 ";
     }
-
     if (!ui->lePMComment->text().isEmpty()) {
         where += " and upper(oh.f_paymentModeComment) like '" + ui->lePMComment->text() + "%' ";
     }
@@ -430,12 +421,10 @@ void FRestaurantTotal::apply(WReportGrid *rg)
         where += " and (od.f_complex=0 or (od.f_complex>0 and od.f_complexId>0)) ";
     }
     if (ui->rbShowComplex->isChecked()) {
-
     }
     if (ui->rbOnlycomplex->isChecked() && !countAmount) {
         where += " and (od.f_complex>0 and od.f_complexId=0) ";
     }
-
     if (ui->chOrderNum->isChecked()) {
         order += "oh.f_id,";
     }
@@ -449,8 +438,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     QObjectList ol(children());
     bool first = true;
     foreach (QObject *o, ol) {
-        if (isCheckBox(static_cast<QWidget*>(o))) {
-            EQCheckBox *check = static_cast<EQCheckBox*>(o);
+        if (isCheckBox(static_cast<QWidget * >(o))) {
+            EQCheckBox *check = static_cast<EQCheckBox *>(o);
             if (check->isChecked()) {
                 if (first) {
                     first = false;
@@ -464,7 +453,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
             }
         }
     }
-    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon,op.f_couponbank,op.f_couponservice,,", "");
+    group = group.replace("op.f_cash,op.f_card,op.f_discount,op.f_debt,op.f_coupon,op.f_couponbank,op.f_couponservice,,",
+                          "");
     if (group.length() > 0) {
         if (group.at(group.length() - 1) == ",") {
             group.remove(group.length() - 1, 1);
@@ -483,20 +473,20 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     QList<int> colsTotal;
     if (!ui->chPaymentMode->isChecked()) {
         colsTotal << rg->fModel->columnIndex(tr("Qty"))
-              << rg->fModel->columnIndex(tr("Total"))
-                 ;
+                  << rg->fModel->columnIndex(tr("Total"))
+                  ;
     } else {
         colsTotal << rg->fModel->columnIndex(tr("Qty"))
                   << rg->fModel->columnIndex(tr("Total"))
-              << rg->fModel->columnIndex(tr("Cash"))
-              << rg->fModel->columnIndex(tr("Card"))
-                << rg->fModel->columnIndex("Idram")
-                << rg->fModel->columnIndex("Կանխավճար")
-              << rg->fModel->columnIndex("Փոխանցում")
-              << rg->fModel->columnIndex(tr("Discount"))
-              << rg->fModel->columnIndex("Նվեր քարտ")
-                 << rg->fModel->columnIndex("Նվեր փոխանցում")
-              << rg->fModel->columnIndex("Ավտոկտրոն");
+                  << rg->fModel->columnIndex(tr("Cash"))
+                  << rg->fModel->columnIndex(tr("Card"))
+                  << rg->fModel->columnIndex("Idram")
+                  << rg->fModel->columnIndex("Կանխավճար")
+                  << rg->fModel->columnIndex("Փոխանցում")
+                  << rg->fModel->columnIndex(tr("Discount"))
+                  << rg->fModel->columnIndex("Նվեր քարտ")
+                  << rg->fModel->columnIndex("Նվեր փոխանցում")
+                  << rg->fModel->columnIndex("Ավտոկտրոն");
     }
     QList<double> valsTotal;
     rg->fModel->sumOfColumns(colsTotal, valsTotal);
@@ -535,9 +525,9 @@ QWidget *FRestaurantTotal::firstElement()
 QString FRestaurantTotal::reportTitle()
 {
     return QString("%1 %2-%3")
-            .arg(tr("Earnings"))
-            .arg(ui->deStart->text())
-            .arg(ui->deEnd->text());
+           .arg(tr("Earnings"))
+           .arg(ui->deStart->text())
+           .arg(ui->deEnd->text());
 }
 
 void FRestaurantTotal::open()
@@ -552,18 +542,18 @@ void FRestaurantTotal::open()
 void FRestaurantTotal::selector(int selectorNumber, const QVariant &value)
 {
     switch (selectorNumber) {
-    case sn_order_state:
-        dockResponse<CI_OrderState, CacheOrderState>(ui->leState, value.value<CI_OrderState*>());
-        break;
-    case sn_table:
-        dockResponse<CI_RestTable, CacheRestTable>(ui->leTable, value.value<CI_RestTable*>());
-        break;
-    case sn_dish:
-        dockResponse<CI_Dish, CacheDish>(ui->leDish, value.value<CI_Dish*>());
-        break;
-    case sn_dish_state:
-        dockResponse<CI_DishState, CacheDishState>(ui->leDishState, value.value<CI_DishState*>());
-        break;
+        case sn_order_state:
+            dockResponse<CI_OrderState, CacheOrderState>(ui->leState, value.value<CI_OrderState *>());
+            break;
+        case sn_table:
+            dockResponse<CI_RestTable, CacheRestTable>(ui->leTable, value.value<CI_RestTable *>());
+            break;
+        case sn_dish:
+            dockResponse<CI_Dish, CacheDish>(ui->leDish, value.value<CI_Dish *>());
+            break;
+        case sn_dish_state:
+            dockResponse<CI_DishState, CacheDishState>(ui->leDishState, value.value<CI_DishState *>());
+            break;
     }
 }
 
@@ -577,7 +567,6 @@ void FRestaurantTotal::printNewPage(int &top, int &left, int &page, PPrintPrevie
     trFooter.setFont(ffooter);
     trFooter.setBorders(false, false, false, false);
     trFooter.setTextAlignment(Qt::AlignLeft);
-
     if (top + nextHeight > sizePortrait.height() - 300) {
         if (left == 20) {
             left = 1100;
@@ -626,11 +615,9 @@ void FRestaurantTotal::printReceipt()
     if (orders.count() == 0) {
         return;
     }
-
     int left = 20;
     int top = 20;
     int page = 1;
-
     PTextRect prTempl;
     prTempl.setWrapMode(QTextOption::NoWrap);
     prTempl.setFont(QFont(qApp->font().family(), 17));
@@ -642,7 +629,6 @@ void FRestaurantTotal::printReceipt()
     prHead.setFont(QFont(qApp->font().family(), 20));
     prHead.setBrush(QBrush(QColor::fromRgb(215, 215, 215), Qt::SolidPattern));
     prHead.setTextAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-
     PPrintPreview pp(this);
     PPrintScene *ps = pp.addScene(0, Portrait);
     PTextRect th;
@@ -651,7 +637,6 @@ void FRestaurantTotal::printReceipt()
     th.setBorders(false, false, false, false);
     th.setTextAlignment(Qt::AlignLeft);
     int rowHeight = 60;
-
     CacheRestHall *hall = CacheRestHall::instance();
     CacheRestTable *table = CacheRestTable::instance();
     CacheUsers *users = CacheUsers::instance();
@@ -663,34 +648,38 @@ void FRestaurantTotal::printReceipt()
         logo->setRect(QRectF(left + 150, top, 400, 250));
         top += 260;
         printNewPage(top, left, page, &pp, ps);
-
         DatabaseResult dh;
         fDbBind[":f_id"] = s;
         dh.select(fDb, "select * from o_header where f_id=:f_id", fDbBind);
         top += ps->addTextRect(left + 10, top, 680, rowHeight, hall->get(dh.value("f_hall").toString())->fName, &prHead)
-                ->textHeight();
+               ->textHeight();
         QString receiptNum = QString("%1 %2").arg(tr("Receipt S/N")).arg(s);
         printNewPage(top, left, page, &pp, ps, rowHeight);
         top += ps->addTextRect(left + 10, top, 680, rowHeight, receiptNum, &prHead)->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 150, rowHeight, tr("Table"), &th, f));
-        ps->addTextRect(new PTextRect(left + 160, top, 200, rowHeight, table->get(dh.value("f_table").toString())->fName, &th, f));
+        ps->addTextRect(new PTextRect(left + 160, top, 200, rowHeight, table->get(dh.value("f_table").toString())->fName, &th,
+                                      f));
         ps->addTextRect(new PTextRect(left + 340, top, 230, rowHeight, tr("Date"), &th, f));
         printNewPage(top, left, page, &pp, ps, rowHeight);
-        top += ps->addTextRect(new PTextRect(450, top, 250, rowHeight, dh.value("f_datecash").toDate().toString(def_date_format), &th, f))
-                ->textHeight();
+        top += ps->addTextRect(new PTextRect(450, top, 250, rowHeight,
+                                             dh.value("f_datecash").toDate().toString(def_date_format), &th, f))
+               ->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 150, rowHeight, tr("Time"), &th, f));
         printNewPage(top, left, page, &pp, ps, rowHeight);
-        top += ps->addTextRect(new PTextRect(left + 160, top, 200, rowHeight, QTime::currentTime().toString(def_time_format), &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(left + 160, top, 200, rowHeight, QTime::currentTime().toString(def_time_format),
+                                             &th, f))->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 150, rowHeight, tr("Waiter"), &th, f));
         printNewPage(top, left, page, &pp, ps, rowHeight);
-        top += ps->addTextRect(new PTextRect(left + 160, top, 500, rowHeight, users->get(dh.value("f_staff").toString())->fFull, &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(left + 160, top, 500, rowHeight, users->get(dh.value("f_staff").toString())->fFull,
+                                             &th, f))->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 150, rowHeight, tr("Opened"), &th, f));
         printNewPage(top, left, page, &pp, ps, rowHeight);
-        top += ps->addTextRect(new PTextRect(left + 160, top, 350, rowHeight, dh.value("f_dateOpen").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(left + 160, top, 350, rowHeight,
+                                             dh.value("f_dateOpen").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 150, rowHeight, tr("Closed"), &th, f));
         printNewPage(top, left, page, &pp, ps, rowHeight);
-        top += ps->addTextRect(new PTextRect(left + 160, top, 350, rowHeight, dh.value("f_dateClose").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
-
+        top += ps->addTextRect(new PTextRect(left + 160, top, 350, rowHeight,
+                                             dh.value("f_dateClose").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
         printNewPage(top, left, page, &pp, ps, rowHeight);
         top += 2;
         ps->addLine(left + 10, top, left + 680, top);
@@ -700,42 +689,43 @@ void FRestaurantTotal::printReceipt()
         top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, tr("Amount"), &th, f))->textHeight();
         ps->addLine(left + 10, top, left + 680, top);
         top ++;
-
-
         DatabaseResult dcomplex;
         fDbBind[":f_header"] = s;
         dcomplex.select(fDb, "select od.f_id, od.f_dish, dc.f_en, dc.f_ru, dc.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
-                             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
-                             "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-                             "dc.f_adgt "
-                             "from o_dish od "
-                             "left join r_dish_complex dc on dc.f_id=od.f_complexId "
-                             "where od.f_header=:f_header and f_complex>0 and f_complexId>0 and f_state=1 "
-                             "order by od.f_id ", fDbBind);
+                        "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
+                        "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
+                        "dc.f_adgt "
+                        "from o_dish od "
+                        "left join r_dish_complex dc on dc.f_id=od.f_complexId "
+                        "where od.f_header=:f_header and f_complex>0 and f_complexId>0 and f_state=1 "
+                        "order by od.f_id ", fDbBind);
         f.setPointSize(18);
         f.setBold(true);
         th.setFont(f);
         for (int i = 0; i < dcomplex.rowCount(); i++) {
-            ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(dcomplex.value(i, "f_qty").toDouble(), 1), &th, f));
+            ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(dcomplex.value(i, "f_qty").toDouble(), 1), &th,
+                                          f));
             ps->addTextRect(new PTextRect(left + 110, top, 390, rowHeight, dcomplex.value(i, "f_en").toString(), &th, f));
-            top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dcomplex.value(i, "f_price").toDouble() * dcomplex.value(i, "f_qty").toDouble(), 2), &th, f))->textHeight();
+            top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dcomplex.value(i,
+                                                 "f_price").toDouble()  *dcomplex.value(i, "f_qty").toDouble(), 2), &th, f))->textHeight();
             printNewPage(top, left, page, &pp, ps);
         }
         DatabaseResult ddish;
         fDbBind[":f_header"] = s;
         ddish.select(fDb, "select od.f_id, od.f_dish, d.f_en, d.f_ru, d.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
-                          "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
-                          "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-                          "od.f_adgt, od.f_complexRec "
-                          "from o_dish od "
-                          "left join r_dish d on d.f_id=od.f_dish "
-                          "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
-                          "order by od.f_id ", fDbBind);
-
+                     "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
+                     "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
+                     "od.f_adgt, od.f_complexRec "
+                     "from o_dish od "
+                     "left join r_dish d on d.f_id=od.f_dish "
+                     "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
+                     "order by od.f_id ", fDbBind);
         for (int i = 0; i < ddish.rowCount(); i++) {
-            ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(ddish.value(i, "f_qty").toDouble(), 1), &th, f));
+            ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(ddish.value(i, "f_qty").toDouble(), 1), &th,
+                                          f));
             ps->addTextRect(new PTextRect(left + 110, top, 390, rowHeight, ddish.value(i, "f_en").toString(), &th, f));
-            top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(ddish.value(i, "f_total").toDouble(), 2), &th, f))->textHeight();
+            top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(ddish.value(i, "f_total").toDouble(),
+                                                 2), &th, f))->textHeight();
             printNewPage(top, left, page, &pp, ps);
         }
         ps->addLine(left + 10, top, left + 680, top);
@@ -743,23 +733,24 @@ void FRestaurantTotal::printReceipt()
         f.setPointSize(24);
         th.setFont(f);
         ps->addTextRect(new PTextRect(left + 10, top, 400, rowHeight, tr("Total, AMD"), &th, f));
-        top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dh.value("f_total").toDouble(), 0), &th, f))->textHeight();
+        top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dh.value("f_total").toDouble(), 0), &th,
+                                             f))->textHeight();
         ps->addTextRect(new PTextRect(left + 10, top, 400, rowHeight, tr("Total, USD"), &th, f));
-        top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dh.value("f_total").toDouble() / def_usd, 2), &th, f))->textHeight();
-
+        top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight,
+                                             float_str(dh.value("f_total").toDouble() / def_usd, 2), &th, f))->textHeight();
         top += rowHeight;
         f.setPointSize(28);
         th.setFont(f);
         th.setTextAlignment(Qt::AlignHCenter);
         printNewPage(top, left, page, &pp, ps);
         if (!dh.value("f_roomComment").toString().isEmpty()) {
-           top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_roomComment").toString(), &th, f))->textHeight();
-           top += rowHeight;
-           top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("Signature"), &th, f))->textHeight();
-           top += rowHeight + 2;
-           ps->addLine(left + 150, top, left + 680, top);
+            top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_roomComment").toString(), &th,
+                                                 f))->textHeight();
+            top += rowHeight;
+            top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("Signature"), &th, f))->textHeight();
+            top += rowHeight + 2;
+            ps->addLine(left + 150, top, left + 680, top);
         }
-
         printNewPage(top, left, page, &pp, ps);
         if (dh.value("f_paymentMode").toInt() == PAYMENT_COMPLIMENTARY) {
             top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("COMPLIMENTARY"), &th, f))->textHeight();
@@ -770,21 +761,25 @@ void FRestaurantTotal::printReceipt()
             top += rowHeight;
             top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("Mode Of Payment"), &th, f))->textHeight();
             switch (dh.value("f_paymentMode").toInt()) {
-            case PAYMENT_CASH:
-                top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("CASH"), &th, f))->textHeight();
-                break;
-            case PAYMENT_CARD:
-                top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("CARD") + "/" + dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-                break;
-            case PAYMENT_ROOM:
-                top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-                break;
-            case PAYMENT_CL:
-                top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, "CL/" + dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-                break;
-            case PAYMENT_COMPLIMENTARY:
-                top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-                break;
+                case PAYMENT_CASH:
+                    top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, tr("CASH"), &th, f))->textHeight();
+                    break;
+                case PAYMENT_CARD:
+                    top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight,
+                                                         tr("CARD") + "/" + dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
+                    break;
+                case PAYMENT_ROOM:
+                    top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_paymentModeComment").toString(), &th,
+                                                         f))->textHeight();
+                    break;
+                case PAYMENT_CL:
+                    top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight,
+                                                         "CL/" + dh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
+                    break;
+                case PAYMENT_COMPLIMENTARY:
+                    top += ps->addTextRect(new PTextRect(left + 10, top, 680, rowHeight, dh.value("f_paymentModeComment").toString(), &th,
+                                                         f))->textHeight();
+                    break;
             }
         } else {
             th.setTextAlignment(Qt::AlignLeft);
@@ -800,10 +795,8 @@ void FRestaurantTotal::printReceipt()
         top++;
         ps->addLine(left + 10, top, left + 680, top, QPen(QBrush(Qt::SolidPattern), 5));
         top += 20;
-
         printNewPage(top, left, page, &pp, ps);
     }
-
     int footerTop = sizePortrait.height() - 200;
     QBrush b(Qt::white, Qt::SolidPattern);
     PTextRect trFooter;
@@ -821,9 +814,7 @@ void FRestaurantTotal::printReceipt()
                     .arg(tr("Page"))
                     .arg(page), &trFooter);
     trFooter.setTextAlignment(Qt::AlignLeft);
-
     pp.exec();
-
 }
 
 void FRestaurantTotal::recalculateStore()
@@ -868,8 +859,8 @@ void FRestaurantTotal::removeOrder()
     fDb.select("select f_discountcard, f_discount from o_header_payment where f_id=:f_id", fDbBind, fDbRows);
     double discamount = 0.0;
     if (fDbRows.count() > 0) {
-    QString disccard = fDbRows.at(0).at(0).toString();
-        if (disccard.isEmpty() == false){
+        QString disccard = fDbRows.at(0).at(0).toString();
+        if (disccard.isEmpty() == false) {
             discamount = fDbRows.at(0).at(1).toDouble();
             fDbBind[":f_card"] = disccard;
             fDb.select("select f_mode from d_car_client where f_card=:f_card", fDbBind, fDbRows);
@@ -884,7 +875,6 @@ void FRestaurantTotal::removeOrder()
             }
         }
     }
-
     fDbBind[":f_state"] = ORDER_STATE_REMOVED;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
     fDb.update("o_header", fDbBind, where_id(val.at(0).toInt()));
@@ -892,8 +882,9 @@ void FRestaurantTotal::removeOrder()
     fDbBind[":f_state_cond"] = DISH_STATE_READY;
     fDbBind[":f_header"] = val.at(0);
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
+    fDbBind[":f_emark"] = QVariant();
     fDb.select("update o_dish set f_state=:f_state, f_comment=:f_comment "
-                   "where f_header=:f_header and f_state=:f_state_cond", fDbBind, fDbRows);
+               "where f_header=:f_header and f_state=:f_state_cond", fDbBind, fDbRows);
     fDbBind[":f_id"] = val.at(0);
     fDbBind[":f_cancelReason"] = "Canceled by " + WORKING_USERNAME;
     fDb.select("update m_register set f_canceled=1, f_cancelReason=:f_cancelReason where f_id=:f_id",

@@ -102,10 +102,11 @@ private slots:
     void on_btnDiss50_clicked();
     void on_btnHallVIP_clicked();
     void on_btnShop_clicked();
-    void on_btnSetRecoverFrom_clicked();
     void on_btnPrintMultipleFiscal_clicked();
 
     void on_btnQr_clicked();
+
+    void on_leCmd_returnPressed();
 
 private:
     Ui::RDesk *ui;
@@ -150,7 +151,6 @@ private:
     void updateTableInfo();
     void manualdisc(double val, int costumer);
     void repaintTables();
-    void setRecoverFrom(int from);
 
 signals:
     void dataReady(const QByteArray &);
