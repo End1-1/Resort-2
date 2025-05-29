@@ -5,8 +5,6 @@
 #include "dishestable.h"
 #include "hall.h"
 #include "user.h"
-#include "defrest.h"
-#include "baseorder.h"
 #include "trackcontrol.h"
 #include <QPainter>
 
@@ -30,7 +28,7 @@ public:
     void prepareToShow();
     bool setup(TableStruct *t);
     void setStaff(User *user);
-    TableStruct *loadHall(int hall);
+    TableStruct* loadHall(int hall);
     void showHideRemovedItems();
     void setOrderComment();
     void removeOrder();
@@ -109,13 +107,13 @@ private slots:
     void on_leCmd_returnPressed();
 
 private:
-    Ui::RDesk *ui;
-    static QMap<int, DishStruct *> fQuickDish;
-    TrackControl *fTrackControl;
-    TableStruct *fTable;
-    HallStruct *fHall;
+    Ui::RDesk* ui;
+    static QMap<int, DishStruct*> fQuickDish;
+    TrackControl* fTrackControl;
+    TableStruct* fTable;
+    HallStruct* fHall;
     int fTimerCounter;
-    User *fStaff;
+    User* fStaff;
     bool fCanClose;
     bool fShowRemoved;
     int fCurrentHall;
@@ -153,7 +151,7 @@ private:
     void repaintTables();
 
 signals:
-    void dataReady(const QByteArray &);
+    void dataReady(const QByteArray&);
 };
 
 #endif // RDESK_H

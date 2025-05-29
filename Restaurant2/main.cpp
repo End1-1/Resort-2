@@ -16,82 +16,88 @@
 #include <QMessageBox>
 #include <QTranslator>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8") );
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
     logEnabled = true;
     QApplication a(argc, argv);
-
     QTranslator t;
     t.load(":/Restaurant.am.qm");
     a.installTranslator(&t);
-
     Preferences p;
     p.initFromConfig();
     DlgConnectToServer *d = new DlgConnectToServer();
-    if (d->exec() != QDialog::Accepted) {
+
+    if(d->exec() != QDialog::Accepted) {
         return -1;
     }
-    delete d;
 
+    delete d;
     QStringList params;
-    for (int i = 0; i < argc; i++) {
+
+    for(int i = 0; i < argc; i++) {
         params << argv[i];
     }
 
     QFile file(p.getString(def_home_path) + "/lock.pid");
     file.remove();
     QLockFile lockFile(p.getString(def_home_path) + "/lock.pid");
-    if (!lockFile.tryLock())
+
+    if(!lockFile.tryLock())
         return -1;
 
     Base::fDbName = "Main";
     p.initFromDb(Base::fDbName, HOSTNAME, 0);
     CacheOne::setDatabase(p.getDatabase(Base::fDbName));
-
-
     QFile styleSheet(":/files/stylesheet.qss");
-    if (!styleSheet.exists()) {
+
+    if(!styleSheet.exists()) {
         QMessageBox::warning(nullptr, "Stylesheet", "Missing stylesheet\r\n" + styleSheet.fileName());
     }
+
     styleSheet.open(QIODevice::ReadOnly);
     a.setStyleSheet(styleSheet.readAll());
     QFont f("Tahoma", 12);
     a.setFont(f);
     a.setWindowIcon(QIcon(":/images/app.ico"));
-
 //    QFont font("Arial LatArm Unicode", 12);
 //    a.setFont(font);
-
     DefRest(QHostInfo::localHostName().toUpper());
-    if (defrest(dr_branch).toInt() == 0){
+
+    if(defrest(dr_branch).toInt() == 0) {
         RMessage::showError(QObject::tr("Branch is not set"), nullptr);
         return 0;
     }
 
     RFace *w = new RFace();
-    if (!w->fIsConfigured) {
+
+    if(!w->fIsConfigured) {
         w->deleteLater();
         return -1;
     }
-    if (!w->setup()) {
+
+    if(!w->setup()) {
         w->deleteLater();
         return -1;
     }
 
     User *u = nullptr;
     QString login;
-    if (RLogin::getLogin(login, QObject::tr("Login"), nullptr)) {
+
+    if(RLogin::getLogin(login, QObject::tr("Login"), nullptr)) {
         u = new User(login, 0);
-        if (!u->isValid()) {
+
+        if(!u->isValid()) {
             delete u;
             u = 0;
             RMessage::showError(QObject::tr("Access denied"), nullptr);
             return 0;
         }
+
         __s.setValue("pin", login);
         UserPermssions::init(u->fGroup);
-
     } else {
         return 0;
     }
@@ -101,7 +107,8 @@ int main(int argc, char *argv[])
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2[":f_branch"] = defrest(dr_branch).toInt();
     db2.exec("select f_store, f_alias from r_branch_storemap where f_branch=:f_branch");
-    while (db2.next()) {
+
+    while(db2.next()) {
         setstorealias(db2.integer("f_store"), db2.integer("f_alias"));
     }
 
@@ -110,9 +117,11 @@ int main(int argc, char *argv[])
     rd->prepareToShow();
     rd->setStaff(u);
     ts = rd->loadHall(1 + ((defrest(dr_branch).toInt() - 1) * 4));
-    if (rd->setup(ts)) {
+
+    if(rd->setup(ts)) {
         rd->exec();
         return 0;
     }
+
     return a.exec();
 }

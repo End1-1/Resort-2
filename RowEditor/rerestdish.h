@@ -9,7 +9,8 @@
 #include "dwselectorreststore.h"
 #include "dwselectordish.h"
 
-namespace Ui {
+namespace Ui
+{
 class RERestDish;
 }
 
@@ -27,6 +28,7 @@ protected:
     virtual void clearWidgets();
     virtual void save();
     virtual void hide();
+    virtual void returnCtrlPressed() override;
 
 private slots:
     void checkComplex(bool v);

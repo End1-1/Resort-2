@@ -11,6 +11,7 @@ public:
     BaseDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
+    virtual void returnCtrlPressed();
     virtual void returnPressed();
     virtual void escapePressed();
 };

@@ -3,13 +3,13 @@
 
 #include "baseextendeddialog.h"
 #include "hall.h"
-#include "dishestable.h"
 #include "user.h"
 #include "command.h"
 #include <QTimer>
 #include <QTcpSocket>
 
-namespace Ui {
+namespace Ui
+{
 class RFace;
 }
 
@@ -30,14 +30,14 @@ private slots:
     void on_btnExit_clicked();
 
 private:
-    Ui::RFace *ui;
+    Ui::RFace* ui;
     Hall fHall;
     int fCurrentHall;
     int fCurrenTableState;
     int fTimerCounter;
     Command fCommand;
     QTcpSocket fSocket;
-    User *login();
+    User* login();
 };
 
 #endif // RFACE_H
