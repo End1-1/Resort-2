@@ -37,6 +37,7 @@
 #include "dlglist.h"
 #include "databaseresult.h"
 #include "dlgdate.h"
+#include "dlgpassword.h"
 #include <Windows.h>
 #include <QItemDelegate>
 #include <QPrintDialog>
@@ -1844,6 +1845,18 @@ void RDesk::setupDish(int typeId)
 
 int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
 {
+    double max = 999;
+    double min = 0.25;
+
+    if(d->fNeedEmarks) {
+        max = 1;
+        min = 1;
+    } else {
+        if(!DlgPassword::getQty(d->fName, max, min)) {
+            return 0;
+        }
+    }
+
     checkOrderHeader(fTable);
 
     if(fNeedCar) {
@@ -1875,6 +1888,8 @@ int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
         delete m;
     }
 
+    od->fQty = max;
+    od->fQtyPrint = max;
     od->fDishId = d->fId;
     od->fState = DISH_STATE_READY;
     od->fPrint1 = d->fPrint1;
@@ -2109,6 +2124,7 @@ double RDesk::countTotal()
         od->fPrice = servicevalue;
         od->fTotal = servicevalue;
         od->fQty = 1;
+        updateDish(od);
     }
 
     for(int i = 0; i < ui->tblComplex->rowCount(); i++) {

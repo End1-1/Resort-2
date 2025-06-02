@@ -1,14 +1,14 @@
 #include "dishestable.h"
 
-QMap<int, MenuStruct *> DishesTable::fMenu;
-QList<DishPartStruct *> DishesTable::fDishPart;
-QMap<int, TypeStruct *> DishesTable::fType;
-QMap<int, QSet<TypeStruct *> > DishesTable::fTypeMenu;
-QMap<QString, TypeStruct *> DishesTable::fTypeProxy;
-QList<DishStruct *> DishesTable::fDish;
-QMap<int, QList<DishStruct *> > DishesTable::fDishMenu;
+QMap<int, MenuStruct*> DishesTable::fMenu;
+QList<DishPartStruct*> DishesTable::fDishPart;
+QMap<int, TypeStruct*> DishesTable::fType;
+QMap<int, QSet<TypeStruct*> > DishesTable::fTypeMenu;
+QMap<QString, TypeStruct*> DishesTable::fTypeProxy;
+QList<DishStruct*> DishesTable::fDish;
+QMap<int, QList<DishStruct*> > DishesTable::fDishMenu;
 QList<QMap<QString, QString> > DishesTable::fMods;
-QList<DishComplexStruct *> DishesTable::fDishComplex;
+QList<DishComplexStruct*> DishesTable::fDishComplex;
 
 DishesTable::DishesTable(QObject *parent) :
     QObject(parent),
@@ -18,14 +18,16 @@ DishesTable::DishesTable(QObject *parent) :
 
 void DishesTable::init(Splash *s)
 {
-    if (s) {
+    if(s) {
         s->setText(tr("Loading menus..."));
     }
+
     qDeleteAll(fMenu);
     fMenu.clear();
     QString query = "select f_id, f_en, f_ru, f_am from r_menu_names";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         MenuStruct *m = new MenuStruct();
         m->fId = it->at(0).toInt();
         m->fName["en"] = it->at(1).toString();
@@ -33,14 +35,17 @@ void DishesTable::init(Splash *s)
         m->fName["am"] = it->at(3).toString();
         fMenu[m->fId] = m;
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Loading dishes parts..."));
     }
+
     qDeleteAll(fDishPart);
     fDishPart.clear();
     query = "select f_id, f_en, f_ru, f_am from r_dish_part order by f_id";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         DishPartStruct *d = new DishPartStruct();
         d->fId = it->at(0).toInt();
         d->fName["en"] = it->at(1).toString();
@@ -48,15 +53,18 @@ void DishesTable::init(Splash *s)
         d->fName["am"] = it->at(3).toString();
         fDishPart.append(d);
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Loading dishes types..."));
     }
+
     fTypeProxy.clear();
     qDeleteAll(fType);
     fType.clear();
     query = "select f_id, f_part, f_en, f_ru, f_am, f_bgColor, f_textColor, f_queue from r_dish_type where f_active=1";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
         TypeStruct *t = new TypeStruct();
         t->fId = it->at(0).toInt();
         t->fPart = it->at(1).toInt();
@@ -68,9 +76,11 @@ void DishesTable::init(Splash *s)
         t->fQueue = it->at(7).toInt();
         fType[t->fId] = t;
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Loading complex dishes..."));
     }
+
     qDeleteAll(fDishComplex);
     fDishComplex.clear();
     query = "select d.f_id, d.f_en, d.f_ru, d.f_am, d.f_startTime, d.f_endTime, d.f_price, "
@@ -78,7 +88,7 @@ void DishesTable::init(Splash *s)
             "from r_dish_complex d where d.f_enabled=1 ";
     fDb.select(query, fDbBind, fDbRows);
     foreach_rows {
-        DishComplexStruct *dc =  new DishComplexStruct();
+        DishComplexStruct* dc =  new DishComplexStruct();
         int c = 0;
         dc->fId = it->at(c++).toInt();
         dc->fName["en"] = it->at(c++).toString();
@@ -92,12 +102,13 @@ void DishesTable::init(Splash *s)
         dc->fAdgt = it->at(c++).toString();
         fDishComplex.append(dc);
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Loading complex dishes components"));
         query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
                 "d.f_bgColor, d.f_textColor, d.f_text_en, "
                 "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, mc.f_complex, "
-                "d.f_service "
+                "d.f_service, d.f_needemarks "
                 "from r_menu m "
                 "inner join r_dish d on d.f_id=m.f_dish "
                 "inner join r_dish_type t on d.f_type=t.f_id "
@@ -105,7 +116,7 @@ void DishesTable::init(Splash *s)
                 "where m.f_state=1 and d.f_type in (select f_id from r_dish_type where f_active=1)";
         fDb.select(query, fDbBind, fDbRows);
         foreach_rows {
-            DishStruct *d = new DishStruct();
+            DishStruct* d = new DishStruct();
             d->fId = it->at(0).toInt();
             d->fMenu = it->at(1).toInt();
             d->fPart = it->at(2).toInt();
@@ -121,27 +132,32 @@ void DishesTable::init(Splash *s)
             d->fQueue = it->at(12).toInt();
             d->fComplex = it->at(13).toInt();
             d->fSvcValue = it->at(14).toDouble();
-            for (int i = 0; i < fDishComplex.count(); i++)
+            d->fNeedEmarks = it->at(16).toDouble();
+
+            for(int i = 0; i < fDishComplex.count(); i++)
             {
-                if (d->fComplex == fDishComplex.at(i)->fId) {
+                if(d->fComplex == fDishComplex.at(i)->fId) {
                     fDishComplex[i]->fDishes.append(d);
                 }
             }
         }
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Loading menu..."));
     }
+
     query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
             "d.f_bgColor, d.f_textColor, d.f_text_en,  "
             "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, m.f_complex, "
-            "d.f_adgt, d.f_tax, d.f_service, d.f_scancode "
+            "d.f_adgt, d.f_tax, d.f_service, d.f_scancode, d.f_needemarks "
             "from r_menu m "
             "inner join r_dish d on d.f_id=m.f_dish "
             "inner join r_dish_type t on d.f_type=t.f_id "
             "where m.f_state=1  and m.f_complex=0 and t.f_active=1";
     fDb.select(query, fDbBind, fDbRows);
-    for (QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
+
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         DishStruct *d = new DishStruct();
         d->fId = it->at(0).toInt();
         d->fMenu = it->at(1).toInt();
@@ -161,21 +177,25 @@ void DishesTable::init(Splash *s)
         d->fTax = it->at(15).toInt();
         d->fSvcValue = it->at(16).toDouble();
         d->barcode = it->at(17).toString();
+        d->fNeedEmarks = it->at(18).toInt();
         fDish.append(d);
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Processing modifiers"));
     }
+
     query = "select m.f_dish, mn.f_en, mn.f_ru, mn.f_am "
             "from r_dish_mod_required m "
             "inner join r_dish_mod mn on mn.f_id=m.f_mod "
             "order by m.f_dish";
     fDb.select(query, fDbBind, fDbRows);
     foreach_rows {
-        for (QList<DishStruct * >::iterator d = fDish.begin(); d != fDish.end(); d++)
+        for(QList<DishStruct* >::iterator d = fDish.begin(); d != fDish.end(); d++)
         {
             DishStruct *dish = *d;
-            if (dish->fId == it->at(0).toInt()) {
+
+            if(dish->fId == it->at(0).toInt()) {
                 QMap<QString, QString> m;
                 m["en"] = it->at(1).toString();
                 m["ru"] = it->at(2).toString();
@@ -194,15 +214,19 @@ void DishesTable::init(Splash *s)
         m["am"] = it->at(3).toString();
         fMods.append(m);
     }
-    if (s) {
+
+    if(s) {
         s->setText(tr("Processing menu..."));
     }
+
     fTypeMenu.clear();
-    for (QMap<int, MenuStruct * >::const_iterator it = fMenu.begin(); it != fMenu.end(); it++) {
-        fTypeMenu[it.key()] = QSet<TypeStruct *>();
-        fDishMenu[it.key()] = QList<DishStruct *>();
+
+    for(QMap<int, MenuStruct* >::const_iterator it = fMenu.begin(); it != fMenu.end(); it++) {
+        fTypeMenu[it.key()] = QSet<TypeStruct*>();
+        fDishMenu[it.key()] = QList<DishStruct*>();
     }
-    for (QList<DishStruct * >::const_iterator it = fDish.begin(); it != fDish.end(); it++) {
+
+    for(QList<DishStruct* >::const_iterator it = fDish.begin(); it != fDish.end(); it++) {
         DishStruct *d = *it;
         TypeStruct *t = fType[d->fType];
         fTypeMenu[d->fMenu].insert(t);
@@ -210,39 +234,47 @@ void DishesTable::init(Splash *s)
     }
 }
 
-void DishesTable::filterType(int menuId, int partId, QMap<int, TypeStruct *> &type)
+void DishesTable::filterType(int menuId, int partId, QMap<int, TypeStruct*>& type)
 {
-    QSet<TypeStruct *> &typeProxy = fTypeMenu[menuId];
-    for (QSet<TypeStruct * >::const_iterator it = typeProxy.begin(); it != typeProxy.end(); it++) {
+    QSet<TypeStruct*>& typeProxy = fTypeMenu[menuId];
+
+    for(QSet<TypeStruct* >::const_iterator it = typeProxy.begin(); it != typeProxy.end(); it++) {
         TypeStruct *t = *it;
-        if (partId != 0) {
-            if (t->fPart != partId) {
+
+        if(partId != 0) {
+            if(t->fPart != partId) {
                 continue;
             }
         }
+
         type[t->fQueue] = t;
     }
 }
 
-void DishesTable::filterDish(int menuId, int typeId, QMap<int, DishStruct *> &dish)
+void DishesTable::filterDish(int menuId, int typeId, QMap<int, DishStruct*>& dish)
 {
-    QList<DishStruct *> &dishProxy = fDishMenu[menuId];
-    for (QList<DishStruct * >::const_iterator it = dishProxy.begin(); it != dishProxy.end(); it++) {
+    QList<DishStruct*>& dishProxy = fDishMenu[menuId];
+
+    for(QList<DishStruct* >::const_iterator it = dishProxy.begin(); it != dishProxy.end(); it++) {
         DishStruct *d = *it;
-        if (typeId != d->fType) {
+
+        if(typeId != d->fType) {
             continue;
         }
+
         dish[d->fQueue] = d;
     }
 }
 
-DishStruct *DishesTable::getDishStructByBarcode(const QString &barcode, int menuId)
+DishStruct* DishesTable::getDishStructByBarcode(const QString &barcode, int menuId)
 {
-    QList<DishStruct *> &dishProxy = fDishMenu[menuId];
-    for (DishStruct *d : dishProxy) {
-        if (d->barcode == barcode) {
+    QList<DishStruct*>& dishProxy = fDishMenu[menuId];
+
+    for(DishStruct *d : dishProxy) {
+        if(d->barcode == barcode) {
             return d;
         }
     }
+
     return nullptr;
 }

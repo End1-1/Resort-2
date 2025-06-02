@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1067</width>
-    <height>600</height>
+    <height>607</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -992,6 +992,9 @@
             </item>
             <item row="2" column="2">
              <widget class="QPushButton" name="btn9">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1014,6 +1017,9 @@
             </item>
             <item row="0" column="2">
              <widget class="QPushButton" name="btn3">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1036,6 +1042,9 @@
             </item>
             <item row="2" column="0">
              <widget class="QPushButton" name="btn7">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1058,6 +1067,9 @@
             </item>
             <item row="1" column="3">
              <widget class="QPushButton" name="btnPlusTen">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1080,6 +1092,9 @@
             </item>
             <item row="1" column="2">
              <widget class="QPushButton" name="btn6">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1102,6 +1117,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QPushButton" name="btn8">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1124,6 +1142,9 @@
             </item>
             <item row="0" column="0">
              <widget class="QPushButton" name="btn1">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1146,6 +1167,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QPushButton" name="btn2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1168,6 +1192,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="btn5">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1222,6 +1249,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="btn4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1244,6 +1274,9 @@
             </item>
             <item row="0" column="3">
              <widget class="QPushButton" name="btnHalfPlush">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1266,6 +1299,9 @@
             </item>
             <item row="0" column="4">
              <widget class="QPushButton" name="btnHalfMinus">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
