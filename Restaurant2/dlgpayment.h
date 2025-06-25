@@ -39,14 +39,16 @@ private slots:
     void on_btnCard_2_clicked();
 
 private:
-    Ui::DlgPayment *ui;
+    Ui::DlgPayment* ui;
     bool fCannotContinue;
     int fOrder;
     int fHall;
     QString fDefaultFiscalMachine;
     bool fUpdateHeader;
     void calcCash();
+    void calcDebt();
     void calcCard();
+    void calcIdram();
     int fCountId;
     bool fCanReject;
     QMap<QString, QMap<QString, QVariant> > fFiscalMachines;

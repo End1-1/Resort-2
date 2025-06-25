@@ -11,7 +11,6 @@
 #include "rtools.h"
 #include "rawmessage.h"
 #include "messagelist.h"
-#include "socketconnection.h"
 #include "dlgsalary.h"
 #include "branchstoremap.h"
 #include "rnumbers.h"
@@ -355,14 +354,6 @@ RDesk::RDesk(QWidget *parent) :
 
     fCostumerId = 0;
     fCarId = 0;
-    connect(SocketConnection::instance(), &SocketConnection::connected, this, &RDesk::socketConnected);
-    connect(SocketConnection::instance(), &SocketConnection::externalDataReady, this, &RDesk::externalDataReceived);
-    connect(SocketConnection::instance(), &SocketConnection::connectionLost, this, &RDesk::connectionLost);
-    connect(this, &RDesk::dataReady, SocketConnection::instance(), &SocketConnection::sendData);
-    SocketConnection::startConnection(defrest(dr_s5_ip),
-                                      defrest(dr_s5_port).toInt(),
-                                      defrest(dr_s5_user),
-                                      defrest(dr_s5_pass));
     auto *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &RDesk::timeout);
     timer->start(3000);
@@ -389,6 +380,9 @@ RDesk::RDesk(QWidget *parent) :
             b->click();
         }
     }
+
+    ui->btnQr->setVisible(false);
+    fDataVersion = 0;
 }
 
 RDesk::~RDesk()
@@ -399,7 +393,11 @@ RDesk::~RDesk()
 
 void RDesk::prepareToShow()
 {
+#ifdef QT_DEBUG
+    showMaximized();
+#else
     showFullScreen();
+#endif
     qApp->processEvents();
 }
 
@@ -1218,7 +1216,7 @@ void RDesk::closeEvent(QCloseEvent *e)
 
     if(fTable) {
         //unlock previous table
-        QString query = QString("update r_table set f_lockTime=0, f_lockHost='' where f_id=%1")
+        QString query = QString("update r_table set f_lockHost='' where f_id=%1")
                         .arg(fTable->fId);
         fDb.queryDirect(query);
     }
@@ -1522,10 +1520,23 @@ void RDesk::timeout()
     ui->leCmd->setFocus();
 
     if(fTimerCounter % 3 == 0) {
-        startService();
-
+        //startService();
         if(fHall) {
             Hall().refresh();
+        }
+    }
+
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_branch"] = defrest(dr_branch).toInt();
+    db2.exec("select f_version from s_app where f_app='data'");
+
+    if(db2.next()) {
+        if(fDataVersion != db2.value("f_version").toString().toInt()) {
+            fDataVersion = db2.value("f_version").toString().toInt();
+            Hall().refresh();
+            repaintTables();
         }
     }
 }
@@ -1540,68 +1551,6 @@ void RDesk::changeMenu()
     setBtnMenuText();
     setupType(0);
 }
-
-void RDesk::externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data)
-{
-    qDebug() << "Incoming message " << cmd << messageId << data;
-
-    if(cmd < MessageList::dll_plugin) {
-        return;
-    }
-
-    if(messageId > 0) {
-        if(!fMessages.contains(messageId)) {
-            return;
-        } else {
-            fMessages.removeAll(messageId);
-        }
-    }
-
-    quint32 op;
-    quint8 ok;
-    RawMessage r(nullptr);
-    r.readUInt(op, data);
-    r.readUByte(ok, data);
-
-    if(ok == 0) {
-        QString err;
-        r.readString(err, data);
-        message_error(err);
-        return;
-    }
-
-    switch(op) {
-    case op_login_pin:
-        ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_on.png"));
-        break;
-
-    case op_update_tables:
-        //repaintTables();
-        Hall().refresh();
-        ui->tblTables->viewport()->update();
-        break;
-    }
-}
-
-void RDesk::socketConnected()
-{
-    ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_b.png"));
-    RawMessage r(nullptr);
-    int messageId = SocketConnection::instance()->getMessageId();
-    r.setHeader(SocketConnection::instance()->getTcpPacketNumber(), messageId, MessageList::dll_plugin);
-    r.putString(MessageList::waiterclientp);
-    r.putUInt(op_login_pin);
-    r.putUByte(3);
-    r.putString(__s.value("pin").toString());
-    fMessages.append(messageId);
-    emit dataReady(r.data());
-}
-
-void RDesk::connectionLost()
-{
-    ui->btnConnectionStatus->setIcon(QIcon(":/images/wifi_off.png"));
-}
-
 void RDesk::onBtnQtyClicked()
 {
     QModelIndexList sel = ui->tblOrder->selectionModel()->selectedRows();
@@ -1738,7 +1687,6 @@ void RDesk::onBtnQtyClicked()
     changeBtnState();
     repaintTables();
 }
-
 void RDesk::on_btnExit_clicked()
 {
     if(message_question(tr("Confirm to close application")) != QDialog::Accepted) {
@@ -1761,7 +1709,6 @@ void RDesk::on_btnExit_clicked()
     fCanClose = true;
     close();
 }
-
 void RDesk::on_btnLanguage_clicked()
 {
     if(RChangeLanguage::changeLanguage(this)) {
@@ -1770,7 +1717,6 @@ void RDesk::on_btnLanguage_clicked()
         ui->tblOrder->viewport()->update();
     }
 }
-
 void RDesk::on_btnMenu_clicked()
 {
     int newMenu;
@@ -1781,7 +1727,6 @@ void RDesk::on_btnMenu_clicked()
         setupType(0);
     }
 }
-
 void RDesk::setBtnMenuText()
 {
     if(fMenu == 0) {
@@ -1789,7 +1734,6 @@ void RDesk::setBtnMenuText()
         return;
     }
 }
-
 void RDesk::setupType(int partId)
 {
     writelog("RDesk::setupType start.");
@@ -1816,7 +1760,6 @@ void RDesk::setupType(int partId)
 
     writelog("RDesk::setupType end.");
 }
-
 void RDesk::setupDish(int typeId)
 {
     ui->tblDish->clear();
@@ -1842,8 +1785,7 @@ void RDesk::setupDish(int typeId)
         }
     }
 }
-
-int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
+int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
 {
     double max = 999;
     double min = 0.25;
@@ -1906,10 +1848,14 @@ int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
         od->fSvcAmount = d->fId == 487 ? 0 : od->fSvcValue * od->fTotal;
     }
 
+    if(od->fDishId == fHall->fServiceItem) {
+        max = 1;
+    }
+
     od->fDctValue = 0;
     od->fDctAmount = 0;
-    od->fQty = 1;
-    od->fQtyPrint = 1;
+    od->fQty = max;
+    od->fQtyPrint = max;
     od->fComplex = d->fComplex;
     od->fComplexRecId = d->fComplexRec;
     od->fAdgt = d->fAdgt;
@@ -1947,8 +1893,7 @@ int RDesk::addDishToOrder(DishStruct *d, bool counttotal)
     fTrackControl->insert("New dish", od->fName, "");
     return od->fRecId;
 }
-
-void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice)
+void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkservice)
 {
     int row = ui->tblOrder->rowCount();
     ui->tblOrder->setRowCount(row + 1);
@@ -1995,7 +1940,7 @@ void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservi
         so->fDctValue = 0;
         so->fDctAmount = 0;
         so->fQty = 1;
-        so->fQtyPrint = 0;
+        so->fQtyPrint = 1;
         so->fComplex = 0;
         so->fComplexRecId = "";
         so->fAdgt = od->fAdgt;
@@ -2049,8 +1994,7 @@ void RDesk::addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservi
         changeBtnState();
     }
 }
-
-void RDesk::updateDish(OrderDishStruct *od)
+void RDesk::updateDish(OrderDishStruct * od)
 {
     fDbBind[":f_state"] = od->fState;
     fDbBind[":f_qty"] = od->fQty;
@@ -2073,7 +2017,6 @@ void RDesk::updateDish(OrderDishStruct *od)
     //    }
     updateDishQtyHistory(od);
 }
-
 double RDesk::countTotal()
 {
     double total = 0;
@@ -2153,15 +2096,13 @@ double RDesk::countTotal()
     updateTableInfo();
     return grandTotal;
 }
-
-void RDesk::countDish(OrderDishStruct *d)
+void RDesk::countDish(OrderDishStruct * d)
 {
     d->fTotal = d->fQty * d->fPrice;
     d->fSvcAmount = (d->fTotal * d->fSvcValue);
     d->fDctAmount = d->fTotal * d->fDctValue;
 }
-
-bool RDesk::setTable(TableStruct *t, bool nosmile)
+bool RDesk::setTable(TableStruct * t, bool nosmile)
 {
     if(fTable) {
         if(t == fTable && !nosmile) {
@@ -2185,7 +2126,7 @@ bool RDesk::setTable(TableStruct *t, bool nosmile)
         if(db2.string("f_lockhost").isEmpty()) {
             db2[":f_id"] = t->fId;
             db2[":f_lockhost"] = HOSTNAME;
-            db2.exec("update r_table set f_lockhost=:f_lockhost, f_locktime=unix_timestamp(now()) where f_id=:f_id");
+            db2.exec("update r_table set f_lockhost=:f_lockhost where f_id=:f_id");
         } else {
             if(db2.string("f_lockhost") != HOSTNAME) {
                 if(!nosmile) {
@@ -2198,7 +2139,7 @@ bool RDesk::setTable(TableStruct *t, bool nosmile)
 
         db2[":f_id"] = t->fId;
         db2[":f_lockhost"] = HOSTNAME;
-        db2.exec("update r_table set f_lockTime=0, f_lockHost='' where f_lockhost=:f_lockhost and f_id <>:f_id");
+        db2.exec("update r_table set f_lockHost='' where f_lockhost=:f_lockhost and f_id <>:f_id");
     }
 
     if(fTable) {
@@ -2278,8 +2219,7 @@ bool RDesk::setTable(TableStruct *t, bool nosmile)
     changeBtnState();
     return true;
 }
-
-void RDesk::checkOrderHeader(TableStruct *t)
+void RDesk::checkOrderHeader(TableStruct * t)
 {
     if(t->fOrder == 0) {
         fDb.fDb.transaction();
@@ -2304,7 +2244,6 @@ void RDesk::checkOrderHeader(TableStruct *t)
         ui->tblTables->viewport()->update();
     }
 }
-
 void RDesk::clearOrder()
 {
     if(!fTable) {
@@ -2344,7 +2283,6 @@ void RDesk::clearOrder()
 
     fTable = nullptr;
 }
-
 void RDesk::loadOrder(bool showwarning)
 {
     QElapsedTimer et;
@@ -2492,8 +2430,7 @@ void RDesk::loadOrder(bool showwarning)
 
     ui->lbCar->setText(fCarModel + " " + fCarGovNum);
 }
-
-void RDesk::setOrderRowHidden(int row, OrderDishStruct *od)
+void RDesk::setOrderRowHidden(int row, OrderDishStruct * od)
 {
     switch(od->fState) {
     case DISH_STATE_READY:
@@ -2511,8 +2448,7 @@ void RDesk::setOrderRowHidden(int row, OrderDishStruct *od)
         break;
     }
 }
-
-void RDesk::printServiceCheck(const QString &prn, int side)
+void RDesk::printServiceCheck(const QString & prn, int side)
 {
     QStringList printers = QPrinterInfo::availablePrinterNames();
 
@@ -2633,8 +2569,7 @@ void RDesk::printServiceCheck(const QString &prn, int side)
         lps[i]->render(&painter);
     }
 }
-
-void RDesk::printRemovedDish(OrderDishStruct *od, double removed, int user)
+void RDesk::printRemovedDish(OrderDishStruct * od, double removed, int user)
 {
     CI_User *u = CacheUsers::instance()->get(user);
     QString userName = fStaff->fName;
@@ -2707,7 +2642,6 @@ void RDesk::printRemovedDish(OrderDishStruct *od, double removed, int user)
         }
     }
 }
-
 void RDesk::printReceipt(bool printModePayment)
 {
     LogWriter::write(LogWriterLevel::verbose, "open database", "start receipt printing");
@@ -3196,7 +3130,6 @@ void RDesk::printReceipt(bool printModePayment)
     QString v = printModePayment ? "v2" : "v1";
     fTrackControl->insert("Print receipt " + v, fTable->fPaymentComment + " " + fTable->fRoomComment, "");
 }
-
 void RDesk::changeBtnState()
 {
     bool emptyReceipt = true;
@@ -3230,7 +3163,6 @@ void RDesk::changeBtnState()
     ui->btnPayment->setEnabled(btnPrintReceipt && !emptyReceipt && fTable->fPrint > 0);
     updateTableInfo();
 }
-
 void RDesk::checkEmpty()
 {
     if(!fTable) {
@@ -3284,7 +3216,6 @@ void RDesk::checkEmpty()
         fDb.select("update r_table set f_order=:f_order where f_id=:f_id", fDbBind, fDbRows);
     }
 }
-
 void RDesk::resetPrintQty()
 {
     if(fTable->fPrint > 0) {
@@ -3293,8 +3224,7 @@ void RDesk::resetPrintQty()
         fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
     }
 }
-
-void RDesk::updateDishQtyHistory(OrderDishStruct *od)
+void RDesk::updateDishQtyHistory(OrderDishStruct * od)
 {
     fDbBind[":f_rec"] = od->fRecId;
     fDbBind[":f_user"] = fStaff->fName;
@@ -3302,12 +3232,10 @@ void RDesk::updateDishQtyHistory(OrderDishStruct *od)
     fDbBind[":f_info"] = QString("%1/%2").arg(od->fQty).arg(od->fQtyPrint);
     fDb.insertWithoutId("o_dish_qty", fDbBind);
 }
-
 void RDesk::updateTableInfo()
 {
     ui->lbCar->setText(fCarModel + " " + fCarGovNum);
 }
-
 void RDesk::manualdisc(double val, int costumer)
 {
     DatabaseResult dr;
@@ -3370,7 +3298,6 @@ void RDesk::manualdisc(double val, int costumer)
     fTrackControl->insert(QString("Discount %1%").arg(val), "", "");
     changeBtnState();
 }
-
 TableStruct* RDesk::loadHall(int hall)
 {
     fCurrentHall = hall;
@@ -3416,8 +3343,7 @@ TableStruct* RDesk::loadHall(int hall)
     ui->tblTables->viewport()->update();
     return ts;
 }
-
-void RDesk::on_tblPart_clicked(const QModelIndex &index)
+void RDesk::on_tblPart_clicked(const QModelIndex & index)
 {
     if(!index.isValid()) {
         return;
@@ -3431,8 +3357,7 @@ void RDesk::on_tblPart_clicked(const QModelIndex &index)
 
     setupType(p->fId);
 }
-
-void RDesk::on_tblType_clicked(const QModelIndex &index)
+void RDesk::on_tblType_clicked(const QModelIndex & index)
 {
     if(!index.isValid()) {
         return;
@@ -3446,8 +3371,7 @@ void RDesk::on_tblType_clicked(const QModelIndex &index)
 
     setupDish(t->fId);
 }
-
-void RDesk::on_tblDish_clicked(const QModelIndex &index)
+void RDesk::on_tblDish_clicked(const QModelIndex & index)
 {
     if(!index.isValid()) {
         return;
@@ -3460,6 +3384,11 @@ void RDesk::on_tblDish_clicked(const QModelIndex &index)
 
     DishStruct *d = index.data(Qt::UserRole).value<DishStruct*>();
 
+    if(d->fNeedEmarks > 0) {
+        message_error(tr("Only using QR code"));
+        return;
+    }
+
     if(!d) {
         return;
     }
@@ -3467,7 +3396,6 @@ void RDesk::on_tblDish_clicked(const QModelIndex &index)
     addDishToOrder(d, true);
     repaintTables();
 }
-
 void RDesk::on_btnTrash_clicked()
 {
     QModelIndexList sel = ui->tblOrder->selectionModel()->selectedRows();
@@ -3479,7 +3407,6 @@ void RDesk::on_btnTrash_clicked()
     ui->tblOrder->clearSelection();
     removeRow(sel.at(0).row(), true);
 }
-
 void RDesk::on_btnPayment_clicked()
 {
     if(!DlgPayment::payment(fTable->fOrder, fTable->fHall)) {
@@ -3496,7 +3423,6 @@ void RDesk::on_btnPayment_clicked()
 
     changeBtnState();
 }
-
 void RDesk::on_btnPrint_clicked()
 {
     QSet<QString> prn1, prn2;
@@ -3561,7 +3487,6 @@ void RDesk::on_btnPrint_clicked()
     changeBtnState();
     repaintTables();
 }
-
 void RDesk::on_btnComment_clicked()
 {
     QModelIndexList sel = ui->tblOrder->selectionModel()->selectedRows();
@@ -3596,7 +3521,6 @@ void RDesk::on_btnComment_clicked()
         ui->tblOrder->viewport()->update();
     }
 }
-
 void RDesk::on_btnTools_clicked()
 {
     RTools *t = new RTools(this);
@@ -3606,47 +3530,38 @@ void RDesk::on_btnTools_clicked()
 
     delete t;
 }
-
 void RDesk::on_btnCheckout_clicked()
 {
     printReceipt(false);
 }
-
 void RDesk::on_btnTypeUp_clicked()
 {
     ui->tblType->verticalScrollBar()->setValue(ui->tblType->verticalScrollBar()->value() - 6);
 }
-
 void RDesk::on_btnTypeDown_clicked()
 {
     ui->tblType->verticalScrollBar()->setValue(ui->tblType->verticalScrollBar()->value() + 6);
 }
-
 void RDesk::on_btnDishUp_clicked()
 {
     ui->tblDish->verticalScrollBar()->setValue(ui->tblDish->verticalScrollBar()->value() - 6);
 }
-
 void RDesk::on_btnDishDown_clicked()
 {
     ui->tblDish->verticalScrollBar()->setValue(ui->tblDish->verticalScrollBar()->value() + 6);
 }
-
 void RDesk::on_btnOrdDown_clicked()
 {
     ui->tblOrder->verticalScrollBar()->setValue(ui->tblOrder->verticalScrollBar()->value() + 6);
 }
-
 void RDesk::on_btnOrdUp_clicked()
 {
     ui->tblOrder->verticalScrollBar()->setValue(ui->tblOrder->verticalScrollBar()->value() - 6);
 }
-
 void RDesk::on_btnComplex_clicked()
 {
     setComplexMode();
 }
-
 void RDesk::repaintTables()
 {
     for(int c = 0; c < ui->tblTables->columnCount(); c++) {
@@ -3696,8 +3611,7 @@ GO:
 
     ui->tblTables->viewport()->update();
 }
-
-void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
+void RDesk::on_tblTables_itemClicked(QTableWidgetItem * item)
 {
     if(!item) {
         return;
@@ -3712,7 +3626,6 @@ void RDesk::on_tblTables_itemClicked(QTableWidgetItem *item)
     setTable(t, false);
     repaintTables();
 }
-
 void RDesk::on_btnPayment_2_clicked()
 {
     if(!fTable) {
@@ -3727,7 +3640,6 @@ void RDesk::on_btnPayment_2_clicked()
     printReceipt(false);
     changeBtnState();
 }
-
 void RDesk::on_btnSetCar_clicked()
 {
     if(!fTable) {
@@ -3794,47 +3706,38 @@ void RDesk::on_btnSetCar_clicked()
         message_info(QString("Այսօր մեքենան գրանցվել է %1 անգամ").arg(db2.rowCount()));
     }
 }
-
 void RDesk::on_btnDiscount_clicked()
 {
     message_error(tr("No discount mechanism"));
 }
-
 void RDesk::on_btnPackage_clicked()
 {
     setComplexMode();
 }
-
 void RDesk::on_btnHallWash_clicked()
 {
     loadHall(1 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
-
 void RDesk::on_btnHallCafe_clicked()
 {
     loadHall(2 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
-
 void RDesk::on_btnExit_2_clicked()
 {
     manualdisc(0.2, defrest(dr_discount_20).toInt());
 }
-
 void RDesk::on_btnDiss50_clicked()
 {
     manualdisc(0.5, defrest(dr_discount_50).toInt());
 }
-
 void RDesk::on_btnHallVIP_clicked()
 {
     loadHall(3 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
-
 void RDesk::on_btnShop_clicked()
 {
     loadHall(4 + ((defrest(dr_branch).toInt() - 1) * 4));
 }
-
 void RDesk::startService()
 {
     SERVICE_STATUS_PROCESS ssStatus;
@@ -4012,7 +3915,6 @@ void RDesk::startService()
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
 }
-
 void RDesk::removeRow(int index, bool confirm)
 {
     OrderDishStruct *od = ui->tblOrder->item(index, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
@@ -4129,13 +4031,11 @@ void RDesk::removeRow(int index, bool confirm)
     changeBtnState();
     repaintTables();
 }
-
 void RDesk::on_btnPrintMultipleFiscal_clicked()
 {
     DlgPrintMultipleFiscal d(this);
     d.exec();
 }
-
 void RDesk::on_btnQr_clicked()
 {
     if(fTable == nullptr) {
@@ -4199,12 +4099,19 @@ void RDesk::on_btnQr_clicked()
     if(barcode.length() > 25) {
         db2[":f_id"] = rec;
         db2[":f_emark"] = barcode;
-        db2.exec("update o_dish set f_emark=:f_emark where f_id=:f_id");
+
+        if(!db2.exec("update o_dish set f_emark=:f_emark where f_id=:f_id")) {
+            QString err = db2.lastDbError();
+
+            if(err.contains("Duplicate entry")) {
+                err = tr("Emark already used");
+                message_error(err);
+            }
+        }
     }
 
     repaintTables();
 }
-
 void RDesk::on_leCmd_returnPressed()
 {
     QString code = ui->leCmd->text();

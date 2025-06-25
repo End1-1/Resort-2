@@ -2,6 +2,7 @@
 #include "ui_dlgpassword.h"
 #include <QCryptographicHash>
 #include <QDoubleValidator>
+#include <QDebug>
 
 DlgPassword::DlgPassword(QWidget *parent) :
     QDialog(parent),
@@ -23,7 +24,7 @@ bool DlgPassword::getQty(const QString &title, double& qty, double& min)
     d->fMin = min;
     d->ui->label->setText(title);
     d->ui->lePassword->setEchoMode(QLineEdit::Normal);
-    d->ui->lePassword->setMaxLength(2);
+    d->ui->lePassword->setMaxLength(3);
     bool result = d->exec() == QDialog::Accepted;
     qty = d->ui->lePassword->text().toDouble();
     delete d;
@@ -43,7 +44,9 @@ void DlgPassword::click(const QString &text)
         }
     }
 
+    qDebug() << "OLD " << ui->lePassword->text();
     ui->lePassword->setText(ui->lePassword->text() + text);
+    qDebug() << "NEWTEXT " << ui->lePassword->text();
 }
 
 void DlgPassword::on_pushButton_2_clicked()

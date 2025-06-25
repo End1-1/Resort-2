@@ -66,9 +66,7 @@ private:
 private slots:
     void timeout();
     void changeMenu();
-    virtual void externalDataReceived(quint16 cmd, quint32 messageId, const QByteArray &data);
-    void socketConnected();
-    virtual void connectionLost();
+
     void onBtnQtyClicked();
     void on_btnExit_clicked();
     void on_btnLanguage_clicked();
@@ -118,6 +116,7 @@ private:
     bool fShowRemoved;
     int fCurrentHall;
     int fMenu;
+    int fDataVersion;
     bool fNoService;
     bool fNeedCar;
     DishesTable fDishTable;
@@ -149,9 +148,6 @@ private:
     void updateTableInfo();
     void manualdisc(double val, int costumer);
     void repaintTables();
-
-signals:
-    void dataReady(const QByteArray&);
 };
 
 #endif // RDESK_H

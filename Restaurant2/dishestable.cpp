@@ -27,7 +27,7 @@ void DishesTable::init(Splash *s)
     QString query = "select f_id, f_en, f_ru, f_am from r_menu_names";
     fDb.select(query, fDbBind, fDbRows);
 
-    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         MenuStruct *m = new MenuStruct();
         m->fId = it->at(0).toInt();
         m->fName["en"] = it->at(1).toString();
@@ -45,7 +45,7 @@ void DishesTable::init(Splash *s)
     query = "select f_id, f_en, f_ru, f_am from r_dish_part order by f_id";
     fDb.select(query, fDbBind, fDbRows);
 
-    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         DishPartStruct *d = new DishPartStruct();
         d->fId = it->at(0).toInt();
         d->fName["en"] = it->at(1).toString();
@@ -61,10 +61,11 @@ void DishesTable::init(Splash *s)
     fTypeProxy.clear();
     qDeleteAll(fType);
     fType.clear();
-    query = "select f_id, f_part, f_en, f_ru, f_am, f_bgColor, f_textColor, f_queue from r_dish_type where f_active=1";
+    query = "select f_id, f_part, f_en, f_ru, f_am, f_bgColor, f_textColor, "
+            "f_queue from r_dish_type where f_active=1";
     fDb.select(query, fDbBind, fDbRows);
 
-    for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++) {
+    for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
         TypeStruct *t = new TypeStruct();
         t->fId = it->at(0).toInt();
         t->fPart = it->at(1).toInt();

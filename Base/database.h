@@ -10,7 +10,7 @@
 #define ap(x) QString("'%1'").arg(x)
 #define where_id(id) QString("where f_id=%1").arg(id)
 #define where_field(field, value) QString("where %1=%2").arg(field).arg(value)
-#define foreach_rows for(QList<QList<QVariant> >::const_iterator it = fDbRows.begin(); it != fDbRows.end(); it++)
+#define foreach_rows for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++)
 
 class Database : public QObject
 {
@@ -23,17 +23,17 @@ public:
     void copyConnectionParamsFrom(Database &db);
     bool open();
     void close();
-    int query(const QString &sql, QMap<QString, QVariant> &bindValues);
+    int query(const QString &sql, QMap<QString, QVariant>& bindValues);
     bool insertId(const QString &table, const QString &id);
-    int insert(const QString &table, QMap<QString, QVariant> &values);
-    bool insertWithoutId(const QString &table, QMap<QString, QVariant> &values);
+    int insert(const QString &table, QMap<QString, QVariant>& values);
+    bool insertWithoutId(const QString &table, QMap<QString, QVariant>& values);
     bool queryDirect(const QString &query);
-    bool update(const QString &table, QMap<QString, QVariant> &values, const QString &where);
+    bool update(const QString &table, QMap<QString, QVariant>& values, const QString &where);
     int select(const QString &sql, QTableWidget *tableWidget);
-    int select(const QString &sql, QMap<QString, QVariant> &values, QList<QList<QVariant> > &out);
-    QSqlQuery *select(QSqlQuery *q, const QString &sql, QMap<QString, QVariant> &values);
+    int select(const QString &sql, QMap<QString, QVariant>& values, QList<QList<QVariant> >& out);
+    QSqlQuery* select(QSqlQuery *q, const QString &sql, QMap<QString, QVariant>& values);
     bool deleteEntry(const QString &table, const QVariant &id);
-    QSqlQuery *select(const QString &query);
+    QSqlQuery* select(const QString &query);
     void logError(QSqlQuery &query);
     void logError(QSqlDatabase &db);
     inline void logQuery(QSqlQuery &query);

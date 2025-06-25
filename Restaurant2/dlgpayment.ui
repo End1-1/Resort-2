@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>596</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -355,7 +355,7 @@
          <item row="3" column="6" colspan="2">
           <widget class="QPushButton" name="btnPrintTax">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="minimumSize">
             <size>

@@ -56,7 +56,6 @@ SOURCES += main.cpp\
     hall.cpp \
     rdesk.cpp \
     dishestable.cpp \
-    socketconnection.cpp \
     splash.cpp \
     rchangelanguage.cpp \
     rchangemenu.cpp \
@@ -163,7 +162,6 @@ HEADERS  += rface.h \
     hall.h \
     rdesk.h \
     dishestable.h \
-    socketconnection.h \
     splash.h \
     rchangelanguage.h \
     rchangemenu.h \
