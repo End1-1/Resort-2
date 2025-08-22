@@ -992,13 +992,21 @@ void DlgPayment::on_btnPrepaid_clicked()
         return;
     }
 
-    if(ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() <
+    if(ui->leCard->asDouble()
+            + ui->leCash->asDouble()
+            + ui->leIdram->asDouble()
+            + ui->leCouponAmount->asDouble()
+            + ui->leDept->asDouble() <
             ui->leFinalAmount->asDouble()) {
         message_error(tr("Payment not complete"));
         return;
     }
 
-    if(ui->leCard->asDouble() + ui->leCash->asDouble() + ui->leCouponAmount->asDouble() + ui->leDept->asDouble() >
+    if(ui->leCard->asDouble()
+            + ui->leCash->asDouble()
+            + ui->leIdram->asDouble()
+            + ui->leCouponAmount->asDouble()
+            + ui->leDept->asDouble() >
             ui->leFinalAmount->asDouble()) {
         message_error(tr("Amount greater than need to pay"));
         return;
@@ -1012,7 +1020,7 @@ void DlgPayment::on_btnPrepaid_clicked()
                  s.value("opcode").toString(),
                  s.value("oppin").toString());
     QString in, out, err;
-    int result = pn.printAdvanceJson(ui->leCash->asDouble(), ui->leCard->asDouble(), in, out, err);
+    int result = pn.printAdvanceJson(ui->leCash->asDouble(), ui->leCard->asDouble()  + ui->leIdram->asDouble(), in, out, err);
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);

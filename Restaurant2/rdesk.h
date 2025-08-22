@@ -52,7 +52,6 @@ public:
     void checkCardAmount();
     void cardStat();
     void saledItem();
-    void checkCardRegistration();
     void employesOfDay();
 
 protected:

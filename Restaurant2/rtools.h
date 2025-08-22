@@ -5,7 +5,8 @@
 
 class RDesk;
 
-namespace Ui {
+namespace Ui
+{
 class RTools;
 }
 
@@ -40,14 +41,12 @@ private slots:
     void on_btnVisitStat_clicked();
     void on_btnCheckCard_clicked();
     void on_btnPrintDailySales_clicked();
-    void on_btnCheckCardReg_clicked();
     void on_btnSalary_2_clicked();
-
     void on_btnRemoveOrder_2_clicked();
 
 private:
-    Ui::RTools *ui;
-    RDesk *fDesk;
+    Ui::RTools* ui;
+    RDesk* fDesk;
 };
 
 #endif // RTOOLS_H

@@ -25,7 +25,6 @@
 #include "c5printing.h"
 #include "pprintscene.h"
 #include "dlgcomplexdish.h"
-#include "dlgcheckcard.h"
 #include "logging.h"
 #include "cacherights.h"
 #include "dlgpayment.h"
@@ -1193,13 +1192,6 @@ void RDesk::saledItem()
     p.setFontSize(18);
     p.ltext(QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm:ss"), 0);
     p.print(defrest(dr_first_receipt_printer), QPrinter::Custom);
-}
-
-void RDesk::checkCardRegistration()
-{
-    DlgCheckCard *d = new DlgCheckCard(this);
-    d->exec();
-    delete d;
 }
 
 void RDesk::employesOfDay()

@@ -38,7 +38,6 @@ SOURCES += main.cpp\
     ../Resort/message.cpp \
     ../Resort/storeoutput.cpp \
     branchstoremap.cpp \
-    dlgcheckcard.cpp \
     dlgpassword.cpp \
     dlgprintmultiplefiscal.cpp \
     dlgsalarytotal.cpp \
@@ -144,7 +143,6 @@ HEADERS  += rface.h \
     ../Resort/logwriter.h \
     branchstoremap.h \
     c:/projects/NewTax/Src/printtaxn.h \
-    dlgcheckcard.h \
     dlgpassword.h \
     dlgprintmultiplefiscal.h \
     dlgsalarytotal.h \
@@ -247,7 +245,6 @@ HEADERS  += rface.h \
     sslsocket.h
 
 FORMS    += rface.ui \
-    dlgcheckcard.ui \
     dlgpassword.ui \
     dlgprintmultiplefiscal.ui \
     dlgsalarytotal.ui \
