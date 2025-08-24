@@ -178,10 +178,7 @@ void DlgPayment::on_btnOk_clicked()
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark "
-                 "from o_dish od "
-                 "left join r_dish d on d.f_id=od.f_dish "
-                 "where od.f_header=:f_header and od.f_state=:f_state ");
+        db2.exec("bb ");
 
         while(db2.next()) {
             if(db2.doubleValue("f_price") < 0.01) {
@@ -247,11 +244,21 @@ void DlgPayment::on_btnOk_clicked()
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("select distinct(od.f_id), d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark "
-                 "from o_dish od "
-                 "left join r_dish d on d.f_id=od.f_dish "
-                 "inner join r_menu m on m.f_dish=d.f_id and m.f_menu in (2,3) and m.f_state=1 "
-                 "where od.f_header=:f_header and od.f_state=:f_state ");
+        db2.exec(R"(
+            select distinct(od.f_id) as f_id, d.f_en, d.f_adgt, od.f_qty,
+            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark
+            from o_dish od
+            left join r_dish d on d.f_id=od.f_dish
+            inner join r_menu m on m.f_dish=d.f_id and m.f_menu in (2,3)  and m.f_state=1
+            where od.f_header=:f_header and od.f_state=:f_state
+    union
+            select distinct(od.f_id) as f_id, d.f_en, d.f_adgt, od.f_qty,
+            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark
+            from o_dish od
+            left join r_dish d on d.f_id=od.f_dish
+            inner join r_menu m on m.f_dish=d.f_id
+            where od.f_header=:f_header and od.f_state=:f_state and od.f_dish=558
+)");
         bool f = false;
 
         while(db2.next()) {
@@ -266,8 +273,8 @@ void DlgPayment::on_btnOk_clicked()
             f = true;
             pn.addGoods(db2.string("f_taxdebt").toInt(),
                         db2.string("f_adgt"),
-                        db2.string("f_id"),
-                        db2.string("f_name"),
+                        QString::number(db2.integer("f_id")),
+                        db2.string("f_en"),
                         db2.doubleValue("f_price"),
                         db2.doubleValue("f_qty"),
                         db2.doubleValue("f_dctvalue"));
