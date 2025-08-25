@@ -178,7 +178,10 @@ void DlgPayment::on_btnOk_clicked()
         db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("bb ");
+        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark "
+                 "from o_dish od "
+                 "left join r_dish d on d.f_id=od.f_dish "
+                 "where od.f_header=:f_header and od.f_state=:f_state ");
 
         while(db2.next()) {
             if(db2.doubleValue("f_price") < 0.01) {
