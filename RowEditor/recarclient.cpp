@@ -85,6 +85,8 @@ if(c.f_fiscal=-88, 'Հին անհայտ', if (f_initialamount=f_spent AND f_fisc
 if (f_spent=0, 'Սպառված', if(f_fiscal IS NOT NULL,  'Վաճառված', 'Ոչ ակտիվ'))))
 FROM d_gift_cart c
 LEFT JOIN (SELECT f_code, SUM(f_amount) AS f_spent FROM d_gift_cart_use GROUP BY 1) u ON u.f_code=c.f_code
+
+ORDER BY CAST(RIGHT(c.f_code, 4) AS UNSIGNED);
 )";
     WReportGrid *r = addTab<WReportGrid>();
     RECarClient *rc = r->fullSetup<RECarClient>(widths, fields, titles, title, icon, query);

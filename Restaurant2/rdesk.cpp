@@ -3376,6 +3376,10 @@ void RDesk::on_tblDish_clicked(const QModelIndex & index)
 
     DishStruct *d = index.data(Qt::UserRole).value<DishStruct*>();
 
+    if(!d) {
+        return;
+    }
+
     if(d->fNeedEmarks > 0) {
         message_error(tr("Only using QR code"));
         return;
@@ -4125,7 +4129,9 @@ void RDesk::on_leCmd_returnPressed()
         QString barcode;
         DishStruct *d = nullptr;
 
-        if(code.mid(0, 6) == "000000") {
+        if(code.mid(0, 8) == "01000000") {
+            barcode = code.mid(8, 8);
+        } else if(code.mid(0, 6) == "000000") {
             barcode = code.mid(6, 8);
         } else if(code.mid(0, 3) == "010") {
             barcode = code.mid(3, 13);

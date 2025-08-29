@@ -272,6 +272,10 @@ DishStruct* DishesTable::getDishStructByBarcode(const QString &barcode, int menu
     QList<DishStruct*>& dishProxy = fDishMenu[menuId];
 
     for(DishStruct *d : dishProxy) {
+        if(!d->barcode.isEmpty()) {
+            qDebug() << "Compare" << d->barcode << barcode;
+        }
+
         if(d->barcode == barcode) {
             return d;
         }
