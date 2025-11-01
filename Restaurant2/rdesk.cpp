@@ -1879,6 +1879,7 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
     fDbBind[":f_row"] = od->fRow;
     fDbBind[":f_emark"] = od->fEmark;
     od->fRecId = fDb.insert("o_dish", fDbBind);
+    fTable->fPrint = abs(fTable->fPrint) * -1;
     updateDishQtyHistory(od);
     addDishToTable(od, counttotal, true);
     resetPrintQty();
@@ -3405,6 +3406,20 @@ void RDesk::on_btnTrash_clicked()
 }
 void RDesk::on_btnPayment_clicked()
 {
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2.exec("select current_timestamp as f_datetime");
+    db2.next();
+    QDateTime dt1 = db2.dateTimeValue("f_datetime");
+    QDateTime dt2 = QDateTime::currentDateTime();
+    int ms = abs(dt1.secsTo(dt2));
+
+    if(ms > 300) {
+        message_error(tr("Time on server and on machine different") + "<br>" + QString::number(ms));
+        return;
+    }
+
     if(!DlgPayment::payment(fTable->fOrder, fTable->fHall)) {
         return;
     }
@@ -4119,6 +4134,12 @@ void RDesk::on_leCmd_returnPressed()
     }
 
     if(code.length() == 13) {
+        DishStruct *d = fDishTable.getDishStructByBarcode(code, fMenu);
+
+        if(d) {
+            addDishToOrder(d, true);
+        }
+    } else if(code.length() == 8) {
         DishStruct *d = fDishTable.getDishStructByBarcode(code, fMenu);
 
         if(d) {
