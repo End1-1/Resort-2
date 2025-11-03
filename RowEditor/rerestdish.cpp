@@ -11,7 +11,7 @@
 #define SEL_DISH 1
 #define SEL_UNIT 2
 
-RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
+RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     RowEditorDialog(values, TRACK_DISH, parent),
     ui(new Ui::RERestDish)
 {
@@ -36,6 +36,8 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->leUnitName, "Unit name");
     addWidget(ui->leMinReminder, "Min reminder");
     addWidget(ui->leFiscalDebt, "Fiscal debt");
+    addWidget(ui->leBarcode, "Barcode");
+    addWidget(ui->chNeedEmark, "Emarks needed");
     /*
     addWidget(ui->leDefStore, "Def store name");
     addWidget(ui->leDefStoreName, "Def store name");*/
@@ -47,46 +49,54 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     ui->tblMenu->setRowCount(fDbRows.count());
     int row = 0;
     foreach_rows {
-        QCheckBox *check = new QCheckBox(this);
+        QCheckBox* check = new QCheckBox(this);
         check->setChecked(false);
         ui->tblMenu->setCellWidget(row, 0, check);
         fTrackControl->addWidget(check, "Checkbox of " + it->at(1).toString());
-        for (int i = 1, count = ui->tblMenu->columnCount() - 1; i < count; i++)
+
+        for(int i = 1, count = ui->tblMenu->columnCount() - 1; i < count; i++)
         {
             EQLineEdit *l = createLineEdit(row, i);
-            switch (i) {
-                case 2:
-                    l->setText(it->at(0).toString());
-                    break;
-                case 3:
-                    l->setText(it->at(1).toString());
-                    l->setReadOnly(true);
-                    break;
-                case 4:
-                    fTrackControl->addWidget(l, "Price for " + it->at(1).toString());
-                    break;
-                case 5:
-                    l->setShowButtonOnFocus(true);
-                    connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
-                    connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
-                    fTrackControl->addWidget(l, "Printer1 for " + it->at(1).toString());
-                    break;
-                case 6:
-                    l->setShowButtonOnFocus(true);
-                    connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
-                    connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
-                    fTrackControl->addWidget(l, "Printer2 for " + it->at(1).toString());
-                    break;
-                case 8:
-                    l->setShowButtonOnFocus(true);
-                    connect(l, SIGNAL(focusIn()), this, SLOT(storeLineEditFocusIn()));
-                    connect(l, SIGNAL(focusOut()), this, SLOT(storeLineEditFocusOut()));
-                    fTrackControl->addWidget(l, "Store for " + it->at(1).toString());
-                    break;
-                    break;
+
+            switch(i) {
+            case 2:
+                l->setText(it->at(0).toString());
+                break;
+
+            case 3:
+                l->setText(it->at(1).toString());
+                l->setReadOnly(true);
+                break;
+
+            case 4:
+                fTrackControl->addWidget(l, "Price for " + it->at(1).toString());
+                break;
+
+            case 5:
+                l->setShowButtonOnFocus(true);
+                connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
+                connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
+                fTrackControl->addWidget(l, "Printer1 for " + it->at(1).toString());
+                break;
+
+            case 6:
+                l->setShowButtonOnFocus(true);
+                connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
+                connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
+                fTrackControl->addWidget(l, "Printer2 for " + it->at(1).toString());
+                break;
+
+            case 8:
+                l->setShowButtonOnFocus(true);
+                connect(l, SIGNAL(focusIn()), this, SLOT(storeLineEditFocusIn()));
+                connect(l, SIGNAL(focusOut()), this, SLOT(storeLineEditFocusOut()));
+                fTrackControl->addWidget(l, "Store for " + it->at(1).toString());
+                break;
+                break;
             }
         }
-        EQCheckBox *checkComplex = new EQCheckBox(this);
+
+        EQCheckBox* checkComplex = new EQCheckBox(this);
         checkComplex->setChecked(false);
         checkComplex->fRow = row;
         checkComplex->fColumn = 9;
@@ -96,20 +106,20 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     }
     fDockPrint = new DWSelectorRestPrinter(this);
     fDockPrint->configure();
-    connect(fDockPrint, SIGNAL(printer(CI_RestPrinter *)), this, SLOT(printer(CI_RestPrinter *)));
+    connect(fDockPrint, SIGNAL(printer(CI_RestPrinter*)), this, SLOT(printer(CI_RestPrinter*)));
     fDockStore = new DWSelectorRestStore(this);
     fDockStore->configure();
-    connect(fDockStore, SIGNAL(store(CI_RestStore *)), this, SLOT(store(CI_RestStore *)));
+    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
     Utils::tableSetColumnWidths(ui->tblModifier, ui->tblModifier->columnCount(), 0, 0, 300, 30);
     fDockMod = new DWSelectorDishMod(this);
     fDockMod->configure();
-    connect(fDockMod, SIGNAL(dishMod(CI_RestDishMod *)), this, SLOT(dishMod(CI_RestDishMod *)));
+    connect(fDockMod, SIGNAL(dishMod(CI_RestDishMod*)), this, SLOT(dishMod(CI_RestDishMod*)));
     fDockType = new DWSelectorDishType();
     fDockType->configure();
     fDockType->setSelector(ui->leTypeCode);
     fImageChanged = false;
     fImageLoaded = false;
-    connect(fDockType, SIGNAL(dishType(CI_RestDishType *)), this, SLOT(dishType(CI_RestDishType *)));
+    connect(fDockType, SIGNAL(dishType(CI_RestDishType*)), this, SLOT(dishType(CI_RestDishType*)));
     connect(ui->tabPage, SIGNAL(currentChanged(int)), this, SLOT(tabPageIndexChanged(int)));
     fDockDish = new DWSelectorDish(this);
     fDockDish->configure();
@@ -121,7 +131,7 @@ RERestDish::RERestDish(QList<QVariant> &values, QWidget *parent) :
     fRestStore = new DWSelectorRestStore(this);
     fRestStore->configure();
     fRestStore->setSelector(ui->leDefStore);
-    connect(fRestStore, SIGNAL(store(CI_RestStore *)), this, SLOT(store2(CI_RestStore *)));
+    connect(fRestStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store2(CI_RestStore*)));
     fCacheId = cid_dish;
 }
 
@@ -132,39 +142,46 @@ RERestDish::~RERestDish()
 
 void RERestDish::selector(int number, const QVariant &value)
 {
-    switch (number) {
-        case SEL_DISH: {
-            CI_Dish *c = value.value<CI_Dish *>();
-            if (!c) {
-                return;
-            }
-            addDishRow(c->fCode, c->fName, 0);
-            break;
+    switch(number) {
+    case SEL_DISH: {
+        CI_Dish *c = value.value<CI_Dish*>();
+
+        if(!c) {
+            return;
         }
-        case SEL_UNIT: {
-            CI_Unit *c = value.value<CI_Unit *>();
-            dockResponse<CI_Unit, CacheUnit>(ui->leUnitCode, ui->leUnitName, c);
-            break;
-        }
+
+        addDishRow(c->fCode, c->fName, 0);
+        break;
+    }
+
+    case SEL_UNIT: {
+        CI_Unit *c = value.value<CI_Unit*>();
+        dockResponse<CI_Unit, CacheUnit>(ui->leUnitCode, ui->leUnitName, c);
+        break;
+    }
     }
 }
 
 bool RERestDish::isDataCorrect()
 {
-    if (ui->leTypeCode->asInt() == 0) {
+    if(ui->leTypeCode->asInt() == 0) {
         fDataErrors.append(tr("Type code must be defined"));
     }
-    if (ui->leQueue->asInt() == 0) {
+
+    if(ui->leQueue->asInt() == 0) {
         DatabaseResult dr;
         dr.select(fDb, "select max(f_queue) as f_queue from r_dish", fDbBind);
         ui->leQueue->setInt(dr.value("f_queue").toInt() + 1);
     }
-    if (ui->leUnitCode->asInt() == 0) {
+
+    if(ui->leUnitCode->asInt() == 0) {
         fDataErrors << tr("Unit must be defined");
     }
-    if (ui->leFiscalDebt->asInt() == 0) {
+
+    if(ui->leFiscalDebt->asInt() == 0) {
         fDataErrors << tr("Fiscal department cannot be empty");
     }
+
     return fDataErrors.count() == 0;
 }
 
@@ -173,7 +190,8 @@ void RERestDish::valuesToWidgets()
     RowEditorDialog::valuesToWidgets();
     ui->tblRecipe->clearContents();
     ui->tblRecipe->setRowCount(0);
-    if (!isNew) {
+
+    if(!isNew) {
         fDbBind[":f_dish"] = ui->leCode->asInt();
         fDb.select("select m.f_id, m.f_state, m.f_menu, m.f_price, m.f_print1, m.f_print2, "
                    "m.f_store, s.f_name, m.f_complex "
@@ -183,32 +201,37 @@ void RERestDish::valuesToWidgets()
         foreach_rows {
             int row = 0;
             bool found = false;
-            for (int i = 0, count = ui->tblMenu->rowCount(); i < count; i++)
+
+            for(int i = 0, count = ui->tblMenu->rowCount(); i < count; i++)
             {
-                if (cellValue(i, 2) == it->at(2).toString()) {
+                if(cellValue(i, 2) == it->at(2).toString()) {
                     row = i;
                     found = true;
                     break;
                 }
             }
-            if (!found)
+
+            if(!found)
             {
                 continue;
             }
+
             setCellValue(row, 1, it->at(0).toString()); //table rec id
             setCellValue(row, 4, it->at(3).toString()); //price
             setCellValue(row, 5, it->at(4).toString()); //prn1
             setCellValue(row, 6, it->at(5).toString()); //prn2
             setCellValue(row, 7, it->at(6).toString()); //store id
             setCellValue(row, 8, it->at(7).toString()); //store name
-            if (it->at(1).toInt() == 1)
+
+            if(it->at(1).toInt() == 1)
             {
-                QCheckBox *check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(row, 0));
+                QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, 0));
                 check->setChecked(true);
             }
-            if (it->at(8).toInt() == 1)
+
+            if(it->at(8).toInt() == 1)
             {
-                QCheckBox *check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(row, 9));
+                QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, 9));
                 check->setChecked(true);
             }
         }
@@ -218,17 +241,21 @@ void RERestDish::valuesToWidgets()
                   "from r_recipe r "
                   "left join r_dish d on d.f_id=r.f_part "
                   "where r.f_dish=:f_dish", fDbBind);
-        for (int i = 0; i < dr.rowCount(); i++) {
+
+        for(int i = 0; i < dr.rowCount(); i++) {
             addDishRow(dr.value(i, "f_part").toString(), dr.value(i, "f_en").toString(), dr.value(i, "f_qty").toDouble());
         }
+
         fDbBind[":f_dish"] = ui->leCode->text();
         dr.select(fDb, "select f_code from r_dish_scancode where f_dish=:f_dish", fDbBind);
-        for (int  i = 0; i < dr.rowCount(); i++) {
+
+        for(int  i = 0; i < dr.rowCount(); i++) {
             QListWidgetItem *item = new QListWidgetItem(ui->lstScancodes);
             item->setText(dr.value(i, "f_scancode").toString());
             ui->lstScancodes->addItem(item);
         }
     }
+
     fDbBind[":f_dish"] = ui->leCode->asInt();
     fDb.select("select m.f_id, m.f_mod, mn.f_" + def_lang + " "
                "from r_dish_mod_required m "
@@ -238,7 +265,7 @@ void RERestDish::valuesToWidgets()
     foreach_rows {
         mod.fCode = it->at(1).toString();
         mod.fName = it->at(2).toString();
-        dishMod( &mod);
+        dishMod(&mod);
         ui->tblModifier->item(ui->tblModifier->rowCount() - 1, 0)->setText(it->at(0).toString());
     }
     CI_Unit *cu = CacheUnit::instance()->get(ui->leUnitCode->text());
@@ -255,23 +282,27 @@ void RERestDish::valuesToWidgets()
 void RERestDish::clearWidgets()
 {
     RowEditorDialog::clearWidgets();
-    for (int i = 0, count = ui->tblMenu->rowCount(); i < count; i++) {
-        QCheckBox *check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(i, 0));
+
+    for(int i = 0, count = ui->tblMenu->rowCount(); i < count; i++) {
+        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 0));
         check->setChecked(false);
-        check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(i, 9));
+        check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 9));
         check->setChecked(false);
-        for (int j = 1, colCount = ui->tblMenu->columnCount() - 1; j < colCount; j++) {
-            switch (j) {
-                case 2:
-                case 3:
-                    continue;
-                    break;
-                default:
-                    setCellValue(i, j, "");
-                    break;
+
+        for(int j = 1, colCount = ui->tblMenu->columnCount() - 1; j < colCount; j++) {
+            switch(j) {
+            case 2:
+            case 3:
+                continue;
+                break;
+
+            default:
+                setCellValue(i, j, "");
+                break;
             }
         }
     }
+
     ui->tblModifier->clearContents();
     ui->tblModifier->setRowCount(0);
     ui->lstScancodes->clear();
@@ -282,10 +313,13 @@ void RERestDish::clearWidgets()
 
 void RERestDish::save()
 {
+    ui->leBarcode->setText(ui->leBarcode->text().trimmed());
     RowEditorDialog::save();
-    for (int i = 0, rowCount = ui->tblMenu->rowCount(); i < rowCount; i++) {
-        int id = cellValue(i, 1).toInt();
-        QCheckBox *check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(i, 0));
+    fDbBind[":f_dish"] = ui->leCode->asInt();
+    fDb.select("delete from r_menu where f_dish=:f_dish", fDbBind, fDbRows);
+
+    for(int i = 0, rowCount = ui->tblMenu->rowCount(); i < rowCount; i++) {
+        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 0));
         fDbBind[":f_state"] = (int) check->isChecked();
         fDbBind[":f_menu"] = cellValue(i, 2);
         fDbBind[":f_dish"] = ui->leCode->text();
@@ -293,34 +327,34 @@ void RERestDish::save()
         fDbBind[":f_print1"] = cellValue(i, 5);
         fDbBind[":f_print2"] = cellValue(i, 6);
         fDbBind[":f_store"] = cellValue(i, 7);
-        check = static_cast<QCheckBox *>(ui->tblMenu->cellWidget(i, 9));
+        check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 9));
         fDbBind[":f_complex"] = (int) check->isChecked();
-        if (id == 0) {
-            fDb.insert("r_menu", fDbBind);
-        } else {
-            fDb.update("r_menu", fDbBind, where_id(id));
-        }
+        fDb.insert("r_menu", fDbBind);
     }
-    for (QStringList::const_iterator it = fRemovedModifiers.begin(); it != fRemovedModifiers.end(); it++) {
+
+    for(QStringList::const_iterator it = fRemovedModifiers.begin(); it != fRemovedModifiers.end(); it++) {
         fDbBind[":f_id"] = *it;
         fDb.select("delete from r_dish_mod_required where f_id=:f_id", fDbBind, fDbRows);
     }
-    for (int i = 0, rowCount = ui->tblModifier->rowCount(); i < rowCount; i++) {
-        if (ui->tblModifier->item(i, 0)->text().isEmpty()) {
+
+    for(int i = 0, rowCount = ui->tblModifier->rowCount(); i < rowCount; i++) {
+        if(ui->tblModifier->item(i, 0)->text().isEmpty()) {
             fDbBind[":f_dish"] = ui->leCode->asInt();
             fDbBind[":f_mod"] = ui->tblModifier->item(i, 1)->text();
             fDb.insert("r_dish_mod_required", fDbBind);
         }
     }
-    if (fImageChanged) {
+
+    if(fImageChanged) {
         const QPixmap *p = ui->lbImage->pixmap();
         QByteArray bytes;
-        QBuffer buff( &bytes);
+        QBuffer buff(&bytes);
         buff.open(QIODevice::WriteOnly);
-        p->save( &buff, "PNG");
+        p->save(&buff, "PNG");
         fDbBind[":f_image"] = bytes;
         fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
     }
+
     /* correct queue */
     fDbBind[":f_queue"] = ui->leQueue->asInt();
     fDb.select("update r_dish set f_queue=f_queue+1 where f_queue>=:f_queue", fDbBind, fDbRows);
@@ -329,25 +363,29 @@ void RERestDish::save()
     /* recipe */
     fDbBind[":f_dish"] = ui->leCode->asInt();
     fDb.select("delete from r_recipe where f_dish=:f_dish", fDbBind, fDbRows);
-    for (int i = 0; i < ui->tblRecipe->rowCount(); i++) {
+
+    for(int i = 0; i < ui->tblRecipe->rowCount(); i++) {
         fDbBind[":f_dish"] = ui->leCode->asInt();
         fDbBind[":f_part"] = ui->tblRecipe->toInt(i, 0);
         fDbBind[":f_qty"] = ui->tblRecipe->lineEdit(i, 2)->asDouble();
         fDb.insert("r_recipe", fDbBind);
     }
+
     fDbBind[":f_lastPrice"] = ui->leLastPrice->asDouble();
     fDbBind[":f_unit"] = ui->leUnitCode->text();
     fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
     /* scancodes */
     fDbBind[":f_dish"] = ui->leCode->text();
     fDb.select("delete from r_dish_scancode where f_dish=:f_dish", fDbBind, fDbRows);
-    for (int i = 0; i < ui->lstScancodes->count(); i++) {
+
+    for(int i = 0; i < ui->lstScancodes->count(); i++) {
         fDbBind[":f_code"] = ui->lstScancodes->item(i)->text();
         fDb.select("delete from r_dish_scancode where f_code=:f_code", fDbBind, fDbRows);
         fDbBind[":f_dish"] = ui->leCode->text();
         fDbBind[":f_code"] = ui->lstScancodes->item(i)->text();
         fDb.insert("r_dish_scancode", fDbBind);
     }
+
     fDbBind[":f_tax"] = ui->chAutoPrintTax->isChecked();
     fDbBind[":f_defstore"] = ui->leDefStore->asInt();
     fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
@@ -355,7 +393,7 @@ void RERestDish::save()
 
 void RERestDish::hide()
 {
-    if (ui->tabPage->currentIndex() == 2) {
+    if(ui->tabPage->currentIndex() == 2) {
         ui->tabPage->setCurrentIndex(0);
     }
 }
@@ -367,7 +405,7 @@ void RERestDish::returnCtrlPressed()
 
 void RERestDish::checkComplex(bool v)
 {
-    EQCheckBox *check = static_cast<EQCheckBox *>(sender());
+    EQCheckBox *check = static_cast<EQCheckBox*>(sender());
     fTrackControl->insert("Complex for menu",
                           QString("%1 %2")
                           .arg(cellValue(check->fRow, 3))
@@ -379,9 +417,9 @@ void RERestDish::checkComplex(bool v)
 
 void RERestDish::tabPageIndexChanged(int index)
 {
-    if (index == 3) {
-        if (!fImageLoaded) {
-            if (ui->leCode->asInt() > 0) {
+    if(index == 3) {
+        if(!fImageLoaded) {
+            if(ui->leCode->asInt() > 0) {
                 fDbBind[":f_id"] = ui->leCode->asInt();
                 fDb.select("select f_image from r_dish where f_id=:f_id", fDbBind, fDbRows);
                 QPixmap p;
@@ -396,7 +434,7 @@ void RERestDish::tabPageIndexChanged(int index)
 
 void RERestDish::printLineEditFocusIn()
 {
-    EQLineEdit *l = static_cast<EQLineEdit *>(sender());
+    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
     fDockPrint->setSelector(l);
 }
 
@@ -406,16 +444,18 @@ void RERestDish::printLineEditFocusOut()
 
 void RERestDish::printer(CI_RestPrinter *p)
 {
-    EQLineEdit *l = static_cast<DWSelectorRestPrinter *>(sender())->selector();
-    if (p) {
+    EQLineEdit *l = static_cast<DWSelectorRestPrinter*>(sender())->selector();
+
+    if(p) {
         l->setText(p->fName);
     }
 }
 
 void RERestDish::store(CI_RestStore *s)
 {
-    EQLineEdit *l = static_cast<DWSelectorRestPrinter *>(sender())->selector();
-    if (s) {
+    EQLineEdit *l = static_cast<DWSelectorRestPrinter*>(sender())->selector();
+
+    if(s) {
         l->setText(s->fName);
         setCellValue(l->fRow, l->fColumn - 1, s->fCode);
     }
@@ -428,12 +468,14 @@ void RERestDish::store2(CI_RestStore *s)
 
 void RERestDish::dishMod(CI_RestDishMod *m)
 {
-    if (m) {
+    if(m) {
         int row = ui->tblModifier->rowCount();
         ui->tblModifier->setRowCount(row + 1);
-        for (int i = 0, colCount = ui->tblModifier->columnCount(); i < colCount; i++) {
+
+        for(int i = 0, colCount = ui->tblModifier->columnCount(); i < colCount; i++) {
             ui->tblModifier->setItem(row, i, new QTableWidgetItem());
         }
+
         ui->tblModifier->item(row, 1)->setText(m->fCode);
         ui->tblModifier->item(row, 2)->setText(m->fName);
         EPushButton *b = new EPushButton(this);
@@ -453,7 +495,7 @@ void RERestDish::dishType(CI_RestDishType *c)
 
 void RERestDish::storeLineEditFocusIn()
 {
-    EQLineEdit *l = static_cast<EQLineEdit *>(sender());
+    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
     fDockStore->setSelector(l);
 }
 
@@ -486,43 +528,48 @@ void RERestDish::on_btnCancel_clicked()
 
 void RERestDish::on_btnOk_clicked()
 {
-    if (ui->leMinReminder->isEmpty()) {
+    if(ui->leMinReminder->isEmpty()) {
         ui->leMinReminder->setText("0");
     }
-    if (!isDataCorrect()) {
+
+    if(!isDataCorrect()) {
         message_error(fDataErrors.join("<br>"));
         fDataErrors.clear();
         return;
     }
+
     save();
 }
 
-EQLineEdit *RERestDish::createLineEdit(int row, int column)
+EQLineEdit* RERestDish::createLineEdit(int row, int column)
 {
     EQLineEdit *le = new EQLineEdit(this);
     le->setReadOnly(false);
     le->fRow = row;
     le->fColumn = column;
     le->setFrame(false);
-    if (column == 4) {
+
+    if(column == 4) {
         le->setValidator(new QDoubleValidator());
     }
-    if (column == 7) {
+
+    if(column == 7) {
         le->setValidator(new QIntValidator());
     }
+
     ui->tblMenu->setCellWidget(row, column, le);
     return le;
 }
 
 QString RERestDish::cellValue(int row, int column)
 {
-    EQLineEdit *l = static_cast<EQLineEdit *>(ui->tblMenu->cellWidget(row, column));
+    EQLineEdit *l = static_cast<EQLineEdit*>(ui->tblMenu->cellWidget(row, column));
     return l->text();
 }
 
 void RERestDish::setCellValue(int row, int column, const QString &value)
 {
-    EQLineEdit *l = static_cast<EQLineEdit *>(ui->tblMenu->cellWidget(row, column));
+    EQLineEdit *l = static_cast<EQLineEdit*>(ui->tblMenu->cellWidget(row, column));
     l->setText(value);
 }
 
@@ -545,7 +592,8 @@ void RERestDish::on_btnAddModifier_clicked()
 void RERestDish::on_btnLoadImage_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select image"), "", "*.jpg;*.png;*.jpeg");
-    if (!fileName.isEmpty()) {
+
+    if(!fileName.isEmpty()) {
         fImageChanged = true;
         int w = ui->lbImage->width();
         int h = ui->lbImage->height();
@@ -562,29 +610,33 @@ void RERestDish::on_btnAppendRecipe_clicked()
 void RERestDish::on_btnRemoveRecipeRow_clicked()
 {
     int row = ui->tblRecipe->currentRow();
-    if (row < 0) {
+
+    if(row < 0) {
         return;
     }
-    if (message_confirm_tr("Confirm to delete selected row") != QDialog::Accepted) {
+
+    if(message_confirm_tr("Confirm to delete selected row") != QDialog::Accepted) {
         return;
     }
+
     ui->tblRecipe->removeRow(row);
 }
 
 void RERestDish::on_btnClearRecipe_clicked()
 {
-    if (message_confirm_tr("Confirm to clear recipe") != QDialog::Accepted) {
+    if(message_confirm_tr("Confirm to clear recipe") != QDialog::Accepted) {
         return;
     }
+
     ui->tblRecipe->clearContents();
     ui->tblRecipe->setRowCount(0);
 }
 
 void RERestDish::on_chContainItself_clicked(bool checked)
 {
-    for (int i = 0; i < ui->tblRecipe->rowCount(); i++) {
-        if (ui->tblRecipe->toString(i, 0) == ui->leCode->text()) {
-            if (checked) {
+    for(int i = 0; i < ui->tblRecipe->rowCount(); i++) {
+        if(ui->tblRecipe->toString(i, 0) == ui->leCode->text()) {
+            if(checked) {
                 return;
             } else {
                 ui->tblRecipe->removeRow(i);
@@ -592,6 +644,7 @@ void RERestDish::on_chContainItself_clicked(bool checked)
             }
         }
     }
+
     CI_Dish *c = CacheDish::instance()->get(ui->leCode->text());
     addDishRow(c->fCode, c->fName, 1);
 }
@@ -603,9 +656,10 @@ void RERestDish::on_btnTrack_clicked()
 
 void RERestDish::on_leReadScancode_returnPressed()
 {
-    if (ui->leReadScancode->isEmpty()) {
+    if(ui->leReadScancode->isEmpty()) {
         return;
     }
+
     QListWidgetItem *item = new QListWidgetItem(ui->lstScancodes);
     item->setText(ui->leReadScancode->text());
     ui->lstScancodes->addItem(item);
@@ -618,31 +672,41 @@ void RERestDish::on_btnRemove_clicked()
     fDbBind[":f_material"] = ui->leCode->asInt();
     DatabaseResult dr;
     dr.select("select * from r_body where f_material=:f_material", fDbBind);
-    if (dr.rowCount() > 0) {
+
+    if(dr.rowCount() > 0) {
         err += tr("This code used in store") + "<BR>";
     }
+
     fDbBind[":f_dish"] = ui->leCode->asInt();
     dr.select("select * from o_dish where f_dish=:f_dish", fDbBind);
-    if (dr.rowCount() > 0) {
+
+    if(dr.rowCount() > 0) {
         err += tr("This code used in sales") + "<BR>";
     }
+
     fDbBind[":f_goods"] = ui->leCode->asInt();
     dr.select("select * from st_body where f_goods=:f_goods", fDbBind);
-    if (dr.rowCount() > 0) {
+
+    if(dr.rowCount() > 0) {
         err += tr("Այս կոդը օգտագործվել է պահեստի գույքագրման մեջ") + "<BR>";
     }
+
     fDbBind[":f_goods"] = ui->leCode->asInt();
     dr.select("select * from r_inventorization_qty where f_goods=:f_goods", fDbBind);
-    if (dr.rowCount() > 0) {
+
+    if(dr.rowCount() > 0) {
         err += tr("Այս կոդը օգտագործվել է պահեստի գույքագրման մեջ") + "<BR>";
     }
-    if (!err.isEmpty()) {
+
+    if(!err.isEmpty()) {
         message_error(err);
         return;
     }
-    if (message_confirm(tr("Confirm to remove")) != QDialog::Accepted) {
+
+    if(message_confirm(tr("Confirm to remove")) != QDialog::Accepted) {
         return;
     }
+
     fDbBind[":f_id"] = ui->leCode->asInt();
     dr.select("delete from r_recipe where f_dish=:f_id or f_part=:f_id", fDbBind);
     fDbBind[":f_id"] = ui->leCode->asInt();

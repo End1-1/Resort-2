@@ -83,7 +83,7 @@
 #include <QShortcut>
 #include <QNetworkProxy>
 
-static QMap<int, QList<QAction *> > fMenu;
+static QMap<int, QList<QAction*> > fMenu;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -100,11 +100,11 @@ MainWindow::MainWindow(QWidget *parent) :
     fTab = ui->tabWidget;
     logout();
     fSocket.setProxy(QNetworkProxy::NoProxy);
-    fCommand.setSocket( &fSocket);
-    connect( &fSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
-    connect( &fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
-    connect( &fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    connect( &fCommand, SIGNAL(parseCommand(QString)), this, SLOT(parseSocketCommand(QString)));
+    fCommand.setSocket(&fSocket);
+    connect(&fSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+    connect(&fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+    connect(&fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
+    connect(&fCommand, SIGNAL(parseCommand(QString)), this, SLOT(parseSocketCommand(QString)));
     QShortcut *shortcut = new QShortcut(QKeySequence("F2"), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(shortcutSlot()));
     QShortcut *shortcut12 = new QShortcut(QKeySequence("F12"), this);
@@ -124,9 +124,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    disconnect( &fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    disconnect( &fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-                SLOT(socketError(QAbstractSocket::SocketError)));
+    disconnect(&fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
+    disconnect(&fSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+               SLOT(socketError(QAbstractSocket::SocketError)));
     delete ui;
 }
 
@@ -152,12 +152,14 @@ void MainWindow::on_actionLock_triggered()
 
 void MainWindow::on_actionDatabases_triggered()
 {
-    if (fPreferences.getString(def_preferences_password).length() > 0) {
+    if(fPreferences.getString(def_preferences_password).length() > 0) {
         LoginSettings ls(this);
-        if (ls.exec() != QDialog::Accepted) {
+
+        if(ls.exec() != QDialog::Accepted) {
             return;
         }
     }
+
     DatabasesConnections dc(this);
     dc.exec();
 }
@@ -165,9 +167,11 @@ void MainWindow::on_actionDatabases_triggered()
 void MainWindow::login()
 {
     Login l(this);
-    if (l.exec() == QDialog::Rejected) {
+
+    if(l.exec() == QDialog::Rejected) {
         return;
     }
+
     logout();
     Db db = fPreferences.getDatabase(fDbName);
     fDb.setConnectionParams(db.dc_main_host, db.dc_main_path, db.dc_main_user, db.dc_main_pass);
@@ -178,10 +182,12 @@ void MainWindow::login()
     enableMainMenu(true);
     fTimer.start(60000);
     ui->actionChange_password->setVisible(true);
-    if (fPreferences.getDb(def_receip_vaucher_id).toInt() == 0) {
+
+    if(fPreferences.getDb(def_receip_vaucher_id).toInt() == 0) {
         message_error(tr("Receipt voucher id not defined"));
         return;
     }
+
     setWindowTitle(fPreferences.getLocal("dbname").toString());
 }
 
@@ -205,13 +211,16 @@ void MainWindow::expandTab()
 
 void MainWindow::tabCloseRequested(int index)
 {
-    BaseWidget *w = static_cast<BaseWidget *>(ui->tabWidget->widget(index));
-    if (!w->canClose()) {
+    BaseWidget *w = static_cast<BaseWidget*>(ui->tabWidget->widget(index));
+
+    if(!w->canClose()) {
         return;
     }
+
     ui->tabWidget->removeTab(index);
     delete w;
-    if (ui->tabWidget->count() == 0) {
+
+    if(ui->tabWidget->count() == 0) {
         ui->tabWidget->setMaximumWidth(0);
         ui->wbg->setMaximumWidth(167772150);
     }
@@ -219,7 +228,7 @@ void MainWindow::tabCloseRequested(int index)
 
 void MainWindow::socketReadyRead()
 {
-    QTcpSocket *s = static_cast<QTcpSocket *>(sender());
+    QTcpSocket *s = static_cast<QTcpSocket*>(sender());
     fCommand.readBytes(s->readAll());
 }
 
@@ -228,18 +237,22 @@ void MainWindow::parseSocketCommand(const QString &command)
     QJsonDocument jDoc = QJsonDocument::fromJson(command.toUtf8());
     QJsonObject jObj = jDoc.object();
     QString cmd = jObj.value("command").toString();
-    if (cmd == "refresh_reservations") {
-    } else if (cmd == "update_cache") {
+
+    if(cmd == "refresh_reservations") {
+    } else if(cmd == "update_cache") {
         int cacheId = jObj.value("cache").toInt();
         QString item = jObj.value("item").toString();
         CacheOne::updateCache(cacheId, item);
     } else {
         QVariantMap m = jObj.toVariantMap();
-        for (int i = 0, count = ui->tabWidget->count(); i < count; i++) {
-            BaseWidget *b = static_cast<BaseWidget *>(ui->tabWidget->widget(i));
-            if (!b) {
+
+        for(int i = 0, count = ui->tabWidget->count(); i < count; i++) {
+            BaseWidget *b = static_cast<BaseWidget*>(ui->tabWidget->widget(i));
+
+            if(!b) {
                 return;
             }
+
             b->handleBroadcast(m);
         }
     }
@@ -248,7 +261,8 @@ void MainWindow::parseSocketCommand(const QString &command)
 void MainWindow::socketError(QAbstractSocket::SocketError f_cityLedger)
 {
     Q_UNUSED(f_cityLedger)
-    if (fTimer.isActive()) {
+
+    if(fTimer.isActive()) {
         message_error(tr("Lost connection to broadcast server, force logout") + "<br>" + fSocket.errorString());
         logout();
     }
@@ -256,7 +270,7 @@ void MainWindow::socketError(QAbstractSocket::SocketError f_cityLedger)
 
 void MainWindow::socketDisconnected()
 {
-    if (fTimer.isActive()) {
+    if(fTimer.isActive()) {
         message_error_tr("Lost connection to broadcast server, force logout");
         logout();
     }
@@ -266,9 +280,11 @@ void MainWindow::logout()
 {
     fTimer.stop();
     disableMainMenu();
-    while (ui->tabWidget->count() > 0) {
+
+    while(ui->tabWidget->count() > 0) {
         tabCloseRequested(0);
     }
+
     CacheOne::clearAll();
     fSocket.close();
     ui->actionChange_password->setVisible(false);
@@ -279,8 +295,9 @@ void MainWindow::lock()
 {
     Login l(this);
     l.setLockUser(WORKING_USERID);
+
     do {
-    } while (l.exec() != QDialog::Accepted);
+    } while(l.exec() != QDialog::Accepted);
 }
 
 void MainWindow::enableMainMenu(bool value)
@@ -288,7 +305,8 @@ void MainWindow::enableMainMenu(bool value)
     ui->wmenu->setVisible(value);
     ui->lstMenu->setMinimumHeight(0);
     ui->lstMenu->setMaximumHeight(0);
-    if (!value) {
+
+    if(!value) {
         return;
     }
 }
@@ -301,8 +319,9 @@ void MainWindow::disableMainMenu()
 void MainWindow::buildMenuOfRole()
 {
     UserPermssions::init(WORKING_USERGROUP);
-    QList<QAction *> a1;
-    if (check_permission(pr_view_revenue)) {
+    QList<QAction*> a1;
+
+    if(check_permission(pr_view_revenue)) {
         a1.append(ui->actionRestaurant);
         a1.append(ui->actionEarnings_carwash);
         a1.append(ui->actionEarnings_waitroom);
@@ -312,17 +331,21 @@ void MainWindow::buildMenuOfRole()
         a1.append(ui->actionReport_by_payment);
         a1.append(ui->actionSales_report_by_cars);
     }
-    if (check_permission(pr_cashbox)) {
+
+    if(check_permission(pr_cashbox)) {
         a1.append(ui->actionAccounts);
     }
+
     fMenu.insert(0, a1);
-    QList<QAction *> a2;
-    if (check_permission(pr_edit_store_doc)) {
+    QList<QAction*> a2;
+
+    if(check_permission(pr_edit_store_doc)) {
         a2.append(ui->actionNew_store_document);
         a2.append(ui->actionNew_store_checkpoint);
         a2.append(ui->action_inventorization);
     }
-    if (check_permission(pr_store_doc_journal)) {
+
+    if(check_permission(pr_store_doc_journal)) {
         a2.append(ui->actionDocuments_list);
         a2.append(ui->actionStore_movement);
         a2.append(ui->actionT_Report);
@@ -331,9 +354,11 @@ void MainWindow::buildMenuOfRole()
         a2.append(ui->actionPartners_debts);
         a2.append(ui->action_goods_movement);
     }
+
     fMenu.insert(1, a2);
-    QList<QAction *> a3;
-    if (check_permission(pr_goods_list)) {
+    QList<QAction*> a3;
+
+    if(check_permission(pr_goods_list)) {
         a3.append(ui->actionType_of_dishes);
         a3.append(ui->actionCarwash_index);
         a3.append(ui->actionWaiting_room_index);
@@ -342,9 +367,11 @@ void MainWindow::buildMenuOfRole()
         a3.append(ui->actionComplex_dish);
         a3.append(ui->actionAllDishes);
     }
+
     fMenu.insert(2, a3);
-    QList<QAction *> a4;
-    if (check_permission(pr_coupon_view)) {
+    QList<QAction*> a4;
+
+    if(check_permission(pr_coupon_view)) {
         a4.append(ui->actionCoupons);
         a4.append(ui->actionCoupons_seria);
         a4.append(ui->actionCoupons_sales);
@@ -361,9 +388,11 @@ void MainWindow::buildMenuOfRole()
         a4.append(ui->actionCoupon_of_service_documents);
         a4.append(ui->actionCoupon_of_service_actions);
     }
+
     fMenu.insert(3, a4);
-    QList<QAction *> a5;
-    if (check_permission(pr_indexes)) {
+    QList<QAction*> a5;
+
+    if(check_permission(pr_indexes)) {
         a5.append(ui->actionHakk);
         a5.append(ui->actionTables);
         a5.append(ui->actionStorages);
@@ -373,22 +402,27 @@ void MainWindow::buildMenuOfRole()
         a5.append(ui->actionUsers_groups);
         a5.append(ui->actionUsers);
     }
-    if (check_permission(pr_global_config)) {
+
+    if(check_permission(pr_global_config)) {
         a5.append(ui->actionGlobal_config);
     }
+
     fMenu.insert(4, a5);
-    QList<QAction *> a6;
-    if (check_permission(pr_attendance)) {
+    QList<QAction*> a6;
+
+    if(check_permission(pr_attendance)) {
         a6.append(ui->actionAttendance);
         a6.append(ui->actionSalary_by_employes);
     }
+
     fMenu.insert(5, a6);
 }
 
-void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
+void MainWindow::buildMenu(QToolButton *btn, const QList<QAction*>& l)
 {
     ui->lstMenu->clear();
-    for (QAction *a : l)  {
+
+    for(QAction *a : l)  {
         QToolButton *b = new QToolButton();
         b->setText(a->text());
         b->setIcon(a->icon());
@@ -399,6 +433,7 @@ void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
         item->setSizeHint(QSize(100, 40));
         ui->lstMenu->setItemWidget(item, b);
     }
+
     ui->lstMenu->setMinimumHeight(ui->lstMenu->count() * 40);
     ui->lstMenu->setMaximumHeight(ui->lstMenu->count() * 40);
     ui->verticalLayout->insertWidget(btn->property("index").toInt(), ui->lstMenu);
@@ -407,21 +442,27 @@ void MainWindow::buildMenu(QToolButton *btn, const QList<QAction *> &l)
 void MainWindow::dish(int t)
 {
     int ot = 0;
-    if (t > 0) {
+
+    if(t > 0) {
         ot = DlgOneTwoAll::getOption(tr("Visible"), tr("All"), tr("Active"), tr("Not active"), this);
     }
+
     QString cond;
-    switch (ot) {
-        case 2:
-            cond = " and d.f_id in (select f_dish from r_menu where f_state=1) ";
-            break;
-        case 3:
-            cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
-            break;
+
+    switch(ot) {
+    case 2:
+        cond = " and d.f_id in (select f_dish from r_menu where f_state=1) ";
+        break;
+
+    case 3:
+        cond = " and d.f_id in (select f_dish from r_menu where f_state=0) ";
+        break;
     }
-    if (t > 0) {
+
+    if(t > 0) {
         cond += " and p.f_id=" + QString("%1 ").arg(t);
     }
+
     QList<int> widths;
     widths << 100
            << 120
@@ -441,7 +482,9 @@ void MainWindow::dish(int t)
            << 0
            << 80
            << 0
-           << 80;
+           << 80
+           << 80
+           << 0;
     QStringList fields;
     fields << "f_id"
            << "f_partname"
@@ -462,6 +505,8 @@ void MainWindow::dish(int t)
            << "f_unitName"
            << "f_minreminder"
            << "f_taxdebt"
+           << "f_scancode"
+           << "f_needemarks"
            ;
     QStringList titles;
     titles << tr("Code")
@@ -483,13 +528,15 @@ void MainWindow::dish(int t)
            << tr("Unit name")
            << tr("Min. reminder")
            << tr("Tax debt")
+           << tr("Barcode")
+           << tr("Need emarks")
            ;
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
     QString query = "select d.f_id, p.f_en as f_partname, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
                     "d.f_en, d.f_armsoftname, d.f_text_en,  "
                     "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
-                    "d.f_minreminder, d.f_taxdebt "
+                    "d.f_minreminder, d.f_taxdebt, d.f_scancode, d.f_needemarks "
                     "from r_dish d "
                     "inner join r_dish_type t on t.f_id=d.f_type "
                     "inner join r_dish_part p on p.f_id=t.f_part "
@@ -877,7 +924,7 @@ void MainWindow::on_actionComplex_dish_triggered()
 
 QString MainWindow::actionTitle(QObject *a)
 {
-    return static_cast<QAction *>(a)->text();
+    return static_cast<QAction*>(a)->text();
 }
 
 void MainWindow::on_actionRestaurant_triggered()
@@ -898,28 +945,33 @@ void MainWindow::on_actionCash_repoort_detailed_triggered()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     bool canClose = true;
-    for (int i = 1; i < ui->tabWidget->count(); i++) {
-        BaseWidget *w = static_cast<BaseWidget *>(ui->tabWidget->widget(i));
-        if (!w->canClose()) {
+
+    for(int i = 1; i < ui->tabWidget->count(); i++) {
+        BaseWidget *w = static_cast<BaseWidget*>(ui->tabWidget->widget(i));
+
+        if(!w->canClose()) {
             canClose = false;
             break;
         }
     }
-    if (canClose) {
-        if (message_confirm(tr("Confirm to close application")) != QDialog::Accepted) {
+
+    if(canClose) {
+        if(message_confirm(tr("Confirm to close application")) != QDialog::Accepted) {
             canClose = false;
         }
     }
-    if (!canClose) {
+
+    if(!canClose) {
         event->ignore();
         return;
     }
+
     QMainWindow::closeEvent(event);
 }
 
 void MainWindow::shortcutFullScreen()
 {
-    if (isFullScreen()) {
+    if(isFullScreen()) {
         showMaximized();
     } else {
         showFullScreen();
@@ -928,18 +980,20 @@ void MainWindow::shortcutFullScreen()
 
 void MainWindow::shortcutSlot()
 {
-    if (ui->tabWidget->count() > 0) {
+    if(ui->tabWidget->count() > 0) {
         ui->tabWidget->setCurrentIndex(0);
     }
 }
 
 void MainWindow::customReport()
 {
-    QAction *a = static_cast<QAction *>(sender());
-    if (!fCustomReports.contains(a)) {
+    QAction *a = static_cast<QAction*>(sender());
+
+    if(!fCustomReports.contains(a)) {
         message_error_tr("Application error. Contact with developer. Message custom action == 0");
         return;
     }
+
     int reportId = fCustomReports[a];
     FCommonFilterByDate::open(reportId);
 }
@@ -1086,27 +1140,27 @@ void MainWindow::on_actionT_Report_triggered()
 
 void MainWindow::on_tbEarning_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[0]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[0]);
 }
 
 void MainWindow::on_tbStore_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[1]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[1]);
 }
 
 void MainWindow::on_tbStore_2_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[2]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[2]);
 }
 
 void MainWindow::on_tbStore_3_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[3]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[3]);
 }
 
 void MainWindow::on_tbStore_4_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[4]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[4]);
 }
 
 void MainWindow::on_actionCostumers_triggered()
@@ -1189,7 +1243,7 @@ void MainWindow::on_actionCoupon_of_service_documents_triggered()
 
 void MainWindow::on_tbEarning_2_clicked()
 {
-    buildMenu(static_cast<QToolButton *>(sender()), fMenu[5]);
+    buildMenu(static_cast<QToolButton*>(sender()), fMenu[5]);
 }
 
 void MainWindow::on_actionAttendance_triggered()
