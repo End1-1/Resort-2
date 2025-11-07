@@ -646,6 +646,17 @@ void RERestDish::on_chContainItself_clicked(bool checked)
     }
 
     CI_Dish *c = CacheDish::instance()->get(ui->leCode->text());
+
+    if(!c) {
+        CacheDish::instance()->load();
+        c = CacheDish::instance()->get(ui->leCode->text());
+    }
+
+    if(!c) {
+        message_error(tr("Please refresh data"));
+        return;
+    }
+
     addDishRow(c->fCode, c->fName, 1);
 }
 
