@@ -9,8 +9,6 @@
 #include "rdishcomment.h"
 #include "dlgsmile.h"
 #include "rtools.h"
-#include "rawmessage.h"
-#include "messagelist.h"
 #include "dlgsalary.h"
 #include "branchstoremap.h"
 #include "rnumbers.h"
@@ -43,6 +41,7 @@
 #include <QPrinterInfo>
 #include <QElapsedTimer>
 #include <QScrollBar>
+#include "baseorder.h"
 #include <QInputDialog>
 #include <QJsonObject>
 #include <QTimer>
@@ -707,8 +706,8 @@ void RDesk::setComplexMode()
 void RDesk::closeOrder(int state)
 {
     //DISABLE AUTOMATIC OUTPUT
-    //BaseOrder bo(fTable->fOrder);
-    //bo.calculateOutput(fDb);
+    BaseOrder bo(fTable->fOrder);
+    bo.calculateOutput(fDb);
     fDbBind[":f_state"] = state;
     fDbBind[":f_dateCash"] = WORKING_DATE;
     fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
@@ -3101,7 +3100,7 @@ void RDesk::printReceipt(bool printModePayment)
     QMatrix m;
 #ifdef QT_DEBUG
     //m.scale(1, 1);
-    m.scale(3, 3);
+    //m.scale(3, 3);
 #else
     m.scale(3, 3);
 #endif
