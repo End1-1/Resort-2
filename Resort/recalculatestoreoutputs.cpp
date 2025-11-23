@@ -44,7 +44,7 @@ void RecalculateStoreOutputs::timeout()
     }
     ui->l1->setText(tr("Write"));
     counter = 0;
-    for(int order: ids) {
+    for(int order: qAsConst(ids)) {
         if (stop) {
             break;
         }

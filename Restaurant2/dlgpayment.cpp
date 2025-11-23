@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QInputDialog>
 #include <QJsonParseError>
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
@@ -962,29 +963,81 @@ void DlgPayment::on_btnCouponService_clicked(bool checked)
 {
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
-    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    db2[":f_order"] = fOrder;
+    if (!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
+        message_error(db2.lastDbError());
+        return;
+    }
 
-    if(checked) {
-        int debtId;
-        QString debtName;
-
-        if(!DlgDeptHolder::getHolder(debtId, debtName)) {
+    if (checked) {
+        bool ok = false;
+        QString code = QInputDialog::getText(this, tr("Code"), tr("Code"), QLineEdit::Password, "", &ok);
+        if (!ok) {
+            ui->btnCouponService->setChecked(false);
+            return;
+        }
+        if (code.isEmpty()) {
             return;
         }
 
-        db2[":f_costumer"] = debtId;
-        ui->leDeptHolder->fHiddenText = QString::number(debtId);
-        ui->leDeptHolder->setText(debtName);
+        db2[":f_code"] = code;
+        db2.exec("select  t.*, p.f_name as f_partnername from talon_service t "
+                 "left join r_partners p on p.f_id=t.f_partner "
+                 "where t.f_code=:f_code ");
+        if (db2.next() == false) {
+            ui->btnCouponService->setChecked(false);
+            message_error(tr("Invalid code"));
+            return;
+        }
+        if (db2.integer("f_used") != 0)  {
+            ui->btnCouponService->setChecked(false);
+            message_error(tr("Talon used"));
+            return;
+        }
+        int partner = db2.integer("f_partner");
+        QString partnerName = db2.string("f_parnername");
+        db2[":f_code"] =code;
+        db2[":f_order"] = fOrder;
+        db2.exec("update talon_service set f_used=1, f_order=:f_order where f_code=:f_code");
+        db2[":f_partner"] = partner;
+        db2[":f_order"] = fOrder;
+        db2.exec("update o_car set f_partner=:f_partner where f_order=:f_order");
+
+        ui->leDeptHolder->fHiddenText = QString::number(partner);
+        ui->leDeptHolder->setText(partnerName);
         ui->btnPrintTax->setChecked(false);
         ui->btnCash->click();
     } else {
-        db2[":f_costumer"] = 0;
+        db2[":f_order"] = fOrder;
+        db2.exec("update talon_service set f_used=0, f_order=null where f_order=:f_order");
+
+        db2[":f_order"] = fOrder;
+        db2.exec("update o_car set f_partner=null where f_order=:f_order");
         ui->leDeptHolder->fHiddenText.clear();
         ui->leDeptHolder->clear();
     }
 
-    db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
+
+    // db2[":f_order"] = fOrder;
+    // if(checked) {
+    //     int debtId;
+    //     QString debtName;
+
+    //     if(!DlgDeptHolder::getHolder(debtId, debtName)) {
+    //         return;
+    //     }
+
+    //     db2[":f_costumer"] = debtId;
+    //     ui->leDeptHolder->fHiddenText = QString::number(debtId);
+    //     ui->leDeptHolder->setText(debtName);
+    //     ui->btnPrintTax->setChecked(false);
+    //     ui->btnCash->click();
+    // } else {
+    //     db2[":f_costumer"] = 0;
+    //     ui->leDeptHolder->fHiddenText.clear();
+    //     ui->leDeptHolder->clear();
+    // }
+
+    // db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
     db2[":f_couponservice"] = checked ? 1 : 0;
     db2.update("o_header", "f_id", fOrder);
     ui->btnPrintTax->setChecked(!checked);
@@ -1156,3 +1209,10 @@ void DlgPayment::on_btnCard_2_clicked()
     db2.exec("delete from d_gift_cart_use where f_order=:f_order");
     calcIdram();
 }
+
+void DlgPayment::on_btnCouponService_clicked()
+{
+
+
+}
+

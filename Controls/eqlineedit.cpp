@@ -29,30 +29,33 @@ EQLineEdit::EQLineEdit(QWidget *parent) :
 
 EQLineEdit::~EQLineEdit()
 {
-
 }
 
 void EQLineEdit::setText(const QString &text)
 {
     QString t = text;
     const QValidator *v = validator();
-    if (v) {
-        if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
+
+    if(v) {
+        if(!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             QLocale l;
             t.replace(".", l.decimalPoint());
             t.replace(",", l.decimalPoint());
             t.replace("․", l.decimalPoint());
         }
     }
-    if (fMax > 0.1) {
-        if (t.toDouble() > fMax) {
+
+    if(fMax > 0.1) {
+        if(t.toDouble() > fMax) {
             setDouble(fMax);
             return;
         }
     }
+
     QLineEdit::setText(t);
-    if (fEnableHiddenText) {
-        if (hasFocus()) {
+
+    if(fEnableHiddenText) {
+        if(hasFocus()) {
             fHiddenText = t;
         } else {
             fShowText = t;
@@ -64,18 +67,21 @@ QString EQLineEdit::text() const
 {
     QString t = QLineEdit::text();
     const QValidator *v = validator();
-    if (v) {
+
+    if(v) {
         t.replace(mLocale.groupSeparator(), "");
-        if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
+
+        if(!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             const QDoubleValidator *dv = static_cast<const QDoubleValidator*>(v);
             t = float_str(QLocale().toDouble(t), dv->decimals());
             qDebug() << mLocale.groupSeparator() << t;
             t.replace(mLocale.groupSeparator(), "");
             return t;
-        } else if (!strcmp(v->metaObject()->className(), "QIntValidator")) {
+        } else if(!strcmp(v->metaObject()->className(), "QIntValidator")) {
             return QString::number(QLineEdit::text().toInt());
         }
     }
+
     return t;
 }
 
@@ -87,8 +93,9 @@ void EQLineEdit::setInt(int val)
 void EQLineEdit::setDouble(double val)
 {
     const QValidator *v = validator();
-    if (v) {
-        if (!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
+
+    if(v) {
+        if(!strcmp(v->metaObject()->className(), "QDoubleValidator")) {
             const QDoubleValidator *dv = reinterpret_cast<const QDoubleValidator* >(v);
             setText(float_str(val, dv->decimals()));
         } else {
@@ -121,10 +128,12 @@ void EQLineEdit::setMultipleOfDouble(double val1, double val2, int prec)
 void EQLineEdit::setDevideOfDouble(double val1, double val2, int prec)
 {
     double result;
-    if (val2 == 0)
+
+    if(val2 == 0)
         result = 0;
     else
         result = val1 / val2;
+
     setText(QString::number(result, 'f', prec));
 }
 
@@ -147,7 +156,8 @@ bool EQLineEdit::getShowButton()
 void EQLineEdit::setShowButtonOnFocus(bool value)
 {
     fShowButtonOnFocus = value;
-    if (value && hasFocus())
+
+    if(value && hasFocus())
         fButton->show();
 }
 
@@ -228,12 +238,15 @@ void EQLineEdit::resizeEvent(QResizeEvent *event)
 void EQLineEdit::focusInEvent(QFocusEvent *event)
 {
     const QValidator *v = validator();
-    if (v) {
+
+    if(v) {
         setText(text());
     }
-    if (fEnableHiddenText) {
+
+    if(fEnableHiddenText) {
         setText(fHiddenText);
     }
+
     QLineEdit::focusInEvent(event);
     setSelection(0, text().length());
     emit focusIn();
@@ -241,9 +254,10 @@ void EQLineEdit::focusInEvent(QFocusEvent *event)
 
 void EQLineEdit::focusOutEvent(QFocusEvent *event)
 {
-    if (fEnableHiddenText) {
+    if(fEnableHiddenText) {
         setText(fShowText);
     }
+
     QLineEdit::focusOutEvent(event);
     emit focusOut();
 }
@@ -277,26 +291,31 @@ void EQLineEdit::leaveEvent(QEvent *event)
 
 bool EQLineEdit::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == this) {
-        if (event->type() == QEvent::KeyPress) {
+    if(watched == this) {
+        if(event->type() == QEvent::KeyPress) {
             QKeyEvent *k = static_cast<QKeyEvent*>(event);
-            switch (k->key()) {
+
+            switch(k->key()) {
             case Qt::Key_F1:
-                if (getShowButton()) {
+                if(getShowButton()) {
                     emit customButtonClicked(true);
                     return true;
                 }
+
                 break;
+
             default:
-                if (k->key() == mLocale.groupSeparator()) {
-                    QKeyEvent * eve2 = new QKeyEvent (QEvent::KeyRelease,Qt::Key_A,Qt::NoModifier, mLocale.decimalPoint());
-                    qApp->postEvent(this,(QEvent *)eve2);
+                if(k->key() == mLocale.groupSeparator()) {
+                    QKeyEvent * eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier, mLocale.decimalPoint());
+                    qApp->postEvent(this, (QEvent*)eve2);
                     event->ignore();
                 }
+
                 break;
             }
         }
     }
+
     return QLineEdit::eventFilter(watched, event);
 }
 
@@ -310,23 +329,26 @@ void EQLineEdit::correctButtonPosition()
     QSize sz = fButton->sizeHint();
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     fButton->move(rect().right() - frameWidth - sz.width(),
-                  (rect().bottom() + 1 - sz.height())/2);
+                  (rect().bottom() + 1 - sz.height()) / 2);
 }
 
 void EQLineEdit::hiddenTextChanged(const QString &text)
 {
     int cursPos = cursorPosition();
-    if (fEnableHiddenText) {
-        if (hasFocus()) {
+
+    if(fEnableHiddenText) {
+        if(hasFocus()) {
             fHiddenText = (fAlwaysUpper ? text.toUpper() : text);
         } else {
             fShowText = (fAlwaysUpper ? text.toUpper() : text);
         }
     } else {
         setText(fAlwaysUpper ? text.toUpper() : text);
-        if (text.isEmpty()) {
+
+        if(text.isEmpty()) {
             fHiddenText.clear();
         }
     }
+
     setCursorPosition(cursPos);
 }

@@ -8,7 +8,8 @@
 #define COLOR_DARK_ROW QColor::fromRgb(230, 230, 230)
 #define COLOR_VERY_DARK_ROW QColor::fromRgb(100, 100, 100)
 
-class Column {
+class Column
+{
 public:
     Column(int width, const QString &fieldName, const QString &title);
     ~Column();
@@ -18,7 +19,8 @@ public:
     QString fTitle;
 };
 
-class Row {
+class Row
+{
     int fIndex;
 };
 
@@ -31,7 +33,7 @@ public:
     TableModel(QTableView *tableView);
     ~TableModel();
     DoubleDatabase fDD;
-    QTableView *fTableView;
+    QTableView* fTableView;
     void apply(WReportGrid *rg);
     void apply(const QStringList &queries);
     void applyFinal(WReportGrid *rg, bool clearBefore);
@@ -54,19 +56,20 @@ public:
     void clearColumns();
     void clearData();
     Qt::ItemFlags flags(const QModelIndex &index) const;
-    void setDataFromSource(const QList<QList<QVariant> > &dataSource);
+    void setDataFromSource(const QList<QList<QVariant> >& dataSource);
     void clearProxyRows();
-    TableModel &setColumn(int width, const QString &fieldName, const QString &title);
-    TableModel &setColumn(Column *column);
+    TableModel& setColumn(int width, const QString &fieldName, const QString &title);
+    TableModel& setColumn(Column *column);
+    TableModel& setColumns(const QList<Column>& cols);
     void setSqlQuery(const QString &query);
     void searchInTable(const QString &text);
-    void appendRow(const QList<QVariant> &values);
-    void insertRow(int row, const QList<QVariant> &values);
+    void appendRow(const QList<QVariant>& values);
+    void insertRow(int row, const QList<QVariant>& values);
     void removeRow(int row);
-    void updateRowValues(int row, const QList<QVariant> &values);
-    void uniqueValuesForColumn(int column, QSet<QString> &values);
-    void sumOfColumns(const QList<int> columns, QList<double> &out);
-    void insertSubTotals(int colName, const QList<int> &totalCols);
+    void updateRowValues(int row, const QList<QVariant>& values);
+    void uniqueValuesForColumn(int column, QSet<QString>& values);
+    void sumOfColumns(const QList<int> columns, QList<double>& out);
+    void insertSubTotals(int colName, const QList<int>& totalCols);
     QList<int> fCheckBoxColumns;
     QList<int> fCheckBoxIsCheckable;
 private:
@@ -82,7 +85,7 @@ private:
 signals:
     void rowCount(int count);
     void endApply();
-    void newSum(const QList<int> &columns, const QList<double> &values);
+    void newSum(const QList<int>& columns, const QList<double>& values);
 };
 
 #endif // TABLEMODEL_H

@@ -95,7 +95,6 @@
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -131,7 +130,6 @@
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -167,7 +165,6 @@
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -203,7 +200,6 @@
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -239,7 +235,6 @@
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -276,7 +271,6 @@ system</string>
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -315,7 +309,6 @@ system</string>
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -351,7 +344,6 @@ system</string>
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -1107,6 +1099,30 @@ system</string>
    </property>
    <property name="text">
     <string>Բոլոր ապրանքները</string>
+   </property>
+  </action>
+  <action name="actionStock_Reminder">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/warning.png</normaloff>:/images/warning.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stock Reminder</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionMenu_review_2">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/earnings.png</normaloff>:/images/earnings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Menu review</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>

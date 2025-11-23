@@ -58,7 +58,6 @@ SOURCES += main.cpp\
     splash.cpp \
     rchangelanguage.cpp \
     rchangemenu.cpp \
-    rpaymenttype.cpp \
     rchangehall.cpp \
     rkeyboard.cpp \
     rdishcomment.cpp \
@@ -163,7 +162,6 @@ HEADERS  += rface.h \
     splash.h \
     rchangelanguage.h \
     rchangemenu.h \
-    rpaymenttype.h \
     rchangehall.h \
     rkeyboard.h \
     rdishcomment.h \
@@ -254,7 +252,6 @@ FORMS    += rface.ui \
     splash.ui \
     rchangelanguage.ui \
     rchangemenu.ui \
-    rpaymenttype.ui \
     rchangehall.ui \
     rkeyboard.ui \
     rdishcomment.ui \

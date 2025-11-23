@@ -21,7 +21,6 @@
 #include "fsalesbycar.h"
 #include "fbalanceoncard.h"
 #include "fcouponsservice.h"
-#include "fcash.h"
 #include "goodsmovement.h"
 #include "fstoreentry.h"
 #include "fpartnersdebt.h"
@@ -29,6 +28,7 @@
 #include "fdebtholders.h"
 #include "wstoreentry.h"
 #include "fdebtofcostumers.h"
+#include "fmenureview.h"
 #include "about.h"
 #include "baseuid.h"
 #include "remodelofcars.h"
@@ -44,6 +44,7 @@
 #include "wcustomreports.h"
 #include "wcontacts.h"
 #include "wusers.h"
+#include "fstockreminder.h"
 #include "fmaterialsinstore.h"
 #include "fstoremovement.h"
 #include "wusersgroups.h"
@@ -51,7 +52,6 @@
 #include "fcoupondocuments.h"
 #include "cachebase.h"
 #include "fsalarybyemployes.h"
-#include "fonlinerest.h"
 #include "reresthall.h"
 #include "reresttable.h"
 #include "rerestmenunames.h"
@@ -70,7 +70,6 @@
 #include "wglobaldbconfig.h"
 #include "rerestdishcomplex.h"
 #include "frestauranttotal.h"
-#include "fcashreportsummary.h"
 #include "fcommonfilterbydate.h"
 #include "fcashreport.h"
 #include "recomplimentarycomment.h"
@@ -353,6 +352,7 @@ void MainWindow::buildMenuOfRole()
         a2.append(ui->actionMaterials_in_the_store);
         a2.append(ui->actionPartners_debts);
         a2.append(ui->action_goods_movement);
+        a2.append(ui->actionStock_Reminder);
     }
 
     fMenu.insert(1, a2);
@@ -366,6 +366,7 @@ void MainWindow::buildMenuOfRole()
         a3.append(ui->actionStorage_goods_index);
         a3.append(ui->actionComplex_dish);
         a3.append(ui->actionAllDishes);
+        a3.append(ui->actionMenu_review_2);
     }
 
     fMenu.insert(2, a3);
@@ -932,11 +933,6 @@ void MainWindow::on_actionRestaurant_triggered()
     FRestaurantTotal::open();
 }
 
-void MainWindow::on_actionCash_report_total_triggered()
-{
-    addTab<WReportGrid>()->setQueryModel<FCashReportSummary>();
-}
-
 void MainWindow::on_actionCash_repoort_detailed_triggered()
 {
     FCashReport::open();
@@ -1081,11 +1077,6 @@ void MainWindow::on_actionCoupons_sales_triggered()
 void MainWindow::on_actionCoupons_seria_triggered()
 {
     RECouponSeria::openReport();
-}
-
-void MainWindow::on_actionAccounts_triggered()
-{
-    FCash::openFilterReport<FCash, WReportGrid>();
 }
 
 void MainWindow::on_actionAccounts_2_triggered()
@@ -1274,4 +1265,14 @@ void MainWindow::on_action_goods_movement_triggered()
 void MainWindow::on_actionAllDishes_triggered()
 {
     dish(0);
+}
+
+void MainWindow::on_actionStock_Reminder_triggered()
+{
+    FStockReminder::openFilterReport<FStockReminder, WReportGrid>();
+}
+
+void MainWindow::on_actionMenu_review_2_triggered()
+{
+    FMenuReview::openFilterReport<FMenuReview, WReportGrid>();
 }

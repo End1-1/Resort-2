@@ -27,12 +27,11 @@ public:
     void logout();
     void addTabWidget(BaseWidget *widget);
     void setCurrentWidget(QWidget *w);
-    QTabWidget *fTab;
+    QTabWidget* fTab;
     void expandTab();
 
 public slots:
     void on_actionCash_repoort_detailed_triggered();
-    void on_actionCash_report_total_triggered();
     void on_actionRestaurant_triggered();
     void on_actionReports_set_triggered();
     void on_actionStatistics_triggered();
@@ -72,7 +71,6 @@ public slots:
     void on_actionPartners_debts_triggered();
     void on_actionCoupons_sales_triggered();
     void on_actionCoupons_seria_triggered();
-    void on_actionAccounts_triggered();
     void on_actionAccounts_2_triggered();
     void on_actionStore_entries_triggered();
     void on_actionNew_store_checkpoint_triggered();
@@ -135,8 +133,12 @@ private slots:
 
     void on_actionAllDishes_triggered();
 
+    void on_actionStock_Reminder_triggered();
+
+    void on_actionMenu_review_2_triggered();
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     QTimer fTimer;
     Command fCommand;
     QTcpSocket fSocket;
@@ -147,8 +149,8 @@ private:
     void enableMainMenu(bool value);
     void disableMainMenu();
     void buildMenuOfRole();
-    void buildMenu(QToolButton *btn, const QList<QAction *> &l);
-    QMap<QAction *, int> fCustomReports;
+    void buildMenu(QToolButton *btn, const QList<QAction*>& l);
+    QMap<QAction*, int> fCustomReports;
     void dish(int t);
 };
 

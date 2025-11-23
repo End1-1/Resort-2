@@ -24,8 +24,10 @@ SOURCES += main.cpp\
     ../Filter/fcoupondocuments.cpp \
     ../Filter/fcouponsservice.cpp \
     ../Filter/fearningswash.cpp \
+    ../Filter/fmenureview.cpp \
     ../Filter/freportfromstoredproc.cpp \
     ../Filter/fsalarybyemployes.cpp \
+    ../Filter/fstockreminder.cpp \
     ../Filter/goodsmovement.cpp \
     ../Filter/wsalary.cpp \
     ../RowEditor/dlgcouponservicedocument.cpp \
@@ -177,7 +179,6 @@ SOURCES += main.cpp\
     ../Cache/cacheinvoiceitemgroup.cpp \
     ../Selector/dwselectorinvoiceitemgroup.cpp \
     ../Controls/edateedit.cpp \
-    ../Filter/fcashreportsummary.cpp \
     ../Filter/fcashreport.cpp \
     dlguserrights.cpp \
     ../Selector/dwselectorvaucher.cpp \
@@ -215,7 +216,6 @@ SOURCES += main.cpp\
     dlgperemovereason.cpp \
     dlgdishhistory.cpp \
     dlgremotinvoices.cpp \
-    fonlinerest.cpp \
     dlghelp.cpp \
     ../Widgets/storedoc.cpp \
     ../RowEditor/restorepartner.cpp \
@@ -253,7 +253,6 @@ SOURCES += main.cpp\
     ../Selector/dwselectorcashdesk.cpp \
     ../Widgets/wcashentry.cpp \
     ../Cache/cachecashdoc.cpp \
-    ../Filter/fcash.cpp \
     ../RowEditor/recashdesk.cpp \
     ../Filter/fstoreentry.cpp \
     ../Widgets/wstoreentry.cpp \
@@ -300,8 +299,10 @@ HEADERS  += mainwindow.h \
     ../Filter/fcoupondocuments.h \
     ../Filter/fcouponsservice.h \
     ../Filter/fearningswash.h \
+    ../Filter/fmenureview.h \
     ../Filter/freportfromstoredproc.h \
     ../Filter/fsalarybyemployes.h \
+    ../Filter/fstockreminder.h \
     ../Filter/goodsmovement.h \
     ../Filter/wsalary.h \
     ../RowEditor/dlgcouponservicedocument.h \
@@ -457,7 +458,6 @@ HEADERS  += mainwindow.h \
     ../Cache/cacheinvoiceitemgroup.h \
     ../Selector/dwselectorinvoiceitemgroup.h \
     ../Controls/edateedit.h \
-    ../Filter/fcashreportsummary.h \
     ../Filter/fcashreport.h \
     dlguserrights.h \
     ../Selector/dwselectorvaucher.h \
@@ -495,7 +495,6 @@ HEADERS  += mainwindow.h \
     dlgperemovereason.h \
     dlgdishhistory.h \
     dlgremotinvoices.h \
-    fonlinerest.h \
     dlghelp.h \
     ../Widgets/storedoc.h \
     ../RowEditor/restorepartner.h \
@@ -534,7 +533,6 @@ HEADERS  += mainwindow.h \
     ../Selector/dwselectorcashdesk.h \
     ../Widgets/wcashentry.h \
     ../Cache/cachecashdoc.h \
-    ../Filter/fcash.h \
     ../RowEditor/recashdesk.h \
     ../Filter/fstoreentry.h \
     ../Widgets/wstoreentry.h \
@@ -578,8 +576,10 @@ FORMS    += mainwindow.ui \
     ../Filter/fcoupondocuments.ui \
     ../Filter/fcouponsservice.ui \
     ../Filter/fearningswash.ui \
+    ../Filter/fmenureview.ui \
     ../Filter/freportfromstoredproc.ui \
     ../Filter/fsalarybyemployes.ui \
+    ../Filter/fstockreminder.ui \
     ../Filter/goodsmovement.ui \
     ../Filter/wsalary.ui \
     ../RowEditor/dlgcouponservicedocument.ui \
@@ -629,7 +629,6 @@ FORMS    += mainwindow.ui \
     ../RowEditor/rerestdishcomplex.ui \
     dlgtracking.ui \
     ../Filter/frestauranttotal.ui \
-    ../Filter/fcashreportsummary.ui \
     ../Filter/fcashreport.ui \
     dlguserrights.ui \
     dlgpretax.ui \
@@ -649,7 +648,6 @@ FORMS    += mainwindow.ui \
     dlgperemovereason.ui \
     dlgdishhistory.ui \
     dlgremotinvoices.ui \
-    fonlinerest.ui \
     dlghelp.ui \
     ../Widgets/storedoc.ui \
     ../RowEditor/restorepartner.ui \
@@ -670,7 +668,6 @@ FORMS    += mainwindow.ui \
     fcouponsales.ui \
     ../RowEditor/recouponseria.ui \
     ../Widgets/wcashentry.ui \
-    ../Filter/fcash.ui \
     ../RowEditor/recashdesk.ui \
     ../Filter/fstoreentry.ui \
     ../Widgets/wstoreentry.ui \

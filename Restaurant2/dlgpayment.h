@@ -38,6 +38,8 @@ private slots:
     void on_leGiftCardCode_returnPressed();
     void on_btnCard_2_clicked();
 
+    void on_btnCouponService_clicked();
+
 private:
     Ui::DlgPayment* ui;
     bool fCannotContinue;
