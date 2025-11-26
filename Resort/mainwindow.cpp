@@ -408,6 +408,10 @@ void MainWindow::buildMenuOfRole()
         a5.append(ui->actionGlobal_config);
     }
 
+    if(check_permission(pr_partners)) {
+        a5.append(ui->actionPartners_2);
+    }
+
     fMenu.insert(4, a5);
     QList<QAction*> a6;
 

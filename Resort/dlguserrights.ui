@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>970</width>
-    <height>663</height>
+    <width>1000</width>
+    <height>741</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,9 +35,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>933</width>
-        <height>655</height>
+        <y>-74</y>
+        <width>966</width>
+        <height>765</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -301,6 +301,9 @@
         <widget class="QCheckBox" name="checkBox_35">
          <property name="text">
           <string>Խմբագրել գործընկերների ցանկը</string>
+         </property>
+         <property name="tag" stdset="0">
+          <number>17</number>
          </property>
         </widget>
        </item>

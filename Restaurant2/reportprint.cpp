@@ -505,7 +505,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     QMatrix m;
 #ifdef QT_DEBUG
     //m.scale(1, 1); //<-- one note printer
-    m.scale(3, 3); // <--- real printer
+    // m.scale(3, 3); // <--- real printer
 #else
     m.scale(3, 3);
 #endif

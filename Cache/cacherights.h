@@ -21,8 +21,10 @@
 #define pr_global_config 14
 #define pr_edit_cash_doc 15
 #define pr_hall_manager 16
+#define pr_partners 17
 
-class UserPermssions: public QObject {
+class UserPermssions: public QObject
+{
     Q_OBJECT
 public:
     UserPermssions(int group);
@@ -36,7 +38,7 @@ private:
 
     QList<int> fPermissions;
 
-    static UserPermssions *fInstance;
+    static UserPermssions* fInstance;
 };
 
 #endif // CACHERIGHTS_H
