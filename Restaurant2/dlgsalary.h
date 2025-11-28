@@ -3,7 +3,8 @@
 
 #include "baseextendeddialog.h"
 
-namespace Ui {
+namespace Ui
+{
 class DlgSalary;
 }
 
@@ -33,7 +34,7 @@ private slots:
     void on_btnTotal_clicked();
 
 private:
-    Ui::DlgSalary *ui;
+    Ui::DlgSalary* ui;
     bool fDay;
     void countSalary();
 };

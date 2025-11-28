@@ -3,11 +3,11 @@
 #include "defstore.h"
 #include "rerestdish.h"
 #include "cachecashdoc.h"
-#include "excel.h"
 #include "storeoutput.h"
 #include "pprintstoredoc.h"
 #include "database2.h"
 #include "dlggetidname.h"
+#include "xlsxall.h"
 #include <QInputDialog>
 #include <QFileDialog>
 #include <qxml.h>
@@ -834,32 +834,63 @@ void StoreDoc::on_btnExcel_clicked()
     cols << 100 << 300 << 100 << 100 << 100 << 100;
     QStringList colName;
     colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Price") <<  tr("Amount");
-    Excel e;
+    int fXlsxFitToPage = 0;
+    QString fXlsxPageOrientation = xls_page_orientation_portrait;
+    int fXlsxPageSize = xls_page_size_a4;
+    XlsxDocument d;
+    XlsxSheet *s = d.workbook()->addSheet("Sheet1");
+    s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
+    QColor color = QColor::fromRgb(200, 200, 250);
+    QFont headerFont(qApp->font());
+    headerFont.setBold(true);
+    d.style()->addFont("header", headerFont);
+    d.style()->addBackgrounFill("header", color);
+    d.style()->addHAlignment("header", xls_alignment_center);
+    d.style()->addBorder("header", XlsxBorder());
 
     for(int i = 0; i < colCount; i++) {
-        e.setValue(colName[i], 2, i + 1);
-        e.setColumnWidth(i + 1, cols[i] / 7);
+        s->addCell(1, i + 1, colName[i], d.style()->styleNum("header"));
+        s->setColumnWidth(i + 1, cols[i] / 7);
     }
 
-    QColor color = QColor::fromRgb(200, 200, 250);
-    e.setBackground(e.address(1, 0), e.address(1, colCount - 1),
-                    color.red(), color.green(), color.blue());
-    e.setFontBold(e.address(0, 0), e.address(0, colCount - 1));
-    e.setHorizontalAlignment(e.address(0, 0), e.address(0, colCount - 1), Excel::hCenter);
-    e.setValue(ui->leDocNumber->text(), 1, 1);
-    e.setValue(ui->deDate->text(), 1, 2);
+    /* BODY */
+    QMap<int, QString> bgFill;
+    QMap<int, QString> bgFillb;
+    QFont bodyFont(qApp->font());
+    d.style()->addFont("body", bodyFont);
+    d.style()->addBackgrounFill("body", QColor(Qt::white));
+    d.style()->addVAlignment("body", xls_alignment_center);
+    d.style()->addBorder("body", XlsxBorder());
+    bgFill[QColor(Qt::white).rgb()] = "body";
+    s->addCell(1,  1, ui->leDocNumber->text(), d.style()->styleNum("header"));
+    s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
 
     for(int j = 0; j < rowCount; j++) {
-        e.setValue(ui->tblGoods->item(j, 0)->text(), j + 3, 1);
-        e.setValue(ui->tblGoods->item(j, 2)->text(), j + 3, 2);
-        e.setValue(ui->tblGoods->lineEdit(j, 3)->text(), j + 3, 3);
-        e.setValue(ui->tblGoods->item(j, 4)->text(), j + 3, 4);
-        e.setValue(ui->tblGoods->lineEdit(j, 5)->text(), j + 3, 5);
-        e.setValue(ui->tblGoods->lineEdit(j, 6)->text(), j + 3, 6);
+        for(int j = 0; j < rowCount; j++) {
+            // Дата (фиксировано)
+            s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
+            // Колонка 1
+            s->addCell(j + 3, 1,  ui->tblGoods->item(j, 0)->text());
+            // Колонка 2
+            s->addCell(j + 3, 2,  ui->tblGoods->item(j, 2)->text());
+            // Колонка 3
+            s->addCell(j + 3, 3,  ui->tblGoods->lineEdit(j, 3)->text());
+            // Колонка 4
+            s->addCell(j + 3, 4,  ui->tblGoods->item(j, 4)->text());
+            // Колонка 5
+            s->addCell(j + 3, 5,  ui->tblGoods->lineEdit(j, 5)->text());
+            // Колонка 6
+            s->addCell(j + 3, 6,  ui->tblGoods->lineEdit(j, 6)->text());
+        }
     }
 
-    e.setFontSize(e.address(0, 0), e.address(rowCount + 2, colCount), 10);
-    e.show();
+    QString err;
+
+    if(!d.save(err, true)) {
+        if(!err.isEmpty()) {
+            message_error(err);
+        }
+    }
 }
 
 void StoreDoc::on_btnImportXML_clicked()

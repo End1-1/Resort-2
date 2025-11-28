@@ -38,7 +38,7 @@ private slots:
     void on_leGiftCardCode_returnPressed();
     void on_btnCard_2_clicked();
 
-    void on_btnCouponService_clicked();
+    void on_btnOldTalon_clicked(bool checked);
 
 private:
     Ui::DlgPayment* ui;

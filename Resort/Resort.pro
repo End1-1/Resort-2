@@ -75,7 +75,6 @@ SOURCES += main.cpp\
     wreportgrid.cpp \
     wcontacts.cpp \
     tablemodel.cpp \
-    excel.cpp \
     dlgcontact.cpp \
     roweditordialog.cpp \
     about.cpp \
@@ -352,7 +351,6 @@ HEADERS  += mainwindow.h \
     wreportgrid.h \
     wcontacts.h \
     tablemodel.h \
-    excel.h \
     dlgcontact.h \
     roweditordialog.h \
     about.h \

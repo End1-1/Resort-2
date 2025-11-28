@@ -331,10 +331,10 @@ void DlgPayment::on_btnOk_clicked()
         }
     }
 
-    fDbBind[":f_cash"] = ui->btnCouponService->isChecked() ? 0 : ui->leCash->asDouble();
+    fDbBind[":f_cash"] = (ui->btnCouponService->isChecked() || ui->btnOldTalon->isChecked()) ? 0 : ui->leCash->asDouble();
     fDbBind[":f_idram"] = ui->leIdram->asDouble();
     fDbBind[":f_card"] = ui->leCard->asDouble();
-    fDbBind[":f_couponservice"] = ui->btnCouponService->isChecked() ? ui->leCash->asDouble() : 0;
+    fDbBind[":f_couponservice"] = (ui->btnCouponService->isChecked() || ui->btnOldTalon->isChecked()) ? ui->leCash->asDouble() : 0;
     fDbBind[":f_coupon"] = ui->leCouponAmount->asDouble();
     fDbBind[":f_discount"] = ui->leDiscountAmount->asDouble();
     fDbBind[":f_couponSeria"] = ui->leCouponSerial->text();
@@ -959,6 +959,38 @@ void DlgPayment::on_btnTaxPayerId_clicked()
     }
 }
 
+void DlgPayment::on_btnOldTalon_clicked(bool checked)
+{
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":f_order"] = fOrder;
+
+    if(checked) {
+        int debtId;
+        QString debtName;
+
+        if(!DlgDeptHolder::getHolder(debtId, debtName)) {
+            return;
+        }
+
+        db2[":f_costumer"] = debtId;
+        ui->leDeptHolder->fHiddenText = QString::number(debtId);
+        ui->leDeptHolder->setText(debtName);
+        ui->btnPrintTax->setChecked(false);
+        ui->btnCash->click();
+    } else {
+        db2[":f_costumer"] = 0;
+        ui->leDeptHolder->fHiddenText.clear();
+        ui->leDeptHolder->clear();
+    }
+
+    db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
+    db2[":f_couponservice"] = checked ? 1 : 0;
+    db2.update("o_header", "f_id", fOrder);
+    ui->btnPrintTax->setChecked(!checked);
+}
+
 void DlgPayment::on_btnCouponService_clicked(bool checked)
 {
     Db b = Preferences().getDatabase(Base::fDbName);
@@ -971,6 +1003,7 @@ void DlgPayment::on_btnCouponService_clicked(bool checked)
     if (checked) {
         bool ok = false;
         QString code = QInputDialog::getText(this, tr("Code"), tr("Code"), QLineEdit::Password, "", &ok);
+        code = code.replace("tel:", "", Qt::CaseInsensitive);
         if (!ok) {
             ui->btnCouponService->setChecked(false);
             return;
@@ -1209,10 +1242,3 @@ void DlgPayment::on_btnCard_2_clicked()
     db2.exec("delete from d_gift_cart_use where f_order=:f_order");
     calcIdram();
 }
-
-void DlgPayment::on_btnCouponService_clicked()
-{
-
-
-}
-
