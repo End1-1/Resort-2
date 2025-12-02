@@ -979,7 +979,7 @@ void FRestaurantTotal::removeOrder()
     fDbBind[":f_header"] = val.at(0);
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
     fDbBind[":f_emark"] = QVariant();
-    fDb.select("update o_dish set f_state=:f_state, f_comment=:f_comment "
+    fDb.select("update o_dish set f_state=:f_state, f_comment=:f_comment, f_emarks=null "
                "where f_header=:f_header and f_state=:f_state_cond", fDbBind, fDbRows);
     fDbBind[":f_id"] = val.at(0);
     fDbBind[":f_cancelReason"] = "Canceled by " + WORKING_USERNAME;
