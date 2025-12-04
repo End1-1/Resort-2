@@ -71,7 +71,12 @@ void DlgCouponServiceBack::on_leCode_returnPressed()
     }
 
     db[":f_code"] = code;
-    db.exec("select t.*, g.f_name as groupname from talon_service t, talon_service_items_group g where g.f_id=t.f_group and f_code=:f_code");
+    db.exec("select t.*, g.f_name as groupname, b.f_name "
+            "from talon_service t "
+            "left join talon_service_items_group g on g.f_id=t.f_group "
+            "left join o_header h on h.f_id=t.f_order "
+            "left join r_branch b on b.f_id=h.f_branch "
+            "where g.f_id=t.f_group and f_code=:f_code ");
 
     if(db.next() == false) {
         message_error(tr("Invalid code"));
@@ -93,6 +98,7 @@ void DlgCouponServiceBack::on_leCode_returnPressed()
     ui->tbl->setItem(r, 0, new QTableWidgetItem(db.string("f_code")));
     ui->tbl->setItem(r, 2, new QTableWidgetItem(db.string("groupname")));
     ui->tbl->setItem(r, 3, new QTableWidgetItem(QString::number(db.doubleValue("f_price") - db.doubleValue("f_discount"))));
+    ui->tbl->setItem(r, 4, new QTableWidgetItem(db.string("f_name")));
     db[":f_id"] = db.integer("f_id");
     db.exec("select p.f_name from talon_service t "
             "left join talon_documents_header d on t.f_trsale=d.f_id "

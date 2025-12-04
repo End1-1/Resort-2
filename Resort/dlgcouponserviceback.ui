@@ -77,6 +77,11 @@
        <string>Price</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Branch</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item row="1" column="0" colspan="6">
@@ -194,17 +199,17 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>EQLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">eqlineedit.h</header>
    <slots>
     <signal>customButtonClicked(bool)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>EDateEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">edateedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
