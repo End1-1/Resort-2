@@ -1080,12 +1080,16 @@ void RDesk::fiscalCancel()
                  sf.value("opcode").toString(), sf.value("oppin").toString());
     QString in, out, err;
 
-    if(jin["fEmarks"].toArray().isEmpty() == false) {
-        QJsonArray emarks = jin["fEmarks"].toArray();
+    if(jin["eMarks"].toArray().isEmpty() == false) {
+        QJsonArray emarks = jin["eMarks"].toArray();
+        // message_info(tr("eMarks exists"));
 
-        for(int i = 0; i < 0; i++) {
+        for(int i = 0; i < emarks.count(); i++) {
+            //  message_info(emarks.at(i).toString());
             pn.fEmarks.append(emarks.at(i).toString());
         }
+    } else {
+        //  message_info(tr("No eMarks"));
     }
     int result = pn.printTaxback(jtax["rseq"].toInt(), jtax["crn"].toString(), in, out,
                                  err);
@@ -1101,6 +1105,14 @@ void RDesk::fiscalCancel()
     db2[":f_out"] = out;
     db2[":f_err"] = err;
     db2.insert("o_tax_log");
+
+    if(result == 0) {
+        db2[":f_id"] = orderId;
+        db2.exec("update o_dish set f_emarks=null where f_header=:f_id");
+        message_info(tr("Done"));
+    } else {
+        message_error(QJsonDocument(jin).toJson() + out);
+    }
 }
 
 void RDesk::closeEvent(QCloseEvent *e)
