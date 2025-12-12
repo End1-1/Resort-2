@@ -23,14 +23,11 @@ private slots:
     void on_btnExit_clicked();
     void on_btnShowHideRemovedItems_clicked();
     void on_btnOrderComment_clicked();
-    void on_btnRemoveOrder_clicked();
-    void on_btnShowTableOrders_clicked();
     void on_btnShowNyTotal_clicked();
     void on_btnInitCash_clicked();
     void on_btnComplex_clicked();
     void on_btnTotalReport_clicked();
     void on_btnTotalYesterday_clicked();
-    void on_btnCompimentary_clicked();
     void on_btnTotalReportAnyDay_clicked();
     void on_btnPrintAnyReport_clicked();
     void on_btnPrintVoid_clicked();
@@ -42,7 +39,8 @@ private slots:
     void on_btnCheckCard_clicked();
     void on_btnPrintDailySales_clicked();
     void on_btnSalary_2_clicked();
-    void on_btnRemoveOrder_2_clicked();
+
+    void on_btnFiscalCancel_clicked();
 
 private:
     Ui::RTools* ui;

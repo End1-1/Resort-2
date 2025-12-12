@@ -32,10 +32,25 @@
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="2" column="1">
-         <widget class="QToolButton" name="btnCloseDay">
+        <item row="4" column="1">
+         <widget class="QToolButton" name="btnPrintDailySales">
           <property name="text">
-           <string>End of day</string>
+           <string>Saled item</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/list.png</normaloff>:/images/list.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QToolButton" name="btnCheckCard">
+          <property name="text">
+           <string>Card
+amount</string>
           </property>
           <property name="icon">
            <iconset resource="res.qrc">
@@ -47,6 +62,36 @@
          </widget>
         </item>
         <item row="3" column="1">
+         <widget class="QToolButton" name="btnFiscalCancel">
+          <property name="text">
+           <string>ՀԴՄ հետ
+վերադարձ</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QToolButton" name="btnOrderComment">
+          <property name="text">
+           <string>Order
+comment</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/mark.png</normaloff>:/images/mark.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
          <widget class="QToolButton" name="btnCardStat">
           <property name="text">
            <string>Cards
@@ -55,6 +100,79 @@ statistics</string>
           <property name="icon">
            <iconset resource="res.qrc">
             <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QToolButton" name="btnPrintVoid">
+          <property name="text">
+           <string>Print void
+report</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/recycle.png</normaloff>:/images/recycle.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QToolButton" name="btnVisitStat">
+          <property name="text">
+           <string>Visits
+statistics</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QToolButton" name="btnSalary_2">
+          <property name="text">
+           <string>Employes of day</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QToolButton" name="btnPrintAnyReport">
+          <property name="text">
+           <string>Print receipt
+by number</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QToolButton" name="btnCloseDay">
+          <property name="text">
+           <string>End of day</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
            <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -75,26 +193,10 @@ statistics</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QToolButton" name="btnCheckCardReg">
-          <property name="text">
-           <string>Check cards
-registration</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0">
-         <widget class="QToolButton" name="btnPrintAnyReport">
+         <widget class="QToolButton" name="btnSalary">
           <property name="text">
-           <string>Print receipt
-by number</string>
+           <string>Salary</string>
           </property>
           <property name="icon">
            <iconset resource="res.qrc">
@@ -105,30 +207,15 @@ by number</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QToolButton" name="btnPrintVoid">
+        <item row="4" column="0">
+         <widget class="QToolButton" name="btnCheckCardReg">
           <property name="text">
-           <string>Print void
-report</string>
+           <string>Check cards
+registration</string>
           </property>
           <property name="icon">
            <iconset resource="res.qrc">
-            <normaloff>:/images/recycle.png</normaloff>:/images/recycle.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QToolButton" name="btnRemoveOrder_2">
-          <property name="text">
-           <string>Հեռացնել պատվերը
-ըստ համարի</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
+            <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
            <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -144,122 +231,6 @@ removed items</string>
           <property name="icon">
            <iconset resource="res.qrc">
             <normaloff>:/images/basket.png</normaloff>:/images/basket.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QToolButton" name="btnPrintDailySales">
-          <property name="text">
-           <string>Saled item</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/list.png</normaloff>:/images/list.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QToolButton" name="btnRemoveOrder">
-          <property name="text">
-           <string>Remove
-order</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QToolButton" name="btnCompimentary">
-          <property name="text">
-           <string>Complimentary</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/gift.png</normaloff>:/images/gift.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QToolButton" name="btnVisitStat">
-          <property name="text">
-           <string>Visits
-statistics</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="QToolButton" name="btnCheckCard">
-          <property name="text">
-           <string>Card
-amount</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QToolButton" name="btnSalary_2">
-          <property name="text">
-           <string>Employes of day</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QToolButton" name="btnSalary">
-          <property name="text">
-           <string>Salary</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QToolButton" name="btnOrderComment">
-          <property name="text">
-           <string>Order
-comment</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/mark.png</normaloff>:/images/mark.png</iconset>
           </property>
           <property name="toolButtonStyle">
            <enum>Qt::ToolButtonTextUnderIcon</enum>

@@ -640,6 +640,10 @@
              </widget>
             </item>
            </layout>
+           <zorder>btnTools</zorder>
+           <zorder>btnTypeUp</zorder>
+           <zorder>btnTypeDown</zorder>
+           <zorder>btnSetCar</zorder>
           </widget>
          </item>
         </layout>

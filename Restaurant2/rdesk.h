@@ -31,9 +31,6 @@ public:
     TableStruct* loadHall(int hall);
     void showHideRemovedItems();
     void setOrderComment();
-    void removeOrder();
-    void removeOrderByNumber();
-    void showTableOrders();
     void showMyTotal();
     void initialCash();
     void setComplexMode();
@@ -44,7 +41,6 @@ public:
     void printTotalAnyDay();
     void printReceiptByNumber();
     void printVoidReport();
-    void complimentary();
     void openTools();
     void closeDay();
     void salary();
@@ -53,6 +49,10 @@ public:
     void cardStat();
     void saledItem();
     void employesOfDay();
+    void extracted(QSettings &s,
+                   QMap<QString, QMap<QString, QVariant>> &fFiscalMachines,
+                   const QString &g, QStringList &keys);
+    void fiscalCancel();
 
 protected:
     virtual void closeEvent(QCloseEvent *e);

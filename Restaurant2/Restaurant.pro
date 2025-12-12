@@ -106,7 +106,6 @@ SOURCES += main.cpp\
     reportprint.cpp \
     ../Controls/eqcombobox.cpp \
     ../Cache/cachsex.cpp \
-    dlgselecttaxcashmode.cpp \
     ../Base/command.cpp \
     dlgbanketitems.cpp \
     dlglist.cpp \
@@ -115,7 +114,6 @@ SOURCES += main.cpp\
     ../Base/databaseresult.cpp \
     dlgvoidback.cpp \
     ../Print/pprintreceipt.cpp \
-    dlgorders.cpp \
     ../Base/baseuid.cpp \
     dlggettext.cpp \
     dlgconnecttoserver.cpp \
@@ -211,7 +209,6 @@ HEADERS  += rface.h \
     reportprint.h \
     ../Controls/eqcombobox.h \
     ../Cache/cachsex.h \
-    dlgselecttaxcashmode.h \
     ../Base/command.h \
     dlgbanketitems.h \
     ../Base/vauchers.h \
@@ -221,7 +218,6 @@ HEADERS  += rface.h \
     ../Base/databaseresult.h \
     dlgvoidback.h \
     ../Print/pprintreceipt.h \
-    dlgorders.h \
     ../Base/baseuid.h \
     dlggettext.h \
     dlgconnecttoserver.h \
@@ -262,12 +258,10 @@ FORMS    += rface.ui \
     dlgreservation.ui \
     dlgcomplexdish.ui \
     ../Print/pprintpreview.ui \
-    dlgselecttaxcashmode.ui \
     dlgbanketitems.ui \
     dlglist.ui \
     dlgdate.ui \
     dlgvoidback.ui \
-    dlgorders.ui \
     dlggettext.ui \
     dlgconnecttoserver.ui \
     dlgcarselection.ui \

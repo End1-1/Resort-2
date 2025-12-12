@@ -1,7 +1,6 @@
 #include "rtools.h"
 #include "ui_rtools.h"
 #include "rdesk.h"
-#include "dlgselecttaxcashmode.h"
 
 RTools::RTools(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -14,8 +13,6 @@ RTools::RTools(QWidget *parent) :
 
 void RTools::setNoTable()
 {
-    ui->btnCompimentary->setEnabled(false);
-    ui->btnRemoveOrder->setEnabled(false);
     ui->btnOrderComment->setEnabled(false);
     ui->btnShowHideRemovedItems->setEnabled(false);
     ui->btnComplex->setEnabled(false);
@@ -41,18 +38,6 @@ void RTools::on_btnOrderComment_clicked()
 {
     accept();
     fDesk->setOrderComment();
-}
-
-void RTools::on_btnRemoveOrder_clicked()
-{
-    accept();
-    fDesk->removeOrder();
-}
-
-void RTools::on_btnShowTableOrders_clicked()
-{
-    accept();
-    fDesk->showTableOrders();
 }
 
 void RTools::on_btnShowNyTotal_clicked()
@@ -83,12 +68,6 @@ void RTools::on_btnTotalYesterday_clicked()
 {
     accept();
     fDesk->printTotalYesterday();
-}
-
-void RTools::on_btnCompimentary_clicked()
-{
-    accept();
-    fDesk->complimentary();
 }
 
 void RTools::on_btnTotalReportAnyDay_clicked()
@@ -157,8 +136,8 @@ void RTools::on_btnSalary_2_clicked()
     fDesk->employesOfDay();
 }
 
-void RTools::on_btnRemoveOrder_2_clicked()
+void RTools::on_btnFiscalCancel_clicked()
 {
     accept();
-    fDesk->removeOrderByNumber();
+    fDesk->fiscalCancel();
 }

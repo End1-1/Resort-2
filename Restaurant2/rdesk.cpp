@@ -15,6 +15,7 @@
 #include "dlgprintmultiplefiscal.h"
 #include "cacherights.h"
 #include "database2.h"
+#include "printtaxn.h"
 #include "logwriter.h"
 #include "rmodifiers.h"
 #include "pprintreceipt.h"
@@ -458,155 +459,6 @@ void RDesk::setOrderComment()
     }
 }
 
-void RDesk::removeOrder()
-{
-    if(!fTable) {
-        return;
-    }
-
-    if(fTable->fOrder == 0) {
-        return;
-    }
-
-    QString pwd;
-
-    if(RNumbers::getPassword(pwd, "ՄԵՆԵՋԵՐԻ ԳԱԽՏՆԱԲԱՌ", this) == false) {
-        return;
-    }
-
-    Db b = Preferences().getDatabase(Base::fDbName);
-    Database2 db2;
-    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    db2[":f_altpassword"] = pwd;
-    db2.exec("select f_id, f_group from users where f_altpassword=md5(:f_altpassword)");
-
-    if(db2.next() == false) {
-        message_error("Սխալ մենեջերի կոդ");
-        return;
-    }
-
-    int trackUser = db2.integer("f_id");
-
-    if(db2.integer("f_group") != 1) {
-        db2[":f_group"] = db2.integer("f_group");
-        db2[":f_right"] = pr_hall_manager;
-        db2.exec("select f_id from users_right where f_group=:f_group and f_right=:f_right and f_flag=1");
-
-        if(db2.next() == false) {
-            message_error("Արգելված է");
-            return;
-        }
-    }
-
-    if(message_question(tr("Confirm remove whole order")) != QDialog::Accepted) {
-        return;
-    }
-
-    QString name, sql = "select f_id, f_en from o_dish_state where f_id in (2, 3)";
-    QVariant result;
-
-    if(!DlgList::getValue(tr("STORE OPTION"), name, result, sql)) {
-        return;
-    }
-
-    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-
-        if(od->fState == DISH_STATE_READY && od->fQtyPrint > 0.1) {
-            fDbBind[":f_state"] = DISH_STATE_REMOVED_NOSTORE;
-            fDbBind[":f_cancelUser"] = trackUser;
-            fDbBind[":f_cancelDate"] = QDateTime::currentDateTime();
-            fDb.update("o_dish", fDbBind, where_id(ap(od->fRecId)));
-            printRemovedDish(od, od->fQty - od->fQtyPrint, trackUser);
-        } else if(od->fState == DISH_STATE_READY) {
-            fDbBind[":f_state"] = DISH_STATE_EMPTY;
-            fDbBind[":f_cancelUser"] = trackUser;
-            fDbBind[":f_cancelDate"] = QDateTime::currentDateTime();
-            fDb.update("o_dish", fDbBind, where_id(ap(od->fRecId)));
-        }
-
-        if(od->fState == DISH_STATE_READY) {
-            QString dish = QString("%1, %2/%3")
-                           .arg(od->fName)
-                           .arg(od->fQty)
-                           .arg(od->fQtyPrint);
-            fTrackControl->insert("Dish removed with order", dish, "");
-        }
-    }
-
-    fTrackControl->insert("Order canceled", "", "");
-    closeOrder(ORDER_STATE_REMOVED);
-}
-
-void RDesk::removeOrderByNumber()
-{
-    QString pwd;
-
-    if(RNumbers::getPassword(pwd, "ՄԵՆԵՋԵՐԻ ԳԱԽՏՆԱԲԱՌ", this) == false) {
-        return;
-    }
-
-    Db b = Preferences().getDatabase(Base::fDbName);
-    Database2 db2;
-    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    db2[":f_altpassword"] = pwd;
-    db2.exec("select f_id, f_group from users where f_altpassword=md5(:f_altpassword)");
-
-    if(db2.next() == false) {
-        message_error("Սխալ մենեջերի կոդ");
-        return;
-    }
-
-    int trackUser = db2.integer("f_id");
-
-    if(db2.integer("f_group") != 1) {
-        db2[":f_group"] = db2.integer("f_group");
-        db2[":f_right"] = pr_hall_manager;
-        db2.exec("select f_id from users_right where f_group=:f_group and f_right=:f_right and f_flag=1");
-
-        if(db2.next() == false) {
-            message_error("Արգելված է");
-            return;
-        }
-    }
-
-    int num = 0;
-
-    if(RNumbers::getInt(num, "ՊԱՏՎԵՐԻ ՀԱՄԱՐԸ", this) == false) {
-        return;
-    }
-
-    db2[":f_id"] = num;
-    db2.exec("select * from o_header where f_id=:f_id");
-
-    if(db2.next() == false) {
-        message_error("Նշված պատվերի համարը առկա չէ");
-        return;
-    }
-
-    if(db2.integer("f_state") != ORDER_STATE_CLOSED) {
-        message_error("Պատվերը հնարավոր չէ չեղարկել");
-        return;
-    }
-
-    if(message_question(tr("Confirm remove whole order")) != QDialog::Accepted) {
-        return;
-    }
-
-    db2[":f_id"] = num;
-    db2[":f_state"] = ORDER_STATE_REMOVED;
-    db2.exec("update o_header set f_state=:f_state where f_id=:f_id");
-    db2[":f_header"] = num;
-    db2[":f_oldstate"] = DISH_STATE_READY;
-    db2[":f_newstate"] = DISH_STATE_REMOVED_NOSTORE;
-    db2.exec("update o_dish set f_state=:f_newstate where f_state=:f_oldstate and f_header=:f_header");
-    PPrintReceipt::printOrder(fHall->fReceiptPrinter, num, trackUser);
-}
-
-void RDesk::showTableOrders()
-{
-}
-
 void RDesk::showMyTotal()
 {
     fDbBind[":f_dateCash"] = fPreferences.getLocalDate(def_working_day);
@@ -907,31 +759,6 @@ void RDesk::printVoidReport()
     qDeleteAll(lps);
 }
 
-void RDesk::complimentary()
-{
-    int trackUser = fStaff->fId;
-
-    if(!check_permission(pr_hall_manager)) {
-        message_error(tr("Access denied"));
-        return;
-    }
-
-    QString comment, sql = "select f_id, f_name from r_complimentary_comment";
-    QVariant result;
-
-    if(!DlgList::getValue(tr("Complimentary comment"), comment, result, sql)) {
-        return;
-    }
-
-    fDbBind[":f_paymentMode"] = PAYMENT_COMPLIMENTARY;
-    fDbBind[":f_paymentModeComment"] =  comment;
-    fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
-    fTable->fPaymentComment = comment;
-    fTable->fPaymentMode = PAYMENT_COMPLIMENTARY;
-    printReceipt(true);
-    closeOrder();
-}
-
 void RDesk::openTools()
 {
     RTools *t = new RTools(this);
@@ -1196,6 +1023,84 @@ void RDesk::saledItem()
 void RDesk::employesOfDay()
 {
     DlgSalary::salary2();
+}
+
+void RDesk::extracted(QSettings &s,
+                      QMap<QString, QMap<QString, QVariant>> &fFiscalMachines,
+                      const QString &g, QStringList &keys)
+{
+    for(const QString &k : keys) {
+        fFiscalMachines[g][k] = s.value(k);
+    }
+}
+void RDesk::fiscalCancel()
+{
+    int ordNum;
+    if(!RNumbers::getInt(ordNum, "ՊԱՏՎԵՐԻ ՀԱՄԱՐԸ", this)) {
+        return;
+    }
+    if(ordNum == 0) {
+        return;
+    }
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    db2[":rseq"] = ordNum;
+    db2.exec("select * from o_tax_log where f_time>DATE_SUB(NOW(), INTERVAL 7 "
+             "DAY) AND JSON_VALUE(f_out, '$.rseq')=:rseq");
+    if(db2.next() == false) {
+        message_error(tr("Fiscal not found"));
+        return;
+    }
+    QString fromBase64 = QByteArray::fromBase64(db2.string("f_in").toLatin1());
+    QJsonObject jin = QJsonDocument::fromJson(fromBase64.toUtf8()).object();
+    QJsonObject jtax =
+        QJsonDocument::fromJson(db2.string("f_out").toUtf8()).object();
+    int orderId = db2.integer("f_order");
+    QSettings s(QString("%1\\fiscal.ini").arg(qApp->applicationDirPath()),
+                QSettings::IniFormat);
+    QStringList groups = s.childGroups();
+    QString fDefaultFiscalMachine;
+    QMap<QString, QMap<QString, QVariant>> fFiscalMachines;
+
+    for(const QString &g : qAsConst(groups)) {
+        s.beginGroup(g);
+
+        if(s.value("default").toBool()) {
+            fDefaultFiscalMachine = g;
+        }
+
+        QStringList keys = s.childKeys();
+        extracted(s, fFiscalMachines, g, keys);
+        s.endGroup();
+    }
+    QMap<QString, QVariant> sf = fFiscalMachines[fDefaultFiscalMachine];
+    PrintTaxN pn(sf.value("ip").toString(), sf.value("port").toInt(),
+                 sf.value("password").toString(), sf.value("extpos").toString(),
+                 sf.value("opcode").toString(), sf.value("oppin").toString());
+    QString in, out, err;
+
+    if(jin["fEmarks"].toArray().isEmpty() == false) {
+        QJsonArray emarks = jin["fEmarks"].toArray();
+
+        for(int i = 0; i < 0; i++) {
+            pn.fEmarks.append(emarks.at(i).toString());
+        }
+    }
+    int result = pn.printTaxback(jtax["rseq"].toInt(), jtax["crn"].toString(), in, out,
+                                 err);
+#ifdef QT_DEBUG
+    out =
+        "{\"rseq\":77,\"crn\":\"63219817\",\"sn\":\"V98745506068\",\"tin\":\"01588771\",\"taxpayer\":\"«Ռոգա էնդ կոպիտա ՍՊԸ»\",\"address\":\"Արշակունյանց 34\",\"time\":1676794194840,\"fiscal\":\"98198105\",\"lottery\":\"00000000\",\"prize\":0,\"total\":1540.0,\"change\":0.0}";
+    out =
+        "{\"address\":\"ԿԵՆՏՐՈՆ ԹԱՂԱՄԱՍ Ամիրյան 4/3 \",\"change\":0.0,\"crn\":\"53235782\",\"fiscal\":\"54704153\",\"lottery\":\"\",\"prize\":0,\"rseq\":1327,\"sn\":\"00022154380\",\"taxpayer\":\"«ՊԼԱԶԱ ՍԻՍՏԵՄՍ»\",\"time\":1709630105632,\"tin\":\"02596277\",\"total\":93600.0}";
+    result = 0;
+#endif
+    db2[":f_order"] = orderId;
+    db2[":f_in"] = QByteArray(in.toUtf8()).toBase64();
+    db2[":f_out"] = out;
+    db2[":f_err"] = err;
+    db2.insert("o_tax_log");
 }
 
 void RDesk::closeEvent(QCloseEvent *e)
@@ -3290,7 +3195,7 @@ void RDesk::manualdisc(double val, int costumer)
     fTrackControl->insert(QString("Discount %1%").arg(val), "", "");
     changeBtnState();
 }
-TableStruct* RDesk::loadHall(int hall)
+TableStruct * RDesk::loadHall(int hall)
 {
     fCurrentHall = hall;
     ui->tblTables->setRowCount(3);
