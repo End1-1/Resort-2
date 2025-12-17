@@ -50,9 +50,6 @@ StoreDoc::StoreDoc(QWidget *parent) :
     fDockDish->setDialog(this, SEL_DISH);
     Utils::tableSetColumnWidths(ui->tblGoods, ui->tblGoods->columnCount(),
                                 0, 100, 300, 80, 80, 80);
-    ui->wAcc->docType(CASHDOC_STORE);
-    ui->wAcc->setSaveVisible(false);
-    ui->wAcc->cashOp(CASHOP_OUT);
     ui->btnSaveDoc->setEnabled(check_permission(pr_edit_store_doc));
     ui->btnRemoveDoc->setEnabled(check_permission(pr_edit_store_doc));
     ui->btnDraftDoc->setEnabled(check_permission(pr_edit_store_doc));
@@ -81,13 +78,6 @@ void StoreDoc::selector(int number, const QVariant &value)
     case SEL_PARTNER: {
         CI_StorePartners *c = value.value<CI_StorePartners*>();
         dockResponse<CI_StorePartners, CacheStorePartners>(ui->lePartnerCode, ui->lePartnerName, c);
-
-        if(c) {
-            ui->wAcc->partner(c->fCode.toInt());
-        } else {
-            ui->wAcc->partner(0);
-        }
-
         break;
     }
 
@@ -225,7 +215,6 @@ void StoreDoc::prepareDoc()
         ui->tabCommon->setVisible(false);
         ui->leStoreout->setVisible(true);
         ui->lbStoreout->setVisible(true);
-        ui->wAcc->disable();
         break;
 
     case STORE_DOC_OUT:
@@ -237,7 +226,6 @@ void StoreDoc::prepareDoc()
         ui->tabCommon->setVisible(false);
         ui->leStore->setVisible(false);
         ui->lbStorein->setVisible(false);
-        ui->wAcc->disable();
         break;
 
     default:
@@ -264,10 +252,6 @@ void StoreDoc::saveDoc(int docState)
 
     if(ui->leAction->fHiddenText.toInt() == 1) {
         QString err;
-
-        if(!ui->wAcc->isCorrent(err)) {
-            errors += err;
-        }
     }
 
     if(ui->leAction->fHiddenText.toInt() == 0) {
@@ -492,10 +476,6 @@ void StoreDoc::saveDoc(int docState)
 
     if(ui->leAction->fHiddenText.toInt() == 1) {
         if(docState == 1) {
-            ui->wAcc->docType(1);
-            ui->wAcc->partner(ui->lePartnerCode->asInt());
-            ui->wAcc->docNum(ui->leDocNumber->text());
-            ui->wAcc->save();
         } else {
             fDbBind[":f_docType"] = CASHDOC_STORE;
             fDbBind[":f_docNum"] = ui->leDocNumber->text();
@@ -802,17 +782,14 @@ void StoreDoc::on_btnRemoveMaterial_clicked()
 void StoreDoc::on_deDate_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
-    ui->wAcc->date(ui->deDate->date());
 }
 
 void StoreDoc::on_leTotal_textChanged(const QString &arg1)
 {
-    ui->wAcc->amount(QLocale().toDouble(arg1));
 }
 
 void StoreDoc::on_leComments_textChanged(const QString &arg1)
 {
-    ui->wAcc->comment(arg1);
 }
 
 void StoreDoc::on_btnPrintDoc_clicked()

@@ -3,8 +3,10 @@
 
 #include "basewidget.h"
 #include "database2.h"
+#include "eqtablewidget.h"
 
-namespace Ui {
+namespace Ui
+{
 class FReportFromStoredProc;
 }
 
@@ -16,10 +18,10 @@ public:
     explicit FReportFromStoredProc(QWidget *parent = nullptr);
     ~FReportFromStoredProc();
     QString fTitle;
-    EQTableWidget *tbl(Database2 &db2);
+    EQTableWidget* tbl(Database2 &db2);
 
 private:
-    Ui::FReportFromStoredProc *ui;
+    Ui::FReportFromStoredProc* ui;
     virtual void setupTab() override;
 };
 

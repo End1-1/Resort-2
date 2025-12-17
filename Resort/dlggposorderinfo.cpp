@@ -5,7 +5,6 @@
 #include "dlgdishhistory.h"
 #include "databaseresult.h"
 #include "cachepaymentmode.h"
-#include "cacheinvoiceitem.h"
 #include "paymentmode.h"
 #include "dlgtracking.h"
 #include "database2.h"
@@ -43,25 +42,31 @@ void DlgGPOSOrderInfo::setOrder(const QString &id)
                "where o.f_header=:f_header and o.f_state=:f_state",
                fDbBind, fDbRows);
     Utils::fillTableWithData(ui->tblData, fDbRows);
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
+
+    for(int i = 0; i < ui->tblData->rowCount(); i++) {
         ui->tblData->addButton(i, 7, SLOT(showDishHistory(int)), this, QIcon(":/images/update.png"));
     }
+
     fDbBind[":f_header"] = id;
     fDb.select("select oh.f_dateCash, u.f_username, oh.f_paymentMode, oh.f_paymentModeComment, oh.f_tax from o_header oh "
                "inner join users u on u.f_id=oh.f_staff "
                "where oh.f_id=:f_header", fDbBind, fDbRows);
-    if (fDbRows.count() == 0) {
+
+    if(fDbRows.count() == 0) {
         message_info_tr("No order for this voucher");
         return;
     }
+
     ui->deDate->setDate(fDbRows.at(0).at(0).toDate());
     ui->leStaff->setText(fDbRows.at(0).at(1).toString());
     ui->lePaymentComment->setText(fDbRows.at(0).at(3).toString());
     ui->leFiscal->setText(fDbRows.at(0).at(4).toString());
     CI_PaymentMode *pm = CachePaymentMode::instance()->get(fDbRows.at(0).at(2).toString());
-    if (pm) {
+
+    if(pm) {
         dockResponse<CI_PaymentMode, CachePaymentMode>(ui->lePayment, pm);
     }
+
     countTotal();
 }
 
@@ -70,7 +75,8 @@ void DlgGPOSOrderInfo::setVaucher(const QString &id)
     ui->leOrder->setText(id);
     fDbBind[":f_id"] = id;
     fDb.select("select f_id from m_register where f_id=:f_id", fDbBind, fDbRows);
-    if (fDbRows.count() > 0) {
+
+    if(fDbRows.count() > 0) {
         setOrder(fDbRows.at(0).at(0).toString());
     } else {
         setOrder(id);
@@ -92,13 +98,14 @@ void DlgGPOSOrderInfo::on_btnOk_clicked()
 
 void DlgGPOSOrderInfo::on_btnSave_clicked()
 {
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
+    for(int i = 0; i < ui->tblData->rowCount(); i++) {
         fDbBind[":f_qty"] = ui->tblData->item(i, 1)->data(Qt::EditRole).toDouble();
         fDbBind[":f_total"] = ui->tblData->item(i, 2)->data(Qt::EditRole).toDouble();
         fDb.update("o_dish", fDbBind, where_id(ap(ui->tblData->item(i, 3)->data(Qt::EditRole).toString())));
         fDbBind[":f_id"] = ui->tblData->item(i, 3)->data(Qt::EditRole).toString();
         fDb.select("update o_dish set f_price=:f_total/:f_qty where f_id=:f_id", fDbBind, fDbRows);
     }
+
     fDbBind[":f_dateCash"] = ui->deDate->date();
     fDbBind[":f_total"] = ui->leTotal->asDouble();
     fDb.update("o_header", fDbBind, where_id(ap(ui->leOrder->text())));
@@ -111,9 +118,11 @@ void DlgGPOSOrderInfo::on_btnSave_clicked()
 void DlgGPOSOrderInfo::countTotal()
 {
     double total = 0;
-    for (int i = 0; i < ui->tblData->rowCount(); i++) {
+
+    for(int i = 0; i < ui->tblData->rowCount(); i++) {
         total += ui->tblData->item(i, 2)->data(Qt::EditRole).toDouble();
     }
+
     ui->leTotal->setDouble(total);
 }
 
@@ -128,26 +137,12 @@ void DlgGPOSOrderInfo::on_btnPrint_clicked()
 {
     QPrinter p;
     QPrintDialog pd(&p, this);
-    if (pd.exec() != QDialog::Accepted) {
+
+    if(pd.exec() != QDialog::Accepted) {
         return;
     }
+
     PPrintReceipt::printOrder(p.printerName(), ui->leOrder->text().toInt(), WORKING_USERID);
-}
-
-void DlgGPOSOrderInfo::on_btnPrintTax_clicked()
-{
-    DatabaseResult dbh;
-    fDbBind[":f_id"] = ui->leOrder->text();
-    dbh.select(fDb, "select f_paymentMode from o_header where f_id=:f_id", fDbBind);
-    QString taxDept;
-    fDbBind[":f_id"] = ui->leOrder->text();
-    fDb.select("select f_itemCode from m_register where f_id=:f_id", fDbBind, fDbRows);
-    taxDept = CacheInvoiceItem::instance()->get(fDbRows.at(0).at(0).toString())->fVatDept;
-    if (fPreferences.getDb(def_tax_port).toInt() == 0) {
-        message_error(tr("Setup tax printer first"));
-        return;
-    }
-
 }
 
 void DlgGPOSOrderInfo::on_btnTracking_clicked()
@@ -159,14 +154,18 @@ void DlgGPOSOrderInfo::on_btnSetFiscalNumber_clicked()
 {
     bool ok;
     int num = QInputDialog::getInt(this, tr("Fiscal"), "", 0, 0, 2147483647, 1, &ok);
-    if (!ok) {
+
+    if(!ok) {
         return;
     }
+
     Database2 db;
-    if (!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
+
+    if(!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {
         message_error(db.lastDbError());
         return;
     }
+
     ui->leFiscal->setText(QString::number(num));
     db[":f_id"] = ui->leOrder->text().toInt();
     db[":f_tax"] = ui->leFiscal->text().toInt();

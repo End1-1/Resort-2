@@ -3,7 +3,8 @@
 
 #include "wfilterbase.h"
 
-namespace Ui {
+namespace Ui
+{
 class FPartnersDebt;
 }
 
@@ -15,12 +16,10 @@ public:
     explicit FPartnersDebt(QWidget *parent = 0);
     ~FPartnersDebt();
     virtual QString reportTitle();
-    virtual QWidget *firstElement();
+    virtual QWidget* firstElement();
     virtual void apply(WReportGrid *rg);
 private:
-    Ui::FPartnersDebt *ui;
-private slots:
-    void btnNew();
+    Ui::FPartnersDebt* ui;
 };
 
 #endif // FPARTNERSDEBT_H

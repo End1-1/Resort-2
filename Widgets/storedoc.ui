@@ -636,16 +636,6 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab">
-         <attribute name="title">
-          <string>Cashdesk</string>
-         </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="WCashEntry" name="wAcc" native="true"/>
-          </item>
-         </layout>
-        </widget>
        </widget>
       </item>
      </layout>
@@ -676,12 +666,6 @@
    <class>EQComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">eqcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WCashEntry</class>
-   <extends>QWidget</extends>
-   <header location="global">wcashentry.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

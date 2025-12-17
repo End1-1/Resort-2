@@ -3,18 +3,16 @@
 
 #include "base.h"
 #include "mainwindow.h"
-#include "message.h"
 #include "trackcontrol.h"
-#include "cacherights.h"
 #include "pprintscene.h"
-#include "dlgraiseuser.h"
 #include <QWidget>
 #include <QTabWidget>
 
-extern MainWindow *fMainWindow;
+extern MainWindow* fMainWindow;
 
 template<class T>
-T *addTab() {
+T* addTab()
+{
     T *t = new T();
     fMainWindow->addTabWidget(t);
     fMainWindow->expandTab();
@@ -33,14 +31,14 @@ public:
     virtual QString title();
     virtual bool canClose();
     virtual void closeEvent(QCloseEvent *event);
-    virtual void handleBroadcast(const QMap<QString, QVariant> &data);
+    virtual void handleBroadcast(const QMap<QString, QVariant>& data);
     virtual bool event(QEvent *event);
     virtual void setupTabTextAndIcon(const QString &text, const QString &iconName);
     QString valueForWidget(const QString &name);
 protected:
-    QTabWidget *fTabWidget;
+    QTabWidget* fTabWidget;
     int fTabIndex;
-    TrackControl *fTrackControl;
+    TrackControl* fTrackControl;
     virtual void setupTab();
     virtual void finalPrint(PPrintScene *ps, int top);
 };

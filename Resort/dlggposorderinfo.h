@@ -3,7 +3,8 @@
 
 #include "baseextendeddialog.h"
 
-namespace Ui {
+namespace Ui
+{
 class DlgGPOSOrderInfo;
 }
 
@@ -22,13 +23,12 @@ private slots:
     void on_btnSave_clicked();
     void on_tblData_currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous);
     void on_btnPrint_clicked();
-    void on_btnPrintTax_clicked();
     void on_btnTracking_clicked();
 
     void on_btnSetFiscalNumber_clicked();
 
 private:
-    Ui::DlgGPOSOrderInfo *ui;
+    Ui::DlgGPOSOrderInfo* ui;
     void countTotal();
 };
 

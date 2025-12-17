@@ -8,7 +8,6 @@
 #include "basewidget.h"
 #include "cachepaymentmode.h"
 #include "cachecreditcard.h"
-#include "cacheinvoiceitem.h"
 #include "databaseresult.h"
 #include "paymentmode.h"
 #include "defines.h"
@@ -16,7 +15,6 @@
 PPrintVaucher::PPrintVaucher() :
     Base()
 {
-
 }
 
 void PPrintVaucher::printVaucher(const QString &id)
@@ -37,7 +35,7 @@ void PPrintVaucher::printVaucher(const QString &id)
                  "left join users uo on uo.f_id=m.f_user "
                  "where m.f_id=:f_id", p.fDbBind, p.fDbRows);
 
-    if (p.fDbRows.count() == 0) {
+    if(p.fDbRows.count() == 0) {
         message_error("Application error. Contact to developer. Message: PrintVoucher row count=0");
         p.fDb.fDb.commit();
         return;
@@ -45,20 +43,22 @@ void PPrintVaucher::printVaucher(const QString &id)
 
     int room = p.fDbRows.at(0).at(2).toInt();
     DatabaseResult reserv;
-    if (room > 0) {
+
+    if(room > 0) {
         p.fDbBind[":f_id"] = id;
         QSqlQuery *q = 0;
         q = p.fDb.select(q, "select f_inv from m_register where f_id=:f_id", p.fDbBind);
         q->next();
         p.fDbBind[":f_invoice"] = q->value(0);
         reserv.select(p.fDb, "select r.f_startDate, r.f_checkInUser, r.f_endDate, r.f_checkOutUser, "
-                      "r.f_checkInTime, r.f_checkOutTime "
-                      "from f_reservation r "
-                      "where r.f_invoice=:f_invoice", p.fDbBind);
+                             "r.f_checkInTime, r.f_checkOutTime "
+                             "from f_reservation r "
+                             "where r.f_invoice=:f_invoice", p.fDbBind);
     }
 
     CI_Vaucher *cv = CacheVaucher::instance()->get(p.fDbRows.at(0).at(0).toString());
-    if (!cv) {
+
+    if(!cv) {
         message_error("Application error. Contact to developer. Message: PrintVoucher cv=0");
         p.fDb.fDb.commit();
         return;
@@ -87,7 +87,8 @@ void PPrintVaucher::printVaucher(const QString &id)
     th.setBorders(false, false, false, false);
     th.setFont(f);
     th.setTextAlignment(Qt::AlignHCenter);
-    if (p.fDbRows.at(0).at(12).toInt() == 1) {
+
+    if(p.fDbRows.at(0).at(12).toInt() == 1) {
         top += ps->addTextRect(20, top, 2000, 80, QObject::tr("CORRECTION"), &th)->textHeight();
         f.setPointSize(20);
         f.setItalic(false);
@@ -100,6 +101,7 @@ void PPrintVaucher::printVaucher(const QString &id)
                         .arg(p.fDbRows.at(0).at(14).toString()),
                         &th);
     }
+
     top += trInfo->textHeight();
     trInfo->setTextAlignment(Qt::AlignTop | Qt::AlignRight);
     trInfo->setBorders(false, false, false, false);
@@ -112,7 +114,6 @@ void PPrintVaucher::printVaucher(const QString &id)
     top = 320;
     ps->addLine(10, top, 2100, top, boldPen);
     top += 10;
-
     f.setPointSize(30);
     f.setItalic(false);
     f.setBold(false);
@@ -128,7 +129,7 @@ void PPrintVaucher::printVaucher(const QString &id)
          << QObject::tr("Amount")
          << QObject::tr("VAT")
          << QObject::tr("Purpose")
-            ;
+         ;
     ps->addTableRow(top, rowHeight, cols, vals, &th);
     vals << p.fDbRows.at(0).at(5).toDate().toString(def_date_format)
          << p.fDbRows.at(0).at(2).toString()
@@ -137,7 +138,7 @@ void PPrintVaucher::printVaucher(const QString &id)
          << p.fDbRows.at(0).at(15).toString();
     ps->addTableRow(top, rowHeight, cols, vals, &th);
 
-    if (p.fDbRows.at(0).at(16).toInt() == 1) {
+    if(p.fDbRows.at(0).at(16).toInt() == 1) {
         top += 10;
         cols.clear();
         cols << 20 << 1080 << 1000;
@@ -145,19 +146,24 @@ void PPrintVaucher::printVaucher(const QString &id)
              << QObject::tr("Additional info");
         ps->addTableRow(top, rowHeight, cols, vals, &th);
         CI_PaymentMode *pm = CachePaymentMode::instance()->get(p.fDbRows.at(0).at(18).toString());
-        if (!pm) {
+
+        if(!pm) {
             message_error_tr("Application error. Contact to developer. Message PrintVoucher pm=0");
             return;
         }
+
         vals << pm->fName;
         QString pmInfo;
-        switch (pm->fCode.toInt()) {
+
+        switch(pm->fCode.toInt()) {
         case PAYMENT_CASH:
             break;
+
         case PAYMENT_CARD:
             pmInfo = CacheCreditCard::instance()->get(p.fDbRows.at(0).at(10).toString())->fName;
             break;
         }
+
         vals << pmInfo;
         ps->addTableRow(top, rowHeight, cols, vals, &th);
     }
@@ -173,33 +179,36 @@ void PPrintVaucher::printVaucher(const QString &id)
     ps->addTableRow(top, rowHeight * 1.5, cols, vals, &th);
     th.setWrapMode(QTextOption::NoWrap);
 
-    if (room > 0 && room < 1000 && reserv.rowCount() > 0) {
+    if(room > 0 && room < 1000 && reserv.rowCount() > 0) {
         QString checkInUser = "-";
         QString checkOutUser = "-";
-        if (CacheUsers::instance()->get(reserv.value(0, "f_checkInUser").toString())) {
+
+        if(CacheUsers::instance()->get(reserv.value(0, "f_checkInUser").toString())) {
             checkInUser = CacheUsers::instance()->get(reserv.value(0, "f_checkInUser").toString())->fFull;
         }
-        if (CacheUsers::instance()->get(reserv.value(0, "f_checkOutUser").toString())) {
+
+        if(CacheUsers::instance()->get(reserv.value(0, "f_checkOutUser").toString())) {
             checkOutUser = CacheUsers::instance()->get(reserv.value(0, "f_checkOutUser").toString())->fFull;
         }
+
         cols.clear();
         cols << 20 << 380 << 700 << 400 << 600;
         vals << QObject::tr("Arrival date")
-            << reserv.value(0, "f_startDate").toDate().toString(def_date_format)
-            << QObject::tr("Operator")
-            << checkInUser;
+             << reserv.value(0, "f_startDate").toDate().toString(def_date_format)
+             << QObject::tr("Operator")
+             << checkInUser;
         ps->addTableRow(top, rowHeight, cols, vals, &th);
         vals << QObject::tr("Departure date")
-            << reserv.value(0, "f_endDate").toDate().toString(def_date_format)
-            << QObject::tr("Operator")
-            << checkOutUser;
+             << reserv.value(0, "f_endDate").toDate().toString(def_date_format)
+             << QObject::tr("Operator")
+             << checkOutUser;
         ps->addTableRow(top, rowHeight, cols, vals, &th);
     }
 
     top += rowHeight;
-
     QString remarks = p.fDbRows.at(0).at(19).toString();
-    if (!remarks.isEmpty()) {
+
+    if(!remarks.isEmpty()) {
         top += (rowHeight / 2);
         th.setTextAlignment(Qt::AlignLeft);
         th.setBorders(false, false, false, false);
@@ -218,10 +227,10 @@ void PPrintVaucher::printVaucher(const QString &id)
     ps->addLine(1100, top, 2100, top, boldPen);
     top += rowHeight;
     QString footer = QString("%1: %2, %3: %4")
-            .arg(QObject::tr("Printed"))
-            .arg(QDateTime::currentDateTime().toString(def_date_time_format))
-            .arg(QObject::tr("Operator"))
-            .arg(WORKING_USERNAME);
+                     .arg(QObject::tr("Printed"))
+                     .arg(QDateTime::currentDateTime().toString(def_date_time_format))
+                     .arg(QObject::tr("Operator"))
+                     .arg(WORKING_USERNAME);
     f.setBold(true);
     f.setPointSize(18);
     th.setFont(f);

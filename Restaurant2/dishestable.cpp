@@ -148,14 +148,127 @@ void DishesTable::init(Splash *s)
         s->setText(tr("Loading menu..."));
     }
 
-    query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
-            "d.f_bgColor, d.f_textColor, d.f_text_en,  "
-            "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, m.f_complex, "
-            "d.f_adgt, d.f_tax, d.f_service, d.f_scancode, d.f_needemarks "
-            "from r_menu m "
-            "inner join r_dish d on d.f_id=m.f_dish "
-            "inner join r_dish_type t on d.f_type=t.f_id "
-            "where m.f_state=1  and m.f_complex=0 and t.f_active=1";
+    query = R"(
+WITH RECURSIVE sc AS (
+    -- только строки СО сканкодами
+    SELECT
+        m.f_dish,
+        m.f_menu,
+        t.f_part,
+        d.f_type,
+        d.f_en,
+        d.f_bgColor,
+        d.f_textColor,
+        d.f_text_en,
+        m.f_print1,
+        m.f_print2,
+        m.f_store,
+        m.f_price,
+        d.f_queue,
+        m.f_complex,
+        d.f_adgt,
+        d.f_tax,
+        d.f_service,
+        d.f_needemarks,
+        TRIM(SUBSTRING_INDEX(d.f_scancode, ',', 1)) AS f_scancode,
+        SUBSTRING(
+            d.f_scancode,
+            LENGTH(SUBSTRING_INDEX(d.f_scancode, ',', 1)) + 2
+        ) AS rest
+    FROM r_menu m
+    JOIN r_dish d ON d.f_id = m.f_dish
+    JOIN r_dish_type t ON d.f_type = t.f_id
+    WHERE m.f_state = 1
+      AND m.f_complex = 0
+      AND t.f_active = 1
+      AND d.f_scancode IS NOT NULL
+      AND d.f_scancode <> ''
+
+    UNION ALL
+
+    SELECT
+        f_dish,
+        f_menu,
+        f_part,
+        f_type,
+        f_en,
+        f_bgColor,
+        f_textColor,
+        f_text_en,
+        f_print1,
+        f_print2,
+        f_store,
+        f_price,
+        f_queue,
+        f_complex,
+        f_adgt,
+        f_tax,
+        f_service,
+        f_needemarks,
+        TRIM(SUBSTRING_INDEX(rest, ',', 1)),
+        SUBSTRING(
+            rest,
+            LENGTH(SUBSTRING_INDEX(rest, ',', 1)) + 2
+        )
+    FROM sc
+    WHERE rest <> ''
+)
+
+-- строки БЕЗ сканкодов
+SELECT
+    m.f_dish,
+    m.f_menu,
+    t.f_part,
+    d.f_type,
+    d.f_en,
+    d.f_bgColor,
+    d.f_textColor,
+    d.f_text_en,
+    m.f_print1,
+    m.f_print2,
+    m.f_store,
+    m.f_price,
+    d.f_queue,
+    m.f_complex,
+    d.f_adgt,
+    d.f_tax,
+    d.f_service,
+    NULL AS f_scancode,
+    d.f_needemarks
+FROM r_menu m
+JOIN r_dish d ON d.f_id = m.f_dish
+JOIN r_dish_type t ON d.f_type = t.f_id
+WHERE m.f_state = 1
+  AND m.f_complex = 0
+  AND t.f_active = 1
+  AND (d.f_scancode IS NULL OR d.f_scancode = '')
+
+UNION ALL
+
+-- строки СО сканкодами (размноженные)
+SELECT
+    f_dish,
+    f_menu,
+    f_part,
+    f_type,
+    f_en,
+    f_bgColor,
+    f_textColor,
+    f_text_en,
+    f_print1,
+    f_print2,
+    f_store,
+    f_price,
+    f_queue,
+    f_complex,
+    f_adgt,
+    f_tax,
+    f_service,
+    f_scancode,
+    f_needemarks
+FROM sc;
+
+)";
     fDb.select(query, fDbBind, fDbRows);
 
     for(QList<QList<QVariant> >::const_iterator it = fDbRows.constBegin(); it != fDbRows.constEnd(); it++) {
@@ -193,18 +306,18 @@ void DishesTable::init(Splash *s)
     fDb.select(query, fDbBind, fDbRows);
     foreach_rows {
         for(QList<DishStruct* >::iterator d = fDish.begin(); d != fDish.end(); d++)
-        {
-            DishStruct *dish = *d;
+{
+    DishStruct *dish = *d;
 
-            if(dish->fId == it->at(0).toInt()) {
-                QMap<QString, QString> m;
-                m["en"] = it->at(1).toString();
-                m["ru"] = it->at(2).toString();
-                m["am"] = it->at(3).toString();
-                dish->fMod.append(m);
-                continue;
-            }
+    if(dish->fId == it->at(0).toInt()) {
+            QMap<QString, QString> m;
+            m["en"] = it->at(1).toString();
+            m["ru"] = it->at(2).toString();
+            m["am"] = it->at(3).toString();
+            dish->fMod.append(m);
+            continue;
         }
+    }
     }
     query = "select f_id, f_en, f_ru, f_am from r_dish_mod";
     fDb.select(query, fDbBind, fDbRows);

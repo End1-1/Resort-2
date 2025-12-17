@@ -77,7 +77,6 @@ SOURCES += main.cpp\
     ../Cache/cachecreditcard.cpp \
     ../Cache/cacheguest.cpp \
     ../Cache/cacheguesttitle.cpp \
-    ../Cache/cacheinvoiceitem.cpp \
     ../Cache/cacheone.cpp \
     ../Cache/cachepaymentmode.cpp \
     ../Cache/cacherestdishmod.cpp \
@@ -179,7 +178,6 @@ HEADERS  += rface.h \
     ../Cache/cachecreditcard.h \
     ../Cache/cacheguest.h \
     ../Cache/cacheguesttitle.h \
-    ../Cache/cacheinvoiceitem.h \
     ../Cache/cacheone.h \
     ../Cache/cachepaymentmode.h \
     ../Cache/cacherestdishmod.h \

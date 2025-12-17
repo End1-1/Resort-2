@@ -380,7 +380,6 @@ RDesk::RDesk(QWidget *parent) :
         }
     }
 
-    ui->btnQr->setVisible(false);
     fDataVersion = 0;
 }
 
@@ -1108,7 +1107,7 @@ void RDesk::fiscalCancel()
 
     if(result == 0) {
         db2[":f_id"] = orderId;
-        db2.exec("update o_dish set f_emarks=null where f_header=:f_id");
+        db2.exec("update o_dish set f_emark=null where f_header=:f_id");
         message_info(tr("Done"));
     } else {
         message_error(QJsonDocument(jin).toJson() + out);
@@ -3963,6 +3962,7 @@ void RDesk::on_btnPrintMultipleFiscal_clicked()
     DlgPrintMultipleFiscal d(this);
     d.exec();
 }
+
 void RDesk::on_btnQr_clicked()
 {
     if(fTable == nullptr) {
@@ -4059,6 +4059,11 @@ void RDesk::on_leCmd_returnPressed()
         DishStruct *d = fDishTable.getDishStructByBarcode(code, fMenu);
 
         if(d) {
+            if(d->fNeedEmarks) {
+                message_error(tr("Only by Emarks code"));
+                return;
+            }
+
             addDishToOrder(d, true);
         }
     } else  if(code.length() >= 29) {

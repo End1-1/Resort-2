@@ -5,6 +5,7 @@
 #include "pprintstoreentry.h"
 #include "storedoc.h"
 #include "database2.h"
+#include "message.h"
 
 #define SEL_DISH 1
 

@@ -92,14 +92,12 @@ SOURCES += main.cpp\
     wusersgroups.cpp \
     dlgusergroup.cpp \
     ../Base/command.cpp \
-    ../Cache/cacheinvoiceitem.cpp \
     ../Selector/dwselector.cpp \
     ../Cache/cachebase.cpp \
     ../Cache/cachepaymentmode.cpp \
     ../Controls/eqcheckbox.cpp \
     ../Cache/cachevatmode.cpp \
     ../Selector/dwselectorvatmode.cpp \
-    ../Selector/dwselectorinvoiceitem.cpp \
     ../Cache/cacheguesttitle.cpp \
     ../Selector/dwselectorguesttitle.cpp \
     ../RowEditor/reresthall.cpp \
@@ -196,7 +194,6 @@ SOURCES += main.cpp\
     dlgsearchinvoice.cpp \
     ../RowEditor/rebanquetcomment.cpp \
     ../Filter/fcommonfilterbydate.cpp \
-    dlgprintrandomtax.cpp \
     ../RowEditor/recomplimentarycomment.cpp \
     ../Base/databaseresult.cpp \
     ../Controls/etoolbarbutton.cpp \
@@ -250,13 +247,11 @@ SOURCES += main.cpp\
     ../Selector/dwselectorcouponseria.cpp \
     ../Cache/cachecashdesk.cpp \
     ../Selector/dwselectorcashdesk.cpp \
-    ../Widgets/wcashentry.cpp \
     ../Cache/cachecashdoc.cpp \
     ../RowEditor/recashdesk.cpp \
     ../Filter/fstoreentry.cpp \
     ../Widgets/wstoreentry.cpp \
     dlgpartnerpayment.cpp \
-    dlgcashop.cpp \
     ../Selector/dwselectorcashdoctype.cpp \
     ../Filter/fcouponstatistics.cpp \
     ../Filter/fdebtofcostumers.cpp \
@@ -370,13 +365,11 @@ HEADERS  += mainwindow.h \
     dlgusergroup.h \
     ../Base/command.h \
     ../Cache/cachebase.h \
-    ../Cache/cacheinvoiceitem.h \
     ../Selector/dwselector.h \
     ../Cache/cachepaymentmode.h \
     ../Controls/eqcheckbox.h \
     ../Cache/cachevatmode.h \
     ../Selector/dwselectorvatmode.h \
-    ../Selector/dwselectorinvoiceitem.h \
     ../Cache/cacheguesttitle.h \
     ../Selector/dwselectorguesttitle.h \
     ../RowEditor/reresthall.h \
@@ -474,7 +467,6 @@ HEADERS  += mainwindow.h \
     dlgsearchinvoice.h \
     ../RowEditor/rebanquetcomment.h \
     ../Filter/fcommonfilterbydate.h \
-    dlgprintrandomtax.h \
     ../RowEditor/recomplimentarycomment.h \
     ../Base/databaseresult.h \
     ../Controls/etoolbarbutton.h \
@@ -529,13 +521,11 @@ HEADERS  += mainwindow.h \
     ../Selector/dwselectorcouponseria.h \
     ../Cache/cachecashdesk.h \
     ../Selector/dwselectorcashdesk.h \
-    ../Widgets/wcashentry.h \
     ../Cache/cachecashdoc.h \
     ../RowEditor/recashdesk.h \
     ../Filter/fstoreentry.h \
     ../Widgets/wstoreentry.h \
     dlgpartnerpayment.h \
-    dlgcashop.h \
     ../Selector/dwselectorcashdoctype.h \
     ../Filter/fcouponstatistics.h \
     ../Filter/fdebtofcostumers.h \
@@ -634,7 +624,6 @@ FORMS    += mainwindow.ui \
     dlgsearchinvoice.ui \
     ../RowEditor/rebanquetcomment.ui \
     ../Filter/fcommonfilterbydate.ui \
-    dlgprintrandomtax.ui \
     ../RowEditor/recomplimentarycomment.ui \
     ../Widgets/wreportbuilder.ui \
     ../Controls/efilterlineedit.ui \
@@ -665,12 +654,10 @@ FORMS    += mainwindow.ui \
     dlgcouponsales.ui \
     fcouponsales.ui \
     ../RowEditor/recouponseria.ui \
-    ../Widgets/wcashentry.ui \
     ../RowEditor/recashdesk.ui \
     ../Filter/fstoreentry.ui \
     ../Widgets/wstoreentry.ui \
     dlgpartnerpayment.ui \
-    dlgcashop.ui \
     ../Filter/fcouponstatistics.ui \
     ../Filter/fdebtofcostumers.ui \
     ../Filter/fdiscountreport.ui \

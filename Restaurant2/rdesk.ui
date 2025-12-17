@@ -927,41 +927,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="4">
-             <widget class="QPushButton" name="btnQr">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="res.qrc">
-                <normaloff>:/images/qrcode.png</normaloff>:/images/qrcode.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="2">
              <widget class="QPushButton" name="btn9">
               <property name="enabled">
