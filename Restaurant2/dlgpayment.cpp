@@ -165,6 +165,11 @@ void DlgPayment::on_btnOk_clicked()
     }
 
     QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+    QList<int> idForUpdateFiscal;
+    int fiscalNumber = 0;
 
     if(ui->btnPrintTax->isChecked()) {
         QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
@@ -174,12 +179,9 @@ void DlgPayment::on_btnOk_clicked()
                      s.value("extpos").toString(),
                      s.value("opcode").toString(),
                      s.value("oppin").toString());
-        Db b = Preferences().getDatabase(Base::fDbName);
-        Database2 db2;
-        db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
-        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark "
+        db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark, od.f_id as f_od_id "
                  "from o_dish od "
                  "left join r_dish d on d.f_id=od.f_dish "
                  "where od.f_header=:f_header and od.f_state=:f_state ");
@@ -193,6 +195,7 @@ void DlgPayment::on_btnOk_clicked()
                 pn.fEmarks.append(db2.string("f_emark"));
             }
 
+            idForUpdateFiscal.append(db2.integer("f_od_id"));
             pn.addGoods(db2.string("f_taxdebt").toInt(),
                         db2.string("f_adgt"),
                         db2.string("f_id"),
@@ -230,6 +233,7 @@ void DlgPayment::on_btnOk_clicked()
         }
 
         QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+        fiscalNumber = jo["rseq"].toInt();
         db2[":f_fiscal"] = jo["rseq"].toInt();
         db2.update("o_tax_log", "f_id", fiscalrecid);
         db2[":f_tax"] = jo["rseq"].toInt();
@@ -243,21 +247,18 @@ void DlgPayment::on_btnOk_clicked()
                      s.value("extpos").toString(),
                      s.value("opcode").toString(),
                      s.value("oppin").toString());
-        Db b = Preferences().getDatabase(Base::fDbName);
-        Database2 db2;
-        db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
         db2.exec(R"(
             select distinct(od.f_id) as f_id, d.f_en, d.f_adgt, od.f_qty,
-            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark
+            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark, od.f_id as f_od_id
             from o_dish od
             left join r_dish d on d.f_id=od.f_dish
             inner join r_menu m on m.f_dish=d.f_id and m.f_menu in (2,3)  and m.f_state=1
             where od.f_header=:f_header and od.f_state=:f_state
     union
             select distinct(od.f_id) as f_id, d.f_en, d.f_adgt, od.f_qty,
-            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark
+            od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark, od.f_id as f_od_id
             from o_dish od
             left join r_dish d on d.f_id=od.f_dish
             inner join r_menu m on m.f_dish=d.f_id
@@ -275,6 +276,7 @@ void DlgPayment::on_btnOk_clicked()
             }
 
             f = true;
+            idForUpdateFiscal.append(db2.integer("f_od_id"));
             pn.addGoods(db2.string("f_taxdebt").toInt(),
                         db2.string("f_adgt"),
                         QString::number(db2.integer("f_id")),
@@ -297,8 +299,6 @@ void DlgPayment::on_btnOk_clicked()
 #ifdef QT_DEBUG
             out =
                 "{\"rseq\":77,\"crn\":\"63219817\",\"sn\":\"V98745506068\",\"tin\":\"01588771\",\"taxpayer\":\"«Ռոգա էնդ կոպիտա ՍՊԸ»\",\"address\":\"Արշակունյանց 34\",\"time\":1676794194840,\"fiscal\":\"98198105\",\"lottery\":\"00000000\",\"prize\":0,\"total\":1540.0,\"change\":0.0}";
-            out =
-                "{\"address\":\"ԿԵՆՏՐՈՆ ԹԱՂԱՄԱՍ Ամիրյան 4/3 \",\"change\":0.0,\"crn\":\"53235782\",\"fiscal\":\"54704153\",\"lottery\":\"\",\"prize\":0,\"rseq\":1327,\"sn\":\"00022154380\",\"taxpayer\":\"«ՊԼԱԶԱ ՍԻՍՏԵՄՍ»\",\"time\":1709630105632,\"tin\":\"02596277\",\"total\":93600.0}";
             result = 0;
 #endif
             db2[":f_order"] = fOrder;
@@ -313,11 +313,18 @@ void DlgPayment::on_btnOk_clicked()
             }
 
             QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+            fiscalNumber = jo["rseq"].toInt();
             db2[":f_fiscal"] = jo["rseq"].toInt();
             db2.update("o_tax_log", "f_id", fiscalrecid);
             db2[":f_tax"] = jo["rseq"].toInt();
             db2.update("o_header", "f_id", fOrder);
         }
+    }
+
+    for (auto fn: idForUpdateFiscal) {
+        db2[":f_fiscal"] = fiscalNumber;
+        db2[":f_id"] = fn;
+        db2.exec("update o_dish set f_fiscal=:f_fiscal where f_id=:f_id");
     }
 
     fDbBind[":f_id"] = fOrder;

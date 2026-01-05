@@ -238,7 +238,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "d.f_" + def_lang
                 << "od.f_price"
                 << "d.f_as"
-                << "oh.f_tax"
+                << "od.f_fiscal"
                 << "oh.f_paymentMode"
                 << "pm.f_" + def_lang
                 << "oc.f_govnumber"
@@ -296,7 +296,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["d.f_" + def_lang] = tr("Dish");
     rg->fFieldTitles["od.f_price"] = tr("Price");
     rg->fFieldTitles["d.f_as"] = tr("ArmSoft");
-    rg->fFieldTitles["oh.f_tax"] = tr("Tax");
+    rg->fFieldTitles["od.f_fiscal"] = tr("Tax");
     rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
     rg->fFieldTitles["pm.f_" + def_lang] = tr("P/M");
     rg->fFieldTitles["oh.f_comment"] = "Մեկնաբանություն";
@@ -424,11 +424,11 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     }
 
     if(ui->leTax->text() == "+") {
-        where += " and oh.f_tax>0 ";
+        where += " and od.f_fiscal>0 ";
     }
 
     if(ui->leTax->text() == "-") {
-        where += " and oh.f_tax=0 ";
+        where += " and coalesce(od.f_fiscal, 0)=0 ";
     }
 
     if(!ui->leBranch->isEmpty()) {
@@ -444,7 +444,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     }
 
     if(!ui->leTax->text().isEmpty() && ui->leTax->text() != "+" && ui->leTax->text() != "-") {
-        where += " and oh.f_tax in (" + ui->leTax->text() + ") ";
+        where += " and od.f_fiscal in (" + ui->leTax->text() + ") ";
     }
 
     if(ui->rbNoShowComplex->isChecked() && !countAmount) {

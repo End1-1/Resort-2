@@ -17,7 +17,9 @@ DEFINES += _APPLICATION_=\\\"ELITEWASH\\\"
 DEFINES += _MODULE_=\\\"SALES\\\"
 DEFINES += _DBDRIVER_=\\\"QMARIADB\\\"
 
-RC_FILE = res.rc
+win32 {
+    RC_FILE = res.rc
+}
 
 
 INCLUDEPATH += c:/projects/resort2/Base
@@ -144,6 +146,7 @@ HEADERS  += rface.h \
     dlgsalarytotal.h \
     messagelist.h \
     rawmessage.h \
+    rc.h \
     rlogin.h \
     rmessage.h \
     ../Base/base.h \
@@ -234,7 +237,8 @@ HEADERS  += rface.h \
     ../Base/appconfig.h \
     ../Resort/message.h \
     baseextendeddialog.h \
-    sslsocket.h
+    sslsocket.h \
+    version.h
 
 FORMS    += rface.ui \
     dlgpassword.ui \
@@ -280,7 +284,20 @@ RESOURCES += \
     res.qrc
 
 DISTFILES += \
+    increase_version.ps1 \
     stylesheet.qss \
     css \
     images/add.png
+
+win32 {
+    version_inc.target = version_inc
+    version_inc.commands = powershell -NoProfile -ExecutionPolicy Bypass -File $$shell_path($$PWD/increase_version.ps1)
+    QMAKE_EXTRA_TARGETS += version_inc
+    PRE_TARGETDEPS += version_inc
+}
+
+
+win32 {
+    res_rc.depends += $$PWD/version.h
+}
 

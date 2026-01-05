@@ -1,8 +1,8 @@
-#ifndef RC_H
-#define RC_H
+#include "version.h"
+#define FILE_VERSION VER_MAJOR,VER_MINOR,VER_PATCH,VER_BUILD
 
-#define _PRODUCT_VERSION 2,10,22,638
-#define _FILE_VERSION_STR "2.10.22.638"
-#define _PRODUCT_VERSION_STR "2.10\0"
+#define STR_HELPER(x) #x
+#define STR(x) STR_HELPER(x)
 
-#endif // RC_H
+#define FILE_VERSION_STR \
+STR(VER_MAJOR) "." STR(VER_MINOR) "." STR(VER_PATCH) "." STR(VER_BUILD)

@@ -11,7 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = EliteCarwash
 TEMPLATE = app
 
-RC_FILE = res.rc
+win32 {
+    RC_FILE = res.rc
+}
 
 DEFINES += _MODULE_=\\\"EliteCarwash\\\"
 
@@ -343,6 +345,7 @@ HEADERS  += mainwindow.h \
     recalculatestoreoutputs.h \
     reportquery.h \
     storeoutput.h \
+    version.h \
     wreportgrid.h \
     wcontacts.h \
     tablemodel.h \
@@ -683,6 +686,7 @@ LIBS += -llibcrypto
 LIBS +=  -lwsock32
 
 DISTFILES += \
+    increase_version.ps1 \
     last_cache.txt
 
 INCLUDEPATH += ../Base
@@ -704,3 +708,15 @@ INCLUDEPATH += c:/projects/NewTax/Src
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
 DEFINES += _APPLICATION_=\\\"SmartHotel\\\"
 DEFINES += _DBDRIVER_=\\\"QMARIADB\\\"
+
+win32 {
+    version_inc.target = version_inc
+    version_inc.commands = powershell -NoProfile -ExecutionPolicy Bypass -File $$shell_path($$PWD/increase_version.ps1)
+    QMAKE_EXTRA_TARGETS += version_inc
+    PRE_TARGETDEPS += version_inc
+}
+
+
+win32 {
+    res_rc.depends += $$PWD/version.h
+}

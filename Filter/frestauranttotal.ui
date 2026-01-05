@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>908</width>
-    <height>266</height>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -924,7 +924,7 @@ ledger</string>
       <number>11</number>
      </property>
      <property name="Field" stdset="0">
-      <string>oh.f_tax</string>
+      <string>od.f_fiscal</string>
      </property>
     </widget>
    </item>
