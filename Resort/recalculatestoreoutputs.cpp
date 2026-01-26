@@ -2,8 +2,9 @@
 #include "ui_recalculatestoreoutputs.h"
 #include "storeoutput.h"
 #include "baseorder.h"
+#include "message.h"
 
-RecalculateStoreOutputs::RecalculateStoreOutputs(QSet<int> &idlist, QWidget *parent) :
+RecalculateStoreOutputs::RecalculateStoreOutputs(QSet<int>& idlist, QWidget *parent) :
     BaseDialog(parent),
     ui(new Ui::RecalculateStoreOutputs),
     ids(idlist)
@@ -28,32 +29,44 @@ void RecalculateStoreOutputs::timeout()
 {
     StoreOutput so(fDb, 0);
     BaseOrder bo(0);
-
     fTimer.stop();
     ui->l1->setText(tr("Rollback"));
     int counter = 0;
-    for (int order: ids) {
-        if (stop) {
+
+    for(int order : ids) {
+        if(order == 0) {
+            message_error(tr("Invalid order id: 0"));
+            return;
+        }
+
+        if(stop) {
             break;
         }
+
         so.rollbackSale(fDb, order);
-        if (++counter % 20 == 0) {
+
+        if(++counter % 20 == 0) {
             ui->l2->setText(QString("%1 of %2").arg(counter).arg(ids.count()));
             qApp->processEvents();
         }
     }
+
     ui->l1->setText(tr("Write"));
     counter = 0;
-    for(int order: qAsConst(ids)) {
-        if (stop) {
+
+    for(int order : qAsConst(ids)) {
+        if(stop) {
             break;
         }
+
         bo.calculateOutput(fDb, order);
-        if (++counter % 20 == 0) {
+
+        if(++counter % 20 == 0) {
             ui->l2->setText(QString("%1 of %2").arg(counter).arg(ids.count()));
             qApp->processEvents();
         }
     }
+
     accept();
 }
 

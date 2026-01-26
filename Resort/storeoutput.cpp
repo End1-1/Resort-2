@@ -4,19 +4,21 @@ StoreOutput::StoreOutput(Database &db, int doc) :
     fDoc(doc),
     fDb(db)
 {
-    
 }
 
 void StoreOutput::rollbackSale(Database &db, int order)
 {
+    Q_ASSERT(order != 0);
     QMap<QString, QVariant> bind;
     QList<QList<QVariant> > r;
     bind[":f_rest"] = order;
     db.select("select f_id from r_docs where f_rest=:f_rest", bind, r);
-    if (r.count() == 0) {
+
+    if(r.count() == 0) {
         return;
     }
-    for (int i = 0; i < r.count(); i++) {
+
+    for(int i = 0; i < r.count(); i++) {
         rollback(db, r.at(i).at(0).toInt());
     }
 }
@@ -33,7 +35,7 @@ void StoreOutput::rollback(Database &db, int doc)
     db.select("delete from r_docs where f_id=:f_id", bind, r);
 }
 
-void StoreOutput::output(QMap<int, double> &priceList)
+void StoreOutput::output(QMap<int, double>& priceList)
 {
     QMap<QString, QVariant> bind;
     QList<QList<QVariant> > rows;
@@ -44,7 +46,8 @@ void StoreOutput::output(QMap<int, double> &priceList)
                "where f_doc=:f_doc and f_sign=-1", bind, rows);
     int docrow = 1;
     double docamount = 0;
-    for (QList<QVariant> &v: rows) {
+
+    for(QList<QVariant>& v : rows) {
         double qty_total = v.at(3).toDouble();
         QMap<QString, QVariant> b;
         QList<QList<QVariant> > r;
@@ -56,14 +59,16 @@ void StoreOutput::output(QMap<int, double> &priceList)
                    "group by s.f_base "
                    "having sum(s.f_qty*s.f_sign)>0 "
                    "order by d.f_date ", b, r);
-
         double qp = 0, qs = 0;
-        for (int i = 0; i < r.count(); i++) {
-            if (v.at(3).toDouble() < 0.00001) {
+
+        for(int i = 0; i < r.count(); i++) {
+            if(v.at(3).toDouble() < 0.00001) {
                 break;
             }
+
             double qty = 0.0;
-            if (r.at(i).at(2).toDouble() > v.at(3).toDouble()) {
+
+            if(r.at(i).at(2).toDouble() > v.at(3).toDouble()) {
                 qp += v[3].toDouble();
                 qs += r.at(i).at(1).toDouble() * v[3].toDouble();
                 qty = v[3].toDouble();
@@ -87,7 +92,8 @@ void StoreOutput::output(QMap<int, double> &priceList)
             iv[":f_qty"] = qty;
             fDb.insert("r_store_acc", iv);
         }
-        if (v.at(3).toDouble() > 0.00001) {
+
+        if(v.at(3).toDouble() > 0.00001) {
             qp += v.at(3).toDouble();
             qs += v.at(3).toDouble() * v.at(4).toDouble();
             priceList[v.at(0).toInt()] = v.at(4).toDouble();
@@ -102,14 +108,15 @@ void StoreOutput::output(QMap<int, double> &priceList)
             iv[":f_qty"] = v.at(3).toDouble();
             fDb.insert("r_store_acc", iv);
         }
+
         priceList[v.at(0).toInt()] = qs / qp;
         bind[":f_id"] = v.at(0).toInt();
         bind[":f_price"] = qp > 0.001 ? (qs / qp) : 0;
         bind[":f_total"] = qp > 0.001 ? (qs / qp) * qty_total : 0;
         fDb.update("r_body", bind, where_id(v.at(0).toInt()));
-
         docamount += qs;
     }
+
     bind[":f_amount"] = docamount;
     fDb.update("r_docs", bind, where_id(fDoc));
 }

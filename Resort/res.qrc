@@ -143,5 +143,6 @@
         <file>images/payment.png</file>
         <file>images/xml.png</file>
         <file>images/AS.png</file>
+        <file>images/calendar.png</file>
     </qresource>
 </RCC>
