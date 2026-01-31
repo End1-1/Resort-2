@@ -1,18 +1,28 @@
 #include "edateedit.h"
+#include <QHBoxLayout>
+#include <QStyle>
+#include <QDate>
+#include <QAction>
 
 QDate EDateEditFirstDate = QDate::currentDate();
 
-EDateEdit::EDateEdit(QWidget *parent) :
-    QLineEdit(parent)
+EDateEdit::EDateEdit(QWidget *parent) : QLineEdit(parent)
 {
     setInputMask("00/00/0000");
-    setDate(EDateEditFirstDate);
-    setDate(QDate::currentDate());
-    connect(this, SIGNAL(textChanged(QString)), this, SLOT(newText(QString)));
-    setMinimumWidth(100);
-    setMaximumWidth(100);
-    fRow = 0;
-    fColumn = 0;
+    setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    setFixedWidth(100);
+    // Иконка справа внутри lineedit (ровно и красиво)
+    QIcon ico = QIcon(":/images/calendar.png");
+    calAction = addAction(ico, QLineEdit::TrailingPosition);
+    calAction->setToolTip("Open calendar");
+    // Чуть-чуть сдвинем текст, чтобы не залезал под иконку
+    setTextMargins(2, 0, 2, 0);
+    connect(calAction, &QAction::triggered, this, &EDateEdit::showCalendar);
+    connect(this, &QLineEdit::textChanged, this, &EDateEdit::newText);
+    calendar = new QCalendarWidget();
+    calendar->setWindowFlags(Qt::Popup);
+    calendar->setGridVisible(true);
+    connect(calendar, &QCalendarWidget::clicked, this, &EDateEdit::dateSelected);
 }
 
 QString EDateEdit::getField()
@@ -31,24 +41,28 @@ void EDateEdit::focusInEvent(QFocusEvent *e)
     setCursorPosition(0);
 }
 
-void EDateEdit::setBgColor(const QColor &color)
+void EDateEdit::showCalendar()
 {
-    QPalette palette;
-    palette.setColor(QPalette::Base, color);
-    if (!fIsValid) {
-        palette.setColor(QPalette::Base, Qt::red);
-    }
-    setPalette(palette);
+    QDate d = QDate::fromString(text(), "dd/MM/yyyy");
+
+    if(d.isValid())
+        calendar->setSelectedDate(d);
+
+    QPoint p = mapToGlobal(QPoint(0, height()));
+    calendar->move(p);
+    calendar->show();
 }
 
-void EDateEdit::newText(const QString &arg1)
+void EDateEdit::dateSelected(const QDate &d)
 {
-    QDate d = QDate::fromString(arg1, def_date_format);
-    fIsValid = d.isValid();
-    if (d.isValid()) {
-        setBgColor(Qt::white);
-    } else {
-        setBgColor(Qt::red);
-    }
+    setText(d.toString("dd/MM/yyyy"));
+    calendar->hide();
     emit dateChanged(d);
+}
+
+void EDateEdit::newText(const QString &s)
+{
+    QDate d = QDate::fromString(s, "dd/MM/yyyy");
+    bool ok = d.isValid();
+    setStyleSheet(ok ? "" : "background:#ffaaaa;");
 }

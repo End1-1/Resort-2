@@ -55,6 +55,10 @@ void FMaterialsInStore::apply(WReportGrid *rg)
         where += " and b.f_goods in (" + ui->leMaterial->fHiddenText + ") ";
     }
 
+    if(!ui->chArchive->isChecked()) {
+        where += " and d.f_enabled=1 ";
+    }
+
     QString query = "select s.f_name as f_store, "
                     "b.f_goods,"
                     " dt.f_en as f_group,"
@@ -68,7 +72,7 @@ void FMaterialsInStore::apply(WReportGrid *rg)
                     "left join r_docs bd on bd.f_id=b.f_doc "
                     "where bd.f_date<=" + ui->deDate->dateMySql() + " and bd.f_state=1 " + where +
                     "group by 1, 2 "
-                    "order by 1, 3 ";
+                    "order by 1, 2, 3 ";
     rg->fModel->setSqlQuery(query);
     rg->fModel->apply(rg);
     QList<int> col;

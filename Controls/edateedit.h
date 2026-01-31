@@ -3,6 +3,8 @@
 
 #include "defines.h"
 #include <QLineEdit>
+#include <QToolButton>
+#include <QCalendarWidget>
 
 class EDateEdit : public QLineEdit
 {
@@ -22,8 +24,12 @@ protected:
 private:
     bool fIsValid;
     QString fField;
+    QAction* calAction = nullptr;
+    QCalendarWidget* calendar;
     void setBgColor(const QColor &color);
 private slots:
+    void showCalendar();
+    void dateSelected(const QDate &d);
     void newText(const QString &arg1);
 signals:
     void dateChanged(const QDate &date);

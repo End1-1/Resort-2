@@ -974,7 +974,7 @@ void FRestaurantTotal::removeOrder()
     fDbBind[":f_state"] = ORDER_STATE_REMOVED;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
     fDb.update("o_header", fDbBind, where_id(val.at(0).toInt()));
-    fDbBind[":f_state"] = state;
+    fDbBind[":f_state"] = 3;
     fDbBind[":f_state_cond"] = DISH_STATE_READY;
     fDbBind[":f_header"] = val.at(0);
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;

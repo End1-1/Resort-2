@@ -399,7 +399,7 @@ void WStoreEntry::on_btnCalculate_clicked()
         fDbBind[":f_invDate"] = QVariant();
         fDbBind[":f_amount"] = 0;
         fDbBind[":f_remarks"] = QString("%1").arg(tr("Autocorrection, output"));
-        fDbBind[":f_op"] = 1;
+        fDbBind[":f_op"] = WORKING_USERID;
         fDbBind[":f_fullDate"] = QDateTime::currentDateTime();
         fDbBind[":f_payment"] = 1;
         fDbBind[":f_rest"] = 0;
