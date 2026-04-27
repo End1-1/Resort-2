@@ -34,7 +34,6 @@ file(GLOB_RECURSE APP_SOURCES
     ../Print/*.cpp
     ../Widgets/*.cpp
     ../GridOptionWidgets/*.cpp
-    ../Xlsx/src/*.cpp
 )
 
 file(GLOB_RECURSE APP_HEADERS
@@ -48,7 +47,6 @@ file(GLOB_RECURSE APP_HEADERS
     ../Print/*.h
     ../Widgets/*.h
     ../GridOptionWidgets/*.h
-    ../Xlsx/src/*.h
     ../../NewTax/Src/*.h
 )
 
@@ -76,7 +74,6 @@ target_include_directories(EliteCarwash PRIVATE
     ../Print
     ../Widgets
     ../GridOptionWidgets
-    ../Xlsx/src
     C:/Development/OpenSSL-Win64/include
     C:/Development/OpenSSL-Win64/include/openssl
 )

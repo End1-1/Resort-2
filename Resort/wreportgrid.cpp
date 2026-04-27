@@ -1,5 +1,6 @@
 #include "wreportgrid.h"
 #include <QClipboard>
+#include <QFileDialog>
 #include <QMenu>
 #include <QScrollBar>
 #include "dlgconfiggrid.h"
@@ -10,6 +11,8 @@
 #include "ptextrect.h"
 #include "ui_wreportgrid.h"
 #include "wfilterbase.h"
+#include "xlsxdocument.h"
+#include "xlsxformat.h"
 
 WReportGrid::WReportGrid(QWidget *parent) :
     BaseWidget(parent),
@@ -179,97 +182,116 @@ void WReportGrid::on_leQuickSearch_textChanged(const QString &arg1)
 
 void WReportGrid::on_btnExcel_clicked()
 {
-    // int colCount = fModel->columnCount();
-    // int rowCount = fModel->rowCount();
-    // if (colCount == 0 || rowCount == 0) {
-    //     message_error_tr("Empty report!");
-    //     return;
-    // }
+    QXLSX_USE_NAMESPACE
 
-    // if (colCount == 0 || rowCount == 0) {
-    //     message_info(tr("Empty report!"));
-    //     return;
-    // }
-    // int fXlsxFitToPage = 0;
-    // QString fXlsxPageOrientation = xls_page_orientation_portrait;
-    // int fXlsxPageSize = xls_page_size_a4;
+    int colCount = fModel->columnCount();
+    int rowCount = fModel->rowCount();
+    if (colCount == 0 || rowCount == 0) {
+        message_error_tr("Empty report!");
+        return;
+    }
 
-    // XlsxDocument d;
-    // XlsxSheet *s = d.workbook()->addSheet("Sheet1");
-    // s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
-    // /* HEADER */
-    // QColor color = QColor::fromRgb(200, 200, 250);
-    // QFont headerFont(qApp->font());
-    // headerFont.setBold(true);
-    // d.style()->addFont("header", headerFont);
-    // d.style()->addBackgrounFill("header", color);
-    // d.style()->addHAlignment("header", xls_alignment_center);
-    // d.style()->addBorder("header", XlsxBorder());
-    // for (int i = 0; i < colCount; i++) {
-    //     s->addCell(1, i + 1, fModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), d.style()->styleNum("header"));
-    //     s->setColumnWidth(i + 1, fTableView->columnWidth(i) / 7);
-    // }
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save as Excel"), QString(), tr("Excel files (*.xlsx)"));
+    if (fileName.isEmpty()) {
+        return;
+    }
+    if (!fileName.endsWith(".xlsx", Qt::CaseInsensitive)) {
+        fileName += ".xlsx";
+    }
 
-    // /* BODY */
-    // QMap<int, QString> bgFill;
-    // QMap<int, QString> bgFillb;
-    // QFont bodyFont(qApp->font());
-    // d.style()->addFont("body", bodyFont);
-    // d.style()->addBackgrounFill("body", QColor(Qt::white));
-    // d.style()->addVAlignment("body", xls_alignment_center);
-    // d.style()->addBorder("body", XlsxBorder());
-    // bgFill[QColor(Qt::white).rgb()] = "body";
+    Document d;
+    d.addSheet("Sheet1");
+    d.selectSheet("Sheet1");
+    Worksheet *s = d.currentWorksheet();
+    if (!s) {
+        message_error(tr("Cannot create excel sheet"));
+        return;
+    }
 
-    // bodyFont.setBold(true);
-    // d.style()->addFont("body_b", bodyFont);
-    // d.style()->addBackgrounFill("body_b", QColor(Qt::white));
-    // d.style()->addVAlignment("body_b", xls_alignment_center);
-    // d.style()->addBorder("body_b", XlsxBorder());
-    // bgFillb[QColor(Qt::white).rgb()] = "body_b";
+    QColor color = QColor::fromRgb(200, 200, 250);
+    Format headerFormat;
+    headerFormat.setFont(qApp->font());
+    headerFormat.setFontBold(true);
+    headerFormat.setPatternForegroundColor(color);
+    headerFormat.setPatternBackgroundColor(color);
+    headerFormat.setFillPattern(Format::PatternSolid);
+    headerFormat.setHorizontalAlignment(Format::AlignHCenter);
+    headerFormat.setVerticalAlignment(Format::AlignVCenter);
+    headerFormat.setBorderStyle(Format::BorderThin);
+    for (int i = 0; i < colCount; i++) {
+        s->write(1, i + 1, fModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), headerFormat);
+        d.setColumnWidth(i + 1, fTableView->columnWidth(i) / 7.0);
+    }
 
-    // for (int j = 0; j < rowCount; j++) {
-    //     for (int i = 0; i < colCount; i++) {
-    //         int bgColor = fModel->data(j, i, Qt::BackgroundColorRole).value<QColor>().rgb();
-    //         if (!bgFill.contains(bgColor)) {
-    //             bodyFont.setBold(false);
-    //             d.style()->addFont(QString::number(bgColor), bodyFont);
-    //             d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
-    //             bgFill[bgColor] = QString::number(bgColor);
-    //         }
-    //         if (!bgFill.contains(bgColor)) {
-    //             bodyFont.setBold(true);
-    //             d.style()->addFont(QString::number(bgColor), bodyFont);
-    //             d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
-    //             bgFillb[bgColor] = QString::number(bgColor);
-    //         }
-    //         QString bgStyle = bgFill[bgColor];
-    //         if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
-    //             bgStyle = bgFillb[bgColor];
-    //         }
-    //         s->addCell(j + 2, i + 1, fModel->data(j, i, Qt::EditRole), d.style()->styleNum(bgStyle));
-    //     }
-    // }
-    // /* TOTALS ROWS */
-    // if (ui->tblTotals->isVisible()) {
-    //     QFont totalFont(qApp->font());
-    //     totalFont.setBold(true);
-    //     d.style()->addFont("footer", headerFont);
-    //     d.style()->addBorder("footer", XlsxBorder());
-    //     color = QColor::fromRgb(193, 206, 221);
-    //     d.style()->addBackgrounFill("footer", color);
-    //     //d.style()->addHAlignment("footer", xls_alignment_right);
-    //     for (int i = 0; i < colCount; i++) {
-    //         s->addCell(1 + fModel->rowCount() + 1, i + 1,
-    //                    ui->tblTotals->item(0, i) ?
-    //                                                           ui->tblTotals->itemValue(0, i) : "", d.style()->styleNum("footer"));
-    //     }
-    // }
-    // QString err;
-    // if (!d.save(err, true)) {
-    //     if (!err.isEmpty()) {
-    //         message_error(err);
-    //     }
-    // }
+    QMap<int, Format> bgFill;
+    QMap<int, Format> bgFillb;
+    Format bodyFormat;
+    bodyFormat.setFont(qApp->font());
+    bodyFormat.setPatternForegroundColor(QColor(Qt::white));
+    bodyFormat.setPatternBackgroundColor(QColor(Qt::white));
+    bodyFormat.setFillPattern(Format::PatternSolid);
+    bodyFormat.setVerticalAlignment(Format::AlignVCenter);
+    bodyFormat.setBorderStyle(Format::BorderThin);
+    bgFill[QColor(Qt::white).rgb()] = bodyFormat;
+
+    QFont boldBodyFont(qApp->font());
+    boldBodyFont.setBold(true);
+    Format bodyBoldFormat;
+    bodyBoldFormat.setFont(boldBodyFont);
+    bodyBoldFormat.setPatternForegroundColor(QColor(Qt::white));
+    bodyBoldFormat.setPatternBackgroundColor(QColor(Qt::white));
+    bodyBoldFormat.setFillPattern(Format::PatternSolid);
+    bodyBoldFormat.setVerticalAlignment(Format::AlignVCenter);
+    bodyBoldFormat.setBorderStyle(Format::BorderThin);
+    bgFillb[QColor(Qt::white).rgb()] = bodyBoldFormat;
+
+    for (int j = 0; j < rowCount; j++) {
+        for (int i = 0; i < colCount; i++) {
+            QColor bg = fModel->data(j, i, Qt::BackgroundRole).value<QBrush>().color();
+            if (!bg.isValid()) {
+                bg = QColor(Qt::white);
+            }
+            int bgColor = bg.rgb();
+            if (!bgFill.contains(bgColor)) {
+                Format fmt = bodyFormat;
+                fmt.setPatternForegroundColor(QColor::fromRgb(bgColor));
+                fmt.setPatternBackgroundColor(QColor::fromRgb(bgColor));
+                bgFill[bgColor] = fmt;
+            }
+            if (!bgFillb.contains(bgColor)) {
+                Format fmt = bodyBoldFormat;
+                fmt.setPatternForegroundColor(QColor::fromRgb(bgColor));
+                fmt.setPatternBackgroundColor(QColor::fromRgb(bgColor));
+                bgFillb[bgColor] = fmt;
+            }
+            Format bgStyle = bgFill[bgColor];
+            if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
+                bgStyle = bgFillb[bgColor];
+            }
+            s->write(j + 2, i + 1, fModel->data(j, i, Qt::EditRole), bgStyle);
+        }
+    }
+
+    if (ui->tblTotals->isVisible()) {
+        Format footerFormat;
+        footerFormat.setFont(qApp->font());
+        footerFormat.setFontBold(true);
+        footerFormat.setBorderStyle(Format::BorderThin);
+        color = QColor::fromRgb(193, 206, 221);
+        footerFormat.setPatternForegroundColor(color);
+        footerFormat.setPatternBackgroundColor(color);
+        footerFormat.setFillPattern(Format::PatternSolid);
+        for (int i = 0; i < colCount; i++) {
+            s->write(1 + fModel->rowCount() + 1,
+                     i + 1,
+                     ui->tblTotals->item(0, i) ? ui->tblTotals->itemValue(0, i) : "",
+                     footerFormat);
+        }
+    }
+
+    if (!d.saveAs(fileName)) {
+        message_error(tr("Failed to save Excel file"));
+    }
 }
 
 void WReportGrid::on_tblMain_doubleClicked(const QModelIndex &index)
