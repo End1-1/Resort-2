@@ -5,10 +5,11 @@
 
 #define cid_coupon_seria 109
 
-typedef struct : CI_Base {
+struct CI_CouponSeria : public CI_Base
+{
     double fPrice;
     QStringList fItems;
-} CI_CouponSeria;
+};
 Q_DECLARE_METATYPE(CI_CouponSeria*)
 
 class CacheCouponSeria : public CacheBase<CI_CouponSeria>

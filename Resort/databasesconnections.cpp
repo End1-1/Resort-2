@@ -34,11 +34,8 @@ void DatabasesConnections::loadDatabases()
     for (QStringList::const_iterator it = dbNames.constBegin(); it != dbNames.constEnd(); it++) {
         Db db = fPreferences.getDatabase(*it);
         QList<QVariant> values;
-        values << db.dc_name
-               << db.dc_main_host
-               << db.dc_main_path
-               << db.dc_main_user
-               << db.dc_main_pass;
+        values << QString(db.dc_name) << QString(db.dc_main_host) << QString(db.dc_main_path) << QString(db.dc_main_user)
+               << QString(db.dc_main_pass);
         Utils::tableAppendRowData(ui->tableDb, values, Qt::EditRole);
     }
 }

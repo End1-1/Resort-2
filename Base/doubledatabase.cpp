@@ -1,10 +1,11 @@
 #include "doubledatabase.h"
-#include <QMutexLocker>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlRecord>
 #include <QDate>
 #include <QDebug>
+#include <QMutexLocker>
+#include <QRegularExpression>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 
 int DoubleDatabase::fCounter = 0;
 QMutex fMutex;
@@ -163,31 +164,42 @@ void DoubleDatabase::logEvent(const QString &event)
 QString DoubleDatabase::lastQuery(QSqlQuery *q)
 {
     QString sql = q->lastQuery();
-    QMapIterator<QString, QVariant> it(q->boundValues());
-    while (it.hasNext()) {
-        it.next();
-        QVariant value = it.value();
-        switch (it.value().type()) {
-        case QVariant::String:
+
+    const QStringList names = q->boundValueNames();
+    const QVariantList values = q->boundValues();
+
+    for (int i = 0; i < values.size(); ++i) {
+        QVariant value = values[i];
+
+        switch (value.metaType().id()) {
+        case QMetaType::QString:
             value = QString("'%1'").arg(value.toString().replace("'", "''"));
             break;
-        case QVariant::Date:
+
+        case QMetaType::QDate:
             value = QString("'%1'").arg(value.toDate().toString("yyyy-MM-dd"));
             break;
-        case QVariant::DateTime:
+
+        case QMetaType::QDateTime:
             value = QString("'%1'").arg(value.toDateTime().toString("yyyy-MM-dd HH:mm:ss"));
             break;
-        case QVariant::Double:
+
+        case QMetaType::Double:
             value = QString("%1").arg(value.toDouble());
             break;
-        case QVariant::Int:
+
+        case QMetaType::Int:
             value = QString("%1").arg(value.toInt());
             break;
+
         default:
             break;
         }
-        sql.replace(it.key(), value.toString());
+
+        sql.replace(QRegularExpression("\\b" + QRegularExpression::escape(names[i]) + "\\b"),
+                    value.toString());
     }
+
     return sql;
 }
 

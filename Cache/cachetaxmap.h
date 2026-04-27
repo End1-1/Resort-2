@@ -5,8 +5,8 @@
 
 #define cid_tax_map 105
 
-typedef struct : CI_Base {
-} CI_TaxMap;
+struct CI_TaxMap : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_TaxMap*)
 
 class CacheTaxMap : public CacheBase<CI_TaxMap>

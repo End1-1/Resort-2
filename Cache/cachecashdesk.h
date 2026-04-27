@@ -5,9 +5,8 @@
 
 #define cid_cash_desk 110
 
-typedef struct : CI_Base {
-
-} CI_CashDesk;
+struct CI_CashDesk : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_CashDesk*)
 
 class CacheCashDesk : public CacheBase<CI_CashDesk>

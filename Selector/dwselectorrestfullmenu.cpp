@@ -36,7 +36,7 @@ void DWSelectorRestFullMenu::configure()
         fTable->setItem(row, 2, new QTableWidgetItem(QString::number(ci->fDishCode)));
         fTable->setItem(row, 3, new QTableWidgetItem(ci->fDishName[def_lang]));
         fTable->setItem(row, 4, new QTableWidgetItem(float_str(ci->fPrice, 0)));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(ci));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(ci));
         row++;
     }
     fTable->setRowCount(row);

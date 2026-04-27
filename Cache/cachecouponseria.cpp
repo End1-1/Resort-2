@@ -19,7 +19,7 @@ void CacheCouponSeria::load()
         ci->fCode = q->value(0).toString();
         ci->fName = q->value(1).toString();
         ci->fPrice = q->value(2).toDouble();
-        ci->fItems = q->value(3).toString().split(",", QString::SkipEmptyParts);
+        ci->fItems = q->value(3).toString().split(",", Qt::SkipEmptyParts);
         fStaticCache[fCacheId][ci->fCode] = ci;
     }
     closeDb(q);
@@ -36,7 +36,7 @@ void CacheCouponSeria::updateItem(const QString &id)
         ci->fCode = q->value(0).toString();
         ci->fName = q->value(1).toString();
         ci->fPrice = q->value(2).toDouble();
-        ci->fItems = q->value(3).toString().split(",", QString::SkipEmptyParts);
+        ci->fItems = q->value(3).toString().split(",", Qt::SkipEmptyParts);
         fStaticCache[fCacheId][ci->fCode] = ci;
     } else {
         if (ci) {

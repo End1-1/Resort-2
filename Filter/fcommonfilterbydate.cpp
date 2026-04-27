@@ -17,9 +17,9 @@ FCommonFilterByDate::FCommonFilterByDate(int sqlId, QWidget *parent) :
     fReportGrid->setupTabTextAndIcon(fDbRows.at(0).at(0).toString(), ":/images/report.png");
     fTitle = fDbRows.at(0).at(0).toString();
     fQuery = fDbRows.at(0).at(1).toString();
-    QStringList widths = fDbRows.at(0).at(2).toString().split(";", QString::SkipEmptyParts);
-    QStringList titles = fDbRows.at(0).at(3).toString().split(";", QString::SkipEmptyParts);
-    QStringList sums = fDbRows.at(0).at(4).toString().split(";", QString::SkipEmptyParts);
+    QStringList widths = fDbRows.at(0).at(2).toString().split(";", Qt::SkipEmptyParts);
+    QStringList titles = fDbRows.at(0).at(3).toString().split(";", Qt::SkipEmptyParts);
+    QStringList sums = fDbRows.at(0).at(4).toString().split(";", Qt::SkipEmptyParts);
     for (int i = 0; i < widths.count(); i++) {
         fReportGrid->fModel->setColumn(widths.at(i).toInt(), "", titles.at(i));
     }

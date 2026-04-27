@@ -307,14 +307,8 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
 //        qDebug() << r << "/" << printer.resolution();
 //    }
 //    //printer.setResolution(maxRes);
-    QMatrix m;
-#ifdef QT_DEBUG
-    m.scale(1, 1);
-#else
-    m.scale(3, 3);
-#endif
+
     QPainter painter(&printer);
-    painter.setMatrix(m);
     for (int i = 0; i < lps.count(); i++) {
         if (i > 0) {
             printer.newPage();

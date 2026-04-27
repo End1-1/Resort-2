@@ -5,8 +5,8 @@
 
 #define cid_rest_printers 30
 
-typedef struct : CI_Base {
-} CI_RestPrinter;
+struct CI_RestPrinter : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_RestPrinter*)
 
 class CacheRestPrinters : public CacheBase<CI_RestPrinter>

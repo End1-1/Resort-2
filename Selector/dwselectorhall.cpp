@@ -27,7 +27,7 @@ void DWSelectorHall::configure()
         }
         fTable->setItem(row, 0, new QTableWidgetItem(v->fCode));
         fTable->setItem(row, 1, new QTableWidgetItem(v->fName));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(v));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(v));
         row++;
     }
     fTable->setRowCount(row);

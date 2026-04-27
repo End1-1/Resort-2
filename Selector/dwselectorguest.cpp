@@ -28,7 +28,7 @@ void DWSelectorGuest::configure()
         fTable->setItem(row, 2, new QTableWidgetItem(i.value()->fName));
         fTable->setItem(row, 3, new QTableWidgetItem(i.value()->fPassport));
         fTable->setItem(row, 4, new QTableWidgetItem(i.value()->fNatShort));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(i.value()));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(i.value()));
         row++;
     }
     fTable->setRowCount(row);

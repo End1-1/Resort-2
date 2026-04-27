@@ -48,7 +48,7 @@ void DlgComplexDish::setup()
     while (it.hasNext()) {
         DishComplexStruct *dc = it.next();
         QTableWidgetItem *item = new QTableWidgetItem(dc->fName[def_lang] + " [" +  float_str(dc->fPrice, 2) + "]");
-        item->setData(Qt::UserRole, qVariantFromValue(dc));
+        item->setData(Qt::UserRole, QVariant::fromValue(dc));
         ui->tblData->setItem(row, col++, item);
         if (col >= ui->tblData->columnCount()) {
             col = 0;
@@ -69,7 +69,7 @@ void DlgComplexDish::setupDishes()
     QListIterator<DishStruct*> it(fResult->fDishes);
     while (it.hasNext()) {
         DishStruct *ds = it.next();
-        ui->tblData->setItem(row, col++, Utils::tableItem(ds->fName, qVariantFromValue(ds)));
+        ui->tblData->setItem(row, col++, Utils::tableItem(ds->fName, QVariant::fromValue(ds)));
         if (col >= ui->tblData->columnCount()) {
             col = 0;
             row++;

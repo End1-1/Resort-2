@@ -309,30 +309,56 @@ Db Database::db()
 QString Database::lastQuery(QSqlQuery &q)
 {
     QString sql = q.lastQuery();
-    QMapIterator<QString, QVariant> it(q.boundValues());
-    while (it.hasNext()) {
-        it.next();
-        QVariant value = it.value();
-        switch (it.value().type()) {
-        case QVariant::String:
-            value = QString("'%1'").arg(value.toString().replace("'", "''"));
-            break;
-        case QVariant::Date:
-            value = QString("'%1'").arg(value.toDate().toString(def_mysql_date_format));
-            break;
-        case QVariant::DateTime:
-            value = QString("'%1'").arg(value.toDateTime().toString(def_mysql_datetime_format));
-            break;
-        case QVariant::Double:
-            value = QString("%1").arg(value.toDouble());
-            break;
-        case QVariant::Int:
-            value = QString("%1").arg(value.toInt());
-            break;
-        default:
-            break;
+
+    const auto names = q.boundValueNames();
+    const auto values = q.boundValues();
+
+    for (int i = 0; i < values.size(); ++i) {
+        QString key = names.value(i);
+        QVariant value = values.at(i);
+        QString replacement;
+
+        if (value.isNull()) {
+            replacement = "NULL";
+        } else {
+            switch (value.metaType().id()) {
+            case QMetaType::QString:
+                replacement = QString("'%1'").arg(value.toString().replace("'", "''"));
+                break;
+
+            case QMetaType::QDate:
+                replacement = QString("'%1'").arg(value.toDate().toString(def_mysql_date_format));
+                break;
+
+            case QMetaType::QDateTime:
+                replacement = QString("'%1'").arg(
+                    value.toDateTime().toString(def_mysql_datetime_format));
+                break;
+
+            case QMetaType::Double:
+            case QMetaType::Float:
+                replacement = QString::number(value.toDouble());
+                break;
+
+            case QMetaType::Int:
+            case QMetaType::UInt:
+            case QMetaType::LongLong:
+            case QMetaType::ULongLong:
+                replacement = QString::number(value.toLongLong());
+                break;
+
+            case QMetaType::Bool:
+                replacement = value.toBool() ? "1" : "0";
+                break;
+
+            default:
+                replacement = value.toString();
+                break;
+            }
         }
-        sql.replace(QRegExp(it.key() + "\\b"), value.toString());
+
+        sql.replace(QRegularExpression(key + "\\b"), replacement);
     }
+
     return sql;
 }

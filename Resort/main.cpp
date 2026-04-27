@@ -1,15 +1,13 @@
-#include "mainwindow.h"
-#include "utils.h"
 #include <QApplication>
-#include <QFontDatabase>
 #include <QFile>
+#include <QFontDatabase>
 #include <QStyleFactory>
 #include <QTranslator>
-#include <QTextCodec>
+#include "mainwindow.h"
+#include "utils.h"
 
 int main(int argc, char *argv[])
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8") );
     def_station = "SmartHotel: ";
     Utils::initNumbersWords();
     QApplication a(argc, argv);
@@ -18,18 +16,19 @@ int main(int argc, char *argv[])
 
 
     QTranslator t;
-    t.load(":/Resort.qm");
-    a.installTranslator(&t);
-
+    if (t.load(":/Resort.qm")) {
+        a.installTranslator(&t);
+    }
 
     a.setStyle(QStyleFactory::create("fusion"));
 
     QString fsn = qApp->applicationDirPath() +  "/styles.qss";
     QFile styleFile(fsn);
     if (styleFile.exists()) {
-        styleFile.open(QIODevice::ReadOnly);
-        a.setStyleSheet(styleFile.readAll());
-        styleFile.close();
+        if (styleFile.open(QIODevice::ReadOnly)) {
+            a.setStyleSheet(styleFile.readAll());
+            styleFile.close();
+        }
     }
 
     a.setWindowIcon(QIcon(":/images/app.ico"));

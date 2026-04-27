@@ -5,8 +5,8 @@
 
 #define cid_vat_mode 22
 
-typedef struct : CI_Base {
-} CI_VATMode;
+struct CI_VATMode : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_VATMode*)
 
 class CacheVatMode : public CacheBase<CI_VATMode>

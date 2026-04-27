@@ -12,7 +12,7 @@ public:
         switch (value.type()) {
         case QVariant::Double: {
             QString v = loc.toString(value.toDouble(), 'f', 2);
-            v.remove(QRegExp("\\.0+$")).remove(QRegExp("\\.$"));
+            v.remove(QRegularExpression("\\.0+$")).remove(QRegularExpression("\\.$"));
             return v;
         }
         case QVariant::Date:

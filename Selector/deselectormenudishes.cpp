@@ -35,7 +35,7 @@ void DESelectorMenuDishes::configure()
         fTable->setItem(row, 1, new QTableWidgetItem(c->fTypeName));
         fTable->setItem(row, 2, new QTableWidgetItem(c->fName));
         fTable->setItem(row, 3, new QTableWidgetItem(c->fPrice));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(c));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(c));
         row++;
     }
 }

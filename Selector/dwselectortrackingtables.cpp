@@ -22,7 +22,7 @@ void DWSelectorTrackingTables::configure()
         fTable->setItem(row, 0, new QTableWidgetItem(i.value()->fCode));
         fTable->setItem(row, 1, new QTableWidgetItem(i.value()->fName));
         CI_TrackingTables *ct = i.value();
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(ct));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(ct));
         row++;
     }
 }

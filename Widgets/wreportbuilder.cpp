@@ -53,10 +53,10 @@ void WReportBuilder::on_lwNames_clicked(const QModelIndex &index)
         ui->teSQL->setPlainText(fDbRows.at(0).at(3).toString());
         ui->leSum->setText(fDbRows.at(0).at(6).toString());
         ui->cbMainMenu->setCurrentIndex(fDbRows.at(0).at(9).toInt());
-        QStringList fields = fDbRows.at(0).at(8).toString().split(";", QString::SkipEmptyParts);
-        QStringList titles = fDbRows.at(0).at(5).toString().split(";", QString::SkipEmptyParts);
-        QStringList widths = fDbRows.at(0).at(4).toString().split(";", QString::SkipEmptyParts);
-        QStringList filter = fDbRows.at(0).at(7).toString().split(";", QString::SkipEmptyParts);
+        QStringList fields = fDbRows.at(0).at(8).toString().split(";", Qt::SkipEmptyParts);
+        QStringList titles = fDbRows.at(0).at(5).toString().split(";", Qt::SkipEmptyParts);
+        QStringList widths = fDbRows.at(0).at(4).toString().split(";", Qt::SkipEmptyParts);
+        QStringList filter = fDbRows.at(0).at(7).toString().split(";", Qt::SkipEmptyParts);
         ui->leSubtotals->setText(fDbRows.at(0).at(10).toString());
         for (int i = 0; i < fields.count(); i++) {
             QListWidgetItem *item = new QListWidgetItem(ui->lwCols);
@@ -66,7 +66,7 @@ void WReportBuilder::on_lwNames_clicked(const QModelIndex &index)
             ui->lwCols->addItem(item);
         }
         for (int i = 0; i < filter.count(); i++) {
-             QStringList f = filter.at(i).split("^", QString::KeepEmptyParts);
+             QStringList f = filter.at(i).split("^", Qt::KeepEmptyParts);
              QListWidgetItem *item = new QListWidgetItem(ui->lwFilters);
              item->setText(f.at(1));
              item->setData(Qt::UserRole, f.at(0)); //field
@@ -177,7 +177,7 @@ void WReportBuilder::on_btnExtractCols_clicked()
     }
     ui->lwCols->clear();
     QString sql = ui->teSQL->toPlainText();
-    QStringList fields = sql.mid(7, sql.indexOf("from") - 7).split(",", QString::SkipEmptyParts);
+    QStringList fields = sql.mid(7, sql.indexOf("from") - 7).split(",", Qt::SkipEmptyParts);
     for (int i = 0; i < fields.count(); i++) {
         QListWidgetItem *item = new QListWidgetItem(ui->lwCols);
         item->setText(fields.at(i).trimmed());

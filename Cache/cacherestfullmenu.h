@@ -5,13 +5,14 @@
 
 #define ci_rest_full_menu 113
 
-typedef struct : CI_Base {
+struct CI_RestFullMenu : public CI_Base
+{
     int fMenuCode;
     int fDishCode;
     int fStore;
     QMap<QString, QString> fDishName;
     double fPrice;
-} CI_RestFullMenu;
+};
 Q_DECLARE_METATYPE(CI_RestFullMenu*)
 
 class CacheRestFullMenu : public CacheBase<CI_RestFullMenu>

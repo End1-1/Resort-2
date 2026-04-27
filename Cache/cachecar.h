@@ -5,9 +5,8 @@
 
 #define cid_car 106
 
-typedef struct : CI_Base {
-
-} CI_Car;
+struct CI_Car : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_Car*)
 
 class CacheCar : public CacheBase<CI_Car>

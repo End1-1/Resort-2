@@ -5,9 +5,8 @@
 
 #define cid_credit_card 44
 
-typedef struct : CI_Base {
-
-} CI_CreditCard;
+struct CI_CreditCard : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_CreditCard*)
 
 class CacheCreditCard : public CacheBase<CI_CreditCard>

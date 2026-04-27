@@ -21,7 +21,7 @@ void DWSelectorRestMenu::configure()
         i.next();
         fTable->setItem(row, 0, new QTableWidgetItem(i.value()->fCode));
         fTable->setItem(row, 1, new QTableWidgetItem(i.value()->fName));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(i.value()));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(i.value()));
         row++;
     }
 }

@@ -8,7 +8,11 @@
 #include <QDate>
 #include <QSettings>
 
-#define float_str(value, f) QString("%1").arg(value, 0, 'f', f).remove(QRegExp("(?!\\d[\\.\\,][1-9]+)0+$")).remove(QRegExp("[\\.\\,]$"))
+const QRegularExpression float_expr1("(?!\\d[\\.\\,][1-9]+)0+$");
+const QRegularExpression float_expr2("[\\.\\,]$");
+
+#define float_str(value, f) \
+    QLocale().toString(value, 'f', f).remove(float_expr1).remove(float_expr2)
 #define str_float(value) QLocale().toDouble(value)
 #define float_equal(value1, value2) (abs(value1 - value2) < 0.01 ? true : false)
 #define float_greaterOrEqual(value1, value2) (value1 - value2 >= 0.01 ? true : false)
@@ -63,7 +67,7 @@ namespace Utils {
         int row = 0, col = 0;
         for (typename QList<T>::const_iterator it = list.begin(); it != list.end(); it++) {
             QTableWidgetItem *item = new QTableWidgetItem();
-            item->setData(role, qVariantFromValue(*it));
+            item->setData(role, QVariant::fromValue(*it));
             tw->setItem(row, col++, item);
             if (col == tw->columnCount()) {
                 col = 0;

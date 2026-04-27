@@ -5,12 +5,13 @@
 
 #define cid_menu_dishes 49
 
-typedef struct : CI_Base {
+struct CI_MenuDishes : CI_Base
+{
     QString fMenuId;
     QString fTypeName;
     QString fMenu;
     QString fPrice;
-} CI_MenuDishes;
+};
 Q_DECLARE_METATYPE(CI_MenuDishes*)
 
 class CacheMenuDishes : public CacheBase<CI_MenuDishes>

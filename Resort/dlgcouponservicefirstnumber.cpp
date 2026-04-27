@@ -51,13 +51,13 @@ void DlgCouponServiceFirstNumber::setup(int type)
             int r = ui->tbl->rowCount();
             ui->tbl->setRowCount(r + 1);
             ui->tbl->setItem(r, 0, new QTableWidgetItem(firstnumber));
-            curr = lastnumber.rightRef(5).toInt();
+            curr = lastnumber.right(5).toInt();
             continue;
         }
-        int next = lastnumber.rightRef(5).toInt();
+        int next = lastnumber.right(5).toInt();
         if (next != curr + 1) {
-            int first = firstnumber.rightRef(5).toInt();
-            int last = prevnumber.rightRef(5).toInt();
+            int first = firstnumber.right(5).toInt();
+            int last = prevnumber.right(5).toInt();
             int r = ui->tbl->rowCount() - 1;
             ui->tbl->setItem(r, 1, new QTableWidgetItem(prevnumber));
             ui->tbl->setItem(r, 2, new QTableWidgetItem(QString::number(last - first + 1)));
@@ -73,7 +73,7 @@ void DlgCouponServiceFirstNumber::setup(int type)
         prevnumber = lastnumber;
     }
     if (curr > 0) {
-        int first = firstnumber.rightRef(5).toInt();
+        int first = firstnumber.right(5).toInt();
         int r = ui->tbl->rowCount() - 1;
         ui->tbl->setItem(r, 1, new QTableWidgetItem(lastnumber));
         ui->tbl->setItem(r, 2, new QTableWidgetItem(QString::number(curr - first + 1)));

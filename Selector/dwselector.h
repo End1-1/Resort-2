@@ -68,7 +68,7 @@ protected:
             fTable->setItem(row, 0, new QTableWidgetItem(i.value()->fCode));
             fTable->setItem(row, 1, new QTableWidgetItem(i.value()->fName));
             T *ct = i.value();
-            fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(ct));
+            fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(ct));
             row++;
         }
         fTable->setRowCount(row);

@@ -5,9 +5,10 @@
 
 #define cid_rest_hall 25
 
-typedef struct : CI_Base {
+struct CI_RestHall : public CI_Base
+{
     QString fDefaultMenu;
-} CI_RestHall;
+};
 Q_DECLARE_METATYPE(CI_RestHall*)
 
 class CacheRestHall : public CacheBase<CI_RestHall>

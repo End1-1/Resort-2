@@ -5,9 +5,8 @@
 
 #define cid_sex 52
 
-typedef struct : CI_Base {
-
-} CI_Sex;
+struct CI_Sex : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_Sex*)
 
 class CachSex : public CacheBase<CI_Sex>

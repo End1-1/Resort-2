@@ -5,9 +5,8 @@
 
 #define cid_dish_state 62
 
-typedef struct : CI_Base {
-
-} CI_DishState;
+struct CI_DishState : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_DishState*)
 
 class CacheDishState : public CacheBase<CI_DishState>

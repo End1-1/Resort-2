@@ -1,11 +1,12 @@
 #include "dlgcarselection.h"
-#include "ui_dlgcarselection.h"
+#include <QMessageBox>
+#include "cachecar.h"
+#include "database2.h"
+#include "dlgdeptholder.h"
 #include "dlgreservation.h"
 #include "rdishcomment.h"
-#include "dlgdeptholder.h"
 #include "rmessage.h"
-#include "cacherestdebtholder.h"
-#include "cachecar.h"
+#include "ui_dlgcarselection.h"
 
 DlgCarSelection::DlgCarSelection(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -23,10 +24,20 @@ void DlgCarSelection::selectCar(int &model, QString &govNum, int &costumer)
 {
     DlgCarSelection *d = new DlgCarSelection();
     d->ui->leGovNum->setText(govNum);
-    CI_RestDebtHolder *ch = CacheRestDebtHolder::instance()->get(costumer);
-    if (ch) {
-        d->ui->leCostumer->setText(ch->fName);
-        d->ui->leCostumer->fHiddenText = ch->fCode;
+
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+
+    if (!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
+        QMessageBox::critical(0, "Db error", db2.lastDbError());
+        exit(0);
+    }
+
+    db2[":f_id"] = costumer;
+    db2.exec("select f_id, f_name from o_debt_holder  where f_id=:f_id");
+    if (db2.next()) {
+        d->ui->leCostumer->setText(db2.string("f_name"));
+        d->ui->leCostumer->fHiddenText = QString::number(db2.integer("f_id"));
     }
     d->fModel = model;
     if (model > 0) {

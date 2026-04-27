@@ -57,7 +57,7 @@ protected:
 
         if (t->fOrder > 0) {
             int y = rectTable.top() + 10;
-            int x = rectTable.left() + QFontMetrics(f).width(t->fName) + 15;
+            int x = rectTable.left() + QFontMetrics(f).horizontalAdvance(t->fName) + 15;
             int tableNameHeight = rectTable.top() + QFontMetrics(f).height() + 5;
             f.setPointSize(8);
             painter->setFont(f);
@@ -83,7 +83,6 @@ RFace::RFace(QWidget *parent) :
 
     fCurrenTableState = 0;
     fTimerCounter = 0;
-    fSocket.setProxy(QNetworkProxy::NoProxy);
     fIsConfigured = true;
     // setup tax parameters
     fDbBind[":f_comp"] = QHostInfo::localHostName();
@@ -125,27 +124,6 @@ RFace::~RFace()
 
 bool RFace::setup()
 {
-    fCommand.setSocket(&fSocket);
-    connect(&fSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
-    connect(&fSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    connect(&fCommand, SIGNAL(parseCommand(QString)), this, SLOT(parseCommand(QString)));
-    fSocket.connectToHost(fDb.fDb.hostName(), 1250);
-    if (fSocket.waitForConnected()) {
-        QString data = QString("{\"db\" : {\"database\" : \"%1\", \"user\" : \"%2\", \"password\" : \"password\"}, "
-                               "\"command\" : {\"command\": \"identify\"}}")
-                .arg(fDb.fDb.databaseName())
-                .arg(WORKING_USERNAME);
-        int size = data.toUtf8().length();
-        QByteArray dataToSend;
-        dataToSend.append(reinterpret_cast<const char*>(&size), sizeof(size));
-        dataToSend.append(data.toUtf8(), data.toUtf8().length());
-        fSocket.write(dataToSend, dataToSend.length());
-        fSocket.flush();
-    } else {
-        message_error(tr("Cannot connect to broadcast server, force logout"));
-        message_error(fDb.fDb.hostName());
-        return false;
-    }
     Splash s(this);
     s.show();
     s.setText(tr("Load hall..."));
@@ -180,7 +158,6 @@ void RFace::on_tableWidget_clicked(const QModelIndex &index)
 
 void RFace::on_btnExit_clicked()
 {
-    fSocket.disconnect();
     accept();
 }
 

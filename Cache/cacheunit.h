@@ -6,9 +6,8 @@
 
 #define cid_unit 119
 
-typedef struct : CI_Base {
-
-} CI_Unit;
+struct CI_Unit : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_Unit*)
 
 class CacheUnit : public CacheBase<CI_Unit>

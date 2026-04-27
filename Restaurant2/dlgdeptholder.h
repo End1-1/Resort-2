@@ -25,6 +25,8 @@ private slots:
 
     void on_lstHolders_itemClicked(QListWidgetItem *item);
 
+    void on_btnUnknown_clicked();
+
 private:
     Ui::DlgDeptHolder *ui;
     QString fHolderName;

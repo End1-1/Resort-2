@@ -5,9 +5,8 @@
 
 #define cid_discount_type 118
 
-typedef struct : CI_Base {
-
-} CI_DiscountType;
+struct CI_DiscountType : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_DiscountType*)
 
 class CacheDiscountType : public CacheBase<CI_DiscountType>

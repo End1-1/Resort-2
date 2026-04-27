@@ -74,13 +74,13 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     CI_OrderState *os = CacheOrderState::instance()->get(ORDER_STATE_CLOSED);
 
     if(os) {
-        selector(sn_order_state, qVariantFromValue(os));
+        selector(sn_order_state, QVariant::fromValue(os));
     }
 
     CI_DishState *ds = CacheDishState::instance()->get(DISH_STATE_READY);
 
     if(ds) {
-        selector(sn_dish_state, qVariantFromValue(ds));
+        selector(sn_dish_state, QVariant::fromValue(ds));
     }
 
     connect(ui->leBranch, &EQLineEdit::customButtonClicked, this, &FRestaurantTotal::branchEditDoubleClick);

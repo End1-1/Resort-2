@@ -5,9 +5,8 @@
 
 #define cid_order_state  60
 
-typedef struct : CI_Base {
-
-} CI_OrderState;
+struct CI_OrderState : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_OrderState*)
 
 class CacheOrderState : public CacheBase<CI_OrderState>

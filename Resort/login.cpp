@@ -1,18 +1,19 @@
 #include "login.h"
-#include "ui_login.h"
-#include "loginsettings.h"
-#include "databasesconnections.h"
-#include "cacherights.h"
-#include "databaseresult.h"
-#include "appconfig.h"
-#include "ecomboboxcompleter.h"
-#include <QProcess>
-#include <windows.h>
+#include <QFile>
+#include <QInputDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QProcess>
 #include <QShortcut>
-#include <QInputDialog>
+#include "appconfig.h"
+#include "cacherights.h"
+#include "databaseresult.h"
+#include "databasesconnections.h"
+#include "ecomboboxcompleter.h"
+#include "loginsettings.h"
+#include "ui_login.h"
+#include <windows.h>
 
 Login::Login(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -108,7 +109,6 @@ void Login::readDatagram()
                 TrackControl::fDbDb = jObj["logdb"].toString();
                 TrackControl::fDbUser = jObj["loguser"].toString();
                 TrackControl::fDbPass = jObj["logpass"].toString();
-                _IDGENMODE_ = jObj["idgen"].toInt();
                 DatabaseResult dr;
                 fDbBind[":f_user"] = HOSTNAME + "." + fPreferences.hostUsername();
                 dr.select(db, "select * from f_db where f_id in "
@@ -269,7 +269,6 @@ void Login::on_btnLogin_clicked()
     }
     DatabaseResult dtime;
     dtime.select(fDb, "select current_timestamp() as 'time'", fDbBind);
-    qDebug() << QDateTime::currentDateTime().toTime_t() - dtime.value("time").toDateTime().toTime_t();
 
     DatabaseResult dr;
     fDbBind[":f_comp"] = def_station + QHostInfo::localHostName();

@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap bkgnd(bgpath);
     bkgnd = bkgnd.scaled(ui->wbg->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
-    palette.setBrush(QPalette::Background, bkgnd);
+    palette.setBrush(QPalette::Window, bkgnd);
     ui->wbg->setPalette(palette);
     ui->wbg->setStyleSheet(QString(".QWidget{border-image:url(%1)0 0 0 0 stretch stretch;}").arg(qApp->applicationDirPath()
                            + "/bg.jpg"));
@@ -1096,11 +1096,6 @@ void MainWindow::on_actionStore_entries_triggered()
 void MainWindow::on_actionNew_store_checkpoint_triggered()
 {
     WStoreEntry::openDoc(0);
-}
-
-void MainWindow::on_actionPartner_payments_triggered()
-{
-    //FPartnerPayments::openFilterReport<FPartnerPayments, WReportGrid>();
 }
 
 void MainWindow::on_actionCoupons_statistics_triggered()

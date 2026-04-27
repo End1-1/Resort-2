@@ -1,38 +1,34 @@
-#include "rface.h"
-#include "preferences.h"
-#include "logging.h"
-#include "cacheone.h"
-#include "dlgconnecttoserver.h"
-#include "rdesk.h"
-#include "defrest.h"
-#include "rlogin.h"
-#include "branchstoremap.h"
-#include "database2.h"
-#include "rmessage.h"
-#include "cacherights.h"
-#include <QTextCodec>
 #include <QApplication>
+#include <QFile>
 #include <QLockFile>
 #include <QMessageBox>
 #include <QTranslator>
+#include "branchstoremap.h"
+#include "cacheone.h"
+#include "cacherights.h"
+#include "database2.h"
+#include "defrest.h"
+#include "dlgconnecttoserver.h"
+#include "logging.h"
+#include "preferences.h"
+#include "rdesk.h"
+#include "rface.h"
+#include "rlogin.h"
+#include "rmessage.h"
 
 int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
     logEnabled = true;
     QApplication a(argc, argv);
     QTranslator t;
-    t.load(":/Restaurant.am.qm");
-    a.installTranslator(&t);
+    if (t.load(":/Restaurant.am.qm")) {
+        a.installTranslator(&t);
+    }
     Preferences p;
     p.initFromConfig();
     DlgConnectToServer *d = new DlgConnectToServer();
-
-    if(d->exec() != QDialog::Accepted) {
-        return -1;
-    }
 
     delete d;
     QStringList params;
@@ -57,8 +53,9 @@ int main(int argc, char* argv[])
         QMessageBox::warning(nullptr, "Stylesheet", "Missing stylesheet\r\n" + styleSheet.fileName());
     }
 
-    styleSheet.open(QIODevice::ReadOnly);
-    a.setStyleSheet(styleSheet.readAll());
+    if (styleSheet.open(QIODevice::ReadOnly)) {
+        a.setStyleSheet(styleSheet.readAll());
+    }
     QFont f("Tahoma", 12);
     a.setFont(f);
     a.setWindowIcon(QIcon(":/images/app.ico"));

@@ -5,8 +5,8 @@
 
 #define cid_guest_title 23
 
-typedef struct : CI_Base {
-} CI_GuestTitle;
+struct CI_GuestTitle : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_GuestTitle*)
 
 class CacheGuestTitle : public CacheBase<CI_GuestTitle>

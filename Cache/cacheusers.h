@@ -5,10 +5,11 @@
 
 #define cid_users 39
 
-typedef struct : CI_Base {
+struct CI_User : public CI_Base
+{
     QString fFull;
     QString fGroup;
-} CI_User;
+};
 Q_DECLARE_METATYPE(CI_User*)
 
 class CacheUsers : public CacheBase<CI_User>

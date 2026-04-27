@@ -5,10 +5,11 @@
 
 #define cid_rest_debt_holder 107
 
-typedef struct : CI_Base {
+struct CI_RestDebtHolder : public CI_Base
+{
     QString fGovNumber;
     QString fInfo;
-} CI_RestDebtHolder;
+};
 Q_DECLARE_METATYPE(CI_RestDebtHolder*)
 
 class CacheRestDebtHolder : public CacheBase<CI_RestDebtHolder>

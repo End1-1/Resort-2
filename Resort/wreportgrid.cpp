@@ -1,16 +1,15 @@
 #include "wreportgrid.h"
-#include "ui_wreportgrid.h"
-#include "dlgfiltervalues.h"
-#include "wfilterbase.h"
-#include "pprintscene.h"
-#include "pimage.h"
-#include "ptextrect.h"
-#include "xlsxall.h"
-#include "dlgconfiggrid.h"
-#include "dlghelp.h"
-#include <QScrollBar>
-#include <QMenu>
 #include <QClipboard>
+#include <QMenu>
+#include <QScrollBar>
+#include "dlgconfiggrid.h"
+#include "dlgfiltervalues.h"
+#include "dlghelp.h"
+#include "pimage.h"
+#include "pprintscene.h"
+#include "ptextrect.h"
+#include "ui_wreportgrid.h"
+#include "wfilterbase.h"
 
 WReportGrid::WReportGrid(QWidget *parent) :
     BaseWidget(parent),
@@ -180,97 +179,97 @@ void WReportGrid::on_leQuickSearch_textChanged(const QString &arg1)
 
 void WReportGrid::on_btnExcel_clicked()
 {
-    int colCount = fModel->columnCount();
-    int rowCount = fModel->rowCount();
-    if (colCount == 0 || rowCount == 0) {
-        message_error_tr("Empty report!");
-        return;
-    }
+    // int colCount = fModel->columnCount();
+    // int rowCount = fModel->rowCount();
+    // if (colCount == 0 || rowCount == 0) {
+    //     message_error_tr("Empty report!");
+    //     return;
+    // }
 
-    if (colCount == 0 || rowCount == 0) {
-        message_info(tr("Empty report!"));
-        return;
-    }
-    int fXlsxFitToPage = 0;
-    QString fXlsxPageOrientation = xls_page_orientation_portrait;
-    int fXlsxPageSize = xls_page_size_a4;
+    // if (colCount == 0 || rowCount == 0) {
+    //     message_info(tr("Empty report!"));
+    //     return;
+    // }
+    // int fXlsxFitToPage = 0;
+    // QString fXlsxPageOrientation = xls_page_orientation_portrait;
+    // int fXlsxPageSize = xls_page_size_a4;
 
-    XlsxDocument d;
-    XlsxSheet *s = d.workbook()->addSheet("Sheet1");
-    s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
-    /* HEADER */
-    QColor color = QColor::fromRgb(200, 200, 250);
-    QFont headerFont(qApp->font());
-    headerFont.setBold(true);
-    d.style()->addFont("header", headerFont);
-    d.style()->addBackgrounFill("header", color);
-    d.style()->addHAlignment("header", xls_alignment_center);
-    d.style()->addBorder("header", XlsxBorder());
-    for (int i = 0; i < colCount; i++) {
-        s->addCell(1, i + 1, fModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), d.style()->styleNum("header"));
-        s->setColumnWidth(i + 1, fTableView->columnWidth(i) / 7);
-    }
+    // XlsxDocument d;
+    // XlsxSheet *s = d.workbook()->addSheet("Sheet1");
+    // s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
+    // /* HEADER */
+    // QColor color = QColor::fromRgb(200, 200, 250);
+    // QFont headerFont(qApp->font());
+    // headerFont.setBold(true);
+    // d.style()->addFont("header", headerFont);
+    // d.style()->addBackgrounFill("header", color);
+    // d.style()->addHAlignment("header", xls_alignment_center);
+    // d.style()->addBorder("header", XlsxBorder());
+    // for (int i = 0; i < colCount; i++) {
+    //     s->addCell(1, i + 1, fModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), d.style()->styleNum("header"));
+    //     s->setColumnWidth(i + 1, fTableView->columnWidth(i) / 7);
+    // }
 
-    /* BODY */
-    QMap<int, QString> bgFill;
-    QMap<int, QString> bgFillb;
-    QFont bodyFont(qApp->font());
-    d.style()->addFont("body", bodyFont);
-    d.style()->addBackgrounFill("body", QColor(Qt::white));
-    d.style()->addVAlignment("body", xls_alignment_center);
-    d.style()->addBorder("body", XlsxBorder());
-    bgFill[QColor(Qt::white).rgb()] = "body";
+    // /* BODY */
+    // QMap<int, QString> bgFill;
+    // QMap<int, QString> bgFillb;
+    // QFont bodyFont(qApp->font());
+    // d.style()->addFont("body", bodyFont);
+    // d.style()->addBackgrounFill("body", QColor(Qt::white));
+    // d.style()->addVAlignment("body", xls_alignment_center);
+    // d.style()->addBorder("body", XlsxBorder());
+    // bgFill[QColor(Qt::white).rgb()] = "body";
 
-    bodyFont.setBold(true);
-    d.style()->addFont("body_b", bodyFont);
-    d.style()->addBackgrounFill("body_b", QColor(Qt::white));
-    d.style()->addVAlignment("body_b", xls_alignment_center);
-    d.style()->addBorder("body_b", XlsxBorder());
-    bgFillb[QColor(Qt::white).rgb()] = "body_b";
+    // bodyFont.setBold(true);
+    // d.style()->addFont("body_b", bodyFont);
+    // d.style()->addBackgrounFill("body_b", QColor(Qt::white));
+    // d.style()->addVAlignment("body_b", xls_alignment_center);
+    // d.style()->addBorder("body_b", XlsxBorder());
+    // bgFillb[QColor(Qt::white).rgb()] = "body_b";
 
-    for (int j = 0; j < rowCount; j++) {
-        for (int i = 0; i < colCount; i++) {
-            int bgColor = fModel->data(j, i, Qt::BackgroundColorRole).value<QColor>().rgb();
-            if (!bgFill.contains(bgColor)) {
-                bodyFont.setBold(false);
-                d.style()->addFont(QString::number(bgColor), bodyFont);
-                d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
-                bgFill[bgColor] = QString::number(bgColor);
-            }
-            if (!bgFill.contains(bgColor)) {
-                bodyFont.setBold(true);
-                d.style()->addFont(QString::number(bgColor), bodyFont);
-                d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
-                bgFillb[bgColor] = QString::number(bgColor);
-            }
-            QString bgStyle = bgFill[bgColor];
-            if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
-                bgStyle = bgFillb[bgColor];
-            }
-            s->addCell(j + 2, i + 1, fModel->data(j, i, Qt::EditRole), d.style()->styleNum(bgStyle));
-        }
-    }
-    /* TOTALS ROWS */
-    if (ui->tblTotals->isVisible()) {
-        QFont totalFont(qApp->font());
-        totalFont.setBold(true);
-        d.style()->addFont("footer", headerFont);
-        d.style()->addBorder("footer", XlsxBorder());
-        color = QColor::fromRgb(193, 206, 221);
-        d.style()->addBackgrounFill("footer", color);
-        //d.style()->addHAlignment("footer", xls_alignment_right);
-        for (int i = 0; i < colCount; i++) {
-            s->addCell(1 + fModel->rowCount() + 1, i + 1,
-                       ui->tblTotals->item(0, i) ?
-                                                              ui->tblTotals->itemValue(0, i) : "", d.style()->styleNum("footer"));
-        }
-    }
-    QString err;
-    if (!d.save(err, true)) {
-        if (!err.isEmpty()) {
-            message_error(err);
-        }
-    }
+    // for (int j = 0; j < rowCount; j++) {
+    //     for (int i = 0; i < colCount; i++) {
+    //         int bgColor = fModel->data(j, i, Qt::BackgroundColorRole).value<QColor>().rgb();
+    //         if (!bgFill.contains(bgColor)) {
+    //             bodyFont.setBold(false);
+    //             d.style()->addFont(QString::number(bgColor), bodyFont);
+    //             d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
+    //             bgFill[bgColor] = QString::number(bgColor);
+    //         }
+    //         if (!bgFill.contains(bgColor)) {
+    //             bodyFont.setBold(true);
+    //             d.style()->addFont(QString::number(bgColor), bodyFont);
+    //             d.style()->addBackgrounFill(QString::number(bgColor), QColor::fromRgb(bgColor));
+    //             bgFillb[bgColor] = QString::number(bgColor);
+    //         }
+    //         QString bgStyle = bgFill[bgColor];
+    //         if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
+    //             bgStyle = bgFillb[bgColor];
+    //         }
+    //         s->addCell(j + 2, i + 1, fModel->data(j, i, Qt::EditRole), d.style()->styleNum(bgStyle));
+    //     }
+    // }
+    // /* TOTALS ROWS */
+    // if (ui->tblTotals->isVisible()) {
+    //     QFont totalFont(qApp->font());
+    //     totalFont.setBold(true);
+    //     d.style()->addFont("footer", headerFont);
+    //     d.style()->addBorder("footer", XlsxBorder());
+    //     color = QColor::fromRgb(193, 206, 221);
+    //     d.style()->addBackgrounFill("footer", color);
+    //     //d.style()->addHAlignment("footer", xls_alignment_right);
+    //     for (int i = 0; i < colCount; i++) {
+    //         s->addCell(1 + fModel->rowCount() + 1, i + 1,
+    //                    ui->tblTotals->item(0, i) ?
+    //                                                           ui->tblTotals->itemValue(0, i) : "", d.style()->styleNum("footer"));
+    //     }
+    // }
+    // QString err;
+    // if (!d.save(err, true)) {
+    //     if (!err.isEmpty()) {
+    //         message_error(err);
+    //     }
+    // }
 }
 
 void WReportGrid::on_tblMain_doubleClicked(const QModelIndex &index)
@@ -460,7 +459,7 @@ void WReportGrid::actionFilterColumn(bool v)
         return;
     }
     fModel->uniqueValuesForColumn(sel.at(0).column(), filterValues);
-    QStringList sortedValues = filterValues.toList();
+    QStringList sortedValues = filterValues.values();
     std::sort(sortedValues.begin(), sortedValues.end());
     DlgFilterValues *d = new DlgFilterValues(sortedValues, this);
     if (d->exec() == QDialog::Accepted) {
@@ -635,7 +634,7 @@ void WReportGrid::on_btnPrint_clicked()
             if (ui->tblMain->columnWidth(j) == 0) {
                 continue;
             }
-            QBrush br(fModel->data(i, j, Qt::BackgroundColorRole).value<QColor>());
+            QBrush br(fModel->data(i, j, Qt::BackgroundRole).value<QColor>());
             if (br.color() == Qt::white) {
                 br.setStyle(Qt::NoBrush);
             }
@@ -852,7 +851,7 @@ void WReportGrid::on_btnConfigGrid_clicked()
 void WReportGrid::endApply()
 {
     QSettings s(_ORGANIZATION_, _APPLICATION_ + QString("\\Grid\\") + fGridClassName);
-    QStringList cols = s.value("ColumnsWidths").toString().split(",", QString::SkipEmptyParts);
+    QStringList cols = s.value("ColumnsWidths").toString().split(",", Qt::SkipEmptyParts);
     if (cols.count() != fModel->columnCount()) {
         return;
     }

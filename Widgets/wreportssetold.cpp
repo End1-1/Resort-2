@@ -125,10 +125,10 @@ void WReportsSetOld::rbClicked()
     ui->hlFilter->removeItem(ui->hlFilter->takeAt(0));
     fFilterFields.clear();
     fFilterDefExpr.clear();
-    QStringList filter = dr.value("f_filter").toString().split(";", QString::SkipEmptyParts);
+    QStringList filter = dr.value("f_filter").toString().split(";", Qt::SkipEmptyParts);
     int i = 0;
     foreach (QString s, filter) {
-        QStringList f = s.split("^", QString::KeepEmptyParts);
+        QStringList f = s.split("^", Qt::KeepEmptyParts);
         if (f.at(0) == ":year" || f.at(0) == ":month") {
             continue;
         }
@@ -143,11 +143,11 @@ void WReportsSetOld::rbClicked()
         } else if (f.at(2).toLower() == "combobox") {
             wdt = new EComboBoxCompleter();
             EComboBoxCompleter *cc = static_cast<EComboBoxCompleter*>(wdt);
-            QStringList comboParams = f.at(4).split(":", QString::SkipEmptyParts);
+            QStringList comboParams = f.at(4).split(":", Qt::SkipEmptyParts);
             if (comboParams.at(0).toLower() == "sql") {
                 cc->setSQL(comboParams.at(1));
             } else if (comboParams.at(0).toLower() == "list") {
-                QStringList list = comboParams.at(1).split(",", QString::SkipEmptyParts);
+                QStringList list = comboParams.at(1).split(",", Qt::SkipEmptyParts);
                 foreach (QString l, list) {
                     cc->addItem(l, l);
                 }
@@ -201,8 +201,8 @@ void WReportsSetOld::on_btnGo_clicked()
     rg->setupTabTextAndIcon(reportTitle, ":/images/report.png");
 
     rg->fModel->clearColumns();
-    QStringList widths = dr.value("f_widths").toString().split(";", QString::SkipEmptyParts);
-    QStringList titles = dr.value("f_titles_en").toString().split(";", QString::SkipEmptyParts);
+    QStringList widths = dr.value("f_widths").toString().split(";", Qt::SkipEmptyParts);
+    QStringList titles = dr.value("f_titles_en").toString().split(";", Qt::SkipEmptyParts);
     for (int i = 0; i < widths.count(); i++) {
         rg->fModel->setColumn(widths.at(i).toInt(), "", titles.at(i));
     }
@@ -227,11 +227,11 @@ void WReportsSetOld::on_btnGo_clicked()
     }
 
 
-    rg->fModel->apply(query.split(";", QString::SkipEmptyParts));
+    rg->fModel->apply(query.split(";", Qt::SkipEmptyParts));
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
 
     rg->setTblNoTotalData();
-    QStringList sums = dr.value("f_sum").toString().split(";", QString::SkipEmptyParts);
+    QStringList sums = dr.value("f_sum").toString().split(";", Qt::SkipEmptyParts);
     QList<int> cols;
     QList<double> vals;
     if (sums.count() > 0) {

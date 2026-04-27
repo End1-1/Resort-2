@@ -5,9 +5,8 @@
 
 #define cid_users_group 40
 
-typedef struct : CI_Base {
-
-} CI_UsersGroups;
+struct CI_UsersGroups : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_UsersGroups*)
 
 class CacheUsersGroups : public CacheBase<CI_UsersGroups>

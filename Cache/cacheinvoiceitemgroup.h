@@ -5,9 +5,8 @@
 
 #define cid_invoice_group 57
 
-typedef struct : CI_Base {
-
-} CI_InvoiceGroup;
+struct CI_InvoiceGroup : CI_Base
+{};
 Q_DECLARE_METATYPE(CI_InvoiceGroup*)
 
 class CacheInvoiceItemGroup : public CacheBase<CI_InvoiceGroup>

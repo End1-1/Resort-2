@@ -5,9 +5,8 @@
 
 #define cid_vaucher 59
 
-typedef struct : CI_Base {
-
-} CI_Vaucher;
+struct CI_Vaucher : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_Vaucher*)
 
 class CacheVaucher : public CacheBase<CI_Vaucher>

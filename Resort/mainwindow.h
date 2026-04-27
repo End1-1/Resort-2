@@ -77,7 +77,6 @@ public slots:
     void on_actionCoupons_statistics_triggered();
     void on_actionExit_triggered();
     void on_actionLogin_triggered();
-    void on_actionPartner_payments_triggered();
     void on_actionDebts_triggered();
     void on_actionDiscount_report_triggered();
     void on_actionSales_report_by_cars_triggered();

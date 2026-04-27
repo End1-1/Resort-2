@@ -20,7 +20,7 @@ void DWSelectorGuestTitle::configure()
         i.next();
         CI_GuestTitle *v = i.value();
         fTable->setItem(row, 0, new QTableWidgetItem(v->fName));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(v));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(v));
         row++;
     }
 }

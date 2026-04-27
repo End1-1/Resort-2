@@ -17,7 +17,7 @@ public:
         if (fLineSelector) {
             c = CA::instance()->get(fLineSelector->text());
         }
-        fDialog->selector(fSelectorNumber, qVariantFromValue(c));
+        fDialog->selector(fSelectorNumber, QVariant::fromValue(c));
     }
 
 protected:

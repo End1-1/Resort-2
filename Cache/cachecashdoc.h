@@ -11,9 +11,8 @@
 #define CASHDOC_MOVE 4
 #define CASHDOC_DEBT 5
 
-typedef struct : CI_Base {
-
-} CI_CashDoc;
+struct CI_CashDoc : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_CashDoc*)
 
 class CacheCashDoc : public CacheBase<CI_CashDoc>

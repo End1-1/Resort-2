@@ -1,12 +1,12 @@
 #include "dlgprintmultiplefiscal.h"
-#include "ui_dlgprintmultiplefiscal.h"
-#include "database2.h"
-#include "defrest.h"
-#include "message.h"
-#include "printtaxn.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include "database2.h"
+#include "defrest.h"
+#include "message.h"
+#include "printtaxno.h"
+#include "ui_dlgprintmultiplefiscal.h"
 
 DlgPrintMultipleFiscal::DlgPrintMultipleFiscal(QWidget *parent) :
     BaseDialog(parent, Qt::FramelessWindowHint),
@@ -79,58 +79,61 @@ void DlgPrintMultipleFiscal::on_btnPrint_clicked()
         }
         int order = ui->tbl->item(mi.row(), 0)->text().toInt();
         Db b = Preferences().getDatabase(Base::fDbName);
-        Database2 db;
-        db.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-        db[":f_header"] = order;
+        auto *db = new Database2();
+        db->open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+        (*db)[":f_header"] = order;
         QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
-        PrintTaxN pn(s.value("ip").toString(),
-                     s.value("port").toInt(),
-                     s.value("password").toString(),
-                     s.value("extpos").toString(),
-                     s.value("opcode").toString(),
-                     s.value("oppin").toString());
+        auto *pn = new PrintTaxNO(s.value("ip").toString(),
+                                  s.value("port").toInt(),
+                                  s.value("password").toString(),
+                                  s.value("extpos").toString(),
+                                  s.value("opcode").toString(),
+                                  s.value("oppin").toString());
 
-        db.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-        db[":f_header"] = order;
-        db[":f_state"] = DISH_STATE_READY;
-        db.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id "
-                "from o_dish od "
-                "left join r_dish d on d.f_id=od.f_dish "
-                "where od.f_header=:f_header and od.f_state=:f_state and od.f_total>0 ");
-        while (db.next()) {
-            pn.addGoods(db.string("f_taxdebt").toInt(),
-                        db.string("f_adgt"),
-                        db.string("f_id"),
-                        db.string("f_name"),
-                        db.doubleValue("f_qty"),
-                        db.doubleValue("f_price"),
-                        db.doubleValue("f_dctvalue"));
+        db->open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+        (*db)[":f_header"] = order;
+        (*db)[":f_state"] = DISH_STATE_READY;
+        db->exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id "
+                 "from o_dish od "
+                 "left join r_dish d on d.f_id=od.f_dish "
+                 "where od.f_header=:f_header and od.f_state=:f_state and od.f_total>0 ");
+        while (db->next()) {
+            pn->addGoods(db->string("f_taxdebt").toInt(),
+                         db->string("f_adgt"),
+                         db->string("f_id"),
+                         db->string("f_name"),
+                         db->doubleValue("f_qty"),
+                         db->doubleValue("f_price"),
+                         db->doubleValue("f_dctvalue"));
         }
 
         QString in, out, err;
         int fiscalrecid;
-        int result = pn.makeJsonAndPrint(ui->btnCash->isChecked() ? 0 : ui->tbl->item(mi.row(), 4)->text().toDouble(),
-                                         0, in, out, err);
-        db[":f_order"] = order;
-        db[":f_in"] = in;
-        db[":f_out"] = out;
-        db[":f_err"] = err;
-        db.insert("o_tax_log", fiscalrecid);
-        if (result != pt_err_ok) {
-            message_error(tr("Fiscal error.") + "\r\n" + err);
-            accept();
-            return;
-        }
+        connect(pn,
+                &PrintTaxNO::finished,
+                this,
+                [this, db, order, fiscalrecid](const QString &in, const QString &out, const QString &err, int result) {
+                    (*db)[":f_order"] = order;
+                    (*db)[":f_in"] = in;
+                    (*db)[":f_out"] = out;
+                    (*db)[":f_err"] = err;
+                    int fr = fiscalrecid;
+                    db->insert("o_tax_log", fr);
+                    if (result != pt_err_ok) {
+                        message_error(tr("Fiscal error.") + "\r\n" + err);
+                        accept();
+                        return;
+                    }
 
-        QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+                    QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
 
-
-        db[":f_fiscal"] = jo["rseq"].toInt();
-        db.update("o_tax_log", "f_id", fiscalrecid);
-        db[":f_tax"] = jo["rseq"].toInt();
-        db.update("o_header", "f_id", order);
+                    (*db)[":f_fiscal"] = jo["rseq"].toInt();
+                    db->update("o_tax_log", "f_id", fiscalrecid);
+                    (*db)[":f_tax"] = jo["rseq"].toInt();
+                    db->update("o_header", "f_id", order);
+                });
+        pn->makeJsonAndPrint(ui->btnCash->isChecked() ? 0 : ui->tbl->item(mi.row(), 4)->text().toDouble(), 0, 0);
     }
-    accept();
 }
 
 void DlgPrintMultipleFiscal::on_btnCard_clicked(bool checked)

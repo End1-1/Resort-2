@@ -5,9 +5,8 @@
 
 #define cid_users_state 41
 
-typedef struct : CI_Base {
-
-} CI_UsersState;
+struct CI_UsersState : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_UsersState*)
 
 class CacheUsersState : public CacheBase<CI_UsersState>

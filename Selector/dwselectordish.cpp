@@ -28,7 +28,7 @@ void DWSelectorDish::configure()
         fTable->setItem(row, 1, new QTableWidgetItem(v->fName));
         fTable->setItem(row, 2, new QTableWidgetItem(v->fUnitName));
         fTable->setItem(row, 3, new QTableWidgetItem(v->fStore));
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(v));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(v));
         row++;
     }
     fTable->setRowCount(row);

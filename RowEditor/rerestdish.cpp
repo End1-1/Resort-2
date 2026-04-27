@@ -346,11 +346,11 @@ void RERestDish::save()
     }
 
     if(fImageChanged) {
-        const QPixmap *p = ui->lbImage->pixmap();
+        QPixmap p = ui->lbImage->pixmap();
         QByteArray bytes;
         QBuffer buff(&bytes);
         buff.open(QIODevice::WriteOnly);
-        p->save(&buff, "PNG");
+        p.save(&buff, "PNG");
         fDbBind[":f_image"] = bytes;
         fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
     }

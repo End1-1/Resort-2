@@ -16,7 +16,7 @@ DlgRemotInvoices::DlgRemotInvoices(bool local, QWidget *parent) :
             return;
         }
     } else {
-        QStringList dbParams = fPreferences.getDb("AHC").toString().split(";", QString::SkipEmptyParts);
+        QStringList dbParams = fPreferences.getDb("AHC").toString().split(";", Qt::SkipEmptyParts);
         if (dbParams.count() < 4) {
             message_error_tr("Setup second database parameters");
             return;

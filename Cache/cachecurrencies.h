@@ -5,10 +5,11 @@
 
 #define cid_currencies 51
 
-typedef struct : CI_Base {
+struct CI_Currency : public CI_Base
+{
     QString fDescription;
     double fRate;
-} CI_Currency;
+};
 
 class CacheCurrencies : public CacheBase<CI_Currency>
 {

@@ -5,9 +5,8 @@
 
 #define cid_debt_costumer 112
 
-typedef struct : CI_Base {
-
-} CI_DebtCostumer;
+struct CI_DebtCostumer : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_DebtCostumer *)
 
 

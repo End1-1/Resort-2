@@ -5,9 +5,10 @@
 
 #define cid_rest_table 27
 
-typedef struct : CI_Base {
+struct CI_RestTable : public CI_Base
+{
     int fHall;
-}CI_RestTable;
+};
 Q_DECLARE_METATYPE(CI_RestTable*)
 
 class CacheRestTable : public CacheBase<CI_RestTable>

@@ -311,40 +311,55 @@ void DlgSalary::on_btnCopyFromReal_clicked()
 
 void DlgSalary::on_btnPrint_clicked()
 {
+    // 1. Получаем данные
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db;
     db.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
+
     db[":f_id"] = defrest(dr_branch);
     db.exec("select f_name from r_branch where f_id=:f_id");
-    db.next();
-    QString branchname = db.string("f_name");
-    C5Printing p;
-    p.setSceneParams(2000, 2700, QPrinter::Portrait);
-    QFont font(font());
-    int fontbase = 26;
-    font.setPointSize(fontbase);
-    font.setBold(true);
-    p.setFont(font);
-    p.setFontSize(fontbase + 4);
-    p.setFontBold(true);
-    p.ctext(tr("<<ԷԼԻՏ>> ԱՎՏՈԼՎԱՑՈՒՄ"));
-    p.br();
-    p.setFontSize(fontbase);
-    p.setFontBold(false);
-    p.ctext(tr("ԱՇԽԱՏԱՎԱՐՁԻ ՎՃԱՐՄԱՆ ՓԱՍԹԱԹՈՒՂԹ"));
-    p.br();
-    p.ctext(branchname);
-    p.setFontBold(false);
-    p.br();
-    p.ctext(ui->deDate->text());
-    p.br();
-    p.br();
-    QList<qreal> points;
-    points << 10 << 100 << 300 << 500 << 250 << 350;
-    QStringList vals;
-    vals << tr("NN") << tr("ՀԱՍՏԻԿ") << tr("ԱՆՈՒՆ") << tr("ԳՈՒՄԱՐ") <<  tr("ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ");
-    p.tableText(points, vals, p.fLineHeight + 30);
-    p.br(p.fLineHeight + 30);
+    QString branchname = db.next() ? db.string("f_name") : "";
+
+    // 2. Сборка HTML с жесткими ширинами колонок (на основе твоих points)
+    // Сумма твоих поинтов: 10+100+300+500+250+350 = 1510
+    QString html = "<html><head><style>"
+                   "table { border-collapse: collapse; width: 100%; table-layout: fixed; }"
+                   "th, td { border: 1px solid black; padding: 5px; font-size: 11pt; word-wrap: break-word; }"
+                   ".header { text-align: center; font-family: Arial; }"
+                   "</style></head><body>";
+
+    QString companyName = tr("<<ԷԼԻՏ>> ԱՎՏՈԼՎԱՑՈՒՄ").toHtmlEscaped();
+
+    html += QString("<div class='header'>"
+                    "<h2>%1</h2>"
+                    "<h3>%2</h3>"
+                    "<b>%3</b><br>"
+                    "<b>%4</b>"
+                    "</div><br>")
+                .arg(companyName) // Теперь придет &lt;&lt;ԷԼԻՏ&gt;&gt; и отобразится как надо
+                .arg(tr("ԱՇԽԱՏԱՎԱՐՁԻ ՎՃԱՐՄԱՆ ՓԱՍԹԱԹՈՒՂԹ"))
+                .arg(branchname.toHtmlEscaped()) // На всякий случай экранируем и название филиала
+                .arg(ui->deDate->text());
+    // Определяем ширину каждой колонки в пикселях (или долях), как в твоем QList<qreal> points
+    // vals << NN << ՀԱՍՏԻԿ << ԱՆՈՒՆ << ԳՈՒՄԱՐ << ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ
+    html += "<table>";
+    html += QString("<colgroup>"
+                    "<col style='width: 50px;'>"  // NN (10-100)
+                    "<col style='width: 200px;'>" // ՀԱՍՏԻԿ (300)
+                    "<col style='width: 400px;'>" // ԱՆՈՒՆ (500)
+                    "<col style='width: 200px;'>" // ԳՈՒՄԱՐ (250)
+                    "<col style='width: 300px;'>" // ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ (350)
+                    "</colgroup>");
+
+    html += QString("<thead><tr style='background-color:#eee;'>"
+                    "<th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th>"
+                    "</tr></thead><tbody>")
+                .arg(tr("NN"))
+                .arg(tr("ՀԱՍՏԻԿ"))
+                .arg(tr("ԱՆՈՒՆ"))
+                .arg(tr("ԳՈՒՄԱՐ"))
+                .arg(tr("ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ"));
+
     db[":f_date"] = ui->deDate->date();
     db[":f_branch"] = defrest(dr_branch);
     db.exec("select ug.f_en as f_groupname, concat_ws(' ', u.f_lastname, u.f_firstname) as f_employeename, s.f_amount "
@@ -352,31 +367,59 @@ void DlgSalary::on_btnPrint_clicked()
             "left join users u on u.f_id=s.f_employee "
             "left join users_groups ug on ug.f_id=u.f_group "
             "where s.f_branch=:f_branch and s.f_date=:f_date");
+
     double total = 0;
     int row = 1;
-
-    while(db.next()) {
-        total += db.doubleValue("f_amount");
-        vals.clear();
-        vals << QString::number(row++)
-             << db.string("f_groupname")
-             << db.string("f_employeename")
-             << float_str(db.doubleValue("f_amount"), 2)
-             << "";
-        p.tableText(points, vals, p.fLineHeight + 30);
-        p.br(p.fLineHeight + 30);
+    while (db.next()) {
+        double val = db.doubleValue("f_amount");
+        total += val;
+        html += QString("<tr>"
+                        "<td>%1</td>"
+                        "<td>%2</td>"
+                        "<td>%3</td>"
+                        "<td align='right'>%4</td>"
+                        "<td></td>"
+                        "</tr>")
+                    .arg(row++)
+                    .arg(db.string("f_groupname"))
+                    .arg(db.string("f_employeename"))
+                    .arg(float_str(val, 2));
     }
 
-    points.clear();
-    points << 910 << 250 << 350;
-    vals.clear();
-    vals << tr("ԸՆԴԱՄԵՆԸ") << float_str(total, 2);
-    p.tableText(points, vals, p.fLineHeight + 30);
-#ifdef QT_DEBUG
-    p.print("local", QPrinter::A4);
-#else
-    p.print("salary", QPrinter::A4);
-#endif
+    // Итоговая строка (ԸՆԴԱՄԵՆԸ)
+    // Используем colspan, чтобы соответствовать твоему смещению points (910)
+    html += QString("<tr>"
+                    "<td colspan='3' align='right'><b>%1</b></td>"
+                    "<td align='right'><b>%2</b></td>"
+                    "<td></td>"
+                    "</tr>")
+                .arg(tr("ԸՆԴԱՄԵՆԸ"))
+                .arg(float_str(total, 2));
+
+    html += "</tbody></table></body></html>";
+
+    QTextDocument doc;
+    doc.setHtml(html);
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setPrinterName("salary");
+
+    // 1. Четко задаем формат и ориентацию через Layout
+    QPageLayout layout = printer.pageLayout();
+    layout.setPageSize(QPageSize(QPageSize::A4));
+    layout.setUnits(QPageLayout::Millimeter);
+    layout.setMargins(QMarginsF(10, 10, 10, 10)); // Поля по 10 мм
+    printer.setPageLayout(layout);
+
+    // 2. Синхронизируем размер документа с областью печати в пикселях
+    // Именно разрешение принтера (DPI) определяет, сколько пикселей влезет в A4
+    QRectF rect = printer.pageLayout().paintRectPixels(printer.resolution());
+    doc.setPageSize(rect.size());
+
+    // 3. (Опционально) Если HTML сложный, можно принудительно выставить ширину текста
+    doc.setTextWidth(rect.width());
+
+    doc.print(&printer);
 }
 
 void DlgSalary::on_btnTotal_clicked()

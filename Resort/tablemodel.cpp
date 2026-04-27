@@ -105,14 +105,24 @@ void TableModel::applyFinal(WReportGrid *rg, bool clearBefore)
 void TableModel::sort(int column, Qt::SortOrder order)
 {
     Q_UNUSED(order)
-    QMap<QVariant, int> m;
 
-    for(int i = 0, count = fRows.count(); i < count; i++) {
-        m.insertMulti(fDD.fDbRows.at(fRows.at(i)).at(column), fRows.at(i));
+    // Создаем лямбду для сравнения QVariant
+    auto variantLessThan = [](const QVariant &v1, const QVariant &v2) { return QVariant::compare(v1, v2) < 0; };
+
+    // Используем стандартный multimap с нашей лямбдой
+    std::multimap<QVariant, int, decltype(variantLessThan)> m(variantLessThan);
+
+    for (int i = 0, count = fRows.count(); i < count; i++) {
+        m.insert({fDD.fDbRows.at(fRows.at(i)).at(column), fRows.at(i)});
     }
 
     beginResetModel();
-    fRows = m.values();
+    fRows.clear();
+    fRows.reserve(m.size()); // Оптимизация, чтобы не перевыделять память
+
+    for (auto const &[key, value] : m) {
+        fRows.append(value);
+    }
 
     if(fLastSortIndex == column) {
         fLastSortOrder = fLastSortOrder == Qt::AscendingOrder ? Qt::DescendingOrder : Qt::AscendingOrder;
@@ -216,7 +226,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             return v.toTime().toString("HH:mm:ss");
 
         case QVariant::Double:
-            return fLocale.toString(v.toDouble(), 'f', 2).remove(QRegExp("\\.0+$")).remove(QRegExp("\\.$"));
+            return fLocale.toString(v.toDouble(), 'f', 2).remove(QRegularExpression("\\.0+$")).remove(QRegularExpression("\\.$"));
 
         default:
             return v;
@@ -226,7 +236,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         return fDD.fDbRows.at(fRows.at(index.row())).at(index.column());
 
-    case Qt::BackgroundColorRole:
+    case Qt::BackgroundRole:
         if(fBackgroundColors.contains(index.row())) {
             return fBackgroundColors[index.row()][index.column()];
         }

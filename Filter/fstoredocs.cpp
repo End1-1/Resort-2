@@ -158,7 +158,7 @@ void FStoreDocs::removeSelected()
         rows.insert(mi.row());
     }
 
-    QList<int> rl = rows.toList();
+    QList<int> rl = rows.values();
 
     if(rl.count() > 0) {
         if(message_confirm_tr("Confirm to delete document") != QDialog::Accepted) {
@@ -396,7 +396,7 @@ void FStoreDocs::importAS()
     }
 
     QTextStream out(&tempFile);
-    out.setCodec("UTF-8");
+    out.setEncoding(QStringConverter::Utf8);
 
     for(const QString& err : errors) {
         out << err << "\r\n";

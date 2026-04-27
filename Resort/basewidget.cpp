@@ -1,6 +1,5 @@
 #include "basewidget.h"
 #include <QApplication>
-#include <QDesktopWidget>
 
 MainWindow *fMainWindow;
 
@@ -10,8 +9,6 @@ BaseWidget::BaseWidget(QWidget *parent) :
     fTrackControl = 0;
     fTabWidget = 0;
     setMinimumSize(100, 100);
-    QRect rect = qApp->desktop()->screenGeometry();
-    setMaximumSize(rect.size());
 }
 
 BaseWidget::~BaseWidget()

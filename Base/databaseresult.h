@@ -23,11 +23,11 @@ public:
     void removeRow(int row);
     void getFieldsNames(QStringList &sl);
     static QString fMainDbConnection;
+    Database fDb;
+
 private:
     QMap<QString, int> fFieldsMap;
     QList<QList<QVariant> > fData;
-    Database fDb;
-
 };
 
 #endif // DATABASERESULT_H

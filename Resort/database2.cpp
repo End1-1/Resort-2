@@ -1,9 +1,10 @@
 #include "database2.h"
-#include "logwriter.h"
 #include <QDateTime>
-#include <QSqlRecord>
+#include <QRegularExpression>
 #include <QSettings>
+#include <QSqlRecord>
 #include <QUuid>
+#include "logwriter.h"
 
 QMutex Database2::fMutex;
 int Database2::fDatabaseCounter = 0;
@@ -258,46 +259,53 @@ QVariant& Database2::operator[](const QString &name)
 const QString Database2::lastQuery()
 {
     QString sql = fQuery->lastQuery();
-    QMapIterator<QString, QVariant> it(fQuery->boundValues());
 
-    while(it.hasNext()) {
-        it.next();
-        QVariant value = it.value();
+    const auto names = fQuery->boundValueNames();
+    const auto values = fQuery->boundValues();
 
-        switch(it.value().type()) {
-        case QVariant::String:
-            value = QString("'%1'").arg(value.toString().replace("'", "''"));
+    for (int i = 0; i < values.size(); ++i) {
+        QString key = names.value(i);
+        QVariant value = values.at(i);
+        QString out;
+
+        switch (value.typeId()) {
+        case QMetaType::QString:
+            out = QString("'%1'").arg(value.toString().replace("'", "''"));
             break;
 
-        case QVariant::Date:
-            value = QString("'%1'").arg(value.toDate().toString("yyyy-MM-dd"));
+        case QMetaType::QDate:
+            out = QString("'%1'").arg(value.toDate().toString("yyyy-MM-dd"));
             break;
 
-        case QVariant::DateTime:
-            value = QString("'%1'").arg(value.toDateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        case QMetaType::QDateTime:
+            out = QString("'%1'").arg(value.toDateTime().toString("yyyy-MM-dd HH:mm:ss"));
             break;
 
-        case QVariant::Double:
-            value = QString("%1").arg(value.toDouble());
+        case QMetaType::Double:
+            out = QString::number(value.toDouble());
             break;
 
-        case QVariant::Int:
-            value = QString("%1").arg(value.toInt());
+        case QMetaType::Int:
+        case QMetaType::LongLong:
+        case QMetaType::UInt:
+        case QMetaType::ULongLong:
+            out = QString::number(value.toLongLong());
             break;
 
-        case QVariant::Time:
-            value = QString("'%1'").arg(value.toTime().toString("HH:mm:ss"));
+        case QMetaType::QTime:
+            out = QString("'%1'").arg(value.toTime().toString("HH:mm:ss"));
             break;
 
-        case QVariant::ByteArray:
-            value = QString("'%1'").arg(QString(value.toByteArray().toHex()));
+        case QMetaType::QByteArray:
+            out = QString("'%1'").arg(QString(value.toByteArray().toHex()));
             break;
 
         default:
+            out = value.toString();
             break;
         }
 
-        sql.replace(QRegExp(it.key() + "\\b"), value.toString());
+        sql.replace(QRegularExpression(QRegularExpression::escape(key) + "\\b"), out);
     }
 
     return sql;

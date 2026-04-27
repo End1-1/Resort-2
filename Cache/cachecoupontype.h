@@ -10,9 +10,8 @@
 #define COUPON_STATE_USED 3
 #define COUPON_STATE_EXPARED 4
 
-typedef struct : CI_Base {
-
-} CI_CouponType;
+struct CI_CouponType : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_CouponType*)
 
 class CacheCouponType : public CacheBase<CI_CouponType>

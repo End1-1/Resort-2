@@ -138,7 +138,6 @@ private:
     void loadOrder(bool showwarning);
     void setOrderRowHidden(int row, OrderDishStruct *od);
     void printServiceCheck(const QString &prn, int side);
-    void printRemovedDish(OrderDishStruct *od, double removed, int user);
     void printReceipt(bool printModePayment);
     void changeBtnState();
     void checkEmpty();

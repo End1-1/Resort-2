@@ -1,17 +1,17 @@
 #include "dlgpayment.h"
-#include "ui_dlgpayment.h"
-#include "rmessage.h"
-#include "dlglist.h"
-#include "rnumbers.h"
-#include "cachecouponseria.h"
-#include "dlgdeptholder.h"
-#include "database2.h"
-#include "printtaxn.h"
-#include <QMessageBox>
+#include <QInputDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QInputDialog>
 #include <QJsonParseError>
+#include <QMessageBox>
+#include "cachecouponseria.h"
+#include "database2.h"
+#include "dlgdeptholder.h"
+#include "dlglist.h"
+#include "printtaxno.h"
+#include "rmessage.h"
+#include "rnumbers.h"
+#include "ui_dlgpayment.h"
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -173,12 +173,12 @@ void DlgPayment::on_btnOk_clicked()
 
     if(ui->btnPrintTax->isChecked()) {
         QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
-        PrintTaxN pn(s.value("ip").toString(),
-                     s.value("port").toInt(),
-                     s.value("password").toString(),
-                     s.value("extpos").toString(),
-                     s.value("opcode").toString(),
-                     s.value("oppin").toString());
+        PrintTaxNO pn(s.value("ip").toString(),
+                      s.value("port").toInt(),
+                      s.value("password").toString(),
+                      s.value("extpos").toString(),
+                      s.value("opcode").toString(),
+                      s.value("oppin").toString());
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
         db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark, od.f_id as f_od_id "
@@ -241,12 +241,12 @@ void DlgPayment::on_btnOk_clicked()
     } else {
         // PRINT ALL EXCEPT AVTOLVACUM
         QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
-        PrintTaxN pn(s.value("ip").toString(),
-                     s.value("port").toInt(),
-                     s.value("password").toString(),
-                     s.value("extpos").toString(),
-                     s.value("opcode").toString(),
-                     s.value("oppin").toString());
+        PrintTaxNO pn(s.value("ip").toString(),
+                      s.value("port").toInt(),
+                      s.value("password").toString(),
+                      s.value("extpos").toString(),
+                      s.value("opcode").toString(),
+                      s.value("oppin").toString());
         db2[":f_header"] = fOrder;
         db2[":f_state"] = DISH_STATE_READY;
         db2.exec(R"(
@@ -816,7 +816,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     int m = dr.value("f_model").toInt();
     ui->leCardHolder->setText(dr.value("f_name").toString());
     ui->leCardHolder->fHiddenText = dr.value("f_id").toString();
-    QStringList mode = dr.value("f_mode").toString().split(";", QString::SkipEmptyParts);
+    QStringList mode = dr.value("f_mode").toString().split(";", Qt::SkipEmptyParts);
 
     if(mode.count() == 0) {
         ui->leDiscount->clear();
@@ -831,7 +831,7 @@ void DlgPayment::on_leDiscount_returnPressed()
                "select f_id, f_dish, f_qty, f_price, f_total from o_dish where f_header=:f_header and f_state=:f_state", fDbBind);
     QString visit = mode.at(1);
     QString value = mode.at(2);
-    QStringList items = mode.at(3).split(",", QString::SkipEmptyParts);
+    QStringList items = mode.at(3).split(",", Qt::SkipEmptyParts);
     bool disc = false;
     double totalDisc = 0;
 
@@ -1116,12 +1116,12 @@ void DlgPayment::on_btnPrepaid_clicked()
     }
 
     QMap<QString, QVariant> s = fFiscalMachines[ui->cbFiscalMachine->currentText()];
-    PrintTaxN pn(s.value("ip").toString(),
-                 s.value("port").toInt(),
-                 s.value("password").toString(),
-                 s.value("extpos").toString(),
-                 s.value("opcode").toString(),
-                 s.value("oppin").toString());
+    PrintTaxNO pn(s.value("ip").toString(),
+                  s.value("port").toInt(),
+                  s.value("password").toString(),
+                  s.value("extpos").toString(),
+                  s.value("opcode").toString(),
+                  s.value("oppin").toString());
     QString in, out, err;
     int result = pn.printAdvanceJson(ui->leCash->asDouble(), ui->leCard->asDouble()  + ui->leIdram->asDouble(), in, out, err);
     Db b = Preferences().getDatabase(Base::fDbName);

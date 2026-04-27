@@ -1,16 +1,15 @@
 #include "dlggposorderinfo.h"
-#include "ui_dlggposorderinfo.h"
-#include "cacherights.h"
-#include "pprintreceipt.h"
-#include "dlgdishhistory.h"
-#include "databaseresult.h"
-#include "cachepaymentmode.h"
-#include "paymentmode.h"
-#include "dlgtracking.h"
-#include "database2.h"
+#include <QInputDialog>
 #include <QPrintDialog>
 #include <QPrinter>
-#include <QInputDialog>
+#include "cachepaymentmode.h"
+#include "cacherights.h"
+#include "database2.h"
+#include "databaseresult.h"
+#include "dlgdishhistory.h"
+#include "dlgtracking.h"
+#include "paymentmode.h"
+#include "ui_dlggposorderinfo.h"
 
 DlgGPOSOrderInfo::DlgGPOSOrderInfo(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -141,8 +140,6 @@ void DlgGPOSOrderInfo::on_btnPrint_clicked()
     if(pd.exec() != QDialog::Accepted) {
         return;
     }
-
-    PPrintReceipt::printOrder(p.printerName(), ui->leOrder->text().toInt(), WORKING_USERID);
 }
 
 void DlgGPOSOrderInfo::on_btnTracking_clicked()

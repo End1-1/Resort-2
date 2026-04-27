@@ -5,8 +5,8 @@
 
 #define cid_rest_store 31
 
-typedef struct : CI_Base {
-} CI_RestStore;
+struct CI_RestStore : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_RestStore*)
 
 class CacheRestStore : public CacheBase<CI_RestStore>

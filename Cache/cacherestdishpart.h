@@ -5,8 +5,8 @@
 
 #define cid_rest_dish_part 28
 
-typedef struct : CI_Base {
-} CI_RestDishPart;
+struct CI_RestDishPart : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_RestDishPart*)
 
 class CacheRestDishPart : public CacheBase<CI_RestDishPart>

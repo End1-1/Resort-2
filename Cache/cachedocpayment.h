@@ -5,9 +5,8 @@
 
 #define cid_doc_payment 108
 
-typedef struct : CI_Base {
-
-} CI_DocPayment;
+struct CI_DocPayment : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_DocPayment*)
 
 class CacheDocPayment : public CacheBase<CI_DocPayment>

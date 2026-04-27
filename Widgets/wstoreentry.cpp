@@ -1,11 +1,10 @@
 #include "wstoreentry.h"
-#include "ui_wstoreentry.h"
+#include "database2.h"
 #include "defstore.h"
-#include "xlsxall.h"
+#include "message.h"
 #include "pprintstoreentry.h"
 #include "storedoc.h"
-#include "database2.h"
-#include "message.h"
+#include "ui_wstoreentry.h"
 
 #define SEL_DISH 1
 
@@ -123,7 +122,7 @@ void WStoreEntry::newGoods(CI_Dish *c)
     }
 
     for(int i = 0; i < ui->tblData->rowCount(); i++) {
-        if(ui->tblData->itemValue(i, 1).toInt() == c->fCode) {
+        if (ui->tblData->itemValue(i, 1).toInt() == c->fCode.toInt()) {
             ui->tblData->setCurrentCell(i, 4);
             return;
         }
@@ -271,7 +270,7 @@ void WStoreEntry::on_toolButton_2_clicked()
     }
 
     for(int i = rows.count() - 1; i > -1; i--) {
-        ui->tblData->removeRow(rows.toList().at(i));
+        ui->tblData->removeRow(rows.values().at(i));
     };
 
     countTotal();
@@ -471,62 +470,62 @@ void WStoreEntry::on_leSearch_textChanged(const QString &arg1)
 
 void WStoreEntry::on_btnExcel_clicked()
 {
-    int colCount = 6;
-    int rowCount = ui->tblData->rowCount();
+    // int colCount = 6;
+    // int rowCount = ui->tblData->rowCount();
 
-    if(colCount == 0 || rowCount == 0) {
-        message_error_tr("Empty report!");
-        return;
-    }
+    // if(colCount == 0 || rowCount == 0) {
+    //     message_error_tr("Empty report!");
+    //     return;
+    // }
 
-    QList<int> cols;
-    cols << 100 << 300 << 100 << 100 << 100 << 100;
-    QStringList colName;
-    colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Price") << tr("Amount");
-    int fXlsxFitToPage = 0;
-    QString fXlsxPageOrientation = xls_page_orientation_portrait;
-    int fXlsxPageSize = xls_page_size_a4;
-    XlsxDocument d;
-    XlsxSheet *s = d.workbook()->addSheet("Sheet1");
-    s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
-    QColor color = QColor::fromRgb(200, 200, 250);
-    QFont headerFont(qApp->font());
-    headerFont.setBold(true);
-    d.style()->addFont("header", headerFont);
-    d.style()->addBackgrounFill("header", color);
-    d.style()->addHAlignment("header", xls_alignment_center);
-    d.style()->addBorder("header", XlsxBorder());
+    // QList<int> cols;
+    // cols << 100 << 300 << 100 << 100 << 100 << 100;
+    // QStringList colName;
+    // colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Price") << tr("Amount");
+    // int fXlsxFitToPage = 0;
+    // QString fXlsxPageOrientation = xls_page_orientation_portrait;
+    // int fXlsxPageSize = xls_page_size_a4;
+    // XlsxDocument d;
+    // XlsxSheet *s = d.workbook()->addSheet("Sheet1");
+    // s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
+    // QColor color = QColor::fromRgb(200, 200, 250);
+    // QFont headerFont(qApp->font());
+    // headerFont.setBold(true);
+    // d.style()->addFont("header", headerFont);
+    // d.style()->addBackgrounFill("header", color);
+    // d.style()->addHAlignment("header", xls_alignment_center);
+    // d.style()->addBorder("header", XlsxBorder());
 
-    for(int i = 0; i < colCount; i++) {
-        s->addCell(1, i + 1, colName[i], d.style()->styleNum("header"));
-        s->setColumnWidth(i + 1, cols[i] / 7);
-    }
+    // for(int i = 0; i < colCount; i++) {
+    //     s->addCell(1, i + 1, colName[i], d.style()->styleNum("header"));
+    //     s->setColumnWidth(i + 1, cols[i] / 7);
+    // }
 
-    QFont bodyFont(qApp->font());
-    d.style()->addFont("body", bodyFont);
-    d.style()->addBackgrounFill("body", QColor(Qt::white));
-    d.style()->addVAlignment("body", xls_alignment_center);
-    d.style()->addBorder("body", XlsxBorder());
-    s->addCell(2, 1, ui->leDocNum->text(), d.style()->styleNum("header"));
-    s->addCell(2, 2, ui->deDate->text(), d.style()->styleNum("header"));
+    // QFont bodyFont(qApp->font());
+    // d.style()->addFont("body", bodyFont);
+    // d.style()->addBackgrounFill("body", QColor(Qt::white));
+    // d.style()->addVAlignment("body", xls_alignment_center);
+    // d.style()->addBorder("body", XlsxBorder());
+    // s->addCell(2, 1, ui->leDocNum->text(), d.style()->styleNum("header"));
+    // s->addCell(2, 2, ui->deDate->text(), d.style()->styleNum("header"));
 
-    for(int j = 0; j < rowCount; j++) {
-        int r = j + 3;
-        s->addCell(r, 1, ui->tblData->item(j, 1)->text());
-        s->addCell(r, 2, ui->tblData->item(j, 2)->text());
-        s->addCell(r, 3, ui->tblData->lineEdit(j, 3)->text());
-        s->addCell(r, 4, ui->tblData->item(j, 4)->text());
-        s->addCell(r, 5, ui->tblData->lineEdit(j, 5)->text());
-        s->addCell(r, 6, ui->tblData->lineEdit(j, 6)->text());
-    }
+    // for(int j = 0; j < rowCount; j++) {
+    //     int r = j + 3;
+    //     s->addCell(r, 1, ui->tblData->item(j, 1)->text());
+    //     s->addCell(r, 2, ui->tblData->item(j, 2)->text());
+    //     s->addCell(r, 3, ui->tblData->lineEdit(j, 3)->text());
+    //     s->addCell(r, 4, ui->tblData->item(j, 4)->text());
+    //     s->addCell(r, 5, ui->tblData->lineEdit(j, 5)->text());
+    //     s->addCell(r, 6, ui->tblData->lineEdit(j, 6)->text());
+    // }
 
-    QString err;
+    // QString err;
 
-    if(!d.save(err, true)) {
-        if(!err.isEmpty()) {
-            message_error(err);
-        }
-    }
+    // if(!d.save(err, true)) {
+    //     if(!err.isEmpty()) {
+    //         message_error(err);
+    //     }
+    // }
 }
 
 void WStoreEntry::on_deDate_editingFinished()

@@ -8,7 +8,8 @@
 class BaseDialog : public QDialog, public Base
 {
 public:
-    BaseDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    BaseDialog(QWidget *parent = 0, Qt::WindowFlags flags = Qt::Widget);
+
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
     virtual void returnCtrlPressed();

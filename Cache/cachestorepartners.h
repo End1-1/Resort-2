@@ -5,11 +5,12 @@
 
 #define cid_store_partners 101
 
-typedef struct : CI_Base {
+struct CI_StorePartners : public CI_Base
+{
     QString fTaxCode;
     QString fPhone;
     QString fComments;
-} CI_StorePartners;
+};
 Q_DECLARE_METATYPE(CI_StorePartners*)
 
 class CacheStorePartners : public CacheBase<CI_StorePartners>

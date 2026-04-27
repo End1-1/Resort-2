@@ -38,90 +38,100 @@ void WFilterBase::finalPrint(PPrintScene *ps, int top)
 void WFilterBase::buildQuery(WReportGrid *rg, const QString &where)
 {
     rg->fModel->clearColumns();
+
     QString select = "select ";
     QString from = "from  ";
 
-    QRegExp rw("[\\s(,][a-zA-Z0-9]*\\.");
-    int pos = 0;
-    while ((pos = rw.indexIn(where, pos)) != -1) {
-        QString table = where.mid(pos, rw.matchedLength());
+    QRegularExpression rw("[\\s(,][a-zA-Z0-9]*\\.");
+
+    auto itMatch = rw.globalMatch(where);
+    while (itMatch.hasNext()) {
+        auto match = itMatch.next();
+        QString table = match.captured(0);
         table.remove(table.length() - 1, 1).remove(0, 1);
         checkTableName(table, from, rg);
-        pos += rw.matchedLength();
     }
+
     bool firstSelect = true;
-    rg->fModel->clearColumns();
+
     for (int i = 0, count = rg->fFields.count(); i < count; i++) {
-        if (!rg->fIncludes[rg->fFields.at(i)]) {
+        const QString &field = rg->fFields.at(i);
+
+        if (!rg->fIncludes[field])
             continue;
-        }
-        rg->fModel->setColumn(rg->fFieldsWidths[rg->fFieldTitles[rg->fFields.at(i)]],
-                              rg->fFields.at(i),
-                              rg->fFieldTitles[rg->fFields.at(i)]);
-        if (firstSelect) {
-            firstSelect = false;
-        } else {
+
+        rg->fModel->setColumn(rg->fFieldsWidths[rg->fFieldTitles[field]],
+                              field,
+                              rg->fFieldTitles[field]);
+
+        if (!firstSelect)
             select += ",";
-        }
-        if (rg->fFields.at(i).contains("concat")
-                || rg->fFields.at(i).contains("count(")
-                || rg->fFields.at(i).contains("sum(")) {
-            QRegExp re("([(,].+\\b)");
-            re.setMinimal(true);
-            QStringList tableNames = extractTableName(re, rg->fFields.at(i));
-            for (QStringList::iterator it = tableNames.begin(); it != tableNames.end(); it++) {
-                checkTableName((*it).remove(0, 1), from, rg);
-            }
-        } else if (rg->fFields.at(i).contains("coalesce")) {
-            QRegExp re("[(\\+\\-][a-z]+\\b");
-            re.setMinimal(true);
-            QStringList tableNames = extractTableName(re, rg->fFields.at(i));
-            for (QStringList::iterator it = tableNames.begin(); it != tableNames.end(); it++) {
-                checkTableName((*it).remove(0, 1), from, rg);
-            }
+        firstSelect = false;
+
+        if (field.contains("concat") || field.contains("count(") || field.contains("sum(")) {
+            QRegularExpression re("([(,].+\\b)");
+            re.setPatternOptions(QRegularExpression::InvertedGreedinessOption);
+
+            QStringList tableNames = extractTableName(re, field);
+            for (QString &t : tableNames)
+                checkTableName(t.remove(0, 1), from, rg);
+
+        } else if (field.contains("coalesce")) {
+            QRegularExpression re("[(\\+\\-][a-z]+\\b");
+            re.setPatternOptions(QRegularExpression::InvertedGreedinessOption);
+
+            QStringList tableNames = extractTableName(re, field);
+            for (QString &t : tableNames)
+                checkTableName(t.remove(0, 1), from, rg);
+
         } else {
-            QRegExp re(".+\\b");
-            re.setMinimal(true);
-            QStringList tableNames = extractTableName(re, rg->fFields.at(i));
-            for (QStringList::const_iterator it = tableNames.begin(); it != tableNames.end(); it++) {
-                checkTableName(*it, from, rg);
-            }
+            QRegularExpression re(".+\\b");
+            re.setPatternOptions(QRegularExpression::InvertedGreedinessOption);
+
+            QStringList tableNames = extractTableName(re, field);
+            for (const QString &t : tableNames)
+                checkTableName(t, from, rg);
         }
-        select += rg->fFields.at(i);
+
+        select += field;
     }
+
     rg->fModel->setSqlQuery(select + " " + from + " " + where);
     rg->fModel->apply(rg);
 }
 
-QStringList WFilterBase::extractTableName(const QRegExp &re, const QString &str)
+QStringList WFilterBase::extractTableName(const QRegularExpression &re, const QString &str)
 {
-    re.indexIn(str);
-    QStringList l = re.capturedTexts();
-    return l;
+    auto match = re.match(str);
+    return match.capturedTexts();
 }
 
 void WFilterBase::checkTableName(const QString &alias, QString &from, WReportGrid *rg)
 {
     for (int i = 0; i < rg->fTables.count(); i++) {
-        QRegExp rt("\\s[a-zA-Z]+$");
-        rt.indexIn(rg->fTables.at(i));
-        QStringList lt = rt.capturedTexts();
-        if (lt.count() > 0) {
-            QString compareTableName(lt.at(0));
+        QRegularExpression rt("\\s[a-zA-Z]+$");
+        auto match = rt.match(rg->fTables.at(i));
+
+        if (match.hasMatch()) {
+            QString compareTableName = match.captured(0);
             compareTableName.remove(0, 1);
+
             if (alias == compareTableName) {
                 if (!from.contains(rg->fTables.at(i))) {
                     if (i == 0) {
-                        from = from.insert(5, rg->fTables.at(i)) + " ";
+                        from.insert(5, rg->fTables.at(i));
+                        from += " ";
                     } else {
                         QString joinCond = rg->fJoinConds.at(i);
-                        QRegExp rjt("=[a-z]+\\b");
+
+                        QRegularExpression rjt("=[a-z]+\\b");
                         QStringList joinsTables = extractTableName(rjt, joinCond);
-                        foreach (QString s, joinsTables) {
-                            checkTableName(s.remove(0,1), from, rg);
-                        }
-                        from += rg->fJoins.at(i) + QString(" join ") +
-                                rg->fTables.at(i) + QString(" on ") + joinCond + " ";
+
+                        for (QString s : joinsTables)
+                            checkTableName(s.remove(0, 1), from, rg);
+
+                        from += rg->fJoins.at(i) + " join " + rg->fTables.at(i) + " on " + joinCond
+                                + " ";
                     }
                 }
                 return;
@@ -138,7 +148,7 @@ QWidget *WFilterBase::gridOptionWidget()
 void WFilterBase::groupCheckClicked(bool value)
 {
     EQCheckBox *check = static_cast<EQCheckBox*>(sender());
-    QStringList groupFields = check->getField().split(";", QString::SkipEmptyParts);
+    QStringList groupFields = check->getField().split(";", Qt::SkipEmptyParts);
     foreach (QString s, groupFields) {
         if (check->getRequireLang()) {
             s += def_lang;

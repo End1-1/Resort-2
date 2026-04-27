@@ -31,7 +31,7 @@ public:
 protected:
     WReportGrid *fReportGrid;
     void buildQuery(WReportGrid *rg, const QString &where);
-    QStringList extractTableName(const QRegExp &re, const QString &str);
+    QStringList extractTableName(const QRegularExpression &re, const QString &str);
     void checkTableName(const QString &alias, QString &from, WReportGrid *rg);
 
     //T cache users , C - cache instance
@@ -47,7 +47,7 @@ protected:
                 l->fShowText.clear();
             } else {
                 C *ct = C::instance();
-                QStringList list = l->fHiddenText.split(",", QString::SkipEmptyParts);
+                QStringList list = l->fHiddenText.split(",", Qt::SkipEmptyParts);
                 QString text;
                 bool first = true;
                 for (QStringList::const_iterator it = list.begin(); it != list.end(); it++) {

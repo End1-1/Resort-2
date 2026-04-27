@@ -5,9 +5,8 @@
 
 #define cid_store_doc_type 102
 
-typedef struct : CI_Base {
-
-} CI_StoreDocType;
+struct CI_StoreDocType : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_StoreDocType*)
 
 class CacheStoreDocType : public CacheBase<CI_StoreDocType>

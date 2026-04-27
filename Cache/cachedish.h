@@ -5,10 +5,11 @@
 
 #define cid_dish 61
 
-typedef struct : CI_Base {
+struct CI_Dish : public CI_Base
+{
     QString fUnitName;
     QString fStore;
-} CI_Dish;
+};
 Q_DECLARE_METATYPE(CI_Dish*)
 
 class CacheDish : public CacheBase<CI_Dish>

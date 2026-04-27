@@ -91,7 +91,7 @@ void FAttendance::removeWorker()
     for (QModelIndex &mi: sr) {
         rows.insert(mi.row());
     }
-    QList<int> rl = rows.toList();
+    QList<int> rl = rows.values();
     if (rl.count() > 0) {
         if (message_confirm_tr("Confirm to delete worker") != QDialog::Accepted) {
             return;

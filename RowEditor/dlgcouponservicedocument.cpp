@@ -3,10 +3,16 @@
 #include "reportquery.h"
 #include "dlgcouponservicedocumentplus.h"
 #include "database2.h"
-#include "c5printing.h"
 #include "doubledatabase.h"
-#include "c5printpreview.h"
 #include "message.h"
+
+#include <QDateTime>
+#include <QMarginsF>
+#include <QPageLayout>
+#include <QPageSize>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
+#include <QTextDocument>
 
 DlgCouponServiceDocument::DlgCouponServiceDocument(ReportQuery *rq, QWidget *parent) :
     QDialog(parent),
@@ -16,6 +22,7 @@ DlgCouponServiceDocument::DlgCouponServiceDocument(ReportQuery *rq, QWidget *par
     rq->costumizeCombo(ui->cbPartner, "partners");
     fReportQuery = rq;
     ui->tbl->setColumnWidth(8, 0);
+    ui->leValid->setDate(QDate::currentDate().addDays(365));
 }
 
 DlgCouponServiceDocument::~DlgCouponServiceDocument()
@@ -115,9 +122,10 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
         db[":f_group"]  = ui->tbl->item(i, 8)->text().toInt();
         db[":f_partner"] = ui->cbPartner->currentData();
         db[":f_price"] = str_float(ui->tbl->item(i, 5)->text());
+        db[":f_validto"] = ui->leValid->date();
         db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
         db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, "
-                "f_price=:f_price, f_trback=null, f_partner=:f_partner, f_group=:f_group where f_code=:f_code");
+                "f_price=:f_price, f_trback=null, f_partner=:f_partner, f_group=:f_group, f_validto=:f_validto where f_code=:f_code");
         db[":f_doc"] = docid;
         db[":f_group"] = ui->tbl->item(i, 1)->text();
         db[":f_first"] = ui->tbl->item(i, 2)->text();
@@ -155,108 +163,118 @@ void DlgCouponServiceDocument::on_btnPrint_clicked()
         message_error(tr("Document wasnt saved"));
         return;
     }
-    C5Printing p;
-    p.setSceneParams(2800, 2000, QPrinter::Landscape);
-    QFont font(font());
-    int fontbase = 26;
-    font.setPointSize(fontbase);
-    //font.setBold(true);
-    p.setFont(font);
-    int baseleft = 100;
-    int sl = 1400 + baseleft;
-    int cl = (2700 / 2) / 2;
-    int cr = (2700 / 2) + cl;
-    p.setFontSize(fontbase + 4);
-    p.setFontBold(true);
-    p.ltext(tr("<<ARMPETROL>> LTD"), baseleft);
-    p.ltext(tr("<<ARMPETROL>> LTD"), baseleft + sl);
-    p.br();
-    p.setFontSize(fontbase);
-    p.setFontBold(false);
-    p.ctextof(tr("DEAL"), cl);
-    p.ctextof(tr("DEAL"), cr);
-    p.br();
-    p.ctextof(tr("ACCEPTANCE - DELIVERY"), cl);
-    p.ctextof(tr("ACCEPTANCE - DELIVERY"), cr);
-    p.br();
-    QString strTemp = QString("%1 %2").arg(tr("Date"), ui->leDate->text());
-    p.ctextof(strTemp, cl);
-    p.ctextof(strTemp, cr);
-    p.br();
-    p.ltext(tr("Receiver:"), baseleft);
-    p.ltext(tr("Receiver:"), baseleft + sl);
-    p.line(baseleft + 300, p.fTop + p.fLineHeight, 1200, p.fTop + p.fLineHeight);
-    p.line(baseleft + sl + 300, p.fTop + p.fLineHeight, sl + 1200, p.fTop + p.fLineHeight);
-    p.ltext(ui->cbPartner->currentText(), baseleft + 450);
-    p.ltext(ui->cbPartner->currentText(), baseleft + sl + 450);
-    p.br();
-    p.ltext(tr("Payment:"), baseleft);
-    p.ltext(tr("Payment:"), baseleft + sl);
-    p.line(baseleft + 300, p.fTop + p.fLineHeight, 1200, p.fTop + p.fLineHeight);
-    p.line(baseleft + sl + 300, p.fTop + p.fLineHeight, baseleft + sl + 1200, p.fTop + p.fLineHeight);
-    p.ltext(ui->lePaid->text(), baseleft + 450);
-    p.ltext(ui->lePaid->text(), baseleft + sl + 450);
-    p.br();
-    p.ltext(tr("Paid:"), baseleft);
-    p.ltext(tr("Paid:"), baseleft + sl);
-    p.line(baseleft + 300, p.fTop + p.fLineHeight, 1200, p.fTop + p.fLineHeight);
-    p.line(baseleft + sl + 300, p.fTop + p.fLineHeight, sl + 1200, p.fTop + p.fLineHeight);
-    p.ltext(ui->lePaid->text(), 450);
-    p.ltext(ui->lePaid->text(), sl + 450);
-    p.br();
-    p.br();
-    QList<qreal> points;
-    points << baseleft << 100 << 450 << 150 << 150 << 150 << 250;
-    QList<qreal> points2 = points;
-    points2[0] = points2[0] + sl;
-    QStringList vals;
-    vals << tr("NN") << tr("Name") << tr("Quantity") << tr("Price") <<  tr("Discount") << tr("Amount");
-    p.tableText(points, vals, p.fLineHeight + 30);
-    p.tableText(points2, vals, p.fLineHeight + 30);
-    p.br(p.fLineHeight + 30);
+    const auto esc = [](const QString &s) { return s.toHtmlEscaped(); };
+
+    QString tableRows;
     for (int i = 0; i < ui->tbl->rowCount(); i++) {
-        vals.clear();
-        vals << QString::number(i + 1)
-             << ui->tbl->item(i, 1)->text()
-             << ui->tbl->item(i, 4)->text()
-             << ui->tbl->item(i, 5)->text()
-             << ui->tbl->item(i, 6)->text()
-             << ui->tbl->item(i, 7)->text();
-        p.tableText(points, vals, p.fLineHeight + 30);
-        p.tableText(points2, vals, p.fLineHeight + 30);
-        p.br(p.fLineHeight + 30);
+        tableRows += QStringLiteral("<tr>"
+                                    "<td align='center'>%1</td>"
+                                    "<td>%2</td>"
+                                    "<td align='right'>%3</td>"
+                                    "<td align='right'>%4</td>"
+                                    "<td align='right'>%5</td>"
+                                    "<td align='right'>%6</td>"
+                                    "</tr>")
+                .arg(i + 1)
+                .arg(esc(ui->tbl->item(i, 1)->text()))
+                .arg(esc(ui->tbl->item(i, 4)->text()))
+                .arg(esc(ui->tbl->item(i, 5)->text()))
+                .arg(esc(ui->tbl->item(i, 6)->text()))
+                .arg(esc(ui->tbl->item(i, 7)->text()));
     }
-    points.clear();
-    points << baseleft + 700 << 300 << 250;
-    points2 = points;
-    points2[0] = points2[0] + sl;
-    vals.clear();
-    vals << tr("Total") << ui->leTotal->text();
-    p.tableText(points, vals, p.fLineHeight + 30);
-    p.tableText(points2, vals, p.fLineHeight + 20);
-    p.br(p.fLineHeight + 20);
-    p.br();
-    p.br();
-    p.br(p.fLineHeight + 20);
-    p.ltext(tr("Receiver:"), baseleft);
-    p.ltext(tr("Receiver:"), baseleft + sl);
-    p.ltext(tr("Deliver:"), baseleft + 750);
-    p.ltext(tr("Deliver:"), baseleft + sl + 750);
-    p.line(baseleft, p.fTop + p.fLineHeight, 500, p.fTop + p.fLineHeight);
-    p.line(baseleft + sl, p.fTop + p.fLineHeight, sl + 500, p.fTop + p.fLineHeight);
-    p.line(baseleft + 750, p.fTop + p.fLineHeight, 1200, p.fTop + p.fLineHeight);
-    p.line(baseleft + sl + 750, p.fTop + p.fLineHeight, sl + 1200, p.fTop + p.fLineHeight);
-    p.br();
-    p.ltext(tr("(signature)"), baseleft + 200);
-    p.ltext(tr("(signature)"), baseleft + sl + 200);
-    p.ltext(tr("(signature)"), baseleft + 900);
-    p.ltext(tr("(signature)"), baseleft + sl + 900);
-    p.br();
-    p.br();
-    p.ltext(QString("%1 %2").arg(tr("Printed:"), QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm")), baseleft);
-    p.ltext(QString("%1 %2").arg(tr("Printed:"), QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm")), sl + baseleft);
-    C5PrintPreview pp( &p, this);
-    pp.exec();
+
+    const QString dateLine = esc(QString("%1 %2").arg(tr("Date"), ui->leDate->text()));
+    const QString partner = esc(ui->cbPartner->currentText());
+    const QString paid = esc(ui->lePaid->text());
+    const QString total = esc(ui->leTotal->text());
+    const QString printed = esc(QString("%1 %2")
+                                .arg(tr("Printed:"), QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm")));
+
+    const QString col = QString(
+        "<div style='font-size:9pt;'>"
+        "<p style='text-align:center;font-size:14pt;font-weight:bold;margin:0.2em 0;'>%1</p>"
+        "<p style='text-align:center;margin:0.15em 0;'>%2</p>"
+        "<p style='text-align:center;margin:0.15em 0;'>%3</p>"
+        "<p style='text-align:center;margin:0.2em 0;'>%4</p>"
+
+        "<p style='margin:0.3em 0;'><b>%5</b> <span style='display:inline-block;min-width:12em;border-bottom:1px solid #000;'>%6</span></p>"
+        "<p style='margin:0.3em 0;'><b>%7</b> <span style='display:inline-block;min-width:12em;border-bottom:1px solid #000;'>%8</span></p>"
+        "<p style='margin:0.3em 0;'><b>%9</b> <span style='display:inline-block;min-width:12em;border-bottom:1px solid #000;'>%10</span></p>"
+
+        "<table style='width:100%;border-collapse:collapse;border:1px solid #000;font-size:8pt;margin:0.5em 0;'>"
+        "<thead><tr style='font-weight:bold;'>"
+        "<th style='border:1px solid #000;'>%11</th>"
+        "<th style='border:1px solid #000;'>%12</th>"
+        "<th style='border:1px solid #000;'>%13</th>"
+        "<th style='border:1px solid #000;'>%14</th>"
+        "<th style='border:1px solid #000;'>%15</th>"
+        "<th style='border:1px solid #000;'>%16</th>"
+        "</tr></thead><tbody>"
+        "%17"
+        "<tr><td colspan='4' style='border:1px solid #000;'></td><td align='right' style='border:1px solid #000;'><b>%18</b></td>"
+        "<td align='right' style='border:1px solid #000;'><b>%19</b></td></tr>"
+        "</tbody></table>"
+
+        "<p style='margin:1.2em 0 0.2em;'><b>%20</b> <span style='display:inline-block;min-width:5em;border-bottom:1px solid #000;'></span>"
+        " &nbsp; <b>%21</b> <span style='display:inline-block;min-width:5em;border-bottom:1px solid #000;'></span></p>"
+        "<p style='margin:0.1em 0 0.8em;'><span style='margin-right:1.5em;'>%22</span><span>%23</span></p>"
+
+        "<p style='margin:0.2em 0;'>%24</p>"
+        "</div>")
+        .arg(esc(tr("<<ARMPETROL>> LTD")))
+        .arg(esc(tr("DEAL")))
+        .arg(esc(tr("ACCEPTANCE - DELIVERY")))
+        .arg(dateLine)
+        .arg(esc(tr("Receiver:")))
+        .arg(partner)
+        .arg(esc(tr("Payment:")))
+        .arg(paid)
+        .arg(esc(tr("Paid:")))
+        .arg(paid)
+        .arg(esc(tr("NN")))
+        .arg(esc(tr("Name")))
+        .arg(esc(tr("Quantity")))
+        .arg(esc(tr("Price")))
+        .arg(esc(tr("Discount")))
+        .arg(esc(tr("Amount")))
+        .arg(tableRows)
+        .arg(esc(tr("Total")))
+        .arg(total)
+        .arg(esc(tr("Receiver:")))
+        .arg(esc(tr("Deliver:")))
+        .arg(esc(tr("(signature)")))
+        .arg(esc(tr("(signature)")))
+        .arg(printed);
+
+    const QString html = QStringLiteral("<!DOCTYPE html><html><head><meta charset='utf-8'/></head><body style='font-family:Arial,Helvetica,sans-serif;'>"
+                                        "<table style='width:100%;table-layout:fixed;'><tr>"
+                                        "<td style='width:50%;vertical-align:top;padding:0 0.3em;'>")
+        + col
+        + QStringLiteral("</td><td style='width:50%;vertical-align:top;padding:0 0.3em;'>")
+        + col
+        + QStringLiteral("</td></tr></table></body></html>");
+
+    QPrinter printer(QPrinter::HighResolution);
+    {
+        QPageLayout layout = printer.pageLayout();
+        layout.setPageSize(QPageSize(QPageSize::A4));
+        layout.setUnits(QPageLayout::Millimeter);
+        layout.setMargins(QMarginsF(10, 8, 10, 8));
+        layout.setOrientation(QPageLayout::Landscape);
+        printer.setPageLayout(layout);
+    }
+
+    QPrintPreviewDialog preview(&printer, this);
+    QTextDocument document;
+    document.setHtml(html);
+    QObject::connect(&preview, &QPrintPreviewDialog::paintRequested, [&](QPrinter *p) {
+        document.setHtml(html);
+        const QRectF rect = p->pageLayout().paintRectPixels(p->resolution());
+        document.setPageSize(rect.size());
+        document.setTextWidth(rect.width());
+        document.print(p);
+    });
+    preview.exec();
 }
 
 void DlgCouponServiceDocument::on_btnMinus_clicked()

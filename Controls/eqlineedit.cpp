@@ -1,10 +1,10 @@
 #include "eqlineedit.h"
-#include "utils.h"
-#include "dwselector.h"
-#include <QStyle>
-#include <QRegExpValidator>
-#include <QDebug>
 #include <QApplication>
+#include <QDebug>
+#include <QRegularExpressionValidator>
+#include <QStyle>
+#include "dwselector.h"
+#include "utils.h"
 
 static QLocale mLocale;
 
@@ -209,7 +209,7 @@ QString EQLineEdit::getHiddenTextValidator()
 void EQLineEdit::setHiddenTextValidator(const QString &v)
 {
     fHiddenTextValidator = v;
-    QRegExpValidator *re = new QRegExpValidator(QRegExp(v));
+    QRegularExpressionValidator *re = new QRegularExpressionValidator(QRegularExpression(v));
     setValidator(re);
 }
 
@@ -291,28 +291,32 @@ void EQLineEdit::leaveEvent(QEvent *event)
 
 bool EQLineEdit::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == this) {
-        if(event->type() == QEvent::KeyPress) {
-            QKeyEvent *k = static_cast<QKeyEvent*>(event);
+    if (watched == this && event->type() == QEvent::KeyPress) {
+        auto *k = static_cast<QKeyEvent *>(event);
 
-            switch(k->key()) {
-            case Qt::Key_F1:
-                if(getShowButton()) {
-                    emit customButtonClicked(true);
-                    return true;
-                }
-
-                break;
-
-            default:
-                if(k->key() == mLocale.groupSeparator()) {
-                    QKeyEvent * eve2 = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier, mLocale.decimalPoint());
-                    qApp->postEvent(this, (QEvent*)eve2);
-                    event->ignore();
-                }
-
-                break;
+        switch (k->key()) {
+        case Qt::Key_F1:
+            if (getShowButton()) {
+                emit customButtonClicked(true);
+                return true;
             }
+            break;
+
+        default: {
+            const QString text = k->text();
+
+            if (!text.isEmpty() && text[0] == mLocale.groupSeparator()) {
+                // заменяем на decimal separator
+                auto *e2 = new QKeyEvent(QEvent::KeyPress,
+                                         0,
+                                         Qt::NoModifier,
+                                         QString(mLocale.decimalPoint()));
+
+                qApp->postEvent(this, e2);
+                return true;
+            }
+            break;
+        }
         }
     }
 

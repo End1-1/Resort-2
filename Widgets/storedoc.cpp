@@ -1,20 +1,18 @@
 #include "storedoc.h"
-#include "ui_storedoc.h"
-#include "defstore.h"
-#include "rerestdish.h"
-#include "cachecashdoc.h"
-#include "storeoutput.h"
-#include "pprintstoredoc.h"
-#include "database2.h"
-#include "dlggetidname.h"
-#include "xlsxall.h"
-#include <QInputDialog>
 #include <QFileDialog>
-#include <qxml.h>
-#include <QJsonObject>
+#include <QInputDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QXmlStreamReader>
+#include "cachecashdoc.h"
+#include "database2.h"
+#include "defstore.h"
+#include "dlggetidname.h"
+#include "pprintstoredoc.h"
+#include "rerestdish.h"
+#include "storeoutput.h"
+#include "ui_storedoc.h"
 
 #define SEL_DOC_TYPE 10
 #define SEL_PARTNER 2
@@ -116,7 +114,7 @@ void StoreDoc::loadDoc(int id)
 
     int state = dh.value("f_state").toInt();
     CI_StoreDocType *ds = CacheStoreDocType::instance()->get(dh.value("f_type").toString());
-    selector(SEL_DOC_TYPE, qVariantFromValue(ds));
+    selector(SEL_DOC_TYPE, QVariant::fromValue(ds));
     CI_StorePartners *sp = CacheStorePartners::instance()->get(dh.value("f_partner").toString());
     dockResponse<CI_StorePartners, CacheStorePartners>(ui->lePartnerCode, ui->lePartnerName, sp);
     prepareDoc();
@@ -768,7 +766,7 @@ void StoreDoc::on_btnRemoveMaterial_clicked()
         rows << m.row();
     }
 
-    QList<int> r = rows.toList();
+    QList<int> r = rows.values();
 
     for(int i = r.count() - 1; i > -1; i--) {
         fDbBind[":f_id"] = ui->tblGoods->toInt(r.at(i), 0);
@@ -799,75 +797,75 @@ void StoreDoc::on_btnPrintDoc_clicked()
 
 void StoreDoc::on_btnExcel_clicked()
 {
-    int colCount = 6;
-    int rowCount = ui->tblGoods->rowCount();
+    // int colCount = 6;
+    // int rowCount = ui->tblGoods->rowCount();
 
-    if(colCount == 0 || rowCount == 0) {
-        message_error_tr("Empty report!");
-        return;
-    }
+    // if(colCount == 0 || rowCount == 0) {
+    //     message_error_tr("Empty report!");
+    //     return;
+    // }
 
-    QList<int> cols;
-    cols << 100 << 300 << 100 << 100 << 100 << 100;
-    QStringList colName;
-    colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Price") <<  tr("Amount");
-    int fXlsxFitToPage = 0;
-    QString fXlsxPageOrientation = xls_page_orientation_portrait;
-    int fXlsxPageSize = xls_page_size_a4;
-    XlsxDocument d;
-    XlsxSheet *s = d.workbook()->addSheet("Sheet1");
-    s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
-    QColor color = QColor::fromRgb(200, 200, 250);
-    QFont headerFont(qApp->font());
-    headerFont.setBold(true);
-    d.style()->addFont("header", headerFont);
-    d.style()->addBackgrounFill("header", color);
-    d.style()->addHAlignment("header", xls_alignment_center);
-    d.style()->addBorder("header", XlsxBorder());
+    // QList<int> cols;
+    // cols << 100 << 300 << 100 << 100 << 100 << 100;
+    // QStringList colName;
+    // colName << tr("Code") << tr("Name") << tr("Qty") << tr("Unit") << tr("Price") <<  tr("Amount");
+    // int fXlsxFitToPage = 0;
+    // QString fXlsxPageOrientation = xls_page_orientation_portrait;
+    // int fXlsxPageSize = xls_page_size_a4;
+    // XlsxDocument d;
+    // XlsxSheet *s = d.workbook()->addSheet("Sheet1");
+    // s->setupPage(fXlsxPageSize, fXlsxFitToPage, fXlsxPageOrientation);
+    // QColor color = QColor::fromRgb(200, 200, 250);
+    // QFont headerFont(qApp->font());
+    // headerFont.setBold(true);
+    // d.style()->addFont("header", headerFont);
+    // d.style()->addBackgrounFill("header", color);
+    // d.style()->addHAlignment("header", xls_alignment_center);
+    // d.style()->addBorder("header", XlsxBorder());
 
-    for(int i = 0; i < colCount; i++) {
-        s->addCell(1, i + 1, colName[i], d.style()->styleNum("header"));
-        s->setColumnWidth(i + 1, cols[i] / 7);
-    }
+    // for(int i = 0; i < colCount; i++) {
+    //     s->addCell(1, i + 1, colName[i], d.style()->styleNum("header"));
+    //     s->setColumnWidth(i + 1, cols[i] / 7);
+    // }
 
-    /* BODY */
-    QMap<int, QString> bgFill;
-    QMap<int, QString> bgFillb;
-    QFont bodyFont(qApp->font());
-    d.style()->addFont("body", bodyFont);
-    d.style()->addBackgrounFill("body", QColor(Qt::white));
-    d.style()->addVAlignment("body", xls_alignment_center);
-    d.style()->addBorder("body", XlsxBorder());
-    bgFill[QColor(Qt::white).rgb()] = "body";
-    s->addCell(1,  1, ui->leDocNumber->text(), d.style()->styleNum("header"));
-    s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
+    // /* BODY */
+    // QMap<int, QString> bgFill;
+    // QMap<int, QString> bgFillb;
+    // QFont bodyFont(qApp->font());
+    // d.style()->addFont("body", bodyFont);
+    // d.style()->addBackgrounFill("body", QColor(Qt::white));
+    // d.style()->addVAlignment("body", xls_alignment_center);
+    // d.style()->addBorder("body", XlsxBorder());
+    // bgFill[QColor(Qt::white).rgb()] = "body";
+    // s->addCell(1,  1, ui->leDocNumber->text(), d.style()->styleNum("header"));
+    // s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
 
-    for(int j = 0; j < rowCount; j++) {
-        for(int j = 0; j < rowCount; j++) {
-            // Дата (фиксировано)
-            s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
-            // Колонка 1
-            s->addCell(j + 3, 1,  ui->tblGoods->item(j, 0)->text());
-            // Колонка 2
-            s->addCell(j + 3, 2,  ui->tblGoods->item(j, 2)->text());
-            // Колонка 3
-            s->addCell(j + 3, 3,  ui->tblGoods->lineEdit(j, 3)->text());
-            // Колонка 4
-            s->addCell(j + 3, 4,  ui->tblGoods->item(j, 4)->text());
-            // Колонка 5
-            s->addCell(j + 3, 5,  ui->tblGoods->lineEdit(j, 5)->text());
-            // Колонка 6
-            s->addCell(j + 3, 6,  ui->tblGoods->lineEdit(j, 6)->text());
-        }
-    }
+    // for(int j = 0; j < rowCount; j++) {
+    //     for(int j = 0; j < rowCount; j++) {
+    //         // Дата (фиксировано)
+    //         s->addCell(1, 2, ui->deDate->text(), d.style()->styleNum("header"));
+    //         // Колонка 1
+    //         s->addCell(j + 3, 1,  ui->tblGoods->item(j, 0)->text());
+    //         // Колонка 2
+    //         s->addCell(j + 3, 2,  ui->tblGoods->item(j, 2)->text());
+    //         // Колонка 3
+    //         s->addCell(j + 3, 3,  ui->tblGoods->lineEdit(j, 3)->text());
+    //         // Колонка 4
+    //         s->addCell(j + 3, 4,  ui->tblGoods->item(j, 4)->text());
+    //         // Колонка 5
+    //         s->addCell(j + 3, 5,  ui->tblGoods->lineEdit(j, 5)->text());
+    //         // Колонка 6
+    //         s->addCell(j + 3, 6,  ui->tblGoods->lineEdit(j, 6)->text());
+    //     }
+    // }
 
-    QString err;
+    // QString err;
 
-    if(!d.save(err, true)) {
-        if(!err.isEmpty()) {
-            message_error(err);
-        }
-    }
+    // if(!d.save(err, true)) {
+    //     if(!err.isEmpty()) {
+    //         message_error(err);
+    //     }
+    // }
 }
 
 void StoreDoc::on_btnImportXML_clicked()

@@ -5,8 +5,8 @@
 
 #define cid_rest_menu 26
 
-typedef struct : CI_Base {
-}CI_RestMenu;
+struct CI_RestMenu : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_RestMenu*)
 
 class CacheRestMenu : public CacheBase<CI_RestMenu>

@@ -5,7 +5,7 @@
 
 #define cid_payment_mode 11
 
-typedef struct h : CI_Base {
+typedef struct h : public CI_Base {
 } CI_PaymentMode;
 Q_DECLARE_METATYPE(CI_PaymentMode*)
 

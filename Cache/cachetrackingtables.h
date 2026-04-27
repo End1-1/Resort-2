@@ -5,9 +5,8 @@
 
 #define cid_tracking_tables 38
 
-typedef struct : CI_Base {
-
-} CI_TrackingTables;
+struct CI_TrackingTables : public CI_Base
+{};
 Q_DECLARE_METATYPE(CI_TrackingTables*)
 
 class CacheTrackingTables : public CacheBase<CI_TrackingTables>

@@ -1,12 +1,11 @@
 #include "pprintpreview.h"
-#include "ui_pprintpreview.h"
+#include <QDebug>
+#include <QGraphicsPixmapItem>
+#include <QPrinterInfo>
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QShowEvent>
-#include <QDesktopWidget>
-#include <QPrinterInfo>
-#include <QGraphicsPixmapItem>
-#include <QDebug>
+#include "ui_pprintpreview.h"
 
 PPrintPreview::PPrintPreview(QWidget *parent) :
     QDialog(parent),
@@ -18,7 +17,8 @@ PPrintPreview::PPrintPreview(QWidget *parent) :
     ui->lePages->setVisible(false);
     ui->gv->horizontalScrollBar()->blockSignals(true);
     ui->gv->verticalScrollBar()->blockSignals(true);
-    resize(qApp->desktop()->screenGeometry().width() - 100, qApp->desktop()->screenGeometry().height() - 100);
+    //TODO
+    //resize(qApp->desktop()->screenGeometry().width() - 100, qApp->desktop()->screenGeometry().height() - 100);
     setPrintOrientation(Portrait);
     ui->cbPrinters->addItems(QPrinterInfo::availablePrinterNames());
     ui->cbPrinters->setCurrentIndex(ui->cbPrinters->findText(QPrinterInfo::defaultPrinterName()));
@@ -97,41 +97,42 @@ void PPrintPreview::setPrintOrientation(PrintOrientation po)
 
 void PPrintPreview::on_btnPrint_clicked()
 {
-    QList<int> printPages;
-    switch (ui->cbPrintSelection->currentIndex()) {
-    case 0:
-        for (int i = 0; i < fPrintScene.count(); i++) {
-            printPages << i;
-        }
-        break;
-    case 1:
-        printPages << fPageNumber - 1;
-        break;
-    case 2: {
-        QStringList p = ui->lePages->text().replace(" ", "").split(",", QString::SkipEmptyParts);
-        foreach (QString s, p) {
-            int page = s.toInt() - 1;
-            if (page < 0 || page > fPrintScene.count() - 1) {
-                continue;
-            }
-            printPages << page;
-        }
-        break;
-    }
-    }
+    //todo
+    // QList<int> printPages;
+    // switch (ui->cbPrintSelection->currentIndex()) {
+    // case 0:
+    //     for (int i = 0; i < fPrintScene.count(); i++) {
+    //         printPages << i;
+    //     }
+    //     break;
+    // case 1:
+    //     printPages << fPageNumber - 1;
+    //     break;
+    // case 2: {
+    //     QStringList p = ui->lePages->text().replace(" ", "").split(",", Qt::SkipEmptyParts);
+    //     foreach (QString s, p) {
+    //         int page = s.toInt() - 1;
+    //         if (page < 0 || page > fPrintScene.count() - 1) {
+    //             continue;
+    //         }
+    //         printPages << page;
+    //     }
+    //     break;
+    // }
+    // }
 
-    QPrinter prn;
-    prn.setPaperSize(QPrinter::A4);
-    prn.setPrinterName(ui->cbPrinters->currentText());
-    prn.setOrientation(fPrintScene.at(printPages.at(0))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
-    QPainter painter(&prn);
-    for (int i = 0; i < printPages.count(); i++) {
-        if (i > 0) {
-            prn.setOrientation(fPrintScene.at(printPages.at(i))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
-            prn.newPage();
-        }
-        fPrintScene.at(printPages.at(i))->render(&painter);
-    }
+    // QPrinter prn;
+    // prn.setPaperSize(QPrinter::A4);
+    // prn.setPrinterName(ui->cbPrinters->currentText());
+    // prn.setOrientation(fPrintScene.at(printPages.at(0))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
+    // QPainter painter(&prn);
+    // for (int i = 0; i < printPages.count(); i++) {
+    //     if (i > 0) {
+    //         prn.setOrientation(fPrintScene.at(printPages.at(i))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
+    //         prn.newPage();
+    //     }
+    //     fPrintScene.at(printPages.at(i))->render(&painter);
+    // }
 }
 
 void PPrintPreview::on_btnZoomOut_clicked()

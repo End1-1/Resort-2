@@ -3,8 +3,6 @@
 
 #include "database.h"
 
-extern int _IDGENMODE_;
-
 //#define uuuid(x, y) BaseUID::genID(x, y)
 
 class BaseUID
@@ -12,7 +10,6 @@ class BaseUID
 public:
     BaseUID();
     static QString genID(const QString &prefix, Database &db);
-    static QString ID(const QString &vaucher, Database &db);
     static QString INTID(const QString &prefix, Database &db);
     static int fUserId;
 };

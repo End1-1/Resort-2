@@ -32,7 +32,7 @@ void DWSelectorStorePartners::configure()
         fTable->setItem(row, 2, new QTableWidgetItem(i.value()->fName));
         fTable->setItem(row, 3, new QTableWidgetItem(i.value()->fPhone));
         CI_StorePartners *ct = i.value();
-        fTable->item(row, 0)->setData(Qt::UserRole, qVariantFromValue(ct));
+        fTable->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(ct));
         row++;
     }
     fTable->setRowCount(row);

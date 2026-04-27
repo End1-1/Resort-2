@@ -1,12 +1,11 @@
 #ifndef RFACE_H
 #define RFACE_H
 
+#include <QTimer>
 #include "baseextendeddialog.h"
+#include "command.h"
 #include "hall.h"
 #include "user.h"
-#include "command.h"
-#include <QTimer>
-#include <QTcpSocket>
 
 namespace Ui
 {
@@ -36,7 +35,6 @@ private:
     int fCurrenTableState;
     int fTimerCounter;
     Command fCommand;
-    QTcpSocket fSocket;
     User* login();
 };
 
