@@ -6,7 +6,6 @@
 #include "cachebase.h"
 #include "cacherights.h"
 #include "preferences.h"
-#include <QDockWidget>
 #include <QTableWidget>
 #include <QDialog>
 
@@ -14,7 +13,7 @@ namespace Ui {
 class DWSelector;
 }
 
-class DWSelector : public QDockWidget
+class DWSelector : public QDialog
 {
     Q_OBJECT
 public:
@@ -28,6 +27,8 @@ public:
     void setFilterColumn(const QMap<int, QString> &filter);
     int fCurrentRow;
 protected:
+    virtual void showEvent(QShowEvent *event) override;
+    virtual void hideEvent(QHideEvent *event) override;
     QTableWidget *fTable;
     int fCacheId;
     Preferences fPreferences;
@@ -86,7 +87,6 @@ protected slots:
 private:
     Ui::DWSelector *ui;
 private slots:
-    void thisChangeVisibility(bool v);
     void on_tblData_doubleClicked(const QModelIndex &index);
     void on_btnRefresh_clicked();
 

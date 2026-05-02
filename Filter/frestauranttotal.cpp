@@ -555,18 +555,28 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     }
 
     rg->fTableView->resizeColumnsToContents();
-    rg->fTableTotal->resizeColumnsToContents();
+    rg->syncTotalsWithMain();
 
-    for(int i = 0; i < rg->fTableTotal->colorCount(); i++) {
-        if(rg->fTableView->columnWidth(i) < rg->fTableTotal->columnWidth(i)) {
-            rg->fTableView->setColumnWidth(i, rg->fTableTotal->columnWidth(i));
+    // Totals can be wider than main body values, so expand main columns if needed.
+    const int cc = rg->fTableTotal->columnCount();
+    bool changed = false;
+    for (int i = 0; i < cc; i++) {
+        if (rg->fTableView->columnWidth(i) == 0) {
+            continue;
+        }
+        int totalsWidth = rg->fTableView->columnWidth(i);
+        if (rg->fTableTotal->item(0, i)) {
+            QFontMetrics fm(rg->fTableTotal->font());
+            // Text width + cell paddings/sort of style margin reserve.
+            totalsWidth = fm.horizontalAdvance(rg->fTableTotal->item(0, i)->text()) + 24;
+        }
+        if (totalsWidth > rg->fTableView->columnWidth(i)) {
+            rg->fTableView->setColumnWidth(i, totalsWidth);
+            changed = true;
         }
     }
-
-    for(int i = 0; i < rg->fTableTotal->colorCount(); i++) {
-        if(rg->fTableView->columnWidth(i) > rg->fTableTotal->columnWidth(i)) {
-            rg->fTableTotal->setColumnWidth(i, rg->fTableView->columnWidth(i));
-        }
+    if (changed) {
+        rg->syncTotalsWithMain();
     }
 }
 

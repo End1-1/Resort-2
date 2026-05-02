@@ -6,6 +6,7 @@
 #include "branchstoremap.h"
 #include "cacheone.h"
 #include "cacherights.h"
+#include "checktime.h"
 #include "database2.h"
 #include "defrest.h"
 #include "dlgconnecttoserver.h"
@@ -66,6 +67,11 @@ int main(int argc, char* argv[])
     if(defrest(dr_branch).toInt() == 0) {
         RMessage::showError(QObject::tr("Branch is not set"), nullptr);
         return 0;
+    }
+
+    CheckTime ct;
+    if (!ct.check()) {
+        return -1;
     }
 
     RFace *w = new RFace();

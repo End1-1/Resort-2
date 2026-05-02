@@ -2,19 +2,24 @@
 #include "ui_dwselector.h"
 #include "cachebase.h"
 #include <QDebug>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QSizePolicy>
 
 DWSelector::DWSelector(int cacheId, QWidget *parent) :
-    QDockWidget(parent),
+    QDialog(parent),
     ui(new Ui::DWSelector)
 {
     ui->setupUi(this);
+    setWindowFlag(Qt::Window, true);
+    setWindowModality(Qt::NonModal);
     ui->btnRefresh->setVisible(false);
+    ui->tblData->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     hide();
     fTable = ui->tblData;
     fCacheId = cacheId;
     fLineSelector = 0;
     fCurrentRow = -1;
-    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(thisChangeVisibility(bool)));
 }
 
 DWSelector::~DWSelector()
@@ -108,20 +113,42 @@ void DWSelector::setRefreshButtonVisible(bool v)
 void DWSelector::thisShow(bool v)
 {
     Q_UNUSED(v)
+    onShow();
+
     show();
+    if (fLineSelector) {
+        QPoint p = fLineSelector->mapToGlobal(QPoint(0, fLineSelector->height()));
+        QScreen *scr = QGuiApplication::screenAt(p);
+        if (!scr) {
+            scr = QGuiApplication::primaryScreen();
+        }
+        if (scr) {
+            const QRect ar = scr->availableGeometry();
+            QSize s = frameGeometry().size();
+            if (!s.isValid()) {
+                s = sizeHint();
+            }
+            const int x = qMax(ar.left(), qMin(p.x(), ar.right() - s.width() + 1));
+            const int y = qMax(ar.top(), qMin(p.y(), ar.bottom() - s.height() + 1));
+            p = QPoint(x, y);
+        }
+        move(p);
+    }
     activateWindow();
     raise();
     setFocus();
     ui->lineEdit->setFocus();
 }
 
-void DWSelector::thisChangeVisibility(bool v)
+void DWSelector::showEvent(QShowEvent *event)
 {
-    if (v) {
-        onShow();
-    } else {
-        onHide();
-    }
+    QDialog::showEvent(event);
+}
+
+void DWSelector::hideEvent(QHideEvent *event)
+{
+    onHide();
+    QDialog::hideEvent(event);
 }
 
 void DWSelector::selectorFocusOut()

@@ -107,7 +107,7 @@ set(SOURCES
     ../Controls/edateedit.cpp
     ../Base/databaseresult.cpp
     dlgvoidback.cpp
-    ../Print/pprintreceipt.cpp
+    ../Restaurant2/pprintreceipt.cpp
     ../Base/baseuid.cpp
     dlggettext.cpp
     dlgconnecttoserver.cpp
@@ -159,6 +159,8 @@ qt_add_executable(Restaurant WIN32
     printtaxno.cpp printtaxno.h
     printtaxno.cpp printtaxno.h
     c5printing.cpp c5printing.h
+    checktime.h checktime.cpp
+    dlgcalc.h dlgcalc.cpp dlgcalc.ui
 )
 
 # ---------- DEFINES ----------

@@ -16,9 +16,11 @@
 #include "cachecar.h"
 #include "cacherights.h"
 #include "cacheusers.h"
+#include "checktime.h"
 #include "database2.h"
 #include "databaseresult.h"
 #include "defrest.h"
+#include "dlgcalc.h"
 #include "dlgcarselection.h"
 #include "dlgcomplexdish.h"
 #include "dlgdate.h"
@@ -562,12 +564,12 @@ void RDesk::closeOrder(int state)
     bo.calculateOutput(fDb);
     fDbBind[":f_state"] = state;
     fDbBind[":f_dateCash"] = WORKING_DATE;
-    fDbBind[":f_dateClose"] = QDateTime::currentDateTime();
+    fDbBind[":f_dateClose"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
     fDbBind[":f_order"] = 0;
     fDb.update("r_table", fDbBind, where_id(ap(fTable->fId)));
 
-    if(state == ORDER_STATE_REMOVED) {
+    if (state == ORDER_STATE_REMOVED) {
         printCanceledOrder(fTable->fOrder);
     }
 
@@ -799,6 +801,10 @@ void RDesk::closeDay()
 
 void RDesk::salary()
 {
+    CheckTime ct;
+    if (!ct.check()) {
+        return;
+    }
     DlgSalary::salary();
 }
 
@@ -2140,7 +2146,7 @@ void RDesk::checkOrderHeader(TableStruct * t)
         fDbBind[":f_branch"] = defrest(dr_branch).toInt();
         fDbBind[":f_table"] = t->fId;
         fDbBind[":f_staff"] = fStaff->fId;
-        fDbBind[":f_dateOpen"] = QDateTime::currentDateTime();
+        fDbBind[":f_dateOpen"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
         fDbBind[":f_dateCash"] = WORKING_DATE;
         fDbBind[":f_tax"] = 0;
         fDbBind[":f_paymentMode"] = PAYMENT_CASH;
@@ -2949,6 +2955,11 @@ void RDesk::on_tblDish_clicked(const QModelIndex &index)
         return;
     }
 
+    if (ui->btnCalculationMode->isChecked()) {
+        DlgCalc(d->fId, this).exec();
+        return;
+    }
+
     if (d->fNeedEmarks > 0) {
         message_error(tr("Only using QR code"));
         return;
@@ -2977,16 +2988,11 @@ void RDesk::on_btnPayment_clicked()
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    db2.exec("select current_timestamp as f_datetime");
-    db2.next();
-    QDateTime dt1 = db2.dateTimeValue("f_datetime");
-    QDateTime dt2 = QDateTime::currentDateTime();
-    int ms = abs(dt1.secsTo(dt2));
 
-    // if(ms > 300) {
-    //     message_error(tr("Time on server and on machine different") + "<br>" + QString::number(ms));
-    //     return;
-    // }
+    CheckTime ct;
+    if (!ct.check()) {
+        return;
+    }
 
     if (!DlgPayment::payment(fTable->fOrder, fTable->fHall)) {
         return;

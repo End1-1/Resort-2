@@ -108,6 +108,7 @@ public:
     void dontResizeSave(bool v);
     void setBtnNewVisible(bool value = true);
     virtual QWidget *gridOptionWidget();
+    void syncTotalsWithMain();
 
 public slots:
     virtual void on_btnRefresh_clicked();
@@ -125,6 +126,7 @@ private slots:
     void newSum(const QList<int> &columns, const QList<double> &values);
     void tblMainHeaderClicked(int index);
     void tblMainHeaderResized(int index, int oldSize, int newSize);
+    void tblMainHeaderGeometriesChanged();
     void tblMainCustomeMenu(const QPoint &point);
     void tblMaingridCustomMenu(const QPoint &point);
     void actionCopyGrid(bool v);

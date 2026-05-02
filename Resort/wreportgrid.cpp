@@ -41,6 +41,7 @@ WReportGrid::WReportGrid(QWidget *parent) :
     connect(ui->tblTotals->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(totalGridHScroll(int)));
     connect(ui->tblMain->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(tblMainGridHScroll(int)));
     connect(ui->tblMain->horizontalHeader(), SIGNAL(sectionResized(int,int,int)), this, SLOT(tblMainHeaderResized(int,int,int)));
+    connect(ui->tblMain->horizontalHeader(), SIGNAL(geometriesChanged()), this, SLOT(tblMainHeaderGeometriesChanged()));
     connect(ui->tblMain->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tblMainHeaderClicked(int)));
     fGridMenu = new QMenu();
     connect(fGridMenu->addAction("Copy"), SIGNAL(triggered(bool)), this, SLOT(actionCopyGrid(bool)));
@@ -155,6 +156,7 @@ void WReportGrid::setTblTotalData(const QList<int> &columns, const QList<double>
         ui->tblTotals->setItemWithValue(0, columns.at(i), values.at(i));
     }
     ui->tblTotals->setVerticalHeaderLabels(l);
+    syncTotalsWithMain();
 }
 
 void WReportGrid::setTblNoTotalData()
@@ -162,6 +164,7 @@ void WReportGrid::setTblNoTotalData()
     ui->tblTotals->setVisible(false);
     ui->tblMain->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->tblTotals->clear();
+    syncTotalsWithMain();
 }
 
 void WReportGrid::countToTotal(int col)
@@ -268,7 +271,11 @@ void WReportGrid::on_btnExcel_clicked()
             if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
                 bgStyle = bgFillb[bgColor];
             }
-            s->write(j + 2, i + 1, fModel->data(j, i, Qt::EditRole), bgStyle);
+            QVariant cellValue = fModel->data(j, i, Qt::EditRole);
+            if (cellValue.type() == QVariant::DateTime) {
+                bgStyle.setNumberFormat("dd/mm/yyyy hh:mm:ss");
+            }
+            s->write(j + 2, i + 1, cellValue, bgStyle);
         }
     }
 
@@ -413,6 +420,7 @@ void WReportGrid::tblMainHeaderResized(int index, int oldSize, int newSize)
 {
     Q_UNUSED(oldSize)
     ui->tblTotals->setColumnWidth(index, newSize);
+    syncTotalsWithMain();
     if (fSaveResizedColumn) {
         QSettings s(_ORGANIZATION_, _APPLICATION_ + QString("\\Grid\\") + fGridClassName);
         QStringList cols;
@@ -421,6 +429,11 @@ void WReportGrid::tblMainHeaderResized(int index, int oldSize, int newSize)
         }
         s.setValue("ColumnsWidths", cols.join(","));
     }
+}
+
+void WReportGrid::tblMainHeaderGeometriesChanged()
+{
+    syncTotalsWithMain();
 }
 
 void WReportGrid::tblMainCustomeMenu(const QPoint &point)
@@ -506,9 +519,7 @@ void WReportGrid::rowCount(int count)
     h << QString::number(count);
     ui->tblTotals->setVerticalHeaderLabels(h);
     ui->tblTotals->setColumnCount(fModel->columnCount());
-    for (int i = 0; i < fModel->columnCount(); i++) {
-        ui->tblTotals->setColumnWidth(i, ui->tblMain->columnWidth(i));
-    }
+    syncTotalsWithMain();
 }
 
 void WReportGrid::on_tblMain_clicked(const QModelIndex &index)
@@ -880,4 +891,18 @@ void WReportGrid::endApply()
     for (int i = 0; i < cols.count(); i++) {
         ui->tblMain->setColumnWidth(i, cols[i].toInt());
     }
+    syncTotalsWithMain();
+}
+
+void WReportGrid::syncTotalsWithMain()
+{
+    if (!ui->tblTotals) {
+        return;
+    }
+    ui->tblTotals->setColumnCount(fModel->columnCount());
+    for (int i = 0; i < fModel->columnCount(); i++) {
+        ui->tblTotals->setColumnWidth(i, ui->tblMain->columnWidth(i));
+    }
+    ui->tblTotals->verticalHeader()->setFixedWidth(ui->tblMain->verticalHeader()->width());
+    ui->tblTotals->horizontalScrollBar()->setValue(ui->tblMain->horizontalScrollBar()->value());
 }
