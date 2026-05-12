@@ -195,10 +195,14 @@ bool RowEditorDialog::saveOnly()
             if (!t->getField().isEmpty()) {
                 fDbBind[":" + t->getField()] = t->time();
             }
-        } else if (isCheckBox(w)) {
-            EQCheckBox *c = static_cast<EQCheckBox*>(w);
+        } else if (EQCheckBox *c = qobject_cast<EQCheckBox*>(w)) {
             if (!c->getField().isEmpty()) {
-                fDbBind[":" + c->getField()] = (int) c->isChecked();
+                fDbBind[":" + c->getField()] = static_cast<int>(c->isChecked());
+            }
+        } else if (QCheckBox *cb = qobject_cast<QCheckBox*>(w)) {
+            const QString field = cb->property("Field").toString();
+            if (!field.isEmpty()) {
+                fDbBind[":" + field] = static_cast<int>(cb->isChecked());
             }
         } else if (isTextEdit(w)) {
             EQTextEdit *t = static_cast<EQTextEdit*>(w);

@@ -271,11 +271,20 @@ void WReportGrid::on_btnExcel_clicked()
             if (fModel->data(j, i, Qt::FontRole).value<QFont>().bold()) {
                 bgStyle = bgFillb[bgColor];
             }
-            QVariant cellValue = fModel->data(j, i, Qt::EditRole);
-            if (cellValue.type() == QVariant::DateTime) {
-                bgStyle.setNumberFormat("dd/mm/yyyy hh:mm:ss");
+            const QVariant cellValue = fModel->data(j, i, Qt::EditRole);
+            switch (cellValue.type()) {
+            case QVariant::DateTime:
+            case QVariant::Date:
+            case QVariant::Time: {
+                // Export temporal values as plain text to avoid timezone suffixes like "+04:00".
+                const QString textValue = fModel->data(j, i, Qt::DisplayRole).toString();
+                s->write(j + 2, i + 1, textValue, bgStyle);
+                break;
             }
-            s->write(j + 2, i + 1, cellValue, bgStyle);
+            default:
+                s->write(j + 2, i + 1, cellValue, bgStyle);
+                break;
+            }
         }
     }
 

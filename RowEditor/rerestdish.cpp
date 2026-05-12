@@ -38,6 +38,7 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     addWidget(ui->leFiscalDebt, "Fiscal debt");
     addWidget(ui->leBarcode, "Barcode");
     addWidget(ui->chNeedEmark, "Emarks needed");
+    addWidget(ui->chIsEnabled, "Enabled");
     /*
     addWidget(ui->leDefStore, "Def store name");
     addWidget(ui->leDefStoreName, "Def store name");*/
@@ -114,7 +115,7 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     fDockMod = new DWSelectorDishMod(this);
     fDockMod->configure();
     connect(fDockMod, SIGNAL(dishMod(CI_RestDishMod*)), this, SLOT(dishMod(CI_RestDishMod*)));
-    fDockType = new DWSelectorDishType();
+    fDockType = new DWSelectorDishType(this);
     fDockType->configure();
     fDockType->setSelector(ui->leTypeCode);
     fImageChanged = false;

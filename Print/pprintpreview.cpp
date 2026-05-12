@@ -1,6 +1,8 @@
 #include "pprintpreview.h"
 #include <QDebug>
 #include <QGraphicsPixmapItem>
+#include <QPainter>
+#include <QPrinter>
 #include <QPrinterInfo>
 #include <QResizeEvent>
 #include <QScrollBar>
@@ -97,42 +99,68 @@ void PPrintPreview::setPrintOrientation(PrintOrientation po)
 
 void PPrintPreview::on_btnPrint_clicked()
 {
-    //todo
-    // QList<int> printPages;
-    // switch (ui->cbPrintSelection->currentIndex()) {
-    // case 0:
-    //     for (int i = 0; i < fPrintScene.count(); i++) {
-    //         printPages << i;
-    //     }
-    //     break;
-    // case 1:
-    //     printPages << fPageNumber - 1;
-    //     break;
-    // case 2: {
-    //     QStringList p = ui->lePages->text().replace(" ", "").split(",", Qt::SkipEmptyParts);
-    //     foreach (QString s, p) {
-    //         int page = s.toInt() - 1;
-    //         if (page < 0 || page > fPrintScene.count() - 1) {
-    //             continue;
-    //         }
-    //         printPages << page;
-    //     }
-    //     break;
-    // }
-    // }
+    if (fPrintScene.isEmpty()) {
+        return;
+    }
 
-    // QPrinter prn;
-    // prn.setPaperSize(QPrinter::A4);
-    // prn.setPrinterName(ui->cbPrinters->currentText());
-    // prn.setOrientation(fPrintScene.at(printPages.at(0))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
-    // QPainter painter(&prn);
-    // for (int i = 0; i < printPages.count(); i++) {
-    //     if (i > 0) {
-    //         prn.setOrientation(fPrintScene.at(printPages.at(i))->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
-    //         prn.newPage();
-    //     }
-    //     fPrintScene.at(printPages.at(i))->render(&painter);
-    // }
+    QList<int> printPages;
+    switch (ui->cbPrintSelection->currentIndex()) {
+    case 0:
+        for (int i = 0; i < fPrintScene.count(); i++) {
+            printPages << i;
+        }
+        break;
+    case 1:
+        printPages << (fPageNumber - 1);
+        break;
+    case 2: {
+        const QStringList p = ui->lePages->text().replace(" ", "").split(",", Qt::SkipEmptyParts);
+        for (const QString &s : p) {
+            const int page = s.toInt() - 1;
+            if (page >= 0 && page < fPrintScene.count() && !printPages.contains(page)) {
+                printPages << page;
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (printPages.isEmpty()) {
+        return;
+    }
+
+    // Keep legacy sizing close to Qt 5.12 behavior.
+    QPrinter prn(QPrinter::ScreenResolution);
+    prn.setPageSize(QPageSize(QPageSize::A4));
+    if (!ui->cbPrinters->currentText().isEmpty()) {
+        prn.setPrinterName(ui->cbPrinters->currentText());
+    }
+
+    QPainter painter;
+    bool started = false;
+    for (int i = 0; i < printPages.count(); i++) {
+        const int pageIndex = printPages.at(i);
+        PPrintScene *scene = fPrintScene.at(pageIndex);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QPageLayout layout = prn.pageLayout();
+        layout.setOrientation(scene->fPrintOrientation == Portrait ? QPageLayout::Portrait : QPageLayout::Landscape);
+        prn.setPageLayout(layout);
+#else
+        prn.setOrientation(scene->fPrintOrientation == Portrait ? QPrinter::Portrait : QPrinter::Landscape);
+#endif
+        if (!started) {
+            started = painter.begin(&prn);
+            if (!started) {
+                return;
+            }
+        } else {
+            prn.newPage();
+        }
+        scene->render(&painter);
+    }
+    painter.end();
 }
 
 void PPrintPreview::on_btnZoomOut_clicked()

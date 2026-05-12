@@ -469,27 +469,7 @@ void MainWindow::dish(int t)
     }
 
     QList<int> widths;
-    widths << 100
-           << 120
-           << 0
-           << 120
-           << 0
-           << 120
-           << 150
-           << 150
-           << 0
-           << 0
-           << 0
-           << 80
-           << 80
-           << 80
-           << 80
-           << 0
-           << 80
-           << 0
-           << 80
-           << 80
-           << 0;
+    widths << 100 << 120 << 0 << 120 << 0 << 120 << 150 << 150 << 0 << 0 << 0 << 80 << 80 << 80 << 80 << 0 << 80 << 0 << 80 << 80 << 0 << 0;
     QStringList fields;
     fields << "f_id"
            << "f_partname"
@@ -512,43 +492,25 @@ void MainWindow::dish(int t)
            << "f_taxdebt"
            << "f_scancode"
            << "f_needemarks"
-           ;
+           << "f_enabled";
     QStringList titles;
-    titles << tr("Code")
-           << tr("Տեսակ")
-           << tr("Part")
-           << tr("Store")
-           << tr("Type code")
-           << tr("Type")
-           << tr("Name")
-           << "ՀԾ անվանում"
-           << tr("Description")
-           << tr("Background color")
-           << tr("Text color")
-           << tr("Queue")
-           << tr("ADGT")
-           << tr("ArmSoft")
-           << tr("Input price")
-           << tr("Unit code")
-           << tr("Unit name")
-           << tr("Min. reminder")
-           << tr("Tax debt")
-           << tr("Barcode")
-           << tr("Need emarks")
-           ;
+    titles << tr("Code") << tr("Տեսակ") << tr("Part") << tr("Store") << tr("Type code") << tr("Type") << tr("Name") << "ՀԾ անվանում"
+           << tr("Description") << tr("Background color") << tr("Text color") << tr("Queue") << tr("ADGT") << tr("ArmSoft")
+           << tr("Input price") << tr("Unit code") << tr("Unit name") << tr("Min. reminder") << tr("Tax debt") << tr("Barcode")
+           << tr("Need emarks") << tr("Enabled");
     QString title = tr("Dishes");
     QString icon = ":/images/cutlery.png";
     QString query = "select d.f_id, p.f_en as f_partname, d.f_defstore, st.f_name as f_defstorename, d.f_type, t.f_en, "
                     "d.f_en, d.f_armsoftname, d.f_text_en,  "
                     "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, f_lastPrice, d.f_unit, u.f_name as f_unitName, "
-                    "d.f_minreminder, d.f_taxdebt, d.f_scancode, d.f_needemarks "
+                    "d.f_minreminder, d.f_taxdebt, d.f_scancode, d.f_needemarks, d.f_enabled "
                     "from r_dish d "
                     "inner join r_dish_type t on t.f_id=d.f_type "
                     "inner join r_dish_part p on p.f_id=t.f_part "
                     "inner join r_unit u on u.f_id=d.f_unit "
                     "left join r_store st on st.f_id=d.f_defstore "
-                    "where 1=1 " + cond +
-                    "order by p.f_en, t.f_en, d.f_queue ";
+                    "where 1=1 "
+                    + cond + "order by p.f_en, t.f_en, d.f_queue ";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query);
 }

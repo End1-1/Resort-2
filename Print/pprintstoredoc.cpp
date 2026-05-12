@@ -64,13 +64,18 @@ void PPrintStoreDoc::printDoc()
         }
 
         ps->addTextRect(10, top, 460, rowHeight, storage, &trAll);
-        top += ps->addTextRect(610, top, 400, rowHeight, CacheRestStore::instance()->get(dr2.value("f_store").toString())->fName, &trAll)->textHeight();
+        CI_RestStore *storeIn = CacheRestStore::instance()->get(dr2.value("f_store").toString());
+        top += ps->addTextRect(610, top, 400, rowHeight, storeIn ? storeIn->fName : "N/A", &trAll)->textHeight();
 
         if(dr1.value("f_type").toInt() == 2) {
             DatabaseResult dr3;
             dr3.select(fDb, "select * from r_body where f_doc=:f_doc and f_sign=-1", fDbBind);
             ps->addTextRect(10, top, 600, rowHeight, tr("Storage, output"), &trAll);
-            top += ps->addTextRect(610, top, 400, rowHeight, CacheRestStore::instance()->get(dr2.value("f_store").toString())->fName, &trAll)->textHeight();
+            CI_RestStore *storeOut = nullptr;
+            if(dr3.rowCount() > 0) {
+                storeOut = CacheRestStore::instance()->get(dr3.value("f_store").toString());
+            }
+            top += ps->addTextRect(610, top, 400, rowHeight, storeOut ? storeOut->fName : "N/A", &trAll)->textHeight();
         }
     }
 
@@ -85,7 +90,8 @@ void PPrintStoreDoc::printDoc()
         QList<int> col;
         col << 10 << 800 << 250 << 250 << 250;
         QStringList val;
-        val << CacheDish::instance()->get(dr2.value(i, "f_material").toString())->fName
+        CI_Dish *dish = CacheDish::instance()->get(dr2.value(i, "f_material").toString());
+        val << (dish ? dish->fName : "N/A")
             << float_str(dr2.value(i, "f_qty").toDouble(), 2)
             << float_str(dr2.value(i, "f_price").toDouble(), 2)
             << float_str(dr2.value(i, "f_total").toDouble(), 2);

@@ -208,19 +208,19 @@
        <widget class="QToolButton" name="btnCalculationMode">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>0</width>
           <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>150</width>
+          <width>80</width>
           <height>40</height>
          </size>
         </property>
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>8</pointsize>
           <bold>true</bold>
          </font>
         </property>

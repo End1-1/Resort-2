@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(EliteCarwash LANGUAGES CXX)
+project(EliteCarwash LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -61,6 +61,12 @@ add_executable(EliteCarwash WIN32
     ${APP_FORMS}
     ${APP_RESOURCES}
 )
+
+if(WIN32)
+    target_sources(EliteCarwash PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/res.rc
+    )
+endif()
 
 # --- Includes ---
 target_include_directories(EliteCarwash PRIVATE
