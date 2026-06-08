@@ -128,6 +128,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(op.f_coupon)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponbank)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponservice)"] = false;
+    fReportGrid->fIncludes["tl.f_special"] = false;
 }
 
 FRestaurantTotal::~FRestaurantTotal()
@@ -212,11 +213,11 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths["Նվեր քարտ"] = 80;
     rg->fFieldsWidths["Նվեր փոխանցում"] = 80;
     rg->fFieldsWidths["Ավտոկտրոն"] = 80;
+    rg->fFieldsWidths["Հատուկ"] = 80;
     rg->fFields.clear();
     rg->fFields << "oh.f_id"
                 << "oh.f_state"
-                << "os.f_" + def_lang
-                << "oh.f_datecash"
+                << "os.f_" + def_lang << "oh.f_datecash"
                 << "oh.f_dateopen"
                 << "oh.f_dateclose"
                 << "br.f_name"
@@ -233,18 +234,15 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "s.f_name"
                 << "ds.f_en"
                 << "d.f_type"
-                << "dt.f_" + def_lang
-                << "od.f_dish"
-                << "d.f_" + def_lang
-                << "od.f_price"
+                << "dt.f_" + def_lang << "od.f_dish"
+                << "d.f_" + def_lang << "od.f_price"
                 << "d.f_as"
                 << "od.f_fiscal"
                 << "oh.f_paymentMode"
-                << "pm.f_" + def_lang
-                << "oc.f_govnumber"
+                << "pm.f_" + def_lang << "oc.f_govnumber"
                 << "oh.f_comment"
                 << "op.f_discountcard"
-                ;
+                << "tl.f_special";
 
     if(countAmount) {
         if(!ui->chPaymentMode->isChecked()) {
@@ -316,6 +314,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["sum(op.f_coupon)"] = "Նվեր քարտ";
     rg->fFieldTitles["sum(op.f_couponbank)"] = "Նվեր փոխանցում";
     rg->fFieldTitles["sum(op.f_couponservice)"] = "Ավտոկտրոն";
+    rg->fFieldTitles["tl.f_special"] = "Հատուկ";
     rg->fTables.clear();
     rg->fTables << "o_header oh"
                 << "o_dish od"
@@ -331,24 +330,26 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "f_payment_type pm"
                 << "o_dish_state ds"
                 << "o_header_payment op"
-                << "r_branch br";
+                << "r_branch br"
+                << "talon_service tl";
     rg->fJoins.clear();
-    rg->fJoins << "from" //od
+    rg->fJoins << "from"  //od
                << "inner" //oh
                << "inner" //os
                << "inner" //h
                << "inner" //t
-               << "left" //oc
+               << "left"  //oc
                << "inner" //s
                << "inner" //dt
                << "inner" // d
                << "inner" //u
-               << "left" //cl
+               << "left"  //cl
                << "inner" //pm
-               << "left" //ds
-               << "left" //op
-               << "left" //br
-               ;
+               << "left"  //ds
+               << "left"  //op
+               << "left"  //br
+               << "left"  //tl
+        ;
     rg->fJoinConds.clear();
     rg->fJoinConds << ""
                    << "od.f_header=oh.f_id"
@@ -365,7 +366,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                    << "ds.f_id=od.f_state"
                    << "op.f_id=oh.f_id"
                    << "br.f_id=oh.f_branch"
-                   ;
+                   << "tl.f_order=oh.f_id";
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
                     + " and '" + ui->deEnd->date().toString(def_mysql_date_format) + "') ";
 
@@ -445,17 +446,6 @@ void FRestaurantTotal::apply(WReportGrid *rg)
 
     if(!ui->leTax->text().isEmpty() && ui->leTax->text() != "+" && ui->leTax->text() != "-") {
         where += " and od.f_fiscal in (" + ui->leTax->text() + ") ";
-    }
-
-    if(ui->rbNoShowComplex->isChecked() && !countAmount) {
-        where += " and (od.f_complex=0 or (od.f_complex>0 and od.f_complexId>0)) ";
-    }
-
-    if(ui->rbShowComplex->isChecked()) {
-    }
-
-    if(ui->rbOnlycomplex->isChecked() && !countAmount) {
-        where += " and (od.f_complex>0 and od.f_complexId=0) ";
     }
 
     if(ui->chOrderNum->isChecked()) {
@@ -765,39 +755,19 @@ void FRestaurantTotal::printReceipt()
         top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, tr("Amount"), &th, f))->textHeight();
         ps->addLine(left + 10, top, left + 680, top);
         top ++;
-        DatabaseResult dcomplex;
-        fDbBind[":f_header"] = s;
-        dcomplex.select(fDb, "select od.f_id, od.f_dish, dc.f_en, dc.f_ru, dc.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
-                             "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
-                             "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-                             "dc.f_adgt "
-                             "from o_dish od "
-                             "left join r_dish_complex dc on dc.f_id=od.f_complexId "
-                             "where od.f_header=:f_header and f_complex>0 and f_complexId>0 and f_state=1 "
-                             "order by od.f_id ", fDbBind);
-        f.setPointSize(18);
-        f.setBold(true);
-        th.setFont(f);
-
-        for(int i = 0; i < dcomplex.rowCount(); i++) {
-            ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(dcomplex.value(i, "f_qty").toDouble(), 1), &th,
-                                          f));
-            ps->addTextRect(new PTextRect(left + 110, top, 390, rowHeight, dcomplex.value(i, "f_en").toString(), &th, f));
-            top += ps->addTextRect(new PTextRect(left + 500, top, 200, rowHeight, float_str(dcomplex.value(i,
-                                                 "f_price").toDouble()  *dcomplex.value(i, "f_qty").toDouble(), 2), &th, f))->textHeight();
-            printNewPage(top, left, page, &pp, ps);
-        }
 
         DatabaseResult ddish;
         fDbBind[":f_header"] = s;
-        ddish.select(fDb, "select od.f_id, od.f_dish, d.f_en, d.f_ru, d.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
-                          "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
-                          "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
-                          "od.f_adgt, od.f_complexRec "
-                          "from o_dish od "
-                          "left join r_dish d on d.f_id=od.f_dish "
-                          "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
-                          "order by od.f_id ", fDbBind);
+        ddish.select(fDb,
+                     "select od.f_id, od.f_dish, d.f_en, d.f_ru, d.f_am, od.f_qty, od.f_qtyPrint, od.f_price, "
+                     "od.f_svcValue, od.f_svcAmount, od.f_dctValue, od.f_dctAmount, od.f_total, "
+                     "od.f_print1, od.f_print2, od.f_comment, od.f_staff, od.f_state, od.f_complex, od.f_complexId, "
+                     "od.f_adgt, od.f_complexRec "
+                     "from o_dish od "
+                     "left join r_dish d on d.f_id=od.f_dish "
+                     "where od.f_header=:f_header and f_state=1 "
+                     "order by od.f_id ",
+                     fDbBind);
 
         for(int i = 0; i < ddish.rowCount(); i++) {
             ps->addTextRect(new PTextRect(left + 10, top, 100, rowHeight, float_str(ddish.value(i, "f_qty").toDouble(), 1), &th,

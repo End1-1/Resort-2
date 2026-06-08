@@ -11,6 +11,14 @@
 #define SEL_DISH 1
 #define SEL_UNIT 2
 
+enum MenuTableColumn {
+    MENU_COL_ENABLED = 0,
+    MENU_COL_REC_ID = 1,
+    MENU_COL_MENU_ID = 2,
+    MENU_COL_MENU_NAME = 3,
+    MENU_COL_PRICE = 4
+};
+
 RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     RowEditorDialog(values, TRACK_DISH, parent),
     ui(new Ui::RERestDish)
@@ -45,7 +53,7 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     fTable = "r_dish";
     ui->leQueue->setValidator(new QIntValidator());
     Utils::tableSetColumnWidths(ui->tblMenu, ui->tblMenu->columnCount(),
-                                30, 0, 0, 100, 100, 100, 100, 0, 100, 50);
+                                30, 0, 0, 200, 100);
     fDb.select("select f_id, f_en from r_menu_names", fDbBind, fDbRows);
     ui->tblMenu->setRowCount(fDbRows.count());
     int row = 0;
@@ -55,62 +63,27 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
         ui->tblMenu->setCellWidget(row, 0, check);
         fTrackControl->addWidget(check, "Checkbox of " + it->at(1).toString());
 
-        for(int i = 1, count = ui->tblMenu->columnCount() - 1; i < count; i++)
-        {
+        for(int i = 1; i < ui->tblMenu->columnCount(); i++) {
             EQLineEdit *l = createLineEdit(row, i);
 
             switch(i) {
-            case 2:
+            case MENU_COL_MENU_ID:
                 l->setText(it->at(0).toString());
                 break;
 
-            case 3:
+            case MENU_COL_MENU_NAME:
                 l->setText(it->at(1).toString());
                 l->setReadOnly(true);
                 break;
 
-            case 4:
+            case MENU_COL_PRICE:
                 fTrackControl->addWidget(l, "Price for " + it->at(1).toString());
-                break;
-
-            case 5:
-                l->setShowButtonOnFocus(true);
-                connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
-                connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
-                fTrackControl->addWidget(l, "Printer1 for " + it->at(1).toString());
-                break;
-
-            case 6:
-                l->setShowButtonOnFocus(true);
-                connect(l, SIGNAL(focusIn()), this, SLOT(printLineEditFocusIn()));
-                connect(l, SIGNAL(focusOut()), this, SLOT(printLineEditFocusOut()));
-                fTrackControl->addWidget(l, "Printer2 for " + it->at(1).toString());
-                break;
-
-            case 8:
-                l->setShowButtonOnFocus(true);
-                connect(l, SIGNAL(focusIn()), this, SLOT(storeLineEditFocusIn()));
-                connect(l, SIGNAL(focusOut()), this, SLOT(storeLineEditFocusOut()));
-                fTrackControl->addWidget(l, "Store for " + it->at(1).toString());
-                break;
                 break;
             }
         }
 
-        EQCheckBox* checkComplex = new EQCheckBox(this);
-        checkComplex->setChecked(false);
-        checkComplex->fRow = row;
-        checkComplex->fColumn = 9;
-        connect(checkComplex, SIGNAL(clicked(bool)), this, SLOT(checkComplex(bool)));
-        ui->tblMenu->setCellWidget(row, 9, checkComplex);
         row++;
     }
-    fDockPrint = new DWSelectorRestPrinter(this);
-    fDockPrint->configure();
-    connect(fDockPrint, SIGNAL(printer(CI_RestPrinter*)), this, SLOT(printer(CI_RestPrinter*)));
-    fDockStore = new DWSelectorRestStore(this);
-    fDockStore->configure();
-    connect(fDockStore, SIGNAL(store(CI_RestStore*)), this, SLOT(store(CI_RestStore*)));
     Utils::tableSetColumnWidths(ui->tblModifier, ui->tblModifier->columnCount(), 0, 0, 300, 30);
     fDockMod = new DWSelectorDishMod(this);
     fDockMod->configure();
@@ -194,10 +167,8 @@ void RERestDish::valuesToWidgets()
 
     if(!isNew) {
         fDbBind[":f_dish"] = ui->leCode->asInt();
-        fDb.select("select m.f_id, m.f_state, m.f_menu, m.f_price, m.f_print1, m.f_print2, "
-                   "m.f_store, s.f_name, m.f_complex "
+        fDb.select("select m.f_id, m.f_state, m.f_menu, m.f_price "
                    "from r_menu m "
-                   "inner join r_store s on s.f_id=m.f_store "
                    "where m.f_dish=:f_dish", fDbBind, fDbRows);
         foreach_rows {
             int row = 0;
@@ -205,7 +176,7 @@ void RERestDish::valuesToWidgets()
 
             for(int i = 0, count = ui->tblMenu->rowCount(); i < count; i++)
             {
-                if(cellValue(i, 2) == it->at(2).toString()) {
+                if(cellValue(i, MENU_COL_MENU_ID) == it->at(2).toString()) {
                     row = i;
                     found = true;
                     break;
@@ -217,22 +188,11 @@ void RERestDish::valuesToWidgets()
                 continue;
             }
 
-            setCellValue(row, 1, it->at(0).toString()); //table rec id
-            setCellValue(row, 4, it->at(3).toString()); //price
-            setCellValue(row, 5, it->at(4).toString()); //prn1
-            setCellValue(row, 6, it->at(5).toString()); //prn2
-            setCellValue(row, 7, it->at(6).toString()); //store id
-            setCellValue(row, 8, it->at(7).toString()); //store name
+            setCellValue(row, MENU_COL_REC_ID, it->at(0).toString());
+            setCellValue(row, MENU_COL_PRICE, it->at(3).toString());
 
-            if(it->at(1).toInt() == 1)
-            {
-                QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, 0));
-                check->setChecked(true);
-            }
-
-            if(it->at(8).toInt() == 1)
-            {
-                QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, 9));
+            if(it->at(1).toInt() == 1) {
+                QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, MENU_COL_ENABLED));
                 check->setChecked(true);
             }
         }
@@ -285,23 +245,10 @@ void RERestDish::clearWidgets()
     RowEditorDialog::clearWidgets();
 
     for(int i = 0, count = ui->tblMenu->rowCount(); i < count; i++) {
-        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 0));
+        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, MENU_COL_ENABLED));
         check->setChecked(false);
-        check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 9));
-        check->setChecked(false);
-
-        for(int j = 1, colCount = ui->tblMenu->columnCount() - 1; j < colCount; j++) {
-            switch(j) {
-            case 2:
-            case 3:
-                continue;
-                break;
-
-            default:
-                setCellValue(i, j, "");
-                break;
-            }
-        }
+        setCellValue(i, MENU_COL_REC_ID, "");
+        setCellValue(i, MENU_COL_PRICE, "");
     }
 
     ui->tblModifier->clearContents();
@@ -320,16 +267,15 @@ void RERestDish::save()
     fDb.select("delete from r_menu where f_dish=:f_dish", fDbBind, fDbRows);
 
     for(int i = 0, rowCount = ui->tblMenu->rowCount(); i < rowCount; i++) {
-        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 0));
-        fDbBind[":f_state"] = (int) check->isChecked();
-        fDbBind[":f_menu"] = cellValue(i, 2);
+        QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, MENU_COL_ENABLED));
+        fDbBind[":f_state"] = static_cast<int>(check->isChecked());
+        fDbBind[":f_menu"] = cellValue(i, MENU_COL_MENU_ID);
         fDbBind[":f_dish"] = ui->leCode->text();
-        fDbBind[":f_price"] = QLocale().toFloat(cellValue(i, 4));
-        fDbBind[":f_print1"] = cellValue(i, 5);
-        fDbBind[":f_print2"] = cellValue(i, 6);
-        fDbBind[":f_store"] = cellValue(i, 7);
-        check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, 9));
-        fDbBind[":f_complex"] = (int) check->isChecked();
+        fDbBind[":f_price"] = QLocale().toFloat(cellValue(i, MENU_COL_PRICE));
+        fDbBind[":f_print1"] = QString();
+        fDbBind[":f_print2"] = QString();
+        fDbBind[":f_store"] = 0;
+        fDbBind[":f_complex"] = 0;
         fDb.insert("r_menu", fDbBind);
     }
 
@@ -404,18 +350,6 @@ void RERestDish::returnCtrlPressed()
     on_btnOk_clicked();
 }
 
-void RERestDish::checkComplex(bool v)
-{
-    EQCheckBox *check = static_cast<EQCheckBox*>(sender());
-    fTrackControl->insert("Complex for menu",
-                          QString("%1 %2")
-                          .arg(cellValue(check->fRow, 3))
-                          .arg(int(!v)),
-                          QString("%1 %2")
-                          .arg(cellValue(check->fRow, 3))
-                          .arg((int) v));
-}
-
 void RERestDish::tabPageIndexChanged(int index)
 {
     if(index == 3) {
@@ -430,35 +364,6 @@ void RERestDish::tabPageIndexChanged(int index)
                 ui->lbImage->setPixmap(p.scaled(w, h));
             }
         }
-    }
-}
-
-void RERestDish::printLineEditFocusIn()
-{
-    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
-    fDockPrint->setSelector(l);
-}
-
-void RERestDish::printLineEditFocusOut()
-{
-}
-
-void RERestDish::printer(CI_RestPrinter *p)
-{
-    EQLineEdit *l = static_cast<DWSelectorRestPrinter*>(sender())->selector();
-
-    if(p) {
-        l->setText(p->fName);
-    }
-}
-
-void RERestDish::store(CI_RestStore *s)
-{
-    EQLineEdit *l = static_cast<DWSelectorRestPrinter*>(sender())->selector();
-
-    if(s) {
-        l->setText(s->fName);
-        setCellValue(l->fRow, l->fColumn - 1, s->fCode);
     }
 }
 
@@ -492,16 +397,6 @@ void RERestDish::dishMod(CI_RestDishMod *m)
 void RERestDish::dishType(CI_RestDishType *c)
 {
     dockResponse<CI_RestDishType, CacheRestDishType>(ui->leTypeCode, ui->leTypeName, c);
-}
-
-void RERestDish::storeLineEditFocusIn()
-{
-    EQLineEdit *l = static_cast<EQLineEdit*>(sender());
-    fDockStore->setSelector(l);
-}
-
-void RERestDish::storeLineEditFocusOut()
-{
 }
 
 void RERestDish::btnRemoveModifier(int row)
@@ -550,12 +445,8 @@ EQLineEdit* RERestDish::createLineEdit(int row, int column)
     le->fColumn = column;
     le->setFrame(false);
 
-    if(column == 4) {
+    if(column == MENU_COL_PRICE) {
         le->setValidator(new QDoubleValidator());
-    }
-
-    if(column == 7) {
-        le->setValidator(new QIntValidator());
     }
 
     ui->tblMenu->setCellWidget(row, column, le);

@@ -2,8 +2,6 @@
 #define RERESTDISH_H
 
 #include "roweditordialog.h"
-#include "dwselectorrestprinter.h"
-#include "dwselectorreststore.h"
 #include "dwselectordishmod.h"
 #include "dwselectordishtype.h"
 #include "dwselectorreststore.h"
@@ -31,17 +29,10 @@ protected:
     virtual void returnCtrlPressed() override;
 
 private slots:
-    void checkComplex(bool v);
     void tabPageIndexChanged(int index);
-    void printLineEditFocusIn();
-    void printLineEditFocusOut();
-    void printer(CI_RestPrinter *p);
-    void store(CI_RestStore *s);
     void store2(CI_RestStore *s);
     void dishMod(CI_RestDishMod *m);
     void dishType(CI_RestDishType *c);
-    void storeLineEditFocusIn();
-    void storeLineEditFocusOut();
     void btnRemoveModifier(int row);
     void on_btnTextColor_clicked();
     void on_btnBgColor_clicked();
@@ -62,8 +53,6 @@ private:
     bool fImageChanged;
     bool fImageLoaded;
     DWSelectorDishType *fDockType;
-    DWSelectorRestPrinter *fDockPrint;
-    DWSelectorRestStore *fDockStore;
     DWSelectorDishMod *fDockMod;
     DWSelectorDish *fDockDish;
     QStringList fRemovedModifiers;

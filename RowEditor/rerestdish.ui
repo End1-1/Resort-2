@@ -493,31 +493,6 @@
            <string>Price</string>
           </property>
          </column>
-         <column>
-          <property name="text">
-           <string>Print 1</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Print 2</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>StoreId</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Store</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Complex</string>
-          </property>
-         </column>
         </widget>
        </item>
       </layout>

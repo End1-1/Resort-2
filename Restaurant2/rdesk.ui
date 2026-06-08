@@ -1344,33 +1344,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="tblComplex">
-           <property name="focusPolicy">
-            <enum>Qt::FocusPolicy::NoFocus</enum>
-           </property>
-           <column>
-            <property name="text">
-             <string>ItemCode</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>ItemName</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Qty</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Amount</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-         <item>
           <widget class="QTableWidget" name="tblTotal">
            <property name="minimumSize">
             <size>

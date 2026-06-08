@@ -73,52 +73,12 @@ typedef struct {
     float fTotal;
     QString fComment;
     int fStaff;
-    int fComplex;
-    QString fComplexRecId;
     QString fAdgt;
     int fTax;
     int fRow;
     QString fEmark;
 } OrderDishStruct;
 Q_DECLARE_METATYPE(OrderDishStruct*)
-
-struct DishComplexStruct {
-    int fRecId;
-    int fId;
-    QMap < QString, QString > fName;
-    QTime fStart;
-    QTime fEnd;
-    double fQty;
-    double fPrice;
-    QString fAdgt;
-    double fPriceDeviation;
-    QList < DishStruct* > fDishes;
-    DishComplexStruct& operator= (const DishComplexStruct &d)
-    {
-        if (this == &d) {
-            return *this;
-        }
-
-        fRecId = d.fRecId;
-        fId = d.fId;
-        fName = d.fName;
-        fStart = d.fStart;
-        fEnd = d.fEnd;
-        fQty = d.fQty;
-        fPrice = d.fPrice;
-        fAdgt = d.fAdgt;
-        fPriceDeviation = d.fPriceDeviation;
-
-        foreach (DishStruct *ds, d.fDishes) {
-            DishStruct *dn = new DishStruct();
-            *dn = *ds;
-            fDishes << dn;
-        }
-
-        return *this;
-    }
-} ;
-Q_DECLARE_METATYPE(DishComplexStruct*)
 
 typedef struct {
     int fId;
@@ -151,8 +111,7 @@ public:
     static QMap < int, QSet < TypeStruct*> > fTypeMenu;
     static QMap < QString, TypeStruct* > fTypeProxy;
     static QList < DishStruct* > fDish;
-    static QMap < int, QList < DishStruct*> > fDishMenu;
-    static QList < DishComplexStruct* > fDishComplex;
+    static QMap<int, QList<DishStruct*> > fDishMenu;
     static DishStruct* getDishStructByBarcode(const QString &barcode, int menuId);
 signals:
 

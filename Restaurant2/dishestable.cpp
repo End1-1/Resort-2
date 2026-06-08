@@ -8,7 +8,6 @@ QMap<QString, TypeStruct*> DishesTable::fTypeProxy;
 QList<DishStruct*> DishesTable::fDish;
 QMap<int, QList<DishStruct*> > DishesTable::fDishMenu;
 QList<QMap<QString, QString> > DishesTable::fMods;
-QList<DishComplexStruct*> DishesTable::fDishComplex;
 
 DishesTable::DishesTable(QObject *parent) :
     QObject(parent),
@@ -78,73 +77,7 @@ void DishesTable::init(Splash *s)
         fType[t->fId] = t;
     }
 
-    if(s) {
-        s->setText(tr("Loading complex dishes..."));
-    }
-
-    qDeleteAll(fDishComplex);
-    fDishComplex.clear();
-    query = "select d.f_id, d.f_en, d.f_ru, d.f_am, d.f_startTime, d.f_endTime, d.f_price, "
-            "d.f_priceDeviation, d.f_adgt "
-            "from r_dish_complex d where d.f_enabled=1 ";
-    fDb.select(query, fDbBind, fDbRows);
-    foreach_rows {
-        DishComplexStruct* dc =  new DishComplexStruct();
-        int c = 0;
-        dc->fId = it->at(c++).toInt();
-        dc->fName["en"] = it->at(c++).toString();
-        dc->fName["ru"] = it->at(c++).toString();
-        dc->fName["am"] = it->at(c++).toString();
-        dc->fStart = QTime::fromString(it->at(c++).toString(), def_time_format);
-        dc->fEnd = QTime::fromString(it->at(c++).toString(), def_time_format);
-        dc->fQty = 1;
-        dc->fPrice = it->at(c++).toFloat();
-        dc->fPriceDeviation = it->at(c++).toFloat();
-        dc->fAdgt = it->at(c++).toString();
-        fDishComplex.append(dc);
-    }
-
-    if(s) {
-        s->setText(tr("Loading complex dishes components"));
-        query = "select m.f_dish, m.f_menu, t.f_part, d.f_type, d.f_en, "
-                "d.f_bgColor, d.f_textColor, d.f_text_en, "
-                "m.f_print1, m.f_print2, m.f_store, m.f_price, d.f_queue, mc.f_complex, "
-                "d.f_service, d.f_needemarks "
-                "from r_menu m "
-                "inner join r_dish d on d.f_id=m.f_dish "
-                "inner join r_dish_type t on d.f_type=t.f_id "
-                "inner join r_dish_complex_list mc on mc.f_dish=m.f_id "
-                "where m.f_state=1 and d.f_type in (select f_id from r_dish_type where f_active=1)";
-        fDb.select(query, fDbBind, fDbRows);
-        foreach_rows {
-            DishStruct* d = new DishStruct();
-            d->fId = it->at(0).toInt();
-            d->fMenu = it->at(1).toInt();
-            d->fPart = it->at(2).toInt();
-            d->fType = it->at(3).toInt();
-            d->fName = it->at(4).toString();
-            d->fBgColor = it->at(5).toInt();
-            d->fTextColor = it->at(6).toInt();
-            d->fText = it->at(7).toString();
-            d->fPrint1 = it->at(8).toString();
-            d->fPrint2 = it->at(9).toString();
-            d->fStore = it->at(10).toInt();
-            d->fPrice = it->at(11).toFloat();
-            d->fQueue = it->at(12).toInt();
-            d->fComplex = it->at(13).toInt();
-            d->fSvcValue = it->at(14).toDouble();
-            d->fNeedEmarks = it->at(16).toDouble();
-
-            for(int i = 0; i < fDishComplex.count(); i++)
-            {
-                if(d->fComplex == fDishComplex.at(i)->fId) {
-                    fDishComplex[i]->fDishes.append(d);
-                }
-            }
-        }
-    }
-
-    if(s) {
+    if (s) {
         s->setText(tr("Loading menu..."));
     }
 
@@ -162,7 +95,7 @@ WITH RECURSIVE sc AS (
         d.f_text_en,
         m.f_print1,
         m.f_print2,
-        m.f_store,
+        d.f_defstore,
         m.f_price,
         d.f_queue,
         m.f_complex,
@@ -197,7 +130,7 @@ WITH RECURSIVE sc AS (
         f_text_en,
         f_print1,
         f_print2,
-        f_store,
+        f_defstore AS f_store,
         f_price,
         f_queue,
         f_complex,
@@ -226,7 +159,7 @@ SELECT
     d.f_text_en,
     m.f_print1,
     m.f_print2,
-    m.f_store,
+    d.f_defstore,
     m.f_price,
     d.f_queue,
     m.f_complex,
@@ -257,7 +190,7 @@ SELECT
     f_text_en,
     f_print1,
     f_print2,
-    f_store,
+    f_defstore AS f_store,
     f_price,
     f_queue,
     f_complex,

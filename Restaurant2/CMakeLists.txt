@@ -90,7 +90,7 @@ set(SOURCES
     ../Cache/cachevatmode.cpp
     ../Controls/eqspinbox.cpp
     ../Controls/eqtablewidget.cpp
-    dlgcomplexdish.cpp
+
     ../Controls/epushbutton.cpp
     ../Print/pimage.cpp
     ../Print/pprintpreview.cpp

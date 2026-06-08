@@ -33,7 +33,6 @@ public:
     void setOrderComment();
     void showMyTotal();
     void initialCash();
-    void setComplexMode();
     void closeOrder(int state = ORDER_STATE_CLOSED);
     void printTotalShort();
     void printTotalToday();
@@ -85,12 +84,10 @@ private slots:
     void on_btnDishDown_clicked();
     void on_btnOrdDown_clicked();
     void on_btnOrdUp_clicked();
-    void on_btnComplex_clicked();
     void on_tblTables_itemClicked(QTableWidgetItem *item);
     void on_btnPayment_2_clicked();
     void on_btnSetCar_clicked();
     void on_btnDiscount_clicked();
-    void on_btnPackage_clicked();
     void on_btnHallWash_clicked();
     void on_btnHallCafe_clicked();
     void on_btnExit_2_clicked();

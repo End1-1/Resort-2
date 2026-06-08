@@ -17,10 +17,10 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::Shape::Box</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Shadow::Sunken</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -42,7 +42,7 @@
             <normaloff>:/images/list.png</normaloff>:/images/list.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -57,7 +57,7 @@ amount</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -72,7 +72,7 @@ amount</string>
             <normaloff>:/images/garbage.png</normaloff>:/images/garbage.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -87,7 +87,7 @@ comment</string>
             <normaloff>:/images/mark.png</normaloff>:/images/mark.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -102,7 +102,7 @@ statistics</string>
             <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -117,7 +117,7 @@ report</string>
             <normaloff>:/images/recycle.png</normaloff>:/images/recycle.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -132,7 +132,7 @@ statistics</string>
             <normaloff>:/images/guests.png</normaloff>:/images/guests.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -146,7 +146,7 @@ statistics</string>
             <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -161,7 +161,7 @@ by number</string>
             <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -175,21 +175,7 @@ by number</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QToolButton" name="btnComplex">
-          <property name="text">
-           <string>Add complex</string>
-          </property>
-          <property name="icon">
-           <iconset resource="res.qrc">
-            <normaloff>:/images/dinner.png</normaloff>:/images/dinner.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -203,7 +189,7 @@ by number</string>
             <normaloff>:/images/invoice.png</normaloff>:/images/invoice.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -218,7 +204,7 @@ registration</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -233,7 +219,7 @@ removed items</string>
             <normaloff>:/images/basket.png</normaloff>:/images/basket.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -245,10 +231,10 @@ removed items</string>
    <item>
     <widget class="QFrame" name="frame_2">
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::Shape::Box</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Shadow::Sunken</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -270,7 +256,7 @@ removed items</string>
             <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -284,7 +270,7 @@ removed items</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -298,7 +284,7 @@ removed items</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -312,7 +298,7 @@ removed items</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -326,7 +312,7 @@ removed items</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>
@@ -340,7 +326,7 @@ removed items</string>
             <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextUnderIcon</enum>
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
           </property>
          </widget>
         </item>

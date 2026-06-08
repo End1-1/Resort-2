@@ -15,7 +15,6 @@ void RTools::setNoTable()
 {
     ui->btnOrderComment->setEnabled(false);
     ui->btnShowHideRemovedItems->setEnabled(false);
-    ui->btnComplex->setEnabled(false);
 }
 
 RTools::~RTools()
@@ -50,12 +49,6 @@ void RTools::on_btnInitCash_clicked()
 {
     accept();
     fDesk->initialCash();
-}
-
-void RTools::on_btnComplex_clicked()
-{
-    accept();
-    fDesk->setComplexMode();
 }
 
 void RTools::on_btnTotalReport_clicked()

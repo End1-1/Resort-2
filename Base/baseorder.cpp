@@ -23,11 +23,15 @@ void BaseOrder::calculateOutput(Database &db, int id)
     fDbBind[":f_state1"] = DISH_STATE_READY;
     fDbBind[":f_state2"] = DISH_STATE_REMOVED_STORE;
     fDbBind[":f_header"] = id;
-    dr.select(db, "select o.f_id, o.f_dish, o.f_store, r.f_part, r.f_qty*o.f_qty as f_qty, h.f_datecash "
-                  "from o_dish o "
-                  "left join o_header h on h.f_id=o.f_header "
-                  "inner join r_recipe r on o.f_dish=r.f_dish "
-                  "where o.f_header=:f_header and (o.f_state=:f_state1 or o.f_state=:f_state2)", fDbBind);
+    dr.select(db,
+              R"(select o.f_id, o.f_dish,  bs.f_alias AS f_store, r.f_part, r.f_qty*o.f_qty as f_qty, h.f_datecash 
+                  from o_dish o 
+                  left join o_header h on h.f_id=o.f_header 
+                  inner join r_recipe r on o.f_dish=r.f_dish 
+                  LEFT JOIN r_dish d ON d.f_id=o.f_dish
+                        LEFT JOIN r_branch_storemap bs ON bs.f_store=d.f_defstore AND bs.f_branch=h.f_branch
+                  where o.f_header=:f_header and (o.f_state=:f_state1 or o.f_state=:f_state2))",
+              fDbBind);
 
     if(dr.rowCount() == 0) {
         return;
@@ -36,7 +40,9 @@ void BaseOrder::calculateOutput(Database &db, int id)
     QDate docdate;
     QSet<int> stores;
 
-    for(int i = 0; i < dr.rowCount(); i++) {
+    for (int i = 0; i < dr.rowCount(); i++) {
+        fDbBind[":f_store"] = dr.value(i, "f_store");
+        db.update("o_dish", fDbBind, where_id(dr.value(i, "f_id").toInt()));
         docdate = dr.value(i, "f_datecash").toDate();
         fDbBind[":f_header"] = id;
         fDbBind[":f_body"] = dr.value(i, "f_id");

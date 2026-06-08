@@ -24,13 +24,13 @@
    <item row="9" column="12">
     <widget class="QLabel" name="label_19">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>Show price</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -61,7 +61,7 @@
       <item>
        <widget class="QPushButton" name="btnPrevDate">
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
         </property>
         <property name="text">
          <string/>
@@ -75,7 +75,7 @@
       <item>
        <widget class="QPushButton" name="btnNextDate">
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
         </property>
         <property name="text">
          <string/>
@@ -92,7 +92,7 @@
    <item row="1" column="8">
     <widget class="EQLineEdit" name="leBranch">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -105,7 +105,7 @@
    <item row="5" column="2">
     <widget class="EQLineEdit" name="leState">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -118,7 +118,7 @@
    <item row="6" column="4">
     <widget class="EQCheckBox" name="chPaymentMode">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -143,7 +143,7 @@
       </size>
      </property>
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
     </widget>
    </item>
@@ -169,7 +169,7 @@
       <string/>
      </property>
      <property name="Field" stdset="0">
-      <string>op.f_discount;op.f_discountcard</string>
+      <string>op.f_discount;op.f_discountcard;tl.f_special</string>
      </property>
     </widget>
    </item>
@@ -197,7 +197,7 @@
    <item row="3" column="4">
     <widget class="EQCheckBox" name="chDate">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -213,13 +213,13 @@
    <item row="7" column="12">
     <widget class="QLabel" name="label_18">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>Discount info</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -234,7 +234,7 @@ ledger</string>
    <item row="3" column="9">
     <widget class="EQCheckBox" name="chTable">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -250,7 +250,7 @@ ledger</string>
    <item row="4" column="9">
     <widget class="EQCheckBox" name="chStaff">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -281,7 +281,7 @@ ledger</string>
       <item>
        <widget class="QRadioButton" name="rbAllCard">
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
         </property>
         <property name="text">
          <string>All</string>
@@ -294,7 +294,7 @@ ledger</string>
       <item>
        <widget class="QRadioButton" name="rbWithCard">
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
         </property>
         <property name="text">
          <string>Yes</string>
@@ -307,7 +307,7 @@ ledger</string>
       <item>
        <widget class="QRadioButton" name="rbNoCard">
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
         </property>
         <property name="text">
          <string>No</string>
@@ -320,7 +320,7 @@ ledger</string>
    <item row="5" column="4">
     <widget class="EQCheckBox" name="chState">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -339,7 +339,7 @@ ledger</string>
    <item row="6" column="8">
     <widget class="EQLineEdit" name="lePMComment">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -356,7 +356,7 @@ ledger</string>
    <item row="3" column="8">
     <widget class="EQLineEdit" name="leTable">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -386,7 +386,7 @@ ledger</string>
    <item row="2" column="9">
     <widget class="EQCheckBox" name="chHall">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -425,10 +425,10 @@ ledger</string>
    <item row="7" column="2" colspan="3">
     <widget class="EQCheckBox" name="chShowOpenClose">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>Show open and close date</string>
@@ -441,7 +441,7 @@ ledger</string>
    <item row="2" column="4">
     <widget class="EQCheckBox" name="chOrderNum">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -474,7 +474,7 @@ ledger</string>
    <item row="2" column="2">
     <widget class="EQLineEdit" name="leOrder">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
     </widget>
    </item>
@@ -488,7 +488,7 @@ ledger</string>
    <item row="2" column="8">
     <widget class="EQLineEdit" name="leHall">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -505,20 +505,10 @@ ledger</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="7">
-    <widget class="QLabel" name="label_17">
-     <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
-     </property>
-     <property name="text">
-      <string>Show complex</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="9">
     <widget class="EQCheckBox" name="chHall_2">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -537,20 +527,20 @@ ledger</string>
       </size>
      </property>
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
     </widget>
    </item>
    <item row="11" column="12">
     <widget class="QLabel" name="label_24">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>ArmSoft</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -564,7 +554,7 @@ ledger</string>
    <item row="5" column="9">
     <widget class="EQCheckBox" name="chCL">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -580,20 +570,20 @@ ledger</string>
    <item row="10" column="12">
     <widget class="QLabel" name="label_23">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>Customer info</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="6" column="9">
     <widget class="EQCheckBox" name="chPMComment">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -606,61 +596,10 @@ ledger</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="8">
-    <widget class="QWidget" name="widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="rbShowComplex">
-        <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
-        </property>
-        <property name="text">
-         <string>Yes</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbNoShowComplex">
-        <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
-        </property>
-        <property name="text">
-         <string>No</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbOnlycomplex">
-        <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
-        </property>
-        <property name="text">
-         <string>Only complex</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="4" column="8">
     <widget class="EQLineEdit" name="leStaff">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -680,7 +619,7 @@ ledger</string>
    <item row="5" column="8">
     <widget class="EQLineEdit" name="leCL">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -749,7 +688,7 @@ ledger</string>
    <item row="1" column="12">
     <widget class="EQLineEdit" name="leDishState">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="EnableHiddenText" stdset="0">
       <bool>true</bool>
@@ -759,7 +698,7 @@ ledger</string>
    <item row="1" column="14">
     <widget class="EQCheckBox" name="chDishState">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -779,7 +718,7 @@ ledger</string>
    <item row="2" column="12">
     <widget class="EQLineEdit" name="leStore">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -792,7 +731,7 @@ ledger</string>
    <item row="2" column="14">
     <widget class="EQCheckBox" name="chStore">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -815,7 +754,7 @@ ledger</string>
    <item row="3" column="12">
     <widget class="EQLineEdit" name="leDishType">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -831,7 +770,7 @@ ledger</string>
    <item row="3" column="14">
     <widget class="EQCheckBox" name="chDishType">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -857,7 +796,7 @@ ledger</string>
    <item row="4" column="12">
     <widget class="EQLineEdit" name="leDish">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="ShowButton" stdset="0">
       <bool>true</bool>
@@ -873,7 +812,7 @@ ledger</string>
    <item row="4" column="14">
     <widget class="EQCheckBox" name="chDish">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -899,7 +838,7 @@ ledger</string>
    <item row="5" column="12">
     <widget class="EQLineEdit" name="leTax">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="placeholderText">
       <string>use &quot;+&quot; to include or &quot;-&quot; to exclude</string>
@@ -915,7 +854,7 @@ ledger</string>
    <item row="5" column="14">
     <widget class="EQCheckBox" name="chTax">
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::FocusPolicy::ClickFocus</enum>
      </property>
      <property name="text">
       <string/>
@@ -931,13 +870,13 @@ ledger</string>
    <item row="6" column="12">
     <widget class="QLabel" name="label_25">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
      </property>
      <property name="text">
       <string>Coupon of service</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -960,14 +899,14 @@ ledger</string>
    </slots>
   </customwidget>
   <customwidget>
-   <class>EDateEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">edateedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>EQCheckBox</class>
    <extends>QCheckBox</extends>
    <header location="global">eqcheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EDateEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">edateedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -25,7 +25,6 @@ private slots:
     void on_btnOrderComment_clicked();
     void on_btnShowNyTotal_clicked();
     void on_btnInitCash_clicked();
-    void on_btnComplex_clicked();
     void on_btnTotalReport_clicked();
     void on_btnTotalYesterday_clicked();
     void on_btnTotalReportAnyDay_clicked();
