@@ -38,6 +38,17 @@ QPushButton#btnCancel{
 qproperty-icon: url(:/images/cancel.png);
 }
 
+QDialog#DlgSessionOpen QPushButton#btnOpen,
+QDialog#DlgSessionOpen QPushButton#btnCancel,
+QDialog#DlgSessionOpen QPushButton#btnPrintTotal {
+min-width: 280px;
+max-width: 420px;
+min-height: 90px;
+max-height: 90px;
+font-size: 16px;
+padding: 8px 20px;
+}
+
 QPushButton#btnExit {
 qproperty-icon: url(:/images/exit.png);
 }

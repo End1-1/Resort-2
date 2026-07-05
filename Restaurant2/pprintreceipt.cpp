@@ -80,13 +80,13 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
 
     DatabaseResult drd;
     fDbBind[":f_header"] = number;
-    drd.select(fDb, "select od.f_state, d.f_" + def_lang + ", od.f_qty, od.f_price, od.f_total, od.f_complex \
+    drd.select(fDb,
+               "select od.f_state, d.f_" + def_lang + ", od.f_qty, od.f_price, od.f_total, od.f_complex \
                from o_dish od \
                left join r_dish d on d.f_id=od.f_dish \
                where od.f_header=:f_header and od.f_state in (1, 2, 3) \
-               and (od.f_complex=0 or (od.f_complexId=od.f_complex and od.f_complex>0)) \
-               order by od.f_row ", fDbBind);
-
+               order by od.f_row ",
+               fDbBind);
 
     QList<PPrintScene*> lps;
     PPrintScene *ps = new PPrintScene(Portrait);

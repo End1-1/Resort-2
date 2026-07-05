@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgPayDebt</class>
+ <widget class="QDialog" name="DlgPayDebt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pay debt</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelTitle">
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Pay debt</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutSearch">
+     <item>
+      <widget class="QLabel" name="labelGov">
+       <property name="text">
+        <string>Plate number</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="EQLineEdit" name="leGovNumber"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSearch">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Search</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnShowUnpaid">
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Unpaid</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tblDebts">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <column>
+      <property name="text">
+       <string>Order</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Plate</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Debt</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutTalon">
+     <item>
+      <widget class="QLabel" name="labelTalon">
+       <property name="text">
+        <string>Talon code</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="EQLineEdit" name="leTalon"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="RKeyboard" name="wKbd" native="true"/>
+   </item>
+   <item alignment="Qt::AlignHCenter">
+    <widget class="QWidget" name="widgetActions" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayoutActions">
+      <property name="spacing">
+       <number>16</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="btnCash">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Cash</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCard">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Card</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnPayTalon">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Talon</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RKeyboard</class>
+   <extends>QWidget</extends>
+   <header location="global">rkeyboard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

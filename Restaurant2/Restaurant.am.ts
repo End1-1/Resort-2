@@ -4,42 +4,32 @@
 <context>
     <name>DishesTable</name>
     <message>
-        <location filename="dishestable.cpp" line="22"/>
+        <location filename="dishestable.cpp" line="21"/>
         <source>Loading menus...</source>
         <translation>Ճաշացանկի բեռնում</translation>
     </message>
     <message>
-        <location filename="dishestable.cpp" line="40"/>
+        <location filename="dishestable.cpp" line="39"/>
         <source>Loading dishes parts...</source>
         <translation>Ճաշացանկի բեռնում</translation>
     </message>
     <message>
-        <location filename="dishestable.cpp" line="58"/>
+        <location filename="dishestable.cpp" line="57"/>
         <source>Loading dishes types...</source>
         <translation>Ճաշացանկի բեռնում</translation>
     </message>
     <message>
-        <location filename="dishestable.cpp" line="82"/>
-        <source>Loading complex dishes...</source>
-        <translation>Ճաշաանկի բեռնում</translation>
-    </message>
-    <message>
-        <location filename="dishestable.cpp" line="108"/>
-        <source>Loading complex dishes components</source>
-        <translation>Ճաշաանկի բեռնում</translation>
-    </message>
-    <message>
-        <location filename="dishestable.cpp" line="148"/>
+        <location filename="dishestable.cpp" line="81"/>
         <source>Loading menu...</source>
         <translation>Ճաշացանկի բեռնում</translation>
     </message>
     <message>
-        <location filename="dishestable.cpp" line="186"/>
+        <location filename="dishestable.cpp" line="232"/>
         <source>Processing modifiers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dishestable.cpp" line="220"/>
+        <location filename="dishestable.cpp" line="266"/>
         <source>Processing menu...</source>
         <translation>Ճաշացանկի բեռնում</translation>
     </message>
@@ -92,47 +82,14 @@
         <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <location filename="dlgcarselection.cpp" line="70"/>
+        <location filename="dlgcarselection.cpp" line="81"/>
         <source>Gov number cannot be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Պետհամարանիշը նշված չէ</translation>
     </message>
     <message>
-        <location filename="dlgcarselection.cpp" line="74"/>
+        <location filename="dlgcarselection.cpp" line="85"/>
         <source>Costumer name cannot be emtpy</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DlgComplexDish</name>
-    <message>
-        <location filename="dlgcomplexdish.ui" line="14"/>
-        <source>Dish complex</source>
-        <translation>Փաթեթներ</translation>
-    </message>
-    <message>
-        <location filename="dlgcomplexdish.ui" line="46"/>
-        <source>Select complex</source>
-        <translation>Ընտրեք փաթեթը</translation>
-    </message>
-    <message>
-        <location filename="dlgcomplexdish.ui" line="135"/>
-        <source>Select all</source>
-        <translation>Ընտրել բոլորը</translation>
-    </message>
-    <message>
-        <location filename="dlgcomplexdish.ui" line="148"/>
-        <source>OK</source>
-        <translation>Ընդունել</translation>
-    </message>
-    <message>
-        <location filename="dlgcomplexdish.ui" line="161"/>
-        <source>Cancel</source>
-        <translation>Հրաժարվել</translation>
-    </message>
-    <message>
-        <location filename="dlgcomplexdish.cpp" line="95"/>
-        <source>Select dishes for </source>
-        <translation>Ընտրել փաթեթի ապրանքները</translation>
+        <translation>Անունը պետք է նշել</translation>
     </message>
 </context>
 <context>
@@ -179,37 +136,43 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.ui" line="70"/>
+        <location filename="dlgdeptholder.ui" line="60"/>
         <source>Select</source>
         <translation>Ընտրել</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.ui" line="102"/>
+        <location filename="dlgdeptholder.ui" line="92"/>
         <source>Create new</source>
         <translation>Գրանցել նորը</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.ui" line="134"/>
+        <location filename="dlgdeptholder.ui" line="124"/>
         <source>Cancel</source>
         <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.ui" line="170"/>
+        <location filename="dlgdeptholder.ui" line="177"/>
         <source>Info</source>
         <translation>Լրացուցիչ</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.ui" line="180"/>
+        <location filename="dlgdeptholder.ui" line="184"/>
+        <location filename="dlgdeptholder.cpp" line="118"/>
+        <source>Unknown</source>
+        <translation>Անհայտ</translation>
+    </message>
+    <message>
+        <location filename="dlgdeptholder.ui" line="157"/>
         <source>Name</source>
         <translation>Հաճախորդի անուն</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.cpp" line="79"/>
+        <location filename="dlgdeptholder.cpp" line="81"/>
         <source>Nothing was selected</source>
         <translation>Ոչինչ նշված չէ</translation>
     </message>
     <message>
-        <location filename="dlgdeptholder.cpp" line="90"/>
+        <location filename="dlgdeptholder.cpp" line="92"/>
         <source>Name cannot be empty</source>
         <translation>Անունը պետք է նշել</translation>
     </message>
@@ -219,7 +182,7 @@
     <message>
         <location filename="dlggettext.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -227,12 +190,12 @@
     <message>
         <location filename="dlglist.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlglist.ui" line="29"/>
         <source>Caption</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlglist.ui" line="74"/>
@@ -246,126 +209,167 @@
     </message>
 </context>
 <context>
-    <name>DlgOrders</name>
-    <message>
-        <location filename="dlgorders.ui" line="14"/>
-        <location filename="dlgorders.ui" line="121"/>
-        <source>Print Tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="27"/>
-        <source>Order</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="32"/>
-        <source>Hall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="37"/>
-        <source>Table</source>
-        <translation type="unfinished">Սեղան</translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="42"/>
-        <source>Staff</source>
-        <translation type="unfinished">Սպասարկող</translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="47"/>
-        <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="52"/>
-        <source>Tax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="57"/>
-        <source>Payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="62"/>
-        <source>Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.ui" line="101"/>
-        <location filename="dlgorders.cpp" line="62"/>
-        <source>Order id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgorders.cpp" line="62"/>
-        <source>Enter number</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DlgPassword</name>
     <message>
         <location filename="dlgpassword.ui" line="62"/>
         <source>TABLE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="129"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="151"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="173"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="195"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="217"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="239"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="261"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="283"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="305"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="327"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgpassword.ui" line="349"/>
         <source>.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>DlgPayDebt</name>
+    <message>
+        <location filename="dlgpaydebt.ui" line="14"/>
+        <location filename="dlgpaydebt.ui" line="27"/>
+        <source>Pay debt</source>
+        <translation>Պարտքի մարում</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="39"/>
+        <source>Plate number</source>
+        <translation>Պետհամարանիշ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="55"/>
+        <source>Search</source>
+        <translation>Փնտրել</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="68"/>
+        <source>Unpaid</source>
+        <translation>ՊԱՐՏՔԵՐ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="87"/>
+        <source>Order</source>
+        <translation>Պատվեր</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="92"/>
+        <source>Date</source>
+        <translation>Ամսաթիվ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="97"/>
+        <source>Plate</source>
+        <translation>Պետհամարանիշ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="102"/>
+        <source>Debt</source>
+        <translation>Պարտք</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="112"/>
+        <source>Talon code</source>
+        <translation>Սկանավորեք կտրոնի համարը</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="145"/>
+        <source>Cash</source>
+        <translation>Կանխիկ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="158"/>
+        <source>Card</source>
+        <translation>Քարտ</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="171"/>
+        <source>Talon</source>
+        <translation>Կտրոն</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.ui" line="184"/>
+        <source>Cancel</source>
+        <translation>Հրաժարվել</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="71"/>
+        <source>Enter plate number</source>
+        <translation>Մուտքագրեք պետհամարանիշը</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="78"/>
+        <location filename="dlgpaydebt.cpp" line="94"/>
+        <source>Database error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="122"/>
+        <source>No open debts found</source>
+        <translation>Պարտք չկա</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="140"/>
+        <location filename="dlgpaydebt.cpp" line="147"/>
+        <source>Select debt row</source>
+        <translation>Ընտրեք պարտքի տողը</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="173"/>
+        <source>Enter talon code</source>
+        <translation>Սկանավորեք կտրոնի համարը</translation>
+    </message>
+    <message>
+        <location filename="dlgpaydebt.cpp" line="185"/>
+        <source>Debt paid</source>
+        <translation>Պարտքը մարված է</translation>
     </message>
 </context>
 <context>
@@ -376,54 +380,66 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="517"/>
+        <location filename="dlgpayment.ui" line="548"/>
         <source>Cash</source>
         <translation>Կանխիկ</translation>
     </message>
     <message>
         <location filename="dlgpayment.ui" line="78"/>
         <location filename="dlgpayment.ui" line="104"/>
-        <location filename="dlgpayment.ui" line="219"/>
-        <location filename="dlgpayment.ui" line="458"/>
-        <location filename="dlgpayment.ui" line="507"/>
-        <location filename="dlgpayment.ui" line="544"/>
+        <location filename="dlgpayment.ui" line="272"/>
+        <location filename="dlgpayment.ui" line="489"/>
+        <location filename="dlgpayment.ui" line="538"/>
+        <location filename="dlgpayment.ui" line="575"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="584"/>
-        <location filename="dlgpayment.cpp" line="632"/>
+        <location filename="dlgpayment.ui" line="615"/>
+        <location filename="dlgpayment.cpp" line="647"/>
         <source>Coupon seria</source>
         <translation>Կտրոնի սերիա</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="484"/>
+        <location filename="dlgpayment.ui" line="515"/>
         <source>Debt holder</source>
         <translation>Հաճախորդ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="373"/>
+        <location filename="dlgpayment.ui" line="288"/>
+        <source>Ծառայության
+կտրոն</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgpayment.ui" line="341"/>
         <source>Print tax</source>
         <translation>Տպել ՀԴՄ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="334"/>
+        <location filename="dlgpayment.ui" line="364"/>
         <source>Taxpayer id</source>
         <translation>ՀՎՀՀ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="448"/>
+        <location filename="dlgpayment.ui" line="455"/>
+        <source>Ծառայության
+կտրոն (ՀԻՆ)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgpayment.ui" line="479"/>
         <source>Final amount</source>
         <translation>Ընդանուր գումար</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="567"/>
+        <location filename="dlgpayment.ui" line="598"/>
         <source>Coupon number</source>
         <oldsource>Coupun number</oldsource>
         <translation>Կտրոնի համար</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="524"/>
+        <location filename="dlgpayment.ui" line="555"/>
         <source>IDRAM</source>
         <translation></translation>
     </message>
@@ -438,23 +454,18 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="261"/>
+        <location filename="dlgpayment.ui" line="232"/>
         <source>Կանխավճարի  ՀԴՄ</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="327"/>
+        <location filename="dlgpayment.ui" line="319"/>
         <source>Fiscal number</source>
         <translation>ՀԴՄ համար</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="348"/>
+        <location filename="dlgpayment.ui" line="309"/>
         <source>Նվեր քարտի կոդը</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgpayment.ui" line="415"/>
-        <source>Ծառայության կտրոն</source>
         <translation></translation>
     </message>
     <message>
@@ -478,126 +489,131 @@
         <translation>Զեղչված գումար</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="303"/>
+        <location filename="dlgpayment.ui" line="380"/>
         <source>Save</source>
         <translation>Պահպանել</translation>
     </message>
     <message>
-        <location filename="dlgpayment.ui" line="235"/>
+        <location filename="dlgpayment.ui" line="416"/>
         <source>Cancel</source>
         <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="1070"/>
+        <location filename="dlgpayment.cpp" line="1173"/>
         <source>Dept holder is not defined</source>
         <translation>Պարտքի առկայության դեպքում հաճախորդի անունը պարտադիր է</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="587"/>
+        <location filename="dlgpayment.cpp" line="602"/>
         <source>Coupon seria is not defined</source>
         <translation>Կտրոնի սերիան նշված չէ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="605"/>
+        <location filename="dlgpayment.cpp" line="620"/>
         <source>Invalid coupon number</source>
         <translation>Սխալ կտրոնի համար</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="613"/>
+        <location filename="dlgpayment.cpp" line="628"/>
         <source>Invalide coupon seria</source>
         <translation>Անհայտ կտրոնի սերիա</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="625"/>
+        <location filename="dlgpayment.cpp" line="640"/>
         <source>Cannot use coupon with discount</source>
         <translation>Նվեր քարտը և զեղչը չի կարելի կիրարել միաժամանակ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="639"/>
+        <location filename="dlgpayment.cpp" line="654"/>
         <source>Invalid coupon seria</source>
         <translation>Անհայտ կտրոնի սերիա</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="657"/>
+        <location filename="dlgpayment.cpp" line="672"/>
         <source>This order is not contains any items for this coupon seria</source>
         <translation>Այս պատվերում կտրոն չի օգտագործվում</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="701"/>
+        <location filename="dlgpayment.cpp" line="718"/>
         <source>This coupon not sold</source>
         <translation>Կտրոնը վաճարված չէ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="707"/>
+        <location filename="dlgpayment.cpp" line="724"/>
         <source>This coupon used</source>
         <translation>Այս կտրոնը օգտագործված է</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="756"/>
+        <location filename="dlgpayment.cpp" line="773"/>
         <source>No more gift card required</source>
         <translation>Նվեր քարտի անհրաժեշտություն չկա</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="793"/>
+        <location filename="dlgpayment.cpp" line="810"/>
         <source>Cart amount spent</source>
         <translation>Քարտի գումարը սպարված է</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="919"/>
+        <location filename="dlgpayment.cpp" line="936"/>
         <source>Discount already used</source>
         <translation>Զեղչը արդեն կիռարված է</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="1164"/>
+        <location filename="dlgpayment.cpp" line="1022"/>
         <source>Code</source>
         <translation>Կոդ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="1171"/>
+        <location filename="dlgpayment.cpp" line="1039"/>
         <source>Invalid code</source>
         <translation>Սխալ կոդ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="682"/>
+        <location filename="dlgpayment.cpp" line="1044"/>
+        <source>Talon used</source>
+        <translation>Կտրոնը օգտագործված է</translation>
+    </message>
+    <message>
+        <location filename="dlgpayment.cpp" line="697"/>
         <source>Cannot discount with coupon</source>
         <translation>Նվեր քարտը և զեղչը չի կարելի կիրարել միաժամանակ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="154"/>
-        <location filename="dlgpayment.cpp" line="1012"/>
+        <location filename="dlgpayment.cpp" line="166"/>
+        <location filename="dlgpayment.cpp" line="1115"/>
         <source>Payment not complete</source>
         <translation>Վճարումը ամբողջական չէ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="163"/>
-        <location filename="dlgpayment.cpp" line="1022"/>
+        <location filename="dlgpayment.cpp" line="175"/>
+        <location filename="dlgpayment.cpp" line="1125"/>
         <source>Amount greater than need to pay</source>
         <translation>Վճարումների գումարը գերազանցում է անհրաժեշտ քանակը</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="228"/>
-        <location filename="dlgpayment.cpp" line="311"/>
-        <location filename="dlgpayment.cpp" line="1051"/>
+        <location filename="dlgpayment.cpp" line="241"/>
+        <location filename="dlgpayment.cpp" line="319"/>
+        <location filename="dlgpayment.cpp" line="1154"/>
         <source>Fiscal error.</source>
         <translation>ՀԴՄ ՍԽԱԼ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="329"/>
+        <location filename="dlgpayment.cpp" line="344"/>
         <source>Costumer is not defined</source>
         <translation>Նշեք հաճախորդը</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="407"/>
+        <location filename="dlgpayment.cpp" line="422"/>
         <source>Print?</source>
         <translation>Տպել՞</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="805"/>
+        <location filename="dlgpayment.cpp" line="822"/>
         <source>Invalid card</source>
         <translation>Անհայտ քարտ</translation>
     </message>
     <message>
-        <location filename="dlgpayment.cpp" line="816"/>
+        <location filename="dlgpayment.cpp" line="833"/>
         <source>Card params is not defined</source>
         <translation></translation>
     </message>
@@ -612,7 +628,7 @@
     <message>
         <location filename="dlgprintmultiplefiscal.ui" line="30"/>
         <source>Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Պատվեր</translation>
     </message>
     <message>
         <location filename="dlgprintmultiplefiscal.ui" line="35"/>
@@ -655,7 +671,7 @@
         <translation type="unfinished">Քարտ</translation>
     </message>
     <message>
-        <location filename="dlgprintmultiplefiscal.cpp" line="120"/>
+        <location filename="dlgprintmultiplefiscal.cpp" line="123"/>
         <source>Fiscal error.</source>
         <translation type="unfinished">ՀԴՄ ՍԽԱԼ</translation>
     </message>
@@ -690,7 +706,7 @@
         <location filename="dlgreservation.cpp" line="30"/>
         <location filename="dlgreservation.cpp" line="55"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Կոդ</translation>
     </message>
     <message>
         <location filename="dlgreservation.cpp" line="49"/>
@@ -753,59 +769,59 @@
         <translation>Հաստիկ</translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="147"/>
+        <location filename="dlgsalary.cpp" line="153"/>
         <source>Saved</source>
         <translation>Պահպանված է</translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="183"/>
+        <location filename="dlgsalary.cpp" line="194"/>
         <source>Confirm to remove the selected employee</source>
         <translation>Հաստատեք հեռացումը</translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="246"/>
+        <location filename="dlgsalary.cpp" line="257"/>
         <source>Wash</source>
         <translation>ԱՎՏՈԼՎԱՑՈՒՄ</translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="313"/>
+        <location filename="dlgsalary.cpp" line="331"/>
         <source>&lt;&lt;ԷԼԻՏ&gt;&gt; ԱՎՏՈԼՎԱՑՈՒՄ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="318"/>
+        <location filename="dlgsalary.cpp" line="340"/>
         <source>ԱՇԽԱՏԱՎԱՐՁԻ ՎՃԱՐՄԱՆ ՓԱՍԹԱԹՈՒՂԹ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="330"/>
+        <location filename="dlgsalary.cpp" line="357"/>
         <source>NN</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="dlgsalary.cpp" line="330"/>
+        <location filename="dlgsalary.cpp" line="358"/>
         <source>ՀԱՍՏԻԿ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalary.cpp" line="330"/>
-        <source>ԱՆՈՒՆ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalary.cpp" line="330"/>
-        <source>ԳՈՒՄԱՐ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalary.cpp" line="330"/>
-        <source>ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalary.cpp" line="359"/>
+        <source>ԱՆՈՒՆ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsalary.cpp" line="360"/>
+        <source>ԳՈՒՄԱՐ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsalary.cpp" line="361"/>
+        <source>ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsalary.cpp" line="396"/>
         <source>ԸՆԴԱՄԵՆԸ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -813,128 +829,104 @@
     <message>
         <location filename="dlgsalarytotal.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="47"/>
         <location filename="dlgsalarytotal.ui" line="154"/>
         <location filename="dlgsalarytotal.ui" line="183"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="89"/>
         <source>Բոլորը</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="94"/>
         <source>Ազատություն</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="99"/>
         <source>Արցախ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="104"/>
         <source>Մյասնիկյան</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="117"/>
         <location filename="dlgsalarytotal.ui" line="132"/>
         <source>dd.MM.yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="213"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="218"/>
         <source>Employee Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Կոդ</translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="223"/>
         <source>Employee Name</source>
-        <translation type="unfinished">Աշխատողի անուն</translation>
+        <translation>Աշխատողի անուն</translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="228"/>
         <source>Amount</source>
-        <translation type="unfinished">Գումար</translation>
+        <translation>Գումար</translation>
     </message>
     <message>
         <location filename="dlgsalarytotal.ui" line="233"/>
         <source>Position</source>
-        <translation type="unfinished">Հաստիկ</translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="68"/>
-        <source>&lt;&lt;ԷԼԻՏ&gt;&gt; ԱՎՏՈԼՎԱՑՈՒՄ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="73"/>
-        <source>ԱՇԽԱՏԱՎԱՐՁԻ ՎՃԱՐՄԱՆ ՓԱՍԹԱԹՈՒՂԹ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="85"/>
-        <source>NN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="85"/>
-        <source>ՀԱՍՏԻԿ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="85"/>
-        <source>ԱՆՈՒՆ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="85"/>
-        <source>ԳՈՒՄԱՐ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="85"/>
-        <source>ՍՏՈՐԱԳՐՈՒԹՅՈՒՆ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dlgsalarytotal.cpp" line="121"/>
-        <source>ԸՆԴԱՄԵՆԸ</source>
-        <translation type="unfinished"></translation>
+        <translation>Հաստիկ</translation>
     </message>
 </context>
 <context>
-    <name>DlgSelectTaxCashMode</name>
+    <name>DlgSessionOpen</name>
     <message>
-        <location filename="dlgselecttaxcashmode.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <location filename="dlgsessionopen.ui" line="14"/>
+        <source>Session</source>
+        <translation>Հերթափոխ</translation>
     </message>
     <message>
-        <location filename="dlgselecttaxcashmode.ui" line="40"/>
-        <source>Cash</source>
-        <translation type="unfinished">Կանխիկ</translation>
+        <location filename="dlgsessionopen.ui" line="26"/>
+        <location filename="dlgsessionopen.ui" line="111"/>
+        <source>Open session</source>
+        <translation>Բացել հերթափոխը</translation>
     </message>
     <message>
-        <location filename="dlgselecttaxcashmode.ui" line="51"/>
+        <location filename="dlgsessionopen.ui" line="45"/>
+        <source>Branch</source>
+        <translation>Մասնաճյուղ</translation>
+    </message>
+    <message>
+        <location filename="dlgsessionopen.ui" line="59"/>
+        <source>Start</source>
+        <translation>Սկիզբ</translation>
+    </message>
+    <message>
+        <location filename="dlgsessionopen.ui" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished">Հրաժարվել</translation>
+        <translation>Հրաժարվել</translation>
     </message>
     <message>
-        <location filename="dlgselecttaxcashmode.ui" line="29"/>
-        <source>Card</source>
-        <translation type="unfinished">Քարտ</translation>
+        <location filename="dlgsessionopen.ui" line="171"/>
+        <source>Print total</source>
+        <translation>ԱՄՓՈՓ</translation>
+    </message>
+    <message>
+        <location filename="dlgsessionopen.cpp" line="100"/>
+        <source>Cannot open session</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -942,7 +934,7 @@
     <message>
         <location filename="dlgsmile.ui" line="26"/>
         <source>Smile</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1077,42 +1069,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Print/pprintpreview.cpp" line="78"/>
+        <location filename="../Print/pprintpreview.cpp" line="80"/>
         <source>Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Print/pprintpreview.cpp" line="80"/>
+        <location filename="../Print/pprintpreview.cpp" line="82"/>
         <source>of</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PrintTaxN</name>
-    <message>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="35"/>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="98"/>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="107"/>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="358"/>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="397"/>
-        <source>Connection error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="98"/>
-        <source>Socket read error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="107"/>
-        <source>Data read timeout</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="356"/>
-        <location filename="../../NewTax/Src/printtaxn.cpp" line="395"/>
-        <source>Tax error code</source>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -1123,166 +1087,84 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Print/pprintreceipt.cpp" line="115"/>
-        <source>Receipt S/N </source>
-        <translation>Պատվերի համար</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="152"/>
-        <source>Table</source>
-        <translation>Սեղան</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="135"/>
-        <location filename="../Print/pprintreceipt.cpp" line="154"/>
-        <source>Date</source>
-        <translation>Ամսաթիվ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="30"/>
-        <source>Not valid order id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="42"/>
-        <source>Not valid fiscal number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="77"/>
-        <source>Print receipt</source>
-        <translation>Հաշվի տպում</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="77"/>
-        <source>Incorrect order number</source>
-        <translation>Անհայտ պատվեր</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="121"/>
-        <source>Taxpayer id</source>
-        <translation>ՀՎՀՀ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="124"/>
-        <source>Device number</source>
-        <translation>ԳՀ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="126"/>
-        <source>Serial</source>
-        <translation>ԱՀ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="129"/>
-        <source>Fiscal</source>
-        <translation>Ֆիսկալ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="132"/>
-        <source>Receipt number</source>
-        <translation>ԿՀ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="140"/>
-        <source>(F)</source>
-        <translation>(Ֆ)</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="143"/>
-        <location filename="rdesk.cpp" line="2778"/>
-        <source>Partner tin</source>
-        <translation>Հաճախորդի ՀՎՀՀ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="160"/>
-        <source>Waiter</source>
-        <translation>Սպասարկող</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="163"/>
-        <source>Opened</source>
-        <translation>Բացվեծ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="165"/>
-        <source>Closed</source>
-        <translation>Փակվեծ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="171"/>
-        <source>Qty</source>
-        <translation>Քնկ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="172"/>
-        <source>Description</source>
-        <translation>Նկարագրություն</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="173"/>
-        <source>Amount</source>
-        <translation>Գումար</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="197"/>
-        <source>Total, AMD</source>
-        <translation>Ընդամենը, դրամ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="213"/>
-        <source>Signature</source>
-        <translation>Ստորագրություն</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="224"/>
-        <source>COMPLIMENTARY</source>
-        <translation>Հյուրասիրություն</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="226"/>
-        <source>SALES</source>
-        <translation>Վաճառք</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="230"/>
-        <source>Mode Of Payment</source>
-        <translation>Վճարման եղանակ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="233"/>
-        <source>CASH</source>
-        <translation>Կանխիկ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="236"/>
-        <source>CARD</source>
-        <translation>Քարդ</translation>
-    </message>
-    <message>
-        <location filename="../Print/pprintreceipt.cpp" line="265"/>
-        <source>****VOID****</source>
-        <translation>*****ՉԵՂԱՐԿՈՒՄ******</translation>
-    </message>
-    <message>
-        <location filename="main.cpp" line="70"/>
+        <location filename="main.cpp" line="69"/>
         <source>Branch is not set</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="main.cpp" line="89"/>
+        <location filename="main.cpp" line="93"/>
         <source>Login</source>
         <translation>Մուտք</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="95"/>
+        <location filename="main.cpp" line="99"/>
         <source>Access denied</source>
         <translation>Գործողությունը արգելված է</translation>
     </message>
     <message>
-        <location filename="../Base/baseorder.cpp" line="55"/>
+        <location filename="../Base/baseorder.cpp" line="72"/>
         <source>Sale</source>
         <translation>Վաճառք</translation>
+    </message>
+    <message>
+        <location filename="sessiondebtclose.cpp" line="59"/>
+        <source>Table %1 (order %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sessiondebtclose.cpp" line="61"/>
+        <source>Table %1 (order %2): customer is not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sessiondebtclose.cpp" line="71"/>
+        <source>Car plate number is required for all open orders:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sessiondebtclose.cpp" line="174"/>
+        <source>Cannot close order %1 as debt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="102"/>
+        <source>Talon code is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="113"/>
+        <source>Invalid talon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="118"/>
+        <source>This coupon not sold</source>
+        <translation type="unfinished">Կտրոնը վաճարված չէ</translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="123"/>
+        <source>This coupon used</source>
+        <translation type="unfinished">Այս կտրոնը օգտագործված է</translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="194"/>
+        <source>Invalid debt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="201"/>
+        <source>Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="214"/>
+        <source>Debt is already closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="debtpay.cpp" line="220"/>
+        <source>Debt amount has changed, refresh the list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1363,32 +1245,37 @@
     </message>
     <message>
         <location filename="rdesk.ui" line="187"/>
-        <location filename="rdesk.cpp" line="1278"/>
-        <location filename="rdesk.cpp" line="2790"/>
+        <location filename="rdesk.cpp" line="1230"/>
+        <location filename="rdesk.cpp" line="2434"/>
         <source>Car</source>
         <translation>Մեքենա</translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="219"/>
+        <location filename="rdesk.ui" line="231"/>
+        <source>Բաղադրատոմս</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="rdesk.ui" line="250"/>
         <source>-20%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="355"/>
-        <location filename="rdesk.ui" line="360"/>
-        <location filename="rdesk.ui" line="365"/>
-        <location filename="rdesk.ui" line="1413"/>
-        <location filename="rdesk.ui" line="1418"/>
-        <location filename="rdesk.ui" line="1423"/>
+        <location filename="rdesk.ui" line="386"/>
+        <location filename="rdesk.ui" line="391"/>
+        <location filename="rdesk.ui" line="396"/>
+        <location filename="rdesk.ui" line="1386"/>
+        <location filename="rdesk.ui" line="1391"/>
+        <location filename="rdesk.ui" line="1396"/>
         <source>New Row</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="370"/>
-        <location filename="rdesk.ui" line="375"/>
-        <location filename="rdesk.ui" line="380"/>
-        <location filename="rdesk.ui" line="464"/>
-        <location filename="rdesk.ui" line="469"/>
+        <location filename="rdesk.ui" line="401"/>
+        <location filename="rdesk.ui" line="406"/>
+        <location filename="rdesk.ui" line="411"/>
+        <location filename="rdesk.ui" line="495"/>
+        <location filename="rdesk.ui" line="500"/>
         <source>New Column</source>
         <translation></translation>
     </message>
@@ -1459,507 +1346,467 @@
     </message>
     <message>
         <location filename="rdesk.ui" line="1336"/>
-        <location filename="rdesk.ui" line="1363"/>
-        <location filename="rdesk.cpp" line="1296"/>
-        <location filename="rdesk.cpp" line="2485"/>
-        <location filename="rdesk.cpp" line="2823"/>
+        <location filename="rdesk.cpp" line="1248"/>
+        <location filename="rdesk.cpp" line="2261"/>
         <source>Qty</source>
         <translation>Քնկ</translation>
     </message>
     <message>
         <location filename="rdesk.ui" line="1341"/>
-        <location filename="rdesk.ui" line="1368"/>
-        <location filename="rdesk.cpp" line="1002"/>
-        <location filename="rdesk.cpp" line="1298"/>
-        <location filename="rdesk.cpp" line="2825"/>
+        <location filename="rdesk.cpp" line="859"/>
+        <location filename="rdesk.cpp" line="1250"/>
+        <location filename="rdesk.cpp" line="2455"/>
         <source>Amount</source>
         <translation>Գումար</translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1353"/>
-        <source>ItemCode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.ui" line="1358"/>
-        <source>ItemName</source>
-        <translation>Ապրանք</translation>
-    </message>
-    <message>
-        <location filename="rdesk.ui" line="1428"/>
+        <location filename="rdesk.ui" line="1401"/>
         <source>Key</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1433"/>
+        <location filename="rdesk.ui" line="1406"/>
         <source>Value</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1438"/>
-        <location filename="rdesk.cpp" line="1274"/>
-        <location filename="rdesk.cpp" line="2477"/>
-        <location filename="rdesk.cpp" line="2591"/>
-        <location filename="rdesk.cpp" line="2786"/>
+        <location filename="rdesk.ui" line="1411"/>
+        <location filename="rdesk.cpp" line="1226"/>
+        <location filename="rdesk.cpp" line="2253"/>
+        <location filename="rdesk.cpp" line="2430"/>
         <source>Table</source>
         <translation>Սեղան</translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1443"/>
+        <location filename="rdesk.ui" line="1416"/>
         <source>Seghan1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1448"/>
-        <location filename="rdesk.cpp" line="1151"/>
-        <location filename="rdesk.cpp" line="1185"/>
+        <location filename="rdesk.ui" line="1421"/>
+        <location filename="rdesk.cpp" line="1016"/>
+        <location filename="rdesk.cpp" line="1050"/>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
     <message>
-        <location filename="rdesk.ui" line="1453"/>
+        <location filename="rdesk.ui" line="1426"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="501"/>
-        <location filename="rdesk.cpp" line="592"/>
-        <source>Confirm remove whole order</source>
-        <translation>Հաստատեք ամբողջ
-պատվերի հեռացումը</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="508"/>
-        <source>STORE OPTION</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="848"/>
+        <location filename="rdesk.cpp" line="644"/>
         <source>VOID REPORT</source>
         <translation>ՉԵՂԱՐԿՎԱԾ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="853"/>
+        <location filename="rdesk.cpp" line="649"/>
         <source>Printed by </source>
         <oldsource>Printed by</oldsource>
         <translation>Տպված</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="875"/>
+        <location filename="rdesk.cpp" line="671"/>
         <source>Type: </source>
         <translation>Տեսակ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="876"/>
+        <location filename="rdesk.cpp" line="672"/>
         <source>Manager</source>
         <translation>Մենեջեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="922"/>
-        <source>Complimentary comment</source>
-        <translation>Հյուրասիրության մեկնաբանություն</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="999"/>
+        <location filename="rdesk.cpp" line="856"/>
         <source>Total visits</source>
         <translation>Ընդհանուր այցելություններ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1000"/>
+        <location filename="rdesk.cpp" line="857"/>
         <source>Visits</source>
         <translation>Այց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1049"/>
+        <location filename="rdesk.cpp" line="906"/>
         <source>Invalid card code</source>
         <translation>Անհայտ քարտ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1053"/>
+        <location filename="rdesk.cpp" line="910"/>
         <source>Balance</source>
         <translation>Բալանս</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1038"/>
-        <location filename="rdesk.cpp" line="1074"/>
+        <location filename="rdesk.cpp" line="895"/>
+        <location filename="rdesk.cpp" line="931"/>
         <source>Card holder</source>
         <translation>Քարտապահ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="649"/>
-        <source>This action is prohabited on this hall</source>
-        <translation></translation>
+        <location filename="rdesk.cpp" line="762"/>
+        <source>There are %1 open table(s). Close all orders as debt and finish the session?</source>
+        <translation>Առկա է բաց պատվերներ /%1/՞ փակել բոլորը որպես պարտք՞</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1096"/>
+        <location filename="rdesk.cpp" line="800"/>
+        <source>Cannot close session: %1 open table(s) remain</source>
+        <translation>Հերթափոխ հնարավոր չէ փակել, առկա է բաց պատվեր /%1/</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="953"/>
         <source>Cards</source>
         <translation>Քարտեր</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1097"/>
+        <location filename="rdesk.cpp" line="954"/>
         <source>Total qty</source>
         <translation>Ընդ․ քնկ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1097"/>
+        <location filename="rdesk.cpp" line="954"/>
         <source>Total amount</source>
         <translation>Ընդ․ գումար</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1097"/>
+        <location filename="rdesk.cpp" line="954"/>
         <source>Current visits</source>
         <translation>Ընդ․ այց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1120"/>
+        <location filename="rdesk.cpp" line="985"/>
         <source>Daily sale</source>
         <translation>Օրվա վաճառք</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1122"/>
+        <location filename="rdesk.cpp" line="987"/>
         <source>Goods</source>
         <translation>Ապրանքներ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1266"/>
+        <location filename="rdesk.cpp" line="1090"/>
+        <source>Fiscal not found</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="1153"/>
+        <source>Done</source>
+        <translation>Կատարված է</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="1218"/>
         <source>CANCELED</source>
         <translation>ՉԵՂԱՐԿՎԱԾ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1290"/>
+        <location filename="rdesk.cpp" line="1242"/>
         <source>Canceled</source>
         <translation>Չեղարկված</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1567"/>
+        <location filename="rdesk.cpp" line="1462"/>
         <source>Cannot change quantity of dish thats contains emarks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1576"/>
+        <location filename="rdesk.cpp" line="1471"/>
         <source>This item is not editable</source>
         <translation>Այտ տողը խմբագրամն ենթակա չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1581"/>
+        <location filename="rdesk.cpp" line="1476"/>
         <source>You cannot edit the quantity of selected item</source>
         <translation>Դուք չեկ կարող փոփոխել նշված տողը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1683"/>
+        <location filename="rdesk.cpp" line="1517"/>
         <source>Confirm to close application</source>
         <translation>Հաստատեք ծրարից դուրս գալը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1724"/>
+        <location filename="rdesk.cpp" line="1558"/>
         <source>Default menu is not set</source>
         <oldsource>Menu is not set</oldsource>
         <translation>Ճաշացանկը նշված չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2125"/>
+        <location filename="rdesk.cpp" line="1960"/>
         <source>Table locked by other user</source>
         <translation>Սեղանը արքելափակված է այլ օգտագործողի կողմից</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3003"/>
-        <source>Փոխանցում</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="3384"/>
+        <location filename="rdesk.cpp" line="2780"/>
         <source>Only using QR code</source>
         <translation>Ավելացումը միայն QR կոդով</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3418"/>
-        <source>Time on server and on machine different</source>
-        <translation>Համակարգչի ժամի խնդիր։</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="3938"/>
+        <location filename="rdesk.cpp" line="3319"/>
         <source>This item cannot be removed</source>
         <translation>Նշված տողը հեռացման ենթակա չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4080"/>
-        <location filename="rdesk.cpp" line="4190"/>
+        <location filename="rdesk.cpp" line="3412"/>
+        <location filename="rdesk.cpp" line="3527"/>
         <source>Invalid barcode</source>
         <translation>Սխալ բարկոդ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4098"/>
+        <location filename="rdesk.cpp" line="3430"/>
         <source>Dish not in menu</source>
         <translation>Ուտեստը ցանկում գրանցված չէ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4105"/>
+        <location filename="rdesk.cpp" line="3437"/>
         <source>Error while append dish to order</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4117"/>
+        <location filename="rdesk.cpp" line="3449"/>
         <source>Emark already used</source>
         <translation>Նշված QR-ը արդեն օգտագործվել է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4179"/>
+        <location filename="rdesk.cpp" line="3478"/>
+        <source>Only by Emarks code</source>
+        <translation>Ավելացումը միայն QR կոդով</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="3516"/>
         <source>Invalid emarks</source>
         <translation>Սխալ QR</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="4201"/>
+        <location filename="rdesk.cpp" line="3538"/>
         <source>Used emarks detected</source>
         <translation>Նշված QR-ը արդեն օգտագործվել է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1268"/>
-        <location filename="rdesk.cpp" line="2748"/>
+        <location filename="rdesk.cpp" line="1220"/>
         <source>Receipt S/N </source>
         <translation>Պատվերի համար</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1331"/>
-        <location filename="rdesk.cpp" line="2858"/>
-        <source>Present</source>
-        <translation>Նվեր</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="2954"/>
-        <source>Error while printing receipt</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="2959"/>
+        <location filename="rdesk.cpp" line="2498"/>
         <source>Cash</source>
         <translation>Կանխիկ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1097"/>
-        <location filename="rdesk.cpp" line="2966"/>
+        <location filename="rdesk.cpp" line="954"/>
+        <location filename="rdesk.cpp" line="2499"/>
         <source>Card</source>
         <translation>Քարտ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3017"/>
-        <source>Discount</source>
-        <translation>Զեղչ</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="3958"/>
+        <location filename="rdesk.cpp" line="3338"/>
         <source>Cannot remove printed dish, use order correction tool</source>
         <translation>Հնարավոր չէ հեռացնել ընդունված պատվերը, օգտագործեք պատվերի հեռացման գործիքը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3661"/>
+        <location filename="rdesk.cpp" line="3051"/>
         <source>Emtpy order</source>
         <translation>Պատվերը դատարկ է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3721"/>
+        <location filename="rdesk.cpp" line="3112"/>
         <source>No discount mechanism</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2154"/>
+        <location filename="rdesk.cpp" line="1989"/>
         <source>Opening table </source>
         <translation>Սեղանը բացվում է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2452"/>
+        <location filename="rdesk.cpp" line="2228"/>
         <source>The printer with name not exists on the system</source>
         <translation>Տպիչը բացակայում է համակարգում</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2544"/>
+        <location filename="rdesk.cpp" line="2320"/>
         <source>Printer: </source>
         <translation>Տպիչ՝</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2595"/>
-        <source>User</source>
-        <translation>Սպասարկող</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="1287"/>
-        <location filename="rdesk.cpp" line="2812"/>
+        <location filename="rdesk.cpp" line="1239"/>
+        <location filename="rdesk.cpp" line="2444"/>
         <source>Opened</source>
         <translation>Բացվեց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2815"/>
+        <location filename="rdesk.cpp" line="2446"/>
         <source>Closed</source>
         <translation>Փակվեց</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1413"/>
-        <location filename="rdesk.cpp" line="2940"/>
+        <location filename="rdesk.cpp" line="1323"/>
         <source>COMPLIMENTARY</source>
         <translation>Հյուրասիրություն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1420"/>
-        <location filename="rdesk.cpp" line="3035"/>
+        <location filename="rdesk.cpp" line="749"/>
+        <source>Session is not open</source>
+        <translation>Հերթափոխը բաց չէ</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="757"/>
+        <location filename="rdesk.cpp" line="770"/>
+        <location filename="rdesk.cpp" line="795"/>
+        <location filename="rdesk.cpp" line="806"/>
+        <source>Cannot close session</source>
+        <translation>Հնարավոր չէ փակել հերթափոխը</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="811"/>
+        <source>Session closed</source>
+        <translation>Հերթափոխը փակ է</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="1330"/>
         <source>****VOID****</source>
         <translation>******ՉԵՂՅԱԼ********</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1449"/>
-        <location filename="rdesk.cpp" line="3064"/>
+        <location filename="rdesk.cpp" line="1355"/>
         <source>****MISTAKE****</source>
         <translation>******ՍԽԱԼ******</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2678"/>
+        <location filename="rdesk.cpp" line="2376"/>
+        <source>Receipt S/N</source>
+        <translation>Պատվերի համար</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="2387"/>
         <source>Not valid order id</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2690"/>
-        <source>Not valid fiscal number</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="2755"/>
+        <location filename="rdesk.cpp" line="2403"/>
         <source>Taxpayer id</source>
         <translation>ՀՎՀՀ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2758"/>
+        <location filename="rdesk.cpp" line="2405"/>
         <source>Device number</source>
         <translation>ԳՀ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2761"/>
+        <location filename="rdesk.cpp" line="2407"/>
         <source>Serial</source>
         <translation>ԱՀ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2764"/>
+        <location filename="rdesk.cpp" line="2409"/>
         <source>Fiscal</source>
         <translation>Ֆիսկալ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2767"/>
+        <location filename="rdesk.cpp" line="2411"/>
         <source>Receipt number</source>
         <translation>ԿՀ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2774"/>
+        <location filename="rdesk.cpp" line="2415"/>
         <source>(F)</source>
         <translation>(Ֆ)</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3238"/>
+        <location filename="rdesk.cpp" line="2420"/>
+        <source>Partner tin</source>
+        <translation>Հաճախորդի ՀՎՀՀ</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="2503"/>
+        <source>Debt</source>
+        <translation>Պարտք</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="2505"/>
+        <source>Signature: _________________</source>
+        <translation>Ստորագրություն</translation>
+    </message>
+    <message>
+        <location filename="rdesk.cpp" line="2646"/>
         <source>Discount already used</source>
         <translation>Զեղչը արդեն կիռարված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3243"/>
+        <location filename="rdesk.cpp" line="2650"/>
         <source>Confirm to discount</source>
         <translation>Հաստատեք զեղչը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3327"/>
+        <location filename="rdesk.cpp" line="2718"/>
         <source>Hall is empty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="653"/>
-        <location filename="rdesk.cpp" line="3373"/>
-        <location filename="rdesk.cpp" line="3656"/>
-        <location filename="rdesk.cpp" line="4052"/>
-        <location filename="rdesk.cpp" line="4131"/>
+        <location filename="rdesk.cpp" line="2764"/>
+        <location filename="rdesk.cpp" line="3046"/>
+        <location filename="rdesk.cpp" line="3384"/>
+        <location filename="rdesk.cpp" line="3463"/>
         <source>Please, select table</source>
         <translation>Ընտրեք սեհանը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3944"/>
+        <location filename="rdesk.cpp" line="3325"/>
         <source>Confirm to delete the selected item</source>
         <translation>Հաստատեք տողի հեռացումը</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3983"/>
-        <source>REMOVE OPTION</source>
-        <translation>Հեռացման պատճառ</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="3976"/>
-        <source>Are you sure remove whole complex?</source>
-        <translation>Հեռացնել ամբողջ փաթեթը</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="2187"/>
+        <location filename="rdesk.cpp" line="2022"/>
         <source>Open new VIP Table?</source>
         <translation>Բացել՞ նոր սեղան</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="915"/>
-        <location filename="rdesk.cpp" line="2645"/>
-        <location filename="rdesk.cpp" line="3971"/>
+        <location filename="rdesk.cpp" line="2344"/>
         <source>Access denied</source>
         <translation>Գործողությունը արգելված է</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="855"/>
-        <location filename="rdesk.cpp" line="1282"/>
-        <location filename="rdesk.cpp" line="2770"/>
-        <location filename="rdesk.cpp" line="2798"/>
+        <location filename="rdesk.cpp" line="651"/>
+        <location filename="rdesk.cpp" line="1234"/>
+        <location filename="rdesk.cpp" line="2413"/>
+        <location filename="rdesk.cpp" line="2438"/>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1297"/>
-        <location filename="rdesk.cpp" line="2486"/>
-        <location filename="rdesk.cpp" line="2824"/>
+        <location filename="rdesk.cpp" line="1249"/>
+        <location filename="rdesk.cpp" line="2262"/>
+        <location filename="rdesk.cpp" line="2454"/>
         <source>Description</source>
         <translation>Նկարագրություն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2583"/>
-        <source>Cancelation check</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="1384"/>
-        <location filename="rdesk.cpp" line="2911"/>
+        <location filename="rdesk.cpp" line="1294"/>
+        <location filename="rdesk.cpp" line="2478"/>
         <source>Total, AMD</source>
         <translation>Ընդամենը, դրամ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1401"/>
-        <location filename="rdesk.cpp" line="2928"/>
-        <location filename="rdesk.cpp" line="3011"/>
+        <location filename="rdesk.cpp" line="1311"/>
         <source>Signature</source>
         <translation>Ստորագրություն</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2473"/>
+        <location filename="rdesk.cpp" line="2249"/>
         <source>Service check, order #</source>
         <translation>նոր պատվեր </translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="2479"/>
-        <location filename="rdesk.cpp" line="2593"/>
-        <location filename="rdesk.cpp" line="2803"/>
+        <location filename="rdesk.cpp" line="2255"/>
         <source>Time</source>
         <translation>Ժամ</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="1285"/>
-        <location filename="rdesk.cpp" line="2481"/>
-        <location filename="rdesk.cpp" line="2808"/>
+        <location filename="rdesk.cpp" line="1237"/>
+        <location filename="rdesk.cpp" line="2257"/>
+        <location filename="rdesk.cpp" line="2440"/>
         <source>Waiter</source>
         <translation>Սպասարկող</translation>
     </message>
     <message>
-        <location filename="rdesk.cpp" line="3025"/>
-        <source>Unknown costumer</source>
-        <translation>Անհայտ հաճախորդ</translation>
-    </message>
-    <message>
-        <location filename="rdesk.cpp" line="3516"/>
-        <location filename="rdesk.cpp" line="3522"/>
+        <location filename="rdesk.cpp" line="2907"/>
+        <location filename="rdesk.cpp" line="2913"/>
         <source>You cannot edit comment for this item</source>
         <translation>Դուք չեկ կարող փոփոխել նշված տողը</translation>
     </message>
@@ -1980,37 +1827,32 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="190"/>
+        <location filename="rface.cpp" line="167"/>
         <source>Login</source>
         <translation>Մուտք</translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="145"/>
-        <source>Cannot connect to broadcast server, force logout</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rface.cpp" line="151"/>
+        <location filename="rface.cpp" line="129"/>
         <source>Load hall...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="153"/>
+        <location filename="rface.cpp" line="131"/>
         <source>Load menu...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="156"/>
+        <location filename="rface.cpp" line="134"/>
         <source>Setup current menu...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="170"/>
+        <location filename="rface.cpp" line="148"/>
         <source>Connection to the server lost. Application will quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="rface.cpp" line="195"/>
+        <location filename="rface.cpp" line="172"/>
         <source>Access denied</source>
         <translation>Գործողությունը արգելված է</translation>
     </message>
@@ -2251,230 +2093,287 @@ on</source>
         <translation>Գործողություններ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="185"/>
-        <source>Complimentary</source>
-        <translation>Հյուրասիրություն</translation>
-    </message>
-    <message>
-        <location filename="rtools.ui" line="170"/>
-        <source>Remove
-order</source>
-        <translation>Հեռացնել պատվերը</translation>
-    </message>
-    <message>
-        <location filename="rtools.ui" line="52"/>
+        <location filename="rtools.ui" line="97"/>
         <source>Cards
 statistics</source>
         <translation>Քարտեր</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="199"/>
+        <location filename="rtools.ui" line="127"/>
         <source>Visits
 statistics</source>
         <translation>Այցելություններ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="229"/>
+        <location filename="rtools.ui" line="142"/>
         <source>Employes of day</source>
         <translation>Աշխատողների ցանկ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="365"/>
+        <location filename="rtools.ui" line="350"/>
         <source>Total, Short</source>
         <translation>Ընդամենը
 Համառոտ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="257"/>
+        <location filename="rtools.ui" line="82"/>
         <source>Order
 comment</source>
         <translation>Պատվեր
 մեկնաբանություն</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="67"/>
-        <source>Add complex</source>
-        <oldsource>Set complexe
-mode</oldsource>
-        <translation>Ավելացնել
-կոմլեքս</translation>
-    </message>
-    <message>
-        <location filename="rtools.ui" line="96"/>
+        <location filename="rtools.ui" line="156"/>
         <source>Print receipt
 by number</source>
         <translation>Տպել հաշիվը
 ըստ համարի</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="111"/>
+        <location filename="rtools.ui" line="112"/>
         <source>Print void
 report</source>
         <translation>Տպել անվավեր
 պատվերները</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="126"/>
-        <source>Հեռացնել պատվերը
-ըստ համարի</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="rtools.ui" line="243"/>
+        <location filename="rtools.ui" line="185"/>
         <source>Salary</source>
         <translation>Աշխատավարձ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="286"/>
+        <location filename="rtools.ui" line="229"/>
+        <source>Close session</source>
+        <translation>Փակել հերթափոխը</translation>
+    </message>
+    <message>
+        <location filename="rtools.ui" line="243"/>
+        <source>Pay debt</source>
+        <translation>Պարտքի մարում</translation>
+    </message>
+    <message>
+        <location filename="rtools.ui" line="271"/>
         <source>Reports</source>
         <translation>Հաշվետվություններ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="309"/>
+        <location filename="rtools.ui" line="294"/>
         <source>Total, Today</source>
         <oldsource>Total</oldsource>
         <translation>Ընդացիկ օրվա
 հասույթ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="337"/>
+        <location filename="rtools.ui" line="322"/>
         <source>Show my total</source>
         <translation>Իմ հասույթը</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="351"/>
+        <location filename="rtools.ui" line="336"/>
         <source>Total, Any day</source>
         <translation>Նշված օրվա
 հասույթ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="323"/>
+        <location filename="rtools.ui" line="308"/>
         <source>Total, Yesterday</source>
         <translation>Առաջին օրվա
 հասույթ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="38"/>
+        <location filename="rtools.ui" line="171"/>
         <source>End of day</source>
         <translation>Օրվա փակում</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="214"/>
+        <location filename="rtools.ui" line="52"/>
         <source>Card
 amount</source>
         <translation>Քարտի
 բալանս</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="156"/>
+        <location filename="rtools.ui" line="38"/>
         <source>Saled item</source>
         <translation>Վաճառված
 ապրանքներ</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="81"/>
+        <location filename="rtools.ui" line="67"/>
+        <source>ՀԴՄ հետ
+վերադարձ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="rtools.ui" line="199"/>
         <source>Check cards
 registration</source>
         <translation>Ստուգել քարտի գրանցումը</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="295"/>
+        <location filename="rtools.ui" line="280"/>
         <source>Exit</source>
         <translation>Ելք</translation>
     </message>
     <message>
-        <location filename="rtools.ui" line="141"/>
+        <location filename="rtools.ui" line="214"/>
         <source>Show / hide
 removed items</source>
         <translation>Ցուցադրել/թակցնել
 հեռացված ապրանքները</translation>
     </message>
+    <message>
+        <location filename="rtools.cpp" line="143"/>
+        <source>Confirm to close session</source>
+        <translation>Հաստատեք հերթափոխի փակումը</translation>
+    </message>
 </context>
 <context>
     <name>ReportPrint</name>
     <message>
-        <location filename="reportprint.cpp" line="33"/>
-        <location filename="reportprint.cpp" line="543"/>
+        <location filename="reportprint.cpp" line="45"/>
+        <location filename="reportprint.cpp" line="419"/>
         <source>CASH TOTAL REPORT</source>
         <translation>ԴՐԱՄԱՐԿՂԻ ՀԱՇՎԵՏՎՈՒԹՅՈՒՆ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="36"/>
-        <location filename="reportprint.cpp" line="546"/>
+        <location filename="reportprint.cpp" line="50"/>
+        <source>Տպված է</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="52"/>
+        <source>Ամսաթիվ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="159"/>
+        <source>Ընդամենը</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="196"/>
+        <source>Կանխիկ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="197"/>
+        <location filename="reportprint.cpp" line="347"/>
+        <source>Քարտ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="202"/>
+        <source>Զեղչ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="225"/>
+        <source>Debt payment</source>
+        <translation>Պարտքի մարում</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="227"/>
+        <source>Order</source>
+        <translation>Պատվեր</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="228"/>
+        <source>Plate</source>
+        <translation>Պետհամարանիշ</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="229"/>
+        <source>Debt from</source>
+        <translation>Պարտքը պատվեր</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="230"/>
+        <source>Mode</source>
+        <translation>Եղանակ</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="256"/>
+        <location filename="reportprint.cpp" line="297"/>
+        <source>Cash</source>
+        <translation>Կանխիկ</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="262"/>
+        <location filename="reportprint.cpp" line="299"/>
+        <source>Talon</source>
+        <translation>Կտրոն</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="285"/>
+        <source>Debt payment total</source>
+        <translation>Ընդամենը պարտքերի մարում</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="381"/>
+        <source>Debt payment cash</source>
+        <translation>Ընդամենը պարտքերի կանխիկ</translation>
+    </message>
+    <message>
+        <location filename="reportprint.cpp" line="424"/>
         <source>Printed by </source>
         <oldsource>Printed by</oldsource>
         <translation>Տպված</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="37"/>
-        <location filename="reportprint.cpp" line="547"/>
+        <location filename="reportprint.cpp" line="426"/>
         <source>Date</source>
         <translation>Ամսաթիվ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="83"/>
-        <location filename="reportprint.cpp" line="197"/>
+        <location filename="reportprint.cpp" line="94"/>
         <source>Total for </source>
         <translation>Ընդամենը </translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="228"/>
-        <source>Grand total </source>
-        <translation>Ընդամենը</translation>
-    </message>
-    <message>
-        <location filename="reportprint.cpp" line="251"/>
+        <location filename="reportprint.cpp" line="187"/>
         <source>Common</source>
         <translation>Ընդհանուր</translation>
     </message>
     <message>
         <location filename="reportprint.cpp" line="259"/>
-        <source>Cash</source>
-        <translation>Կանխիկ</translation>
-    </message>
-    <message>
-        <location filename="reportprint.cpp" line="268"/>
-        <location filename="reportprint.cpp" line="411"/>
-        <location filename="reportprint.cpp" line="639"/>
+        <location filename="reportprint.cpp" line="298"/>
+        <location filename="reportprint.cpp" line="530"/>
         <source>Card</source>
         <translation>Քարտ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="305"/>
-        <location filename="reportprint.cpp" line="465"/>
-        <location filename="reportprint.cpp" line="648"/>
+        <location filename="reportprint.cpp" line="201"/>
+        <location filename="reportprint.cpp" line="370"/>
+        <location filename="reportprint.cpp" line="534"/>
         <source>Փոխանցում</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="314"/>
-        <source>Discount</source>
-        <translation>Զեղչ</translation>
-    </message>
-    <message>
-        <location filename="reportprint.cpp" line="327"/>
-        <location filename="reportprint.cpp" line="483"/>
-        <location filename="reportprint.cpp" line="593"/>
-        <location filename="reportprint.cpp" line="657"/>
+        <location filename="reportprint.cpp" line="306"/>
+        <location filename="reportprint.cpp" line="376"/>
+        <location filename="reportprint.cpp" line="484"/>
+        <location filename="reportprint.cpp" line="538"/>
         <source>Salary</source>
         <translation>Աշխատավարձ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="395"/>
-        <location filename="reportprint.cpp" line="632"/>
+        <location filename="reportprint.cpp" line="338"/>
+        <location filename="reportprint.cpp" line="522"/>
         <source>Total Finally</source>
         <oldsource>Finally, wash</oldsource>
         <translation>ՎԵՐՋՆԱՀԱՇՎԱՐԿ</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="396"/>
-        <location filename="reportprint.cpp" line="633"/>
+        <location filename="reportprint.cpp" line="300"/>
+        <location filename="reportprint.cpp" line="344"/>
+        <location filename="reportprint.cpp" line="526"/>
         <source>Total</source>
         <translation>Ընդամենը</translation>
     </message>
     <message>
-        <location filename="reportprint.cpp" line="492"/>
-        <location filename="reportprint.cpp" line="666"/>
+        <location filename="reportprint.cpp" line="388"/>
+        <location filename="reportprint.cpp" line="544"/>
         <source>Finally</source>
         <translation>Մնացորդ</translation>
     </message>

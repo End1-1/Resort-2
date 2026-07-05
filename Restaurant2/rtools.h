@@ -41,6 +41,10 @@ private slots:
 
     void on_btnFiscalCancel_clicked();
 
+    void on_btnCloseSession_clicked();
+
+    void on_btnPayDebt_clicked();
+
 private:
     Ui::RTools* ui;
     RDesk* fDesk;

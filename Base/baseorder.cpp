@@ -1,8 +1,9 @@
 #include "baseorder.h"
-#include "defstore.h"
-#include "storeoutput.h"
-#include "databaseresult.h"
 #include "base.h"
+#include "databaseresult.h"
+#include "defstore.h"
+#include "message.h"
+#include "storeoutput.h"
 
 BaseOrder::BaseOrder(int id)
 {
@@ -41,7 +42,12 @@ void BaseOrder::calculateOutput(Database &db, int id)
     QSet<int> stores;
 
     for (int i = 0; i < dr.rowCount(); i++) {
-        fDbBind[":f_store"] = dr.value(i, "f_store");
+        int store = dr.value(i, "f_store").toInt();
+        if (store == 0) {
+            message_error(QString("%1 store is not defined").arg(dr.value(i, "f_dish").toInt()));
+            return;
+        }
+        fDbBind[":f_store"] = store;
         db.update("o_dish", fDbBind, where_id(dr.value(i, "f_id").toInt()));
         docdate = dr.value(i, "f_datecash").toDate();
         fDbBind[":f_header"] = id;

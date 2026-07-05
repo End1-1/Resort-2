@@ -18,7 +18,6 @@ TableModel::~TableModel()
 
 void TableModel::apply(WReportGrid *rg)
 {
-    clearProxyRows();
     beginResetModel();
 
     if(rg == 0 || fQuery.count() > 0) {
@@ -47,7 +46,6 @@ void TableModel::apply(WReportGrid *rg)
 void TableModel::apply(const QStringList &queries)
 {
     fQuery = queries;
-    clearProxyRows();
     beginResetModel();
     fDD.open(true, false);
     fBackgroundColors.clear();
@@ -65,24 +63,27 @@ void TableModel::apply(const QStringList &queries)
 void TableModel::applyFinal(WReportGrid *rg, bool clearBefore)
 {
     if(clearBefore) {
-        clearProxyRows();
         beginResetModel();
     }
 
-    for(int i = 0, count = fDD.rowCount(); i < count; i++)
+    fRows.clear();
+
+    for(int i = 0, count = fDD.rowCount(); i < count; i++) {
         fRows.append(i);
+    }
 
     fTableView->setModel(this);
 
     if(fDD.rowCount() > 0) {
-        if(fColumns.count() == 0) {
-            for(int i = 0; i < fDD.fDbRows.at(0).count(); i++) {
-                setColumn(80, "", fDD.fDefColNames[i]);
-            }
-        }
+        const int fieldCount = fDD.fDbRows.at(0).count();
 
-        if(fColumns.count() != fDD.fDbRows.at(0).count()) {
-            qDebug() << "Stop! Columns and fields is not equal!" << fColumns.count() << fDD.fDbRows.at(0).count();
+        if(fColumns.count() != fieldCount) {
+            qDeleteAll(fColumns);
+            fColumns.clear();
+
+            for(int i = 0; i < fieldCount; i++) {
+                setColumn(80, "", fDD.fDefColNames.value(i));
+            }
         }
     }
 

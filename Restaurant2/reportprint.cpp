@@ -1,4 +1,5 @@
 #include "reportprint.h"
+#include "debtpay.h"
 #include <QPainter>
 #include <QPrinter>
 #include <QPrinterInfo>
@@ -6,6 +7,7 @@
 #include "c5printing.h"
 #include "database2.h"
 #include "defrest.h"
+#include "preferences.h"
 #include "pimage.h"
 #include "pprintscene.h"
 #include "ptextrect.h"
@@ -16,7 +18,8 @@ ReportPrint::ReportPrint() :
 {
 }
 
-void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const QString &prn)
+void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const QString &prn,
+                             const QString &reportTitle)
 {
     // 1. Настройка принтера
     QPrinterInfo pi = QPrinterInfo::printerInfo(prn.isEmpty() ? "local" : prn);
@@ -39,7 +42,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     // Заголовок
     p.setFontSize(bs + 4);
     p.setFontBold(true);
-    p.ctext(tr("CASH TOTAL REPORT"));
+    p.ctext(reportTitle.isEmpty() ? tr("CASH TOTAL REPORT") : reportTitle);
     p.br();
 
     p.setFontSize(bs);
@@ -199,6 +202,104 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         row(tr("Զեղչ"), db2.doubleValue("f_discount"));
     }
 
+    double debtPayCash = 0;
+    double debtPayCard = 0;
+    double debtPayTalon = 0;
+    int debtPayCount = 0;
+
+    db2[":f_date"] = date;
+    db2[":f_branch"] = defrest(dr_branch).toInt();
+    db2.exec("select pay.f_order, pay.f_govnumber, pay.f_debt, pay.f_datetime as f_pay_dt, pay.f_payment_mode, "
+             "(select min(pos.f_datetime) from o_header_debt pos "
+             " where pos.f_order=pay.f_order and pos.f_debt > 0.001) as f_debt_dt "
+             "from o_header_debt pay "
+             "inner join o_header oh on oh.f_id=pay.f_order "
+             "where pay.f_debt < -0.001 and date(pay.f_datetime)=:f_date and oh.f_branch=:f_branch "
+             "order by pay.f_datetime, pay.f_order");
+
+    while(db2.next()) {
+        if(debtPayCount == 0) {
+            p.line();
+            p.br();
+            p.setFontBold(true);
+            p.ctext(tr("Debt payment"));
+            p.br();
+            p.ltext(tr("Order"), 0);
+            p.ltext(tr("Plate"), 22);
+            p.ltext(tr("Debt from"), 38);
+            p.ltext(tr("Mode"), 68);
+            p.br();
+            p.line();
+            p.setFontBold(false);
+        }
+
+        debtPayCount++;
+        const double amount = db2.doubleValue("f_debt");
+        const int paymentMode = db2.integer("f_payment_mode");
+
+        switch(paymentMode) {
+        case DebtPay::PAYMENT_CASH:
+            debtPayCash += amount;
+            break;
+        case DebtPay::PAYMENT_CARD:
+            debtPayCard += amount;
+            break;
+        case DebtPay::PAYMENT_TALON:
+            debtPayTalon += amount;
+            break;
+        }
+
+        QString modeName;
+
+        switch(paymentMode) {
+        case DebtPay::PAYMENT_CASH:
+            modeName = tr("Cash");
+            break;
+        case DebtPay::PAYMENT_CARD:
+            modeName = tr("Card");
+            break;
+        case DebtPay::PAYMENT_TALON:
+            modeName = tr("Talon");
+            break;
+        default:
+            modeName = QString::number(paymentMode);
+            break;
+        }
+
+        const QDateTime debtCreated = db2.dateTimeValue("f_debt_dt");
+        const QString debtCreatedText = debtCreated.isValid()
+                                        ? debtCreated.toString("yyyy-MM-dd HH:mm")
+                                        : "-";
+
+        p.ltext(db2.string("f_order"), 0);
+        p.ltext(db2.string("f_govnumber"), 22);
+        p.ltext(debtCreatedText, 38);
+        p.ltext(modeName, 68);
+        p.rtext(float_str(amount, 2));
+        p.br();
+    }
+
+    if(debtPayCount > 0) {
+        p.line();
+        p.setFontBold(true);
+        p.ltext(tr("Debt payment total"), 0);
+        p.br();
+        p.setFontBold(false);
+
+        auto debtPayRow = [&](const QString &label, double value) {
+            if(value < -0.01) {
+                p.ltext(label, 0);
+                p.rtext(float_str(value, 2));
+                p.br();
+            }
+        };
+
+        debtPayRow(tr("Cash"), debtPayCash);
+        debtPayRow(tr("Card"), debtPayCard);
+        debtPayRow(tr("Talon"), debtPayTalon);
+        debtPayRow(tr("Total"), debtPayCash + debtPayCard + debtPayTalon);
+    }
+
     // 4. Salary & Deduction
     p.line();
     p.br();
@@ -276,13 +377,24 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     p.rtext(float_str(totalSalary, 2));
     p.br();
 
+    if(debtPayCount > 0) {
+        p.ltext(tr("Debt payment cash"), 0);
+        p.rtext(float_str(-debtPayCash, 2));
+        p.br();
+    }
+
     p.line();
     p.setFontBold(true);
     p.ltext(tr("Finally"), 0);
-    p.rtext(float_str(commCash, 2));
+    p.rtext(float_str(commCash - debtPayCash, 2));
     p.br();
 
     p.print(printer);
+}
+
+void ReportPrint::printSessionCloseTotal(const QString &printedBy, const QString &prn)
+{
+    printTotal(WORKING_DATE, printedBy, prn, QStringLiteral("ՀԵՐԹԱՓՈԽԻ ԱՄԹՈԹՈՒՄ"));
 }
 
 void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, const QString &prn)

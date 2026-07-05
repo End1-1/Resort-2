@@ -112,7 +112,7 @@ void DoubleDatabase::close(bool commit)
 bool DoubleDatabase::exec(const QString &sqlQuery)
 {
     QSqlQuery *q1 = new QSqlQuery(fDb1);
-    bool isSelect;
+    bool isSelect = false;
     bool result = true;
     if (fExecFlagMaster) {
         if (!exec(q1, sqlQuery, isSelect)) {

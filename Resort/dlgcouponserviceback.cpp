@@ -57,6 +57,7 @@ void DlgCouponServiceBack::on_leCode_returnPressed()
 {
     QString code = ui->leCode->text();
     code = code.replace("tel:", "", Qt::CaseInsensitive);
+    code = code.replace("http://", "", Qt::CaseInsensitive);
     ui->leCode->clear();
 
     if(code.isEmpty()) {

@@ -112,6 +112,7 @@ public:
 
 public slots:
     virtual void on_btnRefresh_clicked();
+    void copyAllToClipboard();
 
 protected:
     QString fGridClassName;

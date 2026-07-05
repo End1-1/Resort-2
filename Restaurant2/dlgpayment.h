@@ -37,7 +37,6 @@ private slots:
     void on_btnPrepaid_clicked();
     void on_leGiftCardCode_returnPressed();
     void on_btnCard_2_clicked();
-
     void on_btnOldTalon_clicked(bool checked);
 
 private:

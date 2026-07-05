@@ -223,6 +223,34 @@ removed items</string>
           </property>
          </widget>
         </item>
+        <item row="0" column="2">
+         <widget class="QToolButton" name="btnCloseSession">
+          <property name="text">
+           <string>Close session</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/money_calculator.png</normaloff>:/images/money_calculator.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QToolButton" name="btnPayDebt">
+          <property name="text">
+           <string>Pay debt</string>
+          </property>
+          <property name="icon">
+           <iconset resource="res.qrc">
+            <normaloff>:/images/cash.png</normaloff>:/images/cash.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>

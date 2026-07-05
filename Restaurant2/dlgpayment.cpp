@@ -12,6 +12,18 @@
 #include "rmessage.h"
 #include "rnumbers.h"
 #include "ui_dlgpayment.h"
+#include "dishestable.h"
+
+static void appendEmarkIfValid(PrintTaxNO &pn, const QString &emark, const QString &adgt)
+{
+    if (emark.isEmpty() || emark == adgt || !isValidEmarkCode(emark)) {
+        return;
+    }
+
+    if (!pn.fEmarks.contains(emark)) {
+        pn.fEmarks.append(emark);
+    }
+}
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -191,15 +203,13 @@ void DlgPayment::on_btnOk_clicked()
                 continue;
             }
 
-            if(db2.string("f_emark").isEmpty() == false) {
-                pn.fEmarks.append(db2.string("f_emark"));
-            }
+            appendEmarkIfValid(pn, db2.string("f_emark"), db2.string("f_adgt"));
 
             idForUpdateFiscal.append(db2.integer("f_od_id"));
             pn.addGoods(db2.string("f_taxdebt").toInt(),
                         db2.string("f_adgt"),
                         db2.string("f_id"),
-                        db2.string("f_name"),
+                        db2.string("f_en"),
                         db2.doubleValue("f_price"),
                         db2.doubleValue("f_qty"),
                         db2.doubleValue("f_dctvalue"));
@@ -271,9 +281,7 @@ void DlgPayment::on_btnOk_clicked()
                 continue;
             }
 
-            if(db2.string("f_emark").isEmpty() == false) {
-                pn.fEmarks.append(db2.string("f_emark"));
-            }
+            appendEmarkIfValid(pn, db2.string("f_emark"), db2.string("f_adgt"));
 
             f = true;
             idForUpdateFiscal.append(db2.integer("f_od_id"));
@@ -691,6 +699,8 @@ void DlgPayment::on_leDiscount_returnPressed()
     }
 
     QString code = ui->leDiscount->text().replace("?", "").replace(";", "");
+    code = code.replace("tel:", "", Qt::CaseInsensitive);
+    code = code.replace("http://", "", Qt::CaseInsensitive);
     ui->leDiscount->clear();
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
@@ -1011,6 +1021,7 @@ void DlgPayment::on_btnCouponService_clicked(bool checked)
         bool ok = false;
         QString code = QInputDialog::getText(this, tr("Code"), tr("Code"), QLineEdit::Password, "", &ok);
         code = code.replace("tel:", "", Qt::CaseInsensitive);
+        code = code.replace("http://", "", Qt::CaseInsensitive);
         if (!ok) {
             ui->btnCouponService->setChecked(false);
             return;

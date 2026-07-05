@@ -19,6 +19,8 @@ public:
     void setVaucher(const QString &id);
 private slots:
     void showDishHistory(int tag);
+    void deleteDishRow(int row);
+    void replaceDishRow(int row);
     void on_btnOk_clicked();
     void on_btnSave_clicked();
     void on_tblData_currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous);
@@ -30,6 +32,10 @@ private slots:
 private:
     Ui::DlgGPOSOrderInfo* ui;
     void countTotal();
+    void addRowButtons();
+    void updateOrderTotal();
+    void recalculateStoreForOrder();
+    int storeForDish(int dishId, int orderId);
 };
 
 #endif // DLGGPOSORDERINFO_H

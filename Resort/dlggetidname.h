@@ -7,6 +7,7 @@
 #define idname_hall 2
 #define idname_store 3
 #define idname_dish 4
+#define idname_dish_defstore 5
 
 namespace Ui {
 class DlgGetIDName;

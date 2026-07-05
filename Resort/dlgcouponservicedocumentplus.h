@@ -17,8 +17,7 @@ class DlgCouponServiceDocumentPlus : public QDialog
 public:
     explicit DlgCouponServiceDocumentPlus(ReportQuery *rq, QWidget *parent = nullptr);
     ~DlgCouponServiceDocumentPlus();
-    void getResult(QString &couponType, QString &first, double &price, double &discount,
-                   double &total, int &group);
+    void getResult(QString &couponType, QString &first, double &price, double &discount, double &total, int &group);
     virtual void keyPressEvent(QKeyEvent *e);
 
 private slots:

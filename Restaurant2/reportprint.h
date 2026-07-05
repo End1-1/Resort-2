@@ -8,7 +8,9 @@ class ReportPrint : public QObject, public Base
     Q_OBJECT
 public:
     ReportPrint();
-    static void printTotal(const QDate &date, const QString &printedBy, const QString &prn);
+    static void printTotal(const QDate &date, const QString &printedBy, const QString &prn,
+                           const QString &reportTitle = QString());
+    static void printSessionCloseTotal(const QString &printedBy, const QString &prn);
     static void printTotalShort(const QDate &date, const QString &printedBy, const QString &prn);
     static double totalx500(const QDate &date);
 };

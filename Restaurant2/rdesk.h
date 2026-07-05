@@ -52,6 +52,7 @@ public:
                    QMap<QString, QMap<QString, QVariant>> &fFiscalMachines,
                    const QString &g, QStringList &keys);
     void fiscalCancel();
+    void closeSession();
 
 protected:
     virtual void closeEvent(QCloseEvent *e);

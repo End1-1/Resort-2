@@ -41,3 +41,6 @@ create table o_tax_log (f_id integer primary key auto_increment, f_order integer
 alter table o_tax_log add column f_fiscal integer after f_order;
 
 create table salary2_config (f_id integer primary key auto_increment, f1 tinyint, f2 tinyint, f3 tinyint, f4 tinyint, f5 tinyint, f6 tinyint, f7 tinyint);
+
+create table sessions (f_id integer primary key auto_increment, f_status int, f_branch int, f_start datetime, f_end datetime);
+create index idx_sessions_branch_status on sessions (f_branch, f_status);

@@ -237,6 +237,16 @@
        <string>Complex</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Replace</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

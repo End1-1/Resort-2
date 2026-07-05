@@ -46,8 +46,20 @@
 #include "rmodifiers.h"
 #include "rnumbers.h"
 #include "rtools.h"
+#include "dlgsessionopen.h"
+#include "session.h"
+#include "sessiondebtclose.h"
 #include "ui_rdesk.h"
 #include <Windows.h>
+
+static QString emarkForDb(const QString &emark, const QString &adgt)
+{
+    if (emark.isEmpty() || emark == adgt || !isValidEmarkCode(emark)) {
+        return QString();
+    }
+
+    return emark;
+}
 
 QMap<int, DishStruct*> RDesk::fQuickDish;
 
@@ -350,30 +362,30 @@ RDesk::RDesk(QWidget *parent) :
     timer->start(3000);
     ui->btnHallCafe->setVisible(false);
     ui->btnShop->setVisible(false);
-    fNoService = true;
+    fNoService = false;
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2.exec("select * from r_menu_names where f_enabled=1 ");
-    bool first = true;
+    QPushButton *firstBtn = nullptr;
 
     while(db2.next()) {
         auto *b = new QPushButton(db2.string("f_am"));
-        b->setProperty("id", db2.integer("f_id"));
+        const int menuId = db2.integer("f_id");
+        b->setProperty("id", menuId);
         b->setProperty("noservice", db2.integer("f_noservice"));
         b->setProperty("needcar", db2.integer("f_needcar"));
         b->setMinimumSize(QSize(150, 40));
         connect(b, &QPushButton::clicked, this, &RDesk::changeMenu);
         ui->wbtn->layout()->addWidget(b);
-
-        if(first) {
-            first = false;
-            b->click();
+        if (!firstBtn) {
+            firstBtn = b;
         }
     }
 
     fDataVersion = 0;
     ui->widget->setVisible(false);
+    firstBtn->click();
 }
 
 RDesk::~RDesk()
@@ -727,6 +739,91 @@ void RDesk::closeDay()
     }
 
     printTotalToday();
+}
+
+void RDesk::closeSession()
+{
+    const int sessionId = Session::currentId();
+
+    if(sessionId <= 0) {
+        message_error(tr("Session is not open"));
+        return;
+    }
+
+    const int branch = defrest(dr_branch).toInt();
+    int openTables = Session::openTableCount(branch);
+
+    if(openTables < 0) {
+        message_error(tr("Cannot close session"));
+        return;
+    }
+
+    if(openTables > 0) {
+        if(!message_question(tr("There are %1 open table(s). Close all orders as debt and finish the session?")
+                           .arg(openTables))) {
+            return;
+        }
+
+        QList<SessionDebtOrder> orders;
+
+        if(!SessionDebtClose::loadOpenOrders(branch, orders)) {
+            message_error(tr("Cannot close session"));
+            return;
+        }
+
+        QString validationError;
+
+        if(!SessionDebtClose::validateOrders(orders, validationError)) {
+            message_error(validationError);
+            return;
+        }
+
+        QString closeError;
+
+        if(!SessionDebtClose::closeOrdersAsDebt(fDb, orders, fStaff->fId, closeError)) {
+            message_error(closeError);
+            Hall().refresh();
+            repaintTables();
+            return;
+        }
+
+        Hall().refresh();
+        repaintTables();
+        openTables = Session::openTableCount(branch);
+
+        if(openTables < 0) {
+            message_error(tr("Cannot close session"));
+            return;
+        }
+
+        if(openTables > 0) {
+            message_error(tr("Cannot close session: %1 open table(s) remain").arg(openTables));
+            return;
+        }
+    }
+
+    if(!Session::close(sessionId)) {
+        message_error(tr("Cannot close session"));
+        return;
+    }
+
+    Session::setCurrentId(0);
+    message_info(tr("Session closed"));
+
+    QString userName = fStaff->fName;
+    CI_User *u = CacheUsers::instance()->get(fStaff->fId);
+
+    if(u) {
+        userName = u->fFull;
+    }
+
+    const QString printer = fHall ? fHall->fReceiptPrinter : defrest(dr_first_receipt_printer);
+    ReportPrint::printSessionCloseTotal(userName, printer);
+
+    if(!DlgSessionOpen::ensureOpen(branch, this, userName, printer)) {
+        fCanClose = true;
+        close();
+    }
 }
 
 void RDesk::salary()
@@ -1333,10 +1430,10 @@ void RDesk::timeout()
 void RDesk::changeMenu()
 {
     auto *b = static_cast<QPushButton*>(sender());
-    int menuid = b->property("id").toInt();
-    fMenu = menuid;
+    fMenu = b->property("id").toInt();
     fNoService = b->property("noservice").toInt() == 1;
     fNeedCar = b->property("needcar").toInt() == 1;
+
     setBtnMenuText();
     setupType(0);
 }
@@ -1527,9 +1624,13 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
         }
     }
 
+    if (fTable && (!fHall || fHall->fId != fTable->fHall)) {
+        fHall = Hall::getHallById(fTable->fHall);
+    }
+
     checkOrderHeader(fTable);
 
-    if(fNeedCar) {
+    if (fNeedCar) {
         if(fCarId == 0) {
             on_btnSetCar_clicked();
 
@@ -1609,8 +1710,10 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
     fDbBind[":f_complexId"] = 0;
     fDbBind[":f_adgt"] = od->fAdgt;
     fDbBind[":f_row"] = od->fRow;
+    od->fEmark = emarkForDb(od->fEmark, od->fAdgt);
     fDbBind[":f_emark"] = od->fEmark;
     od->fRecId = fDb.insert("o_dish", fDbBind);
+    d->tempEmark.clear();
     fTable->fPrint = abs(fTable->fPrint) * -1;
     updateDishQtyHistory(od);
     addDishToTable(od, counttotal, true);
@@ -1627,7 +1730,7 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
         ui->tblOrder->setItem(row, i, new QTableWidgetItem());
     }
 
-    bool addService = od->fSvcValue > 0.01;
+    bool addService = !fNoService && od->fSvcValue > 0.01;
     bool serviceItemExists = false;
 
     for(int i = 0; i < ui->tblOrder->rowCount() - 1; i++) {
@@ -1730,16 +1833,17 @@ void RDesk::updateDish(OrderDishStruct * od)
     fDbBind[":f_comment"] = od->fComment;
     fDbBind[":f_cancelUser"] = od->fCancelUser;
     fDbBind[":f_cancelDate"] = od->fCancelDate;
+    od->fEmark = emarkForDb(od->fEmark, od->fAdgt);
     fDbBind[":f_emark"] = od->fEmark;
     fDb.update("o_dish", fDbBind, QString("where f_id=%1").arg(od->fRecId));
-    //    if (!od->fComplexRecId.isEmpty()) {
-    //        fDbBind[":f_id"] = od->fComplexRecId;
-    //        fDb.query("update o_dish set f_totalUSD=f_total where f_id=:f_id", fDbBind);
-    //    }
     updateDishQtyHistory(od);
 }
 double RDesk::countTotal()
 {
+    if (!fTable || !fHall) {
+        return 0;
+    }
+
     double total = 0;
     double servicevalue = 0;
 
@@ -1755,7 +1859,9 @@ double RDesk::countTotal()
         }
 
         if(fHall->fServiceItem != od->fDishId) {
-            servicevalue += od->fTotal * od->fSvcValue;
+            if (!fNoService) {
+                servicevalue += od->fTotal * od->fSvcValue;
+            }
             total += od->fTotal;
         }
 
@@ -1781,13 +1887,23 @@ double RDesk::countTotal()
             continue;
         }
 
+        if (fNoService) {
+            if (od->fPrice > 0.001 || od->fTotal > 0.001) {
+                od->fPrice = 0;
+                od->fTotal = 0;
+                od->fQty = 1;
+                updateDish(od);
+            }
+            continue;
+        }
+
         od->fPrice = servicevalue;
         od->fTotal = servicevalue;
         od->fQty = 1;
         updateDish(od);
     }
 
-    double grandTotal = total + servicevalue ;
+    double grandTotal = total + (fNoService ? 0 : servicevalue);
     qDebug() << fHall << fTable;
     fHall = Hall::getHallById(fTable->fHall);
     ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
@@ -1805,7 +1921,12 @@ double RDesk::countTotal()
 void RDesk::countDish(OrderDishStruct * d)
 {
     d->fTotal = d->fQty * d->fPrice;
-    d->fSvcAmount = (d->fTotal * d->fSvcValue);
+    if (fNoService) {
+        d->fSvcValue = 0;
+        d->fSvcAmount = 0;
+    } else {
+        d->fSvcAmount = d->fTotal * d->fSvcValue;
+    }
     d->fDctAmount = d->fTotal * d->fDctValue;
 }
 bool RDesk::setTable(TableStruct * t, bool nosmile)
@@ -1927,6 +2048,10 @@ bool RDesk::setTable(TableStruct * t, bool nosmile)
 }
 void RDesk::checkOrderHeader(TableStruct * t)
 {
+    if (!fHall || (t && fHall->fId != t->fHall)) {
+        fHall = Hall::getHallById(t->fHall);
+    }
+
     if(t->fOrder == 0) {
         fDb.fDb.transaction();
         QString query = QString("select f_id from r_table where f_id='%1' for update")
@@ -1941,7 +2066,7 @@ void RDesk::checkOrderHeader(TableStruct * t)
         fDbBind[":f_tax"] = 0;
         fDbBind[":f_paymentMode"] = PAYMENT_CASH;
         fDbBind[":f_hall"] = t->fHall;
-        fDbBind[":f_servicevalue"] = fHall->fServiceValue;
+        fDbBind[":f_servicevalue"] = fNoService ? 0 : fHall->fServiceValue;
         t->fOpened = fDbBind[":f_dateOpen"].toDateTime();
         t->fOrder = fDb.insert("o_header", fDbBind);
         fDbBind[":f_order"] = t->fOrder;
@@ -2016,7 +2141,7 @@ void RDesk::loadOrder(bool showwarning)
             "od.f_adgt, od.f_complexRec, od.f_emark "
             "from o_dish od "
             "left join r_dish d on d.f_id=od.f_dish "
-            "where od.f_header=:f_header and (f_complex=0 or (f_complex>0 and f_complexId=0)) and f_state=1 "
+            "where od.f_header=:f_header  and f_state=1 "
             "order by od.f_row ";
     fDbBind[":f_header"] = fTable->fOrder;
     QList<QList<QVariant> > dbr;
@@ -2041,8 +2166,10 @@ void RDesk::loadOrder(bool showwarning)
         d->fComment = it ->at(c++).toString();
         d->fStaff = it->at(c++).toInt();
         d->fState = it->at(c++).toInt();
-        c++; //complexId
+        c++; // od.f_complex
+        c++; // od.f_complexId
         d->fAdgt = it->at(c++).toString();
+        c++; // od.f_complexRec
         d->fEmark = it->at(c++).toString();
 
         countDish(d);
@@ -2228,7 +2355,7 @@ void RDesk::printReceipt(bool printModePayment)
     // --- 3. Инициализация C5Printing ---
     int bs = 22;
     C5Printing p;
-    QPrinterInfo pi = QPrinterInfo::printerInfo("local");
+    QPrinterInfo pi = QPrinterInfo::printerInfo(defrest(dr_first_receipt_printer));
     QPrinter printer(pi);
     printer.setPageSize(QPageSize::Custom);
     printer.setFullPage(false);
@@ -2592,7 +2719,7 @@ TableStruct *RDesk::loadHall(int hall)
         return nullptr;
     }
 
-    fMenu = hs->fDefaultMenu;
+    fHall = hs;
     setupType(0);
     TableStruct *ts = nullptr; //ui->tblTables->item(0, 0)->data(Qt::UserRole).value<TableStruct*>();
     setTable(ts, false);
@@ -3229,7 +3356,7 @@ void RDesk::removeRow(int index, bool confirm)
                 continue;
             }
 
-            if (od->fState == DISH_STATE_READY && od->fSvcValue > 0.001) {
+            if (!fNoService && od->fState == DISH_STATE_READY && od->fSvcValue > 0.001) {
                 removeService = false;
                 continue;
             }
@@ -3311,7 +3438,7 @@ void RDesk::on_btnQr_clicked()
         return;
     }
 
-    if (barcode.length() > 25) {
+    if (dd->fNeedEmarks && isValidEmarkCode(barcode)) {
         db2[":f_id"] = rec;
         db2[":f_emark"] = barcode;
 

@@ -80,6 +80,11 @@ typedef struct {
 } OrderDishStruct;
 Q_DECLARE_METATYPE(OrderDishStruct*)
 
+inline bool isValidEmarkCode(const QString &code)
+{
+    return code.length() >= 29;
+}
+
 typedef struct {
     int fId;
     int fState;

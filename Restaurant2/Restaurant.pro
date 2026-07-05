@@ -47,6 +47,11 @@ SOURCES += main.cpp\
     rface.cpp \
     rlogin.cpp \
     rmessage.cpp \
+    session.cpp \
+    sessiondebtclose.cpp \
+    debtpay.cpp \
+    dlgpaydebt.cpp \
+    dlgsessionopen.cpp \
     ../Base/utils.cpp \
     ../Base/base.cpp \
     ../Base/basedialog.cpp \
@@ -149,6 +154,11 @@ HEADERS  += rface.h \
     rc.h \
     rlogin.h \
     rmessage.h \
+    session.h \
+    sessiondebtclose.h \
+    debtpay.h \
+    dlgpaydebt.h \
+    dlgsessionopen.h \
     ../Base/base.h \
     ../Base/basedialog.h \
     ../Base/database.h \
@@ -246,6 +256,8 @@ FORMS    += rface.ui \
     dlgsalarytotal.ui \
     rlogin.ui \
     rmessage.ui \
+    dlgsessionopen.ui \
+    dlgpaydebt.ui \
     rdesk.ui \
     splash.ui \
     rchangelanguage.ui \

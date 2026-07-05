@@ -1,6 +1,9 @@
 #include "rtools.h"
 #include "ui_rtools.h"
 #include "rdesk.h"
+#include "rmessage.h"
+#include "session.h"
+#include "dlgpaydebt.h"
 
 RTools::RTools(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -133,4 +136,20 @@ void RTools::on_btnFiscalCancel_clicked()
 {
     accept();
     fDesk->fiscalCancel();
+}
+
+void RTools::on_btnCloseSession_clicked()
+{
+    if(!message_question(tr("Confirm to close session"))) {
+        return;
+    }
+
+    accept();
+    fDesk->closeSession();
+}
+
+void RTools::on_btnPayDebt_clicked()
+{
+    accept();
+    DlgPayDebt::showDialog(fDesk);
 }

@@ -6,16 +6,19 @@
 #include "branchstoremap.h"
 #include "cacheone.h"
 #include "cacherights.h"
+#include "cacheusers.h"
 #include "checktime.h"
 #include "database2.h"
 #include "defrest.h"
 #include "dlgconnecttoserver.h"
+#include "dlgsessionopen.h"
 #include "logging.h"
 #include "preferences.h"
 #include "rdesk.h"
 #include "rface.h"
 #include "rlogin.h"
 #include "rmessage.h"
+#include "session.h"
 
 int main(int argc, char* argv[])
 {
@@ -101,6 +104,27 @@ int main(int argc, char* argv[])
         UserPermssions::init(u->fGroup);
     } else {
         return 0;
+    }
+
+    const int branch = defrest(dr_branch).toInt();
+    int sessionId = Session::findOpen(branch);
+
+    if(sessionId <= 0) {
+        QString userName = u->fName;
+        CI_User *cu = CacheUsers::instance()->get(u->fId);
+
+        if(cu) {
+            userName = cu->fFull;
+        }
+
+        if(!DlgSessionOpen::ensureOpen(branch, nullptr, userName, defrest(dr_first_receipt_printer))) {
+            delete u;
+            return 0;
+        }
+
+        sessionId = Session::currentId();
+    } else {
+        Session::setCurrentId(sessionId);
     }
 
     Db b = Preferences().getDatabase(Base::fDbName);

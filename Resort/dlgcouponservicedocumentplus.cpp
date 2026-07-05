@@ -119,6 +119,7 @@ void DlgCouponServiceDocumentPlus::on_leDiscount_textChanged(const QString &arg1
 void DlgCouponServiceDocumentPlus::on_leStartNumber_returnPressed()
 {
     ui->leStartNumber->setText(ui->leStartNumber->text().replace("tel:", "", Qt::CaseInsensitive));
+    ui->leStartNumber->setText(ui->leStartNumber->text().replace("http://", "", Qt::CaseInsensitive));
     Database2 db;
 
     if(!db.open(__dd1Host, __dd1Database, __dd1Username, __dd1Password)) {

@@ -40,6 +40,11 @@ set(SOURCES
     rface.cpp
     rlogin.cpp
     rmessage.cpp
+    session.cpp
+    sessiondebtclose.cpp
+    debtpay.cpp
+    dlgpaydebt.cpp
+    dlgsessionopen.cpp
     ../Base/utils.cpp
     ../Base/base.cpp
     ../Base/basedialog.cpp
@@ -145,6 +150,8 @@ set(FORMS
     rface.ui
     dlgpassword.ui
     rlogin.ui
+    dlgsessionopen.ui
+    dlgpaydebt.ui
     splash.ui
 )
 

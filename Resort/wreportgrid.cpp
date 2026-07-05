@@ -464,6 +464,33 @@ void WReportGrid::tblMaingridCustomMenu(const QPoint &point)
     fGridMenu->popup(ui->tblMain->mapToGlobal(point));
 }
 
+void WReportGrid::copyAllToClipboard()
+{
+    const int colCount = fModel->columnCount();
+    const int rowCount = fModel->rowCount();
+
+    if(colCount == 0 || rowCount == 0) {
+        message_error_tr("Empty report!");
+        return;
+    }
+
+    QString data;
+
+    for(int row = 0; row < rowCount; row++) {
+        for(int col = 0; col < colCount; col++) {
+            if(col > 0) {
+                data += "\t";
+            }
+
+            data += fModel->data(row, col, Qt::DisplayRole).toString();
+        }
+
+        data += "\r\n";
+    }
+
+    qApp->clipboard()->setText(data);
+}
+
 void WReportGrid::actionCopyGrid(bool v)
 {
     Q_UNUSED(v);
