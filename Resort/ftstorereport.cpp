@@ -142,8 +142,8 @@ void FTStoreReport::apply(WReportGrid *rg)
         } else {
             col = 7;
         }
-        rg->fModel->setData(r, col, rg->fModel->data(r, col).toDouble() + fDbRows.at(i).at(3).toDouble());
-        rg->fModel->setData(r, col + 1, rg->fModel->data(r, col + 1).toDouble() + fDbRows.at(i).at(5).toDouble());
+        rg->fModel->setData(r, col, rg->fModel->data(r, col, Qt::EditRole).toDouble() + fDbRows.at(i).at(3).toDouble());
+        rg->fModel->setData(r, col + 1, rg->fModel->data(r, col + 1, Qt::EditRole).toDouble() + fDbRows.at(i).at(5).toDouble());
     }
 
     where = "";

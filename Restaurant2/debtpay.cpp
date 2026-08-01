@@ -1,10 +1,19 @@
 #include "debtpay.h"
 #include "base.h"
 #include "database2.h"
+#include "defines.h"
+#include "dishestable.h"
+#include "orderlog.h"
 #include "preferences.h"
+#include "printtaxno.h"
+#include "talonservice.h"
+#include <QCoreApplication>
 #include <QDate>
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
+#include <QSettings>
 
 static bool openDb(Database2 &db2)
 {
@@ -90,74 +99,67 @@ static double currentBalance(Database2 &db2, int orderId)
     return 0;
 }
 
-static bool applyTalon(Database2 &db2, const QString &code, QString &error)
+static void appendEmarkIfValid(PrintTaxNO &pn, const QString &emark, const QString &adgt)
 {
-    QString normalized = code;
-    normalized.replace("?", "").replace(";", "");
-    normalized.replace("tel:", "", Qt::CaseInsensitive);
-    normalized.replace("http://", "", Qt::CaseInsensitive);
-    normalized = normalized.trimmed();
+    if(emark.isEmpty() || emark == adgt || !isValidEmarkCode(emark)) {
+        return;
+    }
 
-    if(normalized.isEmpty()) {
-        error = QObject::tr("Talon code is empty");
+    if(!pn.fEmarks.contains(emark)) {
+        pn.fEmarks.append(emark);
+    }
+}
+
+static bool loadFiscalMachineForOrder(Database2 &db2, int orderId, QMap<QString, QVariant> &machine, QString &error)
+{
+    QSettings settings(QString("%1\\fiscal.ini").arg(QCoreApplication::applicationDirPath()), QSettings::IniFormat);
+    QMap<QString, QMap<QString, QVariant>> machines;
+    QString defaultMachine;
+
+    for(const QString &group : settings.childGroups()) {
+        settings.beginGroup(group);
+        QMap<QString, QVariant> params;
+
+        for(const QString &key : settings.childKeys()) {
+            params[key] = settings.value(key);
+        }
+
+        if(settings.value("default").toBool()) {
+            defaultMachine = group;
+        }
+
+        machines[group] = params;
+        settings.endGroup();
+    }
+
+    if(machines.isEmpty()) {
+        error = QObject::tr("Fiscal not found");
         return false;
     }
 
-    db2[":f_code"] = normalized;
-    db2.exec("select t.*, p.f_name as f_partnername "
-             "from talon_service t "
-             "left join r_partners p on p.f_id=t.f_partner "
-             "where f_code=:f_code");
+    db2[":f_id"] = orderId;
+    db2.exec("select f_hall from o_header where f_id=:f_id");
+    const int hall = db2.next() ? db2.integer("f_hall") : 0;
 
-    if(!db2.next()) {
-        error = QObject::tr("Invalid talon");
-        return false;
+    for(auto it = machines.constBegin(); it != machines.constEnd(); ++it) {
+        if(it.value().value("hall").toInt() == hall) {
+            machine = it.value();
+            return true;
+        }
     }
 
-    if(db2.integer("f_trsale") == 0) {
-        error = QObject::tr("This coupon not sold");
-        return false;
+    if(!defaultMachine.isEmpty() && machines.contains(defaultMachine)) {
+        machine = machines.value(defaultMachine);
+        return true;
     }
 
-    if(db2.integer("f_trback") > 0) {
-        error = QObject::tr("This coupon used");
-        return false;
+    if(machines.count() == 1) {
+        machine = machines.constBegin().value();
+        return true;
     }
 
-    const int partnerId = db2.integer("f_partner");
-    const double price = db2.doubleValue("f_price");
-    db2[":f_date"] = QDate::currentDate();
-    db2[":f_partner"] = partnerId;
-    db2[":f_amount"] = price;
-    int docId = 0;
-
-    if(!db2.insert("talon_documents_header", docId) || docId <= 0) {
-        error = db2.lastDbError();
-        return false;
-    }
-
-    db2[":f_doc"] = docId;
-    db2[":f_group"] = "";
-    db2[":f_first"] = normalized;
-    db2[":f_last"] = normalized;
-    db2[":f_qty"] = 1;
-    db2[":f_price"] = price;
-    db2[":f_total"] = price;
-
-    if(!db2.insert("talon_body")) {
-        error = db2.lastDbError();
-        return false;
-    }
-
-    db2[":f_trback"] = docId;
-    db2[":f_code"] = normalized;
-
-    if(!db2.exec("update talon_service set f_trback=:f_trback where f_code=:f_code")) {
-        error = db2.lastDbError();
-        return false;
-    }
-
-    return true;
+    error = QObject::tr("Fiscal not found");
+    return false;
 }
 
 static bool insertDebtPayment(Database2 &db2,
@@ -222,8 +224,57 @@ bool DebtPay::payDebt(int orderId,
     }
 
     if(paymentMode == PAYMENT_TALON) {
-        if(!applyTalon(db2, talonCode, error)) {
+        TalonRedeemInfo info;
+        const QString code = TalonService::normalizeCode(talonCode);
+
+        if(!TalonService::redeemForOrderInTx(db2, orderId, code, info, error)) {
             db2.rollback();
+            return false;
+        }
+    } else if(paymentMode == PAYMENT_PREPAID) {
+        const QString code = talonCode.trimmed().replace(";", "").replace("?", "");
+
+        if(code.isEmpty()) {
+            db2.rollback();
+            error = QObject::tr("Enter prepaid card code");
+            return false;
+        }
+
+        db2[":f_code"] = code;
+        db2.exec("select di.f_info, sum(du.f_amount) as f_sum "
+                 "from d_gift_cart_use du "
+                 "inner join d_gift_cart di on di.f_code=du.f_code "
+                 "where du.f_code=:f_code "
+                 "group by di.f_info "
+                 "having sum(du.f_amount) is not null");
+
+        if(!db2.next()) {
+            db2.rollback();
+            error = QObject::tr("Unknown card");
+            return false;
+        }
+
+        const double cardBalance = db2.doubleValue("f_sum");
+
+        if(cardBalance <= 0.001) {
+            db2.rollback();
+            error = QObject::tr("Card amount spent");
+            return false;
+        }
+
+        if(cardBalance + 0.01 < openBalance) {
+            db2.rollback();
+            error = QObject::tr("Insufficient card balance");
+            return false;
+        }
+
+        db2[":f_code"] = code;
+        db2[":f_amount"] = openBalance * -1;
+        db2[":f_order"] = orderId;
+
+        if(!db2.insert("d_gift_cart_use")) {
+            db2.rollback();
+            error = db2.lastDbError();
             return false;
         }
     }
@@ -239,5 +290,162 @@ bool DebtPay::payDebt(int orderId,
         return false;
     }
 
+    if(paymentMode == PAYMENT_TALON) {
+        const QString code = TalonService::normalizeCode(talonCode);
+        OrderLog::write(orderId, OrderLog::ACTION_DISCOUNT_OK,
+                        QString("code=%1;result=ok;reason=debt_talon;amount=%2")
+                        .arg(code)
+                        .arg(balance));
+    } else if(paymentMode == PAYMENT_PREPAID) {
+        const QString code = talonCode.trimmed().replace(";", "").replace("?", "");
+        OrderLog::write(orderId, OrderLog::ACTION_DISCOUNT_OK,
+                        QString("code=%1;result=ok;reason=debt_prepaid;amount=%2")
+                        .arg(code)
+                        .arg(balance));
+    }
+
     return true;
+}
+
+bool DebtPay::printOrderFiscalIfNeeded(int orderId, double amount, int paymentMode, QString &error)
+{
+    if(orderId <= 0 || amount <= 0.001) {
+        return true;
+    }
+
+    Database2 db2;
+
+    if(!openDb(db2)) {
+        error = QObject::tr("Database error");
+        return false;
+    }
+
+    db2[":f_id"] = orderId;
+    db2.exec("select f_tax from o_header where f_id=:f_id");
+
+    if(!db2.next()) {
+        error = QObject::tr("Not valid order id");
+        return false;
+    }
+
+    if(db2.integer("f_tax") > 0) {
+        return true;
+    }
+
+    QMap<QString, QVariant> fiscalParams;
+
+    if(!loadFiscalMachineForOrder(db2, orderId, fiscalParams, error)) {
+        return false;
+    }
+
+    PrintTaxNO pn(fiscalParams.value("ip").toString(),
+                  fiscalParams.value("port").toInt(),
+                  fiscalParams.value("password").toString(),
+                  fiscalParams.value("extpos").toString(),
+                  fiscalParams.value("opcode").toString(),
+                  fiscalParams.value("oppin").toString());
+
+    db2[":f_header"] = orderId;
+    db2[":f_state"] = DISH_STATE_READY;
+    db2.exec("select d.f_en, d.f_adgt, od.f_qty, od.f_price, od.f_dctvalue, d.f_taxdebt, d.f_id, od.f_emark, od.f_id as f_od_id "
+             "from o_dish od "
+             "left join r_dish d on d.f_id=od.f_dish "
+             "where od.f_header=:f_header and od.f_state=:f_state");
+
+    QList<int> dishIds;
+    bool hasGoods = false;
+
+    while(db2.next()) {
+        if(db2.doubleValue("f_price") < 0.01) {
+            continue;
+        }
+
+        appendEmarkIfValid(pn, db2.string("f_emark"), db2.string("f_adgt"));
+        dishIds.append(db2.integer("f_od_id"));
+        hasGoods = true;
+        pn.addGoods(db2.string("f_taxdebt").toInt(),
+                    db2.string("f_adgt"),
+                    db2.string("f_id"),
+                    db2.string("f_en"),
+                    db2.doubleValue("f_price"),
+                    db2.doubleValue("f_qty"),
+                    db2.doubleValue("f_dctvalue"));
+    }
+
+    if(!hasGoods) {
+        return true;
+    }
+
+    double cash = 0;
+    double card = 0;
+    double prepaid = 0;
+
+    switch(paymentMode) {
+    case PAYMENT_CARD:
+        card = amount;
+        break;
+    case PAYMENT_PREPAID:
+        prepaid = amount;
+        break;
+    default:
+        cash = amount;
+        break;
+    }
+
+    QString in;
+    QString out;
+    QString err;
+    const int result = pn.makeJsonAndPrint(cash, card, prepaid, in, out, err);
+
+    if(result != pt_err_ok) {
+        error = QObject::tr("Fiscal error.") + "\r\n" + err;
+        return false;
+    }
+
+    const QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
+    const int fiscalNumber = jo["rseq"].toInt();
+    int fiscalRecId = 0;
+
+    db2[":f_order"] = orderId;
+    db2[":f_in"] = QByteArray(in.toUtf8()).toBase64();
+    db2[":f_out"] = out;
+    db2[":f_err"] = err;
+
+    if(!db2.insert("o_tax_log", fiscalRecId)) {
+        error = db2.lastDbError();
+        return false;
+    }
+
+    db2[":f_fiscal"] = fiscalNumber;
+    db2.update("o_tax_log", "f_id", fiscalRecId);
+    db2[":f_tax"] = fiscalNumber;
+
+    if(!db2.update("o_header", "f_id", orderId)) {
+        error = db2.lastDbError();
+        return false;
+    }
+
+    for(const int dishId : dishIds) {
+        db2[":f_fiscal"] = fiscalNumber;
+        db2[":f_id"] = dishId;
+        db2.exec("update o_dish set f_fiscal=:f_fiscal where f_id=:f_id");
+    }
+
+    return true;
+}
+
+QString DebtPay::paymentModeName(int paymentMode)
+{
+    switch(paymentMode) {
+    case PAYMENT_CASH:
+        return QObject::tr("Cash");
+    case PAYMENT_CARD:
+        return QObject::tr("Card");
+    case PAYMENT_TALON:
+        return QObject::tr("Talon");
+    case PAYMENT_PREPAID:
+        return QObject::tr("Prepaid card");
+    default:
+        return QString::number(paymentMode);
+    }
 }

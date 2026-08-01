@@ -47,6 +47,7 @@
 #include "rnumbers.h"
 #include "rtools.h"
 #include "dlgsessionopen.h"
+#include "orderlog.h"
 #include "session.h"
 #include "sessiondebtclose.h"
 #include "ui_rdesk.h"
@@ -1430,7 +1431,15 @@ void RDesk::timeout()
 void RDesk::changeMenu()
 {
     auto *b = static_cast<QPushButton*>(sender());
-    fMenu = b->property("id").toInt();
+    const int oldMenu = fMenu;
+    const int newMenu = b->property("id").toInt();
+
+    if(fTable && fTable->fOrder > 0) {
+        OrderLog::write(fTable->fOrder, OrderLog::ACTION_MENU_CHANGE,
+                        QString("from=%1;to=%2;source=button").arg(oldMenu).arg(newMenu));
+    }
+
+    fMenu = newMenu;
     fNoService = b->property("noservice").toInt() == 1;
     fNeedCar = b->property("needcar").toInt() == 1;
 
@@ -1545,8 +1554,14 @@ void RDesk::on_btnLanguage_clicked()
 void RDesk::on_btnMenu_clicked()
 {
     int newMenu;
+    const int oldMenu = fMenu;
 
     if(RChangeMenu::changeMenu(fMenu, newMenu, this)) {
+        if(fTable && fTable->fOrder > 0) {
+            OrderLog::write(fTable->fOrder, OrderLog::ACTION_MENU_CHANGE,
+                            QString("from=%1;to=%2;source=dialog").arg(oldMenu).arg(newMenu));
+        }
+
         fMenu = newMenu;
         setBtnMenuText();
         setupType(0);
@@ -1612,6 +1627,13 @@ void RDesk::setupDish(int typeId)
 }
 int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
 {
+    QString sessionError;
+
+    if(!Session::isValidForWorkingDate(sessionError)) {
+        message_error(sessionError);
+        return 0;
+    }
+
     double max = 999;
     double min = 0.25;
 
@@ -1716,6 +1738,13 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
     d->tempEmark.clear();
     fTable->fPrint = abs(fTable->fPrint) * -1;
     updateDishQtyHistory(od);
+    OrderLog::write(fTable->fOrder, OrderLog::ACTION_DISH_ADD,
+                    QString("dishId=%1;name=%2;qty=%3;price=%4;recId=%5")
+                    .arg(od->fDishId)
+                    .arg(od->fName)
+                    .arg(od->fQty)
+                    .arg(od->fPrice)
+                    .arg(od->fRecId));
     addDishToTable(od, counttotal, true);
     resetPrintQty();
     fTrackControl->insert("New dish", od->fName, "");
@@ -1794,6 +1823,13 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
         fDbBind[":f_row"] = so->fRow;
         so->fRecId = fDb.insert("o_dish", fDbBind);
         updateDishQtyHistory(so);
+        OrderLog::write(fTable->fOrder, OrderLog::ACTION_DISH_ADD,
+                        QString("dishId=%1;name=%2;qty=%3;price=%4;recId=%5;service=1")
+                        .arg(so->fDishId)
+                        .arg(so->fName)
+                        .arg(so->fQty)
+                        .arg(so->fPrice)
+                        .arg(so->fRecId));
         int rows = row + 1;
         ui->tblOrder->setRowCount(rows + 1);
 
@@ -2053,6 +2089,13 @@ void RDesk::checkOrderHeader(TableStruct * t)
     }
 
     if(t->fOrder == 0) {
+        QString sessionError;
+
+        if(!Session::isValidForWorkingDate(sessionError)) {
+            message_error(sessionError);
+            return;
+        }
+
         fDb.fDb.transaction();
         QString query = QString("select f_id from r_table where f_id='%1' for update")
                         .arg(t->fId);
@@ -2072,6 +2115,12 @@ void RDesk::checkOrderHeader(TableStruct * t)
         fDbBind[":f_order"] = t->fOrder;
         fDb.update("r_table", fDbBind, QString("where f_id=%1").arg(t->fId));
         fDb.fDb.commit();
+        OrderLog::write(t->fOrder, OrderLog::ACTION_ORDER_OPEN,
+                        QString("table=%1;hall=%2;staff=%3;opened=%4")
+                        .arg(t->fId)
+                        .arg(t->fHall)
+                        .arg(fStaff->fId)
+                        .arg(t->fOpened.toString("yyyy-MM-dd HH:mm:ss")));
         ui->tblTables->viewport()->update();
     }
 }

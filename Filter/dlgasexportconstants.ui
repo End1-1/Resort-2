@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgAsExportConstants</class>
+ <widget class="QDialog" name="DlgAsExportConstants">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ArmSoft export constants</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>440</width>
+        <height>430</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelDocNumber">
+         <property name="text">
+          <string>Document number start (B)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="leDocNumberStart"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelBuyer">
+         <property name="text">
+          <string>Buyer (C)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="leBuyer"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelBuyerAccount">
+         <property name="text">
+          <string>Buyer account (E)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="leBuyerAccount"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelPrepayAccount">
+         <property name="text">
+          <string>Prepayment account (F)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lePrepayAccount"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelCashlessAccount">
+         <property name="text">
+          <string>Cashless account (G)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="leCashlessAccount"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelCashlessAmount">
+         <property name="text">
+          <string>Cashless amount (H)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="leCashlessAmount"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelPrepayUsage">
+         <property name="text">
+          <string>Prepayment usage (I)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="lePrepayUsage"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="labelComment">
+         <property name="text">
+          <string>Comment (J)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="leComment"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="labelVatCalc">
+         <property name="text">
+          <string>VAT calculation (K)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLineEdit" name="leVatCalcMethod"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="labelVatAccount">
+         <property name="text">
+          <string>VAT account (L)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLineEdit" name="leVatAccount"/>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="labelIssueMethod">
+         <property name="text">
+          <string>Issue method (M)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QLineEdit" name="leIssueMethod"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="labelDocStatus">
+         <property name="text">
+          <string>Document status (N)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QLineEdit" name="leDocStatus"/>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="labelVatLine">
+         <property name="text">
+          <string>VAT line (U)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QLineEdit" name="leVatLine"/>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="labelTransType">
+         <property name="text">
+          <string>Transaction type (V)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="1">
+        <widget class="QLineEdit" name="leTransType"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="labelEcoTax">
+         <property name="text">
+          <string>Eco tax (W)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1">
+        <widget class="QLineEdit" name="leEcoTax"/>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="labelExpenseAccount">
+         <property name="text">
+          <string>Expense account (X)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
+        <widget class="QLineEdit" name="leExpenseAccount"/>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="labelRevenueAccount">
+         <property name="text">
+          <string>Revenue account (Y)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="1">
+        <widget class="QLineEdit" name="leRevenueAccount"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnOk">
+        <property name="text">
+         <string>OK</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1065,6 +1065,15 @@ system</string>
     <string>Attendance</string>
    </property>
   </action>
+  <action name="actionOrder_debts">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/refund.png</normaloff>:/images/refund.png</iconset>
+   </property>
+   <property name="text">
+    <string>Order debts</string>
+   </property>
+  </action>
   <action name="actionArmSoftExport">
    <property name="icon">
     <iconset resource="res.qrc">

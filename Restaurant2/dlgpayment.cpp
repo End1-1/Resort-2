@@ -10,6 +10,8 @@
 #include "dlglist.h"
 #include "printtaxno.h"
 #include "rmessage.h"
+#include "orderlog.h"
+#include "talonservice.h"
 #include "rnumbers.h"
 #include "ui_dlgpayment.h"
 #include "dishestable.h"
@@ -691,70 +693,54 @@ void DlgPayment::on_btnPrintTax_clicked()
 {
 }
 
+void DlgPayment::applyTalonRedeemUi(const TalonRedeemInfo &info)
+{
+    ui->btnCouponService->setChecked(true);
+    ui->leDeptHolder->fHiddenText = QString::number(info.partnerId);
+    ui->leDeptHolder->setText(info.partnerName);
+    ui->btnCash->click();
+    ui->btnPrintTax->setChecked(false);
+}
+
+void DlgPayment::logDiscountScan(const QString &code, bool ok, const QString &reason, const QString &extra)
+{
+    QString data = QString("code=%1;result=%2;reason=%3").arg(code, ok ? "ok" : "fail", reason);
+
+    if(!extra.isEmpty()) {
+        data += ";" + extra;
+    }
+
+    OrderLog::write(fOrder, ok ? OrderLog::ACTION_DISCOUNT_OK : OrderLog::ACTION_DISCOUNT_FAIL, data);
+}
+
 void DlgPayment::on_leDiscount_returnPressed()
 {
     if(ui->leCouponNumber->asInt() > 0) {
+        logDiscountScan(ui->leDiscount->text().trimmed(), false, "coupon_active");
         message_error(tr("Cannot discount with coupon"));
         return;
     }
 
-    QString code = ui->leDiscount->text().replace("?", "").replace(";", "");
-    code = code.replace("tel:", "", Qt::CaseInsensitive);
-    code = code.replace("http://", "", Qt::CaseInsensitive);
+    QString code = TalonService::normalizeCode(ui->leDiscount->text());
     ui->leDiscount->clear();
-    Db b = Preferences().getDatabase(Base::fDbName);
-    Database2 db2;
-    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    //COUPON OF SERIVCE?
-    db2[":f_code"] = code;
-    db2.exec("select t.*, p.f_name as f_partnername "
-             "from talon_service t "
-             "left join r_partners p on p.f_id=t.f_partner "
-             "where f_code=:f_code");
 
-    if(db2.next()) {
-        if(db2.integer("f_trsale") == 0) {
-            ui->leDiscount->clear();
-            message_error(tr("This coupon not sold"));
+    if(TalonService::talonExists(code)) {
+        TalonRedeemInfo info;
+        QString error;
+
+        if(!TalonService::redeemForOrder(fOrder, code, info, error)) {
+            logDiscountScan(code, false, "talon_redeem_failed", QString("detail=%1").arg(error));
+            message_error(error);
             return;
         }
 
-        if(db2.integer("f_trback") > 0) {
-            ui->leDiscount->clear();
-            message_error(tr("This coupon used"));
-            return;
-        }
-
-        int partnerid = db2.integer("f_partner");
-        double price = db2.doubleValue("f_price");
-        ui->btnCouponService->setChecked(true);
-        ui->leDeptHolder->fHiddenText = QString::number(db2.integer("f_partner"));
-        ui->leDeptHolder->setText(db2.string("f_partnername"));
-        ui->btnCash->click();
-        ui->btnPrintTax->setChecked(false);
-        db2[":f_costumer"] = db2.integer("f_partner");
-        db2[":f_order"] = fOrder;
-        db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
-        db2[":f_couponservice"] = 1;
-        db2.update("o_header", "f_id", fOrder);
-        db2[":f_date"] = QDate::currentDate();
-        db2[":f_partner"] = partnerid;
-        db2[":f_amount"] = price;
-        int docid = db2.insert("talon_documents_header");
-        db2[":f_doc"] = docid;
-        db2[":f_group"] = "";
-        db2[":f_first"] = code;
-        db2[":f_last"] = code;
-        db2[":f_qty"] = 1;
-        db2[":f_price"] = price;
-        db2[":f_total"] = price;
-        db2.insert("talon_body");
-        db2[":f_trback"] = docid;
-        db2[":f_code"] = code;
-        db2.exec("update talon_service set f_trback=:f_trback where f_code=:f_code");
+        applyTalonRedeemUi(info);
         return;
     }
 
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+    db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2[":f_code"] = code;
     db2.exec("select di.f_info , di.f_fiscal, sum(du.f_amount)as f_sum "
              "from d_gift_cart_use du "
@@ -770,6 +756,7 @@ void DlgPayment::on_leDiscount_returnPressed()
 
             if(amountneeded < 0.01) {
                 ui->leDiscount->clear();
+                logDiscountScan(code, false, "no_gift_required");
                 message_info(tr("No more gift card required"));
                 return;
             }
@@ -804,9 +791,12 @@ void DlgPayment::on_leDiscount_returnPressed()
             }
 
             ui->btnPrintTax->setChecked(true);
+            logDiscountScan(code, true, "gift_card",
+                            QString("amount=%1").arg(ui->leCouponAmount->asDouble()));
             return;
         } else {
             ui->leDiscount->clear();
+            logDiscountScan(code, false, "gift_spent");
             message_info(tr("Cart amount spent"));
             return;
         }
@@ -819,6 +809,7 @@ void DlgPayment::on_leDiscount_returnPressed()
 
     if(dr.rowCount() == 0) {
         ui->leDiscount->clear();
+        logDiscountScan(code, false, "invalid_card");
         message_error(tr("Invalid card"));
         return;
     }
@@ -830,6 +821,7 @@ void DlgPayment::on_leDiscount_returnPressed()
 
     if(mode.count() == 0) {
         ui->leDiscount->clear();
+        logDiscountScan(code, false, "card_params_undefined");
         message_error(tr("Card params is not defined"));
         return;
     }
@@ -885,6 +877,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     case 3: {
         if(value.toDouble() < 0.001) {
             disc = false;
+            logDiscountScan(code, false, "no_discount");
             return;
         }
 
@@ -925,6 +918,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     }
 
     if(!disc) {
+        logDiscountScan(code, false, "no_discount");
         return;
     } else {
         DatabaseResult drDisc;
@@ -933,6 +927,7 @@ void DlgPayment::on_leDiscount_returnPressed()
 
         if(drDisc.rowCount() > 0) {
             ui->leDiscount->clear();
+            logDiscountScan(code, false, "discount_already_used");
             message_error(tr("Discount already used"));
             return;
         }
@@ -957,6 +952,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     ui->leDiscountAmount->setDouble(totalDisc);
     ui->btnCancel->setEnabled(false);
     fCanReject = false;
+    logDiscountScan(code, true, "discount_card", QString("amount=%1").arg(totalDisc));
 }
 
 void DlgPayment::on_leCard_textChanged(const QString &arg1)
@@ -1010,88 +1006,36 @@ void DlgPayment::on_btnOldTalon_clicked(bool checked)
 
 void DlgPayment::on_btnCouponService_clicked(bool checked)
 {
-    Db b = Preferences().getDatabase(Base::fDbName);
-    Database2 db2;
-    if (!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
-        message_error(db2.lastDbError());
+    if(!checked) {
+        ui->btnCouponService->setChecked(true);
+        message_error(tr("Talon used"));
         return;
     }
 
-    if (checked) {
-        bool ok = false;
-        QString code = QInputDialog::getText(this, tr("Code"), tr("Code"), QLineEdit::Password, "", &ok);
-        code = code.replace("tel:", "", Qt::CaseInsensitive);
-        code = code.replace("http://", "", Qt::CaseInsensitive);
-        if (!ok) {
-            ui->btnCouponService->setChecked(false);
-            return;
-        }
-        if (code.isEmpty()) {
-            return;
-        }
+    bool ok = false;
+    QString code = QInputDialog::getText(this, tr("Code"), tr("Code"), QLineEdit::Password, "", &ok);
+    code = TalonService::normalizeCode(code);
 
-        db2[":f_code"] = code;
-        db2.exec("select  t.*, p.f_name as f_partnername from talon_service t "
-                 "left join r_partners p on p.f_id=t.f_partner "
-                 "where t.f_code=:f_code ");
-        if (db2.next() == false) {
-            ui->btnCouponService->setChecked(false);
-            message_error(tr("Invalid code"));
-            return;
-        }
-        if (db2.integer("f_used") != 0)  {
-            ui->btnCouponService->setChecked(false);
-            message_error(tr("Talon used"));
-            return;
-        }
-        int partner = db2.integer("f_partner");
-        QString partnerName = db2.string("f_parnername");
-        db2[":f_code"] =code;
-        db2[":f_order"] = fOrder;
-        db2.exec("update talon_service set f_used=1, f_order=:f_order where f_code=:f_code");
-        db2[":f_partner"] = partner;
-        db2[":f_order"] = fOrder;
-        db2.exec("update o_car set f_partner=:f_partner where f_order=:f_order");
-
-        ui->leDeptHolder->fHiddenText = QString::number(partner);
-        ui->leDeptHolder->setText(partnerName);
-        ui->btnPrintTax->setChecked(false);
-        ui->btnCash->click();
-    } else {
-        db2[":f_order"] = fOrder;
-        db2.exec("update talon_service set f_used=0, f_order=null where f_order=:f_order");
-
-        db2[":f_order"] = fOrder;
-        db2.exec("update o_car set f_partner=null where f_order=:f_order");
-        ui->leDeptHolder->fHiddenText.clear();
-        ui->leDeptHolder->clear();
+    if(!ok) {
+        ui->btnCouponService->setChecked(false);
+        return;
     }
 
+    if(code.isEmpty()) {
+        ui->btnCouponService->setChecked(false);
+        return;
+    }
 
-    // db2[":f_order"] = fOrder;
-    // if(checked) {
-    //     int debtId;
-    //     QString debtName;
+    TalonRedeemInfo info;
+    QString error;
 
-    //     if(!DlgDeptHolder::getHolder(debtId, debtName)) {
-    //         return;
-    //     }
+    if(!TalonService::redeemForOrder(fOrder, code, info, error)) {
+        ui->btnCouponService->setChecked(false);
+        message_error(error);
+        return;
+    }
 
-    //     db2[":f_costumer"] = debtId;
-    //     ui->leDeptHolder->fHiddenText = QString::number(debtId);
-    //     ui->leDeptHolder->setText(debtName);
-    //     ui->btnPrintTax->setChecked(false);
-    //     ui->btnCash->click();
-    // } else {
-    //     db2[":f_costumer"] = 0;
-    //     ui->leDeptHolder->fHiddenText.clear();
-    //     ui->leDeptHolder->clear();
-    // }
-
-    // db2.exec("update o_car set f_costumer=:f_costumer where f_order=:f_order");
-    db2[":f_couponservice"] = checked ? 1 : 0;
-    db2.update("o_header", "f_id", fOrder);
-    ui->btnPrintTax->setChecked(!checked);
+    applyTalonRedeemUi(info);
 }
 
 void DlgPayment::on_btnPrepaid_clicked()

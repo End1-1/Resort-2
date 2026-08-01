@@ -23,7 +23,7 @@ else()
 endif()
 
 # --- Sources ---
-file(GLOB_RECURSE APP_SOURCES
+file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS
     *.cpp
     ../Base/*.cpp
     ../Cache/*.cpp
@@ -35,6 +35,8 @@ file(GLOB_RECURSE APP_SOURCES
     ../Widgets/*.cpp
     ../GridOptionWidgets/*.cpp
 )
+
+file(GLOB_RECURSE FILTER_FORMS CONFIGURE_DEPENDS ../Filter/*.ui)
 
 file(GLOB_RECURSE APP_HEADERS
     *.h
@@ -50,7 +52,8 @@ file(GLOB_RECURSE APP_HEADERS
     ../../NewTax/Src/*.h
 )
 
-file(GLOB_RECURSE APP_FORMS *.ui)
+file(GLOB_RECURSE APP_FORMS CONFIGURE_DEPENDS *.ui)
+set(APP_FORMS ${APP_FORMS} ${FILTER_FORMS})
 
 file(GLOB_RECURSE APP_RESOURCES *.qrc)
 
@@ -129,3 +132,8 @@ if(WIN32)
     )
 
 endif()
+
+target_sources(EliteCarwash PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Filter/dlgasexportconstants.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Filter/dlgasexportconstants.ui
+)

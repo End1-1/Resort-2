@@ -27,7 +27,11 @@ private slots:
     void on_btnPayTalon_clicked();
     void on_btnCancel_clicked();
 
+    void on_btnPrepaidCard_clicked();
+    void on_lePrepaidCard_returnPressed();
+
 private:
+    QString normalizePrepaidCardCode() const;
     void searchDebts();
     void showUnpaidDebts();
     void fillDebts(const QList<OpenDebtRow> &rows);

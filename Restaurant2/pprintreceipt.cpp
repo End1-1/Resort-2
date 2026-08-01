@@ -17,6 +17,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDateTime>
+#include <QPageSize>
 
 PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
     Base()
@@ -295,25 +296,43 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
         top += ps->addTextRect(10, top, 680, rowHeight, QString("By ") + u->fFull, &th)->textHeight();
     }
 
-    QPrinter printer;
-    printer.setPrinterName(printerName.toUpper());
-//    QPrintDialog pd(&printer);
-//    Q_UNUSED(pd);
-//    QPrinterInfo pi(printer);
-//    QList<int> res = pi.supportedResolutions();
-//    int maxRes = 1200;
-//    foreach (int r , res) {
-//        maxRes = maxRes > r ? r : maxRes;
-//        qDebug() << r << "/" << printer.resolution();
-//    }
-//    //printer.setResolution(maxRes);
+    if(printerName.isEmpty()) {
+        return;
+    }
+
+    QPrinterInfo pi = QPrinterInfo::printerInfo(printerName);
+    QPrinter printer(pi);
+    printer.setPageSize(QPageSize::Custom);
+    printer.setFullPage(true);
 
     QPainter painter(&printer);
-    for (int i = 0; i < lps.count(); i++) {
-        if (i > 0) {
+    const QRectF pageRect = printer.pageRect(QPrinter::DevicePixel);
+
+    for(int i = 0; i < lps.count(); i++) {
+        if(i > 0) {
             printer.newPage();
         }
-        lps[i]->render(&painter);
+
+        QRectF sourceRect = lps[i]->itemsBoundingRect().adjusted(-10, -10, 10, 20);
+
+        if(sourceRect.isEmpty()) {
+            continue;
+        }
+
+        QImage image(qMax(1, qRound(sourceRect.width())),
+                     qMax(1, qRound(sourceRect.height())),
+                     QImage::Format_RGB32);
+        image.fill(Qt::white);
+
+        QPainter imagePainter(&image);
+        lps[i]->render(&imagePainter,
+                        QRectF(0, 0, sourceRect.width(), sourceRect.height()),
+                        sourceRect);
+        imagePainter.end();
+
+        const qreal scale = pageRect.width() / sourceRect.width();
+        const int targetHeight = qMax(1, qRound(image.height() * scale));
+        painter.drawImage(QRect(0, 0, qRound(pageRect.width()), targetHeight), image);
     }
 
     fDbBind[":f_print"] = drh.value("f_print").toInt() + 1;

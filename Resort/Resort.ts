@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="hy">
+<TS version="2.1" language="hy_AM">
 <context>
     <name>About</name>
     <message>
@@ -722,6 +722,110 @@ name</source>
         <location filename="dlgaddattendance.cpp" line="61"/>
         <source>Branch was not selected</source>
         <translation>Մասնաճյուղը նշված չէ</translation>
+    </message>
+</context>
+<context>
+    <name>DlgAsExportConstants</name>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="14"/>
+        <location filename="../Filter/dlgasexportconstants.cpp" line="10"/>
+        <source>ArmSoft export constants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="35"/>
+        <source>Document number start (B)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="45"/>
+        <source>Buyer (C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="55"/>
+        <source>Buyer account (E)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="65"/>
+        <source>Prepayment account (F)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="75"/>
+        <source>Cashless account (G)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="85"/>
+        <source>Cashless amount (H)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="95"/>
+        <source>Prepayment usage (I)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="105"/>
+        <source>Comment (J)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="115"/>
+        <source>VAT calculation (K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="125"/>
+        <source>VAT account (L)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="135"/>
+        <source>Issue method (M)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="145"/>
+        <source>Document status (N)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="155"/>
+        <source>VAT line (U)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="165"/>
+        <source>Transaction type (V)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="175"/>
+        <source>Eco tax (W)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="185"/>
+        <source>Expense account (X)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="195"/>
+        <source>Revenue account (Y)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="231"/>
+        <source>OK</source>
+        <translation type="unfinished">Այո</translation>
+    </message>
+    <message>
+        <location filename="../Filter/dlgasexportconstants.ui" line="238"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Հրաժարվել</translation>
     </message>
 </context>
 <context>
@@ -2466,32 +2570,52 @@ for this operation</source>
         <translation>Մասնաճյուղ</translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="34"/>
+        <location filename="../Filter/fasexportsale.cpp" line="221"/>
         <source>ArmSoft export</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="35"/>
+        <location filename="../Filter/fasexportsale.cpp" line="222"/>
         <source>Copy</source>
         <translation type="unfinished">Պատճե</translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="62"/>
+        <location filename="../Filter/fasexportsale.cpp" line="224"/>
+        <source>Config</source>
+        <translation type="unfinished">Կարգավորում</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="256"/>
         <source>Common 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="63"/>
+        <location filename="../Filter/fasexportsale.cpp" line="257"/>
         <source>ImportRetailInvoice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="136"/>
+        <location filename="../Filter/fasexportsale.cpp" line="332"/>
+        <source>Open Config and fill required fields.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="423"/>
+        <source>%1 rows skipped: item code is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="426"/>
+        <source>%1 rows have no store mapping (r_store_as_map.f_store = o_dish.f_store)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="451"/>
         <source>Report query is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter/fasexportsale.cpp" line="180"/>
+        <location filename="../Filter/fasexportsale.cpp" line="495"/>
         <source>Branch is required</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3213,6 +3337,74 @@ for this operation</source>
     </message>
 </context>
 <context>
+    <name>FHeaderDebt</name>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="38"/>
+        <source>Debt state</source>
+        <translation>Ստատուս</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="52"/>
+        <source>All</source>
+        <translation>Բոլորը</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="57"/>
+        <source>Unpaid</source>
+        <translation>Չվճարված</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="62"/>
+        <source>Paid</source>
+        <translation>Վճարված</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="19"/>
+        <source>Order debts</source>
+        <translation>Պատրքեր</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="36"/>
+        <source>Order debts %1 - %2</source>
+        <translation>Պարտքեր %1 -%2</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="47"/>
+        <source>Order</source>
+        <translation>Պատվեր</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="48"/>
+        <source>Gov number</source>
+        <translation>Պետհարանիշ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="49"/>
+        <source>Date</source>
+        <translation>Ամսաթիվ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="50"/>
+        <source>Debt</source>
+        <translation>Պարտք</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="51"/>
+        <source>Payment</source>
+        <translation>Վճարում</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="52"/>
+        <source>Balance</source>
+        <translation>Բալանս</translation>
+    </message>
+</context>
+<context>
     <name>FMaterialsInStore</name>
     <message>
         <location filename="../Filter/fmaterialsinstore.ui" line="14"/>
@@ -3239,7 +3431,7 @@ for this operation</source>
     <message>
         <location filename="../Filter/fmaterialsinstore.ui" line="73"/>
         <source>Archive</source>
-        <translation type="unfinished"></translation>
+        <translation>Արխիվ</translation>
     </message>
     <message>
         <location filename="../Filter/fmaterialsinstore.cpp" line="13"/>
@@ -3249,7 +3441,7 @@ for this operation</source>
     <message>
         <location filename="../Filter/fmaterialsinstore.cpp" line="44"/>
         <source>Group</source>
-        <translation type="unfinished">Խումբ</translation>
+        <translation>Խումբ</translation>
     </message>
     <message>
         <location filename="../Filter/fmaterialsinstore.cpp" line="46"/>
@@ -5043,33 +5235,33 @@ ledger</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="510"/>
-        <location filename="mainwindow.cpp" line="583"/>
-        <location filename="mainwindow.cpp" line="587"/>
-        <location filename="mainwindow.cpp" line="616"/>
+        <location filename="mainwindow.cpp" line="585"/>
+        <location filename="mainwindow.cpp" line="589"/>
+        <location filename="mainwindow.cpp" line="618"/>
         <source>Hall</source>
         <translation>Սրահ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="519"/>
-        <location filename="mainwindow.cpp" line="618"/>
+        <location filename="mainwindow.cpp" line="620"/>
         <source>Tables</source>
         <translation>Սեղաններ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="524"/>
-        <location filename="mainwindow.cpp" line="645"/>
+        <location filename="mainwindow.cpp" line="647"/>
         <source>Names of menu</source>
         <translation>Ճաշացանկներ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="529"/>
-        <location filename="mainwindow.cpp" line="669"/>
+        <location filename="mainwindow.cpp" line="671"/>
         <source>Main partitions of menu</source>
         <translation>Ճաշացանկի բաժիններ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="547"/>
-        <location filename="mainwindow.cpp" line="501"/>
+        <location filename="mainwindow.cpp" line="503"/>
         <source>Dishes</source>
         <translation>Ապրանքների ցանկ</translation>
     </message>
@@ -5080,19 +5272,19 @@ ledger</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="561"/>
-        <location filename="mainwindow.cpp" line="762"/>
+        <location filename="mainwindow.cpp" line="764"/>
         <source>Storages</source>
         <translation>Պահեստներ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="566"/>
-        <location filename="mainwindow.ui" line="1122"/>
+        <location filename="mainwindow.ui" line="1131"/>
         <source>Menu review</source>
         <translation>Ճաշացանկ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="571"/>
-        <location filename="mainwindow.cpp" line="849"/>
+        <location filename="mainwindow.cpp" line="851"/>
         <source>Printers</source>
         <translation>Տպիչներ</translation>
     </message>
@@ -5103,7 +5295,7 @@ ledger</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="589"/>
-        <location filename="mainwindow.cpp" line="867"/>
+        <location filename="mainwindow.cpp" line="869"/>
         <source>Credit cards</source>
         <translation></translation>
     </message>
@@ -5188,239 +5380,244 @@ ledger</source>
         <translation>Կտրոններ</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1110"/>
+        <location filename="mainwindow.ui" line="1074"/>
+        <source>Order debts</source>
+        <translation>Ավտոմատ պատքեր</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1119"/>
         <source>Stock Reminder</source>
         <translation>Քանակի հիշացում</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="265"/>
+        <location filename="mainwindow.cpp" line="266"/>
         <source>Lost connection to broadcast server, force logout</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="573"/>
-        <location filename="mainwindow.cpp" line="613"/>
-        <location filename="mainwindow.cpp" line="641"/>
-        <location filename="mainwindow.cpp" line="665"/>
-        <location filename="mainwindow.cpp" line="701"/>
-        <location filename="mainwindow.cpp" line="740"/>
-        <location filename="mainwindow.cpp" line="760"/>
-        <location filename="mainwindow.cpp" line="806"/>
-        <location filename="mainwindow.cpp" line="847"/>
-        <location filename="mainwindow.cpp" line="865"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="575"/>
+        <location filename="mainwindow.cpp" line="615"/>
+        <location filename="mainwindow.cpp" line="643"/>
+        <location filename="mainwindow.cpp" line="667"/>
+        <location filename="mainwindow.cpp" line="703"/>
+        <location filename="mainwindow.cpp" line="742"/>
+        <location filename="mainwindow.cpp" line="762"/>
+        <location filename="mainwindow.cpp" line="808"/>
+        <location filename="mainwindow.cpp" line="849"/>
+        <location filename="mainwindow.cpp" line="867"/>
         <source>Code</source>
         <translation>Կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="574"/>
-        <location filename="mainwindow.cpp" line="614"/>
-        <location filename="mainwindow.cpp" line="761"/>
-        <location filename="mainwindow.cpp" line="848"/>
-        <location filename="mainwindow.cpp" line="866"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="576"/>
+        <location filename="mainwindow.cpp" line="616"/>
+        <location filename="mainwindow.cpp" line="763"/>
+        <location filename="mainwindow.cpp" line="850"/>
+        <location filename="mainwindow.cpp" line="868"/>
         <source>Name</source>
         <translation>Անվանում</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Barcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="502"/>
         <source>Need emarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="502"/>
         <source>Enabled</source>
         <translation type="unfinished">Ակտիվ է</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="575"/>
-        <location filename="mainwindow.cpp" line="807"/>
+        <location filename="mainwindow.cpp" line="577"/>
+        <location filename="mainwindow.cpp" line="809"/>
         <source>Menu code</source>
         <translation>Ճաշացանկի կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="576"/>
-        <location filename="mainwindow.cpp" line="808"/>
+        <location filename="mainwindow.cpp" line="578"/>
+        <location filename="mainwindow.cpp" line="810"/>
         <source>Menu</source>
         <translation>Ճաշացանկ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="577"/>
+        <location filename="mainwindow.cpp" line="579"/>
         <source>Service</source>
         <translation>Ծառայություն</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="578"/>
+        <location filename="mainwindow.cpp" line="580"/>
         <source>Invoice id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="579"/>
+        <location filename="mainwindow.cpp" line="581"/>
         <source>Printer</source>
         <translation type="unfinished">Տպիչ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="580"/>
+        <location filename="mainwindow.cpp" line="582"/>
         <source>VAT dept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="581"/>
+        <location filename="mainwindow.cpp" line="583"/>
         <source>No VAT dept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="582"/>
+        <location filename="mainwindow.cpp" line="584"/>
         <source>Banket</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="615"/>
+        <location filename="mainwindow.cpp" line="617"/>
         <source>Hall code</source>
         <translation type="unfinished">Սրահի կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
-        <location filename="mainwindow.cpp" line="617"/>
-        <location filename="mainwindow.cpp" line="709"/>
+        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="619"/>
+        <location filename="mainwindow.cpp" line="711"/>
         <source>Queue</source>
         <translation type="unfinished">Հերթ</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="642"/>
-        <location filename="mainwindow.cpp" line="666"/>
-        <location filename="mainwindow.cpp" line="704"/>
-        <location filename="mainwindow.cpp" line="741"/>
-        <source>Name, am</source>
-        <translation>Անվանում, հայ․</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="643"/>
-        <location filename="mainwindow.cpp" line="667"/>
-        <location filename="mainwindow.cpp" line="705"/>
-        <location filename="mainwindow.cpp" line="742"/>
-        <source>Name, en</source>
-        <translation>Անվանում, անգ․</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="644"/>
         <location filename="mainwindow.cpp" line="668"/>
         <location filename="mainwindow.cpp" line="706"/>
         <location filename="mainwindow.cpp" line="743"/>
+        <source>Name, am</source>
+        <translation>Անվանում, հայ․</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="645"/>
+        <location filename="mainwindow.cpp" line="669"/>
+        <location filename="mainwindow.cpp" line="707"/>
+        <location filename="mainwindow.cpp" line="744"/>
+        <source>Name, en</source>
+        <translation>Անվանում, անգ․</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="646"/>
+        <location filename="mainwindow.cpp" line="670"/>
+        <location filename="mainwindow.cpp" line="708"/>
+        <location filename="mainwindow.cpp" line="745"/>
         <source>Name, ru</source>
         <translation>Անվանում, ռուս․</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="702"/>
-        <location filename="mainwindow.cpp" line="809"/>
+        <location filename="mainwindow.cpp" line="704"/>
+        <location filename="mainwindow.cpp" line="811"/>
         <source>Part code</source>
         <translation>Բաժնի կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="703"/>
-        <location filename="mainwindow.cpp" line="810"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="705"/>
+        <location filename="mainwindow.cpp" line="812"/>
         <source>Part</source>
         <translation>Բաժին</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="707"/>
+        <location filename="mainwindow.cpp" line="709"/>
         <source>Backgroun color</source>
         <translation>Գույն</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
-        <location filename="mainwindow.cpp" line="708"/>
+        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="710"/>
         <source>Text color</source>
         <translation>Տառերի գույն</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
-        <location filename="mainwindow.cpp" line="710"/>
+        <location filename="mainwindow.cpp" line="454"/>
+        <location filename="mainwindow.cpp" line="712"/>
         <source>Active</source>
         <translation>Ակտիվ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="711"/>
+        <location filename="mainwindow.cpp" line="713"/>
         <source>Type of dish</source>
         <translation>Ապրանքի տեսակ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="811"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="813"/>
         <source>Type code</source>
         <translation>Ապրանքի տեսակի կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="812"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="814"/>
         <source>Type</source>
         <translation>Տեսակ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
+        <location filename="mainwindow.cpp" line="500"/>
         <source>Background color</source>
         <translation>Ֆոնի գույն</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
+        <location filename="mainwindow.cpp" line="500"/>
         <source>ADGT</source>
         <translation>ԱԴԳՏ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
-        <location filename="mainwindow.cpp" line="820"/>
+        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="822"/>
         <source>ArmSoft</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="744"/>
+        <location filename="mainwindow.cpp" line="746"/>
         <source>Dish modifiers</source>
         <translation>Մոդիֆիկատորներ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="813"/>
+        <location filename="mainwindow.cpp" line="815"/>
         <source>Dish</source>
         <translation>Ապրանք</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="815"/>
+        <location filename="mainwindow.cpp" line="817"/>
         <source>Price</source>
         <translation>Գին</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="816"/>
+        <location filename="mainwindow.cpp" line="818"/>
         <source>Store code</source>
         <translation>Պահեստի կոդ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
-        <location filename="mainwindow.cpp" line="817"/>
+        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="819"/>
         <source>Store</source>
         <translation>Պահեստ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="818"/>
+        <location filename="mainwindow.cpp" line="820"/>
         <source>Printer 1</source>
         <translation>Տպիչ 1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="819"/>
+        <location filename="mainwindow.cpp" line="821"/>
         <source>Printer 2</source>
         <translation>Տպիչ   2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="832"/>
+        <location filename="mainwindow.cpp" line="834"/>
         <source>Review of menu</source>
         <translation>Ճաշացանկ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Input price</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5487,7 +5684,7 @@ ledger</source>
         <translation>Կտրոնների առկայություն</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="923"/>
         <source>Confirm to close application</source>
         <translation>Հաստատեք ծրագրի փակելը</translation>
     </message>
@@ -5520,17 +5717,17 @@ ledger</source>
         <translation>Հաճախորդներ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="186"/>
+        <location filename="mainwindow.cpp" line="187"/>
         <source>Receipt voucher id not defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Unit code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Unit name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5621,7 +5818,7 @@ system</source>
         <translation>Հասույթ, սպասասրահ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
+        <location filename="mainwindow.cpp" line="500"/>
         <source>Description</source>
         <translation>Նկարագրություն</translation>
     </message>
@@ -5631,17 +5828,17 @@ system</source>
         <translation>Հասույթ, խանութ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
+        <location filename="mainwindow.cpp" line="454"/>
         <source>Visible</source>
         <translation>Տեսանելիությունը</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
+        <location filename="mainwindow.cpp" line="454"/>
         <source>All</source>
         <translation>Բոլորը</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
+        <location filename="mainwindow.cpp" line="454"/>
         <source>Not active</source>
         <translation>Ոչ ակտիվ</translation>
     </message>
@@ -5652,12 +5849,12 @@ system</source>
 ապրանքներ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="584"/>
+        <location filename="mainwindow.cpp" line="586"/>
         <source>Service item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="585"/>
+        <location filename="mainwindow.cpp" line="587"/>
         <source>Serivce value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5692,17 +5889,17 @@ system</source>
         <translation>Հաճախում</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Min. reminder</source>
         <translation>Մին․ հուշում</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="499"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Tax debt</source>
         <translation>ՀԴՄ բաժին</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1074"/>
+        <location filename="mainwindow.ui" line="1083"/>
         <source>Հայկական ծրագրեր</source>
         <translation></translation>
     </message>
@@ -5729,22 +5926,22 @@ system</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1083"/>
+        <location filename="mainwindow.ui" line="1092"/>
         <source>Գույքագրում</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1092"/>
+        <location filename="mainwindow.ui" line="1101"/>
         <source>ՆԱ տեղաշարժ</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1101"/>
+        <location filename="mainwindow.ui" line="1110"/>
         <source>Բոլոր ապրանքները</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
+        <location filename="mainwindow.cpp" line="499"/>
         <source>Տեսակ</source>
         <translation></translation>
     </message>
@@ -6074,6 +6271,34 @@ system</source>
     </message>
 </context>
 <context>
+    <name>PrintTaxN</name>
+    <message>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="36"/>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="99"/>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="108"/>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="359"/>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="398"/>
+        <source>Connection error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="99"/>
+        <source>Socket read error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="108"/>
+        <source>Data read timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="357"/>
+        <location filename="../../NewTax/Src/printtaxn.cpp" line="396"/>
+        <source>Tax error code</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <location filename="../Base/utils.cpp" line="273"/>
@@ -6177,6 +6402,26 @@ system</source>
         <location filename="../Base/baseorder.cpp" line="72"/>
         <source>Sale</source>
         <translation>Վաճառք</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="83"/>
+        <source>Document number start must be greater than zero</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="90"/>
+        <source>Buyer code is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="97"/>
+        <source>Expense account is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Filter/fasexportsale.cpp" line="104"/>
+        <source>Revenue account is required</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

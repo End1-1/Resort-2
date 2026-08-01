@@ -22,10 +22,12 @@ SOURCES += main.cpp\
     ../Base/base.cpp \
     ../Base/baseorder.cpp \
     ../Filter/fasexportsale.cpp \
+    ../Filter/dlgasexportconstants.cpp \
     ../Filter/fattendance.cpp \
     ../Filter/fcoupondocuments.cpp \
     ../Filter/fcouponsservice.cpp \
     ../Filter/fearningswash.cpp \
+    ../Filter/fheaderdebt.cpp \
     ../Filter/fmenureview.cpp \
     ../Filter/freportfromstoredproc.cpp \
     ../Filter/fsalarybyemployes.cpp \
@@ -291,10 +293,13 @@ HEADERS  += mainwindow.h \
     ../Base/base.h \
     ../Base/baseorder.h \
     ../Filter/fasexportsale.h \
+    ../Filter/asexportconstants.h \
+    ../Filter/dlgasexportconstants.h \
     ../Filter/fattendance.h \
     ../Filter/fcoupondocuments.h \
     ../Filter/fcouponsservice.h \
     ../Filter/fearningswash.h \
+    ../Filter/fheaderdebt.h \
     ../Filter/fmenureview.h \
     ../Filter/freportfromstoredproc.h \
     ../Filter/fsalarybyemployes.h \
@@ -563,10 +568,12 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     ../Filter/fasexportsale.ui \
+    ../Filter/dlgasexportconstants.ui \
     ../Filter/fattendance.ui \
     ../Filter/fcoupondocuments.ui \
     ../Filter/fcouponsservice.ui \
     ../Filter/fearningswash.ui \
+    ../Filter/fheaderdebt.ui \
     ../Filter/fmenureview.ui \
     ../Filter/freportfromstoredproc.ui \
     ../Filter/fsalarybyemployes.ui \

@@ -44,3 +44,5 @@ create table salary2_config (f_id integer primary key auto_increment, f1 tinyint
 
 create table sessions (f_id integer primary key auto_increment, f_status int, f_branch int, f_start datetime, f_end datetime);
 create index idx_sessions_branch_status on sessions (f_branch, f_status);
+
+create table o_log (f_id integer primary key auto_increment, f_order int, f_datetime datetime, f_action varchar(36), f_data text);

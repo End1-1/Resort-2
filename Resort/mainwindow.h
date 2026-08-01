@@ -122,6 +122,8 @@ private slots:
 
     void on_actionAttendance_triggered();
 
+    void on_actionOrder_debts_triggered();
+
     void on_actionArmSoftExport_triggered();
 
     void on_btnChangeMyPassword_clicked();

@@ -50,6 +50,8 @@ SOURCES += main.cpp\
     session.cpp \
     sessiondebtclose.cpp \
     debtpay.cpp \
+    orderlog.cpp \
+    talonservice.cpp \
     dlgpaydebt.cpp \
     dlgsessionopen.cpp \
     ../Base/utils.cpp \
@@ -119,7 +121,7 @@ SOURCES += main.cpp\
     ../Controls/edateedit.cpp \
     ../Base/databaseresult.cpp \
     dlgvoidback.cpp \
-    ../Print/pprintreceipt.cpp \
+    pprintreceipt.cpp \
     ../Base/baseuid.cpp \
     dlggettext.cpp \
     dlgconnecttoserver.cpp \
@@ -228,7 +230,7 @@ HEADERS  += rface.h \
     ../Controls/edateedit.h \
     ../Base/databaseresult.h \
     dlgvoidback.h \
-    ../Print/pprintreceipt.h \
+    pprintreceipt.h \
     ../Base/baseuid.h \
     dlggettext.h \
     dlgconnecttoserver.h \

@@ -11,6 +11,9 @@
 #include "pimage.h"
 #include "pprintscene.h"
 #include "ptextrect.h"
+#include "utils.h"
+#include <QDateTime>
+#include <QPageSize>
 
 ReportPrint::ReportPrint() :
     QObject(),
@@ -205,6 +208,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     double debtPayCash = 0;
     double debtPayCard = 0;
     double debtPayTalon = 0;
+    double debtPayPrepaid = 0;
     int debtPayCount = 0;
 
     db2[":f_date"] = date;
@@ -247,6 +251,9 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         case DebtPay::PAYMENT_TALON:
             debtPayTalon += amount;
             break;
+        case DebtPay::PAYMENT_PREPAID:
+            debtPayPrepaid += amount;
+            break;
         }
 
         QString modeName;
@@ -260,6 +267,9 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
             break;
         case DebtPay::PAYMENT_TALON:
             modeName = tr("Talon");
+            break;
+        case DebtPay::PAYMENT_PREPAID:
+            modeName = tr("Prepaid card");
             break;
         default:
             modeName = QString::number(paymentMode);
@@ -297,7 +307,8 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         debtPayRow(tr("Cash"), debtPayCash);
         debtPayRow(tr("Card"), debtPayCard);
         debtPayRow(tr("Talon"), debtPayTalon);
-        debtPayRow(tr("Total"), debtPayCash + debtPayCard + debtPayTalon);
+        debtPayRow(tr("Prepaid card"), debtPayPrepaid);
+        debtPayRow(tr("Total"), debtPayCash + debtPayCard + debtPayTalon + debtPayPrepaid);
     }
 
     // 4. Salary & Deduction
@@ -584,4 +595,92 @@ double ReportPrint::totalx500(const QDate &date)
             "and h.f_dateCash=:f_dateCash and d.f_store=:f_store and h.f_branch=:f_branch "), rp.fDbBind);
     totalff -= drsal1.value("f_deduction").toDouble();
     return totalff;
+}
+
+QString ReportPrint::debtPaymentModeName(int paymentMode)
+{
+    switch(paymentMode) {
+    case DebtPay::PAYMENT_CASH:
+        return tr("Cash");
+    case DebtPay::PAYMENT_CARD:
+        return tr("Card");
+    case DebtPay::PAYMENT_TALON:
+        return tr("Talon");
+    case DebtPay::PAYMENT_PREPAID:
+        return tr("Prepaid card");
+    default:
+        return QString::number(paymentMode);
+    }
+}
+
+void ReportPrint::printDebtPaymentReceipt(int orderId,
+                                          const QString &govNumber,
+                                          double amount,
+                                          int paymentMode)
+{
+    if(orderId <= 0 || amount <= 0.001) {
+        return;
+    }
+
+    Db b = Preferences().getDatabase(Base::fDbName);
+    Database2 db2;
+
+    if(!db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
+        return;
+    }
+
+    db2[":f_id"] = orderId;
+    db2.exec("select oh.f_dateOpen "
+             "from o_header oh "
+             "where oh.f_id=:f_id");
+
+    QDateTime orderDate;
+
+    if(db2.next()) {
+        orderDate = db2.dateTimeValue("f_dateOpen");
+    }
+
+    const QString printerName = defrest(dr_first_receipt_printer);
+
+    if(printerName.isEmpty()) {
+        return;
+    }
+
+    const QDateTime payDate = QDateTime::currentDateTime();
+    QPrinterInfo pi = QPrinterInfo::printerInfo(printerName);
+    QPrinter prn(pi);
+    prn.setPageSize(QPageSize::Custom);
+    prn.setFullPage(false);
+
+    const QRectF pageRect = prn.pageRect(QPrinter::DevicePixel);
+    constexpr qreal safeRightMm = 4.0;
+    const qreal safePx = safeRightMm * prn.logicalDpiX() / 25.4;
+
+    C5Printing p;
+    p.setSceneParams(pageRect.width() - safePx, pageRect.height(), prn.logicalDpiX());
+    p.image("./logo_print.png", Qt::AlignHCenter);
+    p.br();
+
+    p.setFontSize(22);
+    p.setFontBold(true);
+    p.ctext(tr("Debt payment"));
+    p.br();
+
+    p.setFontSize(18);
+    p.setFontBold(false);
+    p.lrtext(tr("Order"), QString::number(orderId));
+    p.br();
+    p.lrtext(tr("Plate"), govNumber);
+    p.br();
+    p.lrtext(tr("Order date"),
+             orderDate.isValid() ? orderDate.toString("yyyy-MM-dd HH:mm") : QString("-"));
+    p.br();
+    p.lrtext(tr("Payment date"), payDate.toString("yyyy-MM-dd HH:mm"));
+    p.br();
+    p.lrtext(tr("Payment mode"), debtPaymentModeName(paymentMode));
+    p.br();
+    p.lrtext(tr("Amount"), float_str(amount, 2));
+    p.br();
+    p.line();
+    p.print(prn);
 }

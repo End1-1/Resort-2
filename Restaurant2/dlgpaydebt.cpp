@@ -3,6 +3,7 @@
 #include "debtpay.h"
 #include "defrest.h"
 #include "rmessage.h"
+#include "reportprint.h"
 #include "utils.h"
 #include <QHeaderView>
 #include <QTableWidgetItem>
@@ -26,6 +27,12 @@ DlgPayDebt::DlgPayDebt(QWidget *parent) :
     connect(ui->wKbd, &RKeyboard::rejected, this, &DlgPayDebt::on_btnCancel_clicked);
     connect(ui->leGovNumber, &QLineEdit::returnPressed, this, &DlgPayDebt::on_btnSearch_clicked);
     connect(ui->leTalon, &QLineEdit::returnPressed, this, &DlgPayDebt::on_btnPayTalon_clicked);
+    connect(ui->lePrepaidCard, &QLineEdit::returnPressed, this, &DlgPayDebt::on_lePrepaidCard_returnPressed);
+    connect(ui->tblDebts, &QTableWidget::itemSelectionChanged, this, [this]() {
+        if(ui->tblDebts->currentRow() >= 0) {
+            ui->lePrepaidCard->setFocus();
+        }
+    });
 }
 
 DlgPayDebt::~DlgPayDebt()
@@ -173,6 +180,13 @@ bool DlgPayDebt::paySelected(int paymentMode)
             message_error(tr("Enter talon code"));
             return false;
         }
+    } else if(paymentMode == DebtPay::PAYMENT_PREPAID) {
+        talonCode = normalizePrepaidCardCode();
+
+        if(talonCode.isEmpty()) {
+            message_error(tr("Enter prepaid card code"));
+            return false;
+        }
     }
 
     if(!message_question(tr("Confirm to pay debt %1 for order %2 (%3)?")
@@ -184,15 +198,28 @@ bool DlgPayDebt::paySelected(int paymentMode)
 
     QString error;
 
+    if(!DebtPay::printOrderFiscalIfNeeded(orderId, balance, paymentMode, error)) {
+        message_error(error);
+        return false;
+    }
+
     if(!DebtPay::payDebt(orderId, govNumber, balance, paymentMode, talonCode, error)) {
         message_error(error);
         return false;
     }
 
+    ReportPrint::printDebtPaymentReceipt(orderId, govNumber, balance, paymentMode);
+
     message_info(tr("Debt paid"));
     ui->leTalon->clear();
+    ui->lePrepaidCard->clear();
     refreshDebts();
     return true;
+}
+
+QString DlgPayDebt::normalizePrepaidCardCode() const
+{
+    return ui->lePrepaidCard->text().trimmed().replace(";", "").replace("?", "");
 }
 
 void DlgPayDebt::on_btnCash_clicked()
@@ -213,4 +240,21 @@ void DlgPayDebt::on_btnPayTalon_clicked()
 void DlgPayDebt::on_btnCancel_clicked()
 {
     reject();
+}
+
+void DlgPayDebt::on_btnPrepaidCard_clicked()
+{
+    paySelected(DebtPay::PAYMENT_PREPAID);
+}
+
+void DlgPayDebt::on_lePrepaidCard_returnPressed()
+{
+    const QString code = normalizePrepaidCardCode();
+    ui->lePrepaidCard->setText(code);
+
+    if(code.isEmpty()) {
+        return;
+    }
+
+    paySelected(DebtPay::PAYMENT_PREPAID);
 }

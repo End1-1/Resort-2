@@ -19,6 +19,7 @@ public:
     static const int PAYMENT_CASH = 1;
     static const int PAYMENT_CARD = 2;
     static const int PAYMENT_TALON = 3;
+    static const int PAYMENT_PREPAID = 4;
 
     static QString normalizeGovNumber(const QString &govNumber);
     static bool loadOpenDebts(const QString &govNumber, QList<OpenDebtRow> &rows);
@@ -29,6 +30,11 @@ public:
                         int paymentMode,
                         const QString &talonCode,
                         QString &error);
+    static bool printOrderFiscalIfNeeded(int orderId,
+                                         double amount,
+                                         int paymentMode,
+                                         QString &error);
+    static QString paymentModeName(int paymentMode);
 };
 
 #endif // DEBTPAY_H

@@ -18,6 +18,7 @@
 #include "fdiscounttotal.h"
 #include "fattendance.h"
 #include "fearningswash.h"
+#include "fheaderdebt.h"
 #include "fsalesbycar.h"
 #include "fbalanceoncard.h"
 #include "fcouponsservice.h"
@@ -328,6 +329,7 @@ void MainWindow::buildMenuOfRole()
         a1.append(ui->actionArmSoftExport);
         a1.append(ui->actionSales_by_storages);
         a1.append(ui->actionReport_by_payment);
+        a1.append(ui->actionOrder_debts);
         a1.append(ui->actionSales_report_by_cars);
     }
 
@@ -1201,6 +1203,11 @@ void MainWindow::on_tbEarning_2_clicked()
 void MainWindow::on_actionAttendance_triggered()
 {
     FAttendance::openFilterReport<FAttendance, WReportGrid>();
+}
+
+void MainWindow::on_actionOrder_debts_triggered()
+{
+    FHeaderDebt::openFilterReport<FHeaderDebt, WReportGrid>();
 }
 
 void MainWindow::on_actionArmSoftExport_triggered()

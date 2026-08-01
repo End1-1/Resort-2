@@ -43,6 +43,8 @@ set(SOURCES
     session.cpp
     sessiondebtclose.cpp
     debtpay.cpp
+    orderlog.cpp
+    talonservice.cpp
     dlgpaydebt.cpp
     dlgsessionopen.cpp
     ../Base/utils.cpp

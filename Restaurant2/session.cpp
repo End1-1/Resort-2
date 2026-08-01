@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "preferences.h"
 #include <QDateTime>
+#include <QObject>
 
 int Session::fCurrentId = 0;
 
@@ -101,4 +102,50 @@ int Session::currentId()
 void Session::setCurrentId(int id)
 {
     fCurrentId = id;
+}
+
+QDate Session::openWorkingDate(int sessionId)
+{
+    if(sessionId <= 0) {
+        return QDate();
+    }
+
+    Database2 db2;
+
+    if(!openDb(db2)) {
+        return QDate();
+    }
+
+    db2[":f_id"] = sessionId;
+    db2.exec("select f_start from sessions where f_id=:f_id");
+
+    if(!db2.next()) {
+        return QDate();
+    }
+
+    return db2.dateTimeValue("f_start").date();
+}
+
+bool Session::isValidForWorkingDate(QString &error)
+{
+    const int sessionId = currentId();
+
+    if(sessionId <= 0) {
+        error = QObject::tr("Session is not open");
+        return false;
+    }
+
+    const QDate sessionDate = openWorkingDate(sessionId);
+
+    if(!sessionDate.isValid()) {
+        error = QObject::tr("Cannot read session date");
+        return false;
+    }
+
+    if(sessionDate != Base::fPreferences.getLocalDate(def_working_day)) {
+        error = QObject::tr("Reopen the session for the current working date");
+        return false;
+    }
+
+    return true;
 }

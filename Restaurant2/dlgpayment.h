@@ -2,6 +2,7 @@
 #define DLGPAYMENT_H
 
 #include "baseextendeddialog.h"
+#include "talonservice.h"
 
 namespace Ui
 {
@@ -55,6 +56,8 @@ private:
     QMap<QString, QMap<QString, QVariant> > fFiscalMachines;
     void readFiscalMachines();
     void getGiftAmount();
+    void logDiscountScan(const QString &code, bool ok, const QString &reason, const QString &extra = QString());
+    void applyTalonRedeemUi(const TalonRedeemInfo &info);
 };
 
 #endif // DLGPAYMENT_H

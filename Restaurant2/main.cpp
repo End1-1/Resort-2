@@ -19,6 +19,7 @@
 #include "rlogin.h"
 #include "rmessage.h"
 #include "session.h"
+#include "orderlog.h"
 
 int main(int argc, char* argv[])
 {
@@ -126,6 +127,8 @@ int main(int argc, char* argv[])
     } else {
         Session::setCurrentId(sessionId);
     }
+
+    OrderLog::init();
 
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
