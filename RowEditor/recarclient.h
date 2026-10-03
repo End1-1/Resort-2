@@ -22,7 +22,6 @@ private slots:
     void on_btnSave_clicked();
 
     void on_btnReject_clicked();
-    void doubleClickOnRow(const QList<QVariant> &v);
 
 private:
     Ui::RECarClient *ui;

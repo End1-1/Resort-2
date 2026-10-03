@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FResortLog</class>
+ <widget class="QWidget" name="FResortLog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>80</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Start date</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="EQDateEdit" name="deStart"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>End date</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="EQDateEdit" name="deEnd"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>User</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="EQLineEdit" name="leUser">
+       <property name="minimumSize">
+        <size>
+         <width>180</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="ShowButton" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="EnableHiddenText" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="HiddenTextValidator" stdset="0">
+        <string>[0-9,]*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Entity type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QComboBox" name="cbEntityType">
+       <item>
+        <property name="text">
+         <string>All</string>
+        </property>
+        <property name="userData" stdset="0">
+         <string></string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dish</string>
+        </property>
+        <property name="userData" stdset="0">
+         <string>dish</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Store document</string>
+        </property>
+        <property name="userData" stdset="0">
+         <string>store_doc</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Complex dish</string>
+        </property>
+        <property name="userData" stdset="0">
+         <string>dish_complex</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Record ID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4" colspan="2">
+      <widget class="EQLineEdit" name="leEntityId"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EQLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">eqlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EQDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header location="global">eqdateedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

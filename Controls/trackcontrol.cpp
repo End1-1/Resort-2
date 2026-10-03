@@ -1,5 +1,8 @@
 #include "trackcontrol.h"
 #include "base.h"
+#ifdef RESORT_AUDIT_LOG
+#include "resortlog.h"
+#endif
 #include "defines.h"
 #include "eqcheckbox.h"
 #include "eqlineedit.h"
@@ -200,6 +203,9 @@ void TrackControl::insert(const QString &action, const QVariant &value1, const Q
         fDb->close();
         return;
     }
+#ifdef RESORT_AUDIT_LOG
+    ResortLog::logTrackField(fTable, fRecord, action, value1.toString(), value2.toString());
+#endif
     fDb->close();
 }
 

@@ -12,6 +12,8 @@ namespace Ui
 class RERestDish;
 }
 
+class EQComboBox;
+
 class RERestDish : public RowEditorDialog
 {
     Q_OBJECT
@@ -19,6 +21,7 @@ class RERestDish : public RowEditorDialog
 public:
     explicit RERestDish(QList<QVariant> &values, QWidget *parent = 0);
     ~RERestDish();
+    static bool openEditor(int dishId, QWidget *parent);
     virtual void selector(int number, const QVariant &value);
 protected:
     virtual bool isDataCorrect();
@@ -58,9 +61,13 @@ private:
     QStringList fRemovedModifiers;
     DWSelectorRestStore *fRestStore;
     EQLineEdit *createLineEdit(int row, int column);
+    EQComboBox *createPrinterCombo(int row, const QString &menuName);
+    EQComboBox *printerCombo(int row) const;
+    void setPrinterCombo(int row, const QString &printerName);
     inline QString cellValue(int row, int column);
     inline void setCellValue(int row, int column, const QString &value);
     void addDishRow(const QString &code, const QString &name, double qty);
+    QStringList fPrinterNames;
 };
 
 #endif // RERESTDISH_H

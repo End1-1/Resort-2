@@ -6,53 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>327</width>
-    <height>165</height>
+    <width>360</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Name of menu</string>
+   <string>Menu name</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="EQLineEdit" name="leNameAm">
-       <property name="Field" stdset="0">
-        <string>f_am</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Name, am</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Code</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Name, ru</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Name, en</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="EQLineEdit" name="leCode">
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
@@ -67,10 +45,24 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="EQLineEdit" name="leNameRu">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Name, am</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="EQLineEdit" name="leNameAm">
        <property name="Field" stdset="0">
-        <string>f_ru</string>
+        <string>f_am</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Name, en</string>
        </property>
       </widget>
      </item>
@@ -81,7 +73,72 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="2">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Name, ru</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="EQLineEdit" name="leNameRu">
+       <property name="Field" stdset="0">
+        <string>f_ru</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelEnabled">
+       <property name="text">
+        <string>Enabled</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="EQCheckBox" name="chEnabled">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_enabled</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="labelNoservice">
+       <property name="text">
+        <string>No service charge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="EQCheckBox" name="chNoservice">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_noservice</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="labelNeedcar">
+       <property name="text">
+        <string>Need car number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="EQCheckBox" name="chNeedcar">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="Field" stdset="0">
+        <string>f_needcar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
       <widget class="QWidget" name="widget" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -140,14 +197,21 @@
     <signal>customButtonClicked(bool)</signal>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>EQCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">eqcheckbox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>leNameAm</tabstop>
   <tabstop>leNameEn</tabstop>
   <tabstop>leNameRu</tabstop>
+  <tabstop>chEnabled</tabstop>
+  <tabstop>chNoservice</tabstop>
+  <tabstop>chNeedcar</tabstop>
   <tabstop>btnOk</tabstop>
   <tabstop>btnCancel</tabstop>
-  <tabstop>leCode</tabstop>
  </tabstops>
  <resources/>
  <connections/>

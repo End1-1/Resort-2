@@ -6,6 +6,7 @@ CacheRestHall::CacheRestHall() :
     CacheBase()
 {
     fCacheId = cid_rest_hall;
+    fQuery = "select f_id, f_name, f_defaultMenu from r_hall";
     if (!fStaticCache.contains(fCacheId)) {
         load();
     }

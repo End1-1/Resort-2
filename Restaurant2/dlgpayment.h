@@ -51,6 +51,7 @@ private:
     void calcDebt();
     void calcCard();
     void calcIdram();
+    void updateDeptHolderState();
     int fCountId;
     bool fCanReject;
     QMap<QString, QMap<QString, QVariant> > fFiscalMachines;
@@ -58,6 +59,9 @@ private:
     void getGiftAmount();
     void logDiscountScan(const QString &code, bool ok, const QString &reason, const QString &extra = QString());
     void applyTalonRedeemUi(const TalonRedeemInfo &info);
+    void restoreTalonPaymentState();
+    bool tryRedeemTalon(const QString &rawCode);
+    QString fPendingTalonCode;
 };
 
 #endif // DLGPAYMENT_H

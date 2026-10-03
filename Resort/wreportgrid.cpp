@@ -100,6 +100,12 @@ void WReportGrid::setBtnNewVisible(bool value)
     ui->btnNew->setVisible(value);
 }
 
+void WReportGrid::setRowEditor(RowEditorDialog *editor)
+{
+    fRowEditorDialog = editor;
+    setBtnNewVisible(editor != 0);
+}
+
 QWidget *WReportGrid::gridOptionWidget()
 {
     if (fFilter) {

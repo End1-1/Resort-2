@@ -23,6 +23,7 @@ protected:
     virtual void valuesToWidgets();
     void widgetsToValues();
     virtual void clearWidgets();
+    virtual void prepareDbBind(EQLineEdit *id);
     virtual bool saveOnly();
     virtual void save();
     virtual bool isDataCorrect();

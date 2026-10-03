@@ -10,11 +10,298 @@
 #include "paymentmode.h"
 #include "cacheresthall.h"
 #include "recalculatestoreoutputs.h"
+#ifdef RESORT_AUDIT_LOG
+#include "resortlog.h"
+#include <QJsonObject>
+#include <QUuid>
+#endif
 #include "cacheusers.h"
 #include "cacheresttable.h"
 #include "cachepaymentmode.h"
 #include "dlggetidname.h"
+#include "message.h"
+#include "eqcheckbox.h"
+#include "trackcontrol.h"
+#include "xlsxdocument.h"
+#include "xlsxformat.h"
+#include <QDate>
+#include <QFileDialog>
 #include <QPrinter>
+#include <QSet>
+#include <QSqlQuery>
+#include <algorithm>
+
+namespace {
+constexpr int portalHeaderRow = 1;
+constexpr int portalDataStartRow = 2;
+
+const QString portalHeaderDate = QStringLiteral("ամսաթիվ");
+const QString portalHeaderFiscal = QStringLiteral("հդմ կտրոնի համար");
+const QString portalHeaderService = QStringLiteral("ծառայություն");
+const QString portalHeaderAmount = QStringLiteral("գումար");
+
+struct PortalColumns {
+    int dateTime = -1;
+    int fiscal = -1;
+    int service = -1;
+    int amount = -1;
+};
+
+QString normalizeFiscalNumber(const QString &raw)
+{
+    const QString trimmed = raw.trimmed();
+
+    if(trimmed.isEmpty() || trimmed.compare("null", Qt::CaseInsensitive) == 0) {
+        return QString();
+    }
+
+    bool ok = false;
+    const qint64 value = trimmed.toLongLong(&ok);
+
+    if(ok && value > 0) {
+        return QString::number(value);
+    }
+
+    const double asDouble = trimmed.toDouble(&ok);
+
+    if(ok && asDouble > 0 && qAbs(asDouble - qRound(asDouble)) < 0.0001) {
+        return QString::number(static_cast<qint64>(qRound(asDouble)));
+    }
+
+    return QString();
+}
+
+QString normalizeFiscalNumber(const QVariant &value)
+{
+    if(!value.isValid() || value.isNull()) {
+        return QString();
+    }
+
+    switch(value.typeId()) {
+    case QMetaType::Int:
+    case QMetaType::LongLong:
+    case QMetaType::UInt:
+    case QMetaType::ULongLong: {
+        const qint64 num = value.toLongLong();
+
+        if(num <= 0) {
+            return QString();
+        }
+
+        return QString::number(num);
+    }
+    case QMetaType::Double:
+    case QMetaType::Float: {
+        const double num = value.toDouble();
+
+        if(num <= 0 || qIsNaN(num)) {
+            return QString();
+        }
+
+        return QString::number(static_cast<qint64>(qRound(num)));
+    }
+    default:
+        return normalizeFiscalNumber(value.toString());
+    }
+}
+
+QVariant readPortalCellVariant(QXlsx::Document &doc, int row, int col)
+{
+    if(const std::shared_ptr<QXlsx::Cell> cell = doc.cellAt(row, col)) {
+        return cell->value();
+    }
+
+    return QVariant();
+}
+
+QString formatPortalDateValue(const QVariant &value)
+{
+    if(!value.isValid() || value.isNull()) {
+        return QString();
+    }
+
+    if(value.userType() == QMetaType::QDateTime) {
+        return value.toDateTime().toString("dd.MM.yyyy hh:mm:ss");
+    }
+
+    if(value.userType() == QMetaType::QDate) {
+        return value.toDate().toString("dd.MM.yyyy");
+    }
+
+    if(value.typeId() == QMetaType::Double || value.typeId() == QMetaType::Int
+            || value.typeId() == QMetaType::LongLong) {
+        const double num = value.toDouble();
+
+        if(num >= 30000 && num < 70000) {
+            return QDate(1899, 12, 30).addDays(static_cast<int>(num)).toString("dd.MM.yyyy");
+        }
+    }
+
+    return value.toString().trimmed();
+}
+
+QString formatPortalTextValue(const QVariant &value)
+{
+    if(!value.isValid() || value.isNull()) {
+        return QString();
+    }
+
+    if(value.typeId() == QMetaType::Double) {
+        const double num = value.toDouble();
+
+        if(qAbs(num - qRound(num)) < 0.0001) {
+            return QString::number(static_cast<qint64>(qRound(num)));
+        }
+    }
+
+    return value.toString().trimmed();
+}
+
+bool findPortalColumns(QXlsx::Document &doc, PortalColumns &cols, QString &error)
+{
+    bool hasHeaders = false;
+
+    for(int col = 1; col <= 256; ++col) {
+        const QString header = readPortalCellVariant(doc, portalHeaderRow, col).toString().trimmed();
+
+        if(header.isEmpty()) {
+            continue;
+        }
+
+        hasHeaders = true;
+
+        if(header == portalHeaderDate) {
+            cols.dateTime = col;
+        } else if(header == portalHeaderFiscal) {
+            cols.fiscal = col;
+        } else if(header == portalHeaderService) {
+            cols.service = col;
+        } else if(header == portalHeaderAmount) {
+            cols.amount = col;
+        }
+    }
+
+    if(!hasHeaders) {
+        error = QObject::tr("Excel file has no header row");
+        return false;
+    }
+
+    if(cols.fiscal < 0) {
+        error = QObject::tr("Required column \"%1\" not found in Excel file").arg(portalHeaderFiscal);
+        return false;
+    }
+
+    return true;
+}
+
+bool readPortalFiscals(const QString &filePath,
+                       QMap<QString, QMap<QString, QString>> &byFiscal,
+                       QString &error)
+{
+    QXlsx::Document doc(filePath);
+
+    if(doc.sheetNames().isEmpty()) {
+        error = QObject::tr("Cannot open Excel file");
+        return false;
+    }
+
+    PortalColumns cols;
+
+    if(!findPortalColumns(doc, cols, error)) {
+        return false;
+    }
+
+    int emptyRows = 0;
+
+    for(int row = portalDataStartRow; row < 200000; ++row) {
+        const QVariant fiscalValue = readPortalCellVariant(doc, row, cols.fiscal);
+        const QString fiscal = normalizeFiscalNumber(fiscalValue);
+        const QString dateTime = cols.dateTime > 0
+                                 ? formatPortalDateValue(readPortalCellVariant(doc, row, cols.dateTime))
+                                 : QString();
+        const QString service = cols.service > 0
+                                ? formatPortalTextValue(readPortalCellVariant(doc, row, cols.service))
+                                : QString();
+        const QString amount = cols.amount > 0
+                               ? formatPortalTextValue(readPortalCellVariant(doc, row, cols.amount))
+                               : QString();
+
+        if(fiscal.isEmpty()) {
+            if(dateTime.isEmpty() && service.isEmpty() && amount.isEmpty()) {
+                if(++emptyRows >= 5) {
+                    break;
+                }
+            }
+
+            continue;
+        }
+
+        emptyRows = 0;
+
+        if(!byFiscal.contains(fiscal)) {
+            QMap<QString, QString> info;
+            info["receipt"] = fiscal;
+            info["datetime"] = dateTime;
+            info["service"] = service;
+            info["amount"] = amount;
+            byFiscal[fiscal] = info;
+        }
+    }
+
+    if(byFiscal.isEmpty()) {
+        error = QObject::tr("No fiscal numbers found in Excel file");
+        return false;
+    }
+
+    return true;
+}
+
+}
+
+namespace {
+
+bool ensureDatabaseReady(Database &db)
+{
+    if(!db.fDb.isOpen() && !db.open()) {
+        message_error(db.fLastError);
+        return false;
+    }
+
+    QSqlQuery ping(db.fDb);
+
+    if(!ping.exec(QStringLiteral("SELECT 1"))) {
+        db.fDb.close();
+
+        if(!db.open()) {
+            message_error(db.fLastError);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool execSql(Database &db,
+             const QString &sql,
+             QMap<QString, QVariant> &bind,
+             QList<QList<QVariant>> &rows)
+{
+    if(db.select(sql, bind, rows) < 0) {
+        message_error(db.fLastError);
+        return false;
+    }
+
+    return true;
+}
+
+void abortRemoveTransaction(Database &db)
+{
+    if(db.fDb.isOpen()) {
+        db.fDb.rollback();
+    }
+}
+
+} // namespace
 
 #define sn_order_state 1
 #define sn_table 2
@@ -38,6 +325,8 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     }
 
     //fReportGrid->addToolBarButton(":/images/printer.png", tr("Print receipts"), SLOT(printReceipt()), this)->setFocusPolicy(Qt::ClickFocus);
+    fReportGrid->addToolBarButton(":/images/excel.png", tr("Compare fiscal info"), SLOT(compareFiscalInfo()),
+                                  this)->setFocusPolicy(Qt::ClickFocus);
     connect(fReportGrid, SIGNAL(doubleClickOnRow(QList<QVariant>)), this, SLOT(doubleClick(QList<QVariant>)));
     fDockHall = new DWSelectorHall(this);
     fDockHall->configure();
@@ -97,7 +386,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["t.f_name"] = false;
     fReportGrid->fIncludes["oh.f_staff"] = false;
     fReportGrid->fIncludes["concat(u.f_firstname,' ',u.f_lastname)"] = false;
-    fReportGrid->fIncludes["oh.f_cityLedger"] = false;
+    fReportGrid->fIncludes["oh.f_cityledger"] = false;
     fReportGrid->fIncludes["cl.f_name"] = false;
     fReportGrid->fIncludes["od.f_store"] = false;
     fReportGrid->fIncludes["s.f_name"] = false;
@@ -129,11 +418,140 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["sum(op.f_couponbank)"] = false;
     fReportGrid->fIncludes["sum(op.f_couponservice)"] = false;
     fReportGrid->fIncludes["tl.f_special"] = false;
+    fReportGrid->fIncludes["tl.f_partner"] = false;
+    fReportGrid->fIncludes["tp.f_name"] = false;
+    fReportGrid->fIncludes["od.f_fiscal"] = false;
+    fReportGrid->fIncludes["br.f_name"] = false;
+    fReportGrid->fIncludes["d.f_as"] = false;
 }
 
 FRestaurantTotal::~FRestaurantTotal()
 {
     delete ui;
+}
+
+QString FRestaurantTotal::resolveAggregateIncludeField(const QString &field)
+{
+    if(field == QLatin1String("oh.f_total")) {
+        return QString();
+    }
+
+    if(field == QLatin1String("op.f_cash")) {
+        return QStringLiteral("sum(op.f_cash)");
+    }
+
+    if(field == QLatin1String("op.f_card")) {
+        return QStringLiteral("sum(op.f_card)");
+    }
+
+    if(field == QLatin1String("op.f_idram")) {
+        return QStringLiteral("sum(op.f_idram)");
+    }
+
+    if(field == QLatin1String("op.f_prepaid")) {
+        return QStringLiteral("sum(op.f_prepaid)");
+    }
+
+    if(field == QLatin1String("op.f_discount")) {
+        return QStringLiteral("sum(op.f_discount)");
+    }
+
+    if(field == QLatin1String("op.f_debt")) {
+        return QStringLiteral("sum(op.f_debt)");
+    }
+
+    if(field == QLatin1String("op.f_coupon")) {
+        return QStringLiteral("sum(op.f_coupon)");
+    }
+
+    if(field == QLatin1String("op.f_couponbank")) {
+        return QStringLiteral("sum(op.f_couponbank)");
+    }
+
+    if(field == QLatin1String("op.f_couponservice")) {
+        return QStringLiteral("sum(op.f_couponservice)");
+    }
+
+    return field;
+}
+
+void FRestaurantTotal::syncColumnIncludesFromCheckboxes(bool countAmount)
+{
+    static const QStringList aggregateFields = {
+        QStringLiteral("count(oh.f_id)"),
+        QStringLiteral("sum(oh.f_total)"),
+        QStringLiteral("sum(od.f_qty)"),
+        QStringLiteral("sum(od.f_total)"),
+        QStringLiteral("sum(op.f_cash)"),
+        QStringLiteral("sum(op.f_card)"),
+        QStringLiteral("sum(op.f_idram)"),
+        QStringLiteral("sum(op.f_prepaid)"),
+        QStringLiteral("sum(op.f_discount)"),
+        QStringLiteral("sum(op.f_debt)"),
+        QStringLiteral("sum(op.f_coupon)"),
+        QStringLiteral("sum(op.f_couponbank)"),
+        QStringLiteral("sum(op.f_couponservice)")
+    };
+
+    for(const QString &field : aggregateFields) {
+        fReportGrid->fIncludes[field] = false;
+    }
+
+    const QObjectList ol = children();
+
+    for(QObject *o : ol) {
+        QWidget *w = qobject_cast<QWidget *>(o);
+
+        if(!w || !isCheckBox(w)) {
+            continue;
+        }
+
+        EQCheckBox *check = static_cast<EQCheckBox *>(w);
+        const QString name = check->objectName();
+
+        if(name == QLatin1String("chOnlyZeroes") || name == QLatin1String("chCouponOfService")) {
+            continue;
+        }
+
+        const QString fieldSpec = check->getField().trimmed();
+
+        if(fieldSpec.isEmpty()) {
+            continue;
+        }
+
+        const QStringList groupFields = fieldSpec.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+
+        for(QString s : groupFields) {
+            if(check->getRequireLang()) {
+                s += def_lang;
+            }
+
+            QString includeField = s;
+
+            if(countAmount) {
+                const QString mapped = resolveAggregateIncludeField(s);
+
+                if(mapped.isEmpty()) {
+                    continue;
+                }
+
+                includeField = mapped;
+            }
+
+            fReportGrid->fIncludes[includeField] = check->isChecked();
+        }
+    }
+}
+
+void FRestaurantTotal::groupCheckClicked(bool value)
+{
+    Q_UNUSED(value);
+
+    EQCheckBox *check = qobject_cast<EQCheckBox *>(sender());
+
+    if(check && check->objectName() == QLatin1String("chShowDiscount") && check->isChecked()) {
+        ui->chOrderNum->setChecked(true);
+    }
 }
 
 void FRestaurantTotal::apply(WReportGrid *rg)
@@ -152,6 +570,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     if(ui->chPaymentMode->isChecked()) {
         countAmount = true;
     }
+
+    syncColumnIncludesFromCheckboxes(countAmount);
 
     fReportGrid->fIncludes["sum(od.f_total)"] = !countAmount;
     fReportGrid->fIncludes["sum(od.f_qty)"] = !countAmount;
@@ -214,6 +634,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths["Նվեր փոխանցում"] = 80;
     rg->fFieldsWidths["Ավտոկտրոն"] = 80;
     rg->fFieldsWidths["Հատուկ"] = 80;
+    rg->fFieldsWidths[tr("Talon partner code")] = 0;
+    rg->fFieldsWidths[tr("Talon partner")] = 150;
     rg->fFields.clear();
     rg->fFields << "oh.f_id"
                 << "oh.f_state"
@@ -226,7 +648,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "oh.f_table"
                 << "t.f_name"
                 << "oh.f_staff"
-                << "concat(u.f_firstName,' ',u.f_lastName)"
+                << "concat(u.f_firstname,' ',u.f_lastname)"
                 << "oh.f_cityledger"
                 << "cl.f_name"
                 << "od.f_store"
@@ -242,7 +664,9 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "pm.f_" + def_lang << "oc.f_govnumber"
                 << "oh.f_comment"
                 << "op.f_discountcard"
-                << "tl.f_special";
+                << "tl.f_special"
+                << "tl.f_partner"
+                << "tp.f_name";
 
     if(countAmount) {
         if(!ui->chPaymentMode->isChecked()) {
@@ -315,6 +739,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["sum(op.f_couponbank)"] = "Նվեր փոխանցում";
     rg->fFieldTitles["sum(op.f_couponservice)"] = "Ավտոկտրոն";
     rg->fFieldTitles["tl.f_special"] = "Հատուկ";
+    rg->fFieldTitles["tl.f_partner"] = tr("Talon partner code");
+    rg->fFieldTitles["tp.f_name"] = tr("Talon partner");
     rg->fTables.clear();
     rg->fTables << "o_header oh"
                 << "o_dish od"
@@ -331,7 +757,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "o_dish_state ds"
                 << "o_header_payment op"
                 << "r_branch br"
-                << "talon_service tl";
+                << "talon_service tl"
+                << "r_partners tp";
     rg->fJoins.clear();
     rg->fJoins << "from"  //od
                << "inner" //oh
@@ -349,6 +776,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                << "left"  //op
                << "left"  //br
                << "left"  //tl
+               << "left"  //tp
         ;
     rg->fJoinConds.clear();
     rg->fJoinConds << ""
@@ -366,7 +794,8 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                    << "ds.f_id=od.f_state"
                    << "op.f_id=oh.f_id"
                    << "br.f_id=oh.f_branch"
-                   << "tl.f_order=oh.f_id";
+                   << "tl.f_order=oh.f_id"
+                   << "tp.f_id=tl.f_partner";
     QString where = "where (oh.f_dateCash between '" + ui->deStart->date().toString(def_mysql_date_format) + "' "
                     + " and '" + ui->deEnd->date().toString(def_mysql_date_format) + "') ";
 
@@ -589,7 +1018,6 @@ void FRestaurantTotal::open()
     rg->setupTabTextAndIcon(tr("Earnings"), ":/images/cutlery.png");
     FRestaurantTotal *fr = new FRestaurantTotal(rg);
     rg->addFilterWidget(fr);
-    fr->apply(rg);
 }
 
 void FRestaurantTotal::selector(int selectorNumber, const QVariant &value)
@@ -895,7 +1323,22 @@ void FRestaurantTotal::recalculateStore()
         ids.insert(fReportGrid->fModel->data(i, 0, Qt::EditRole).toInt());
     }
 
-    RecalculateStoreOutputs *r = new RecalculateStoreOutputs(ids, this);
+    if(ids.isEmpty()) {
+        message_error(tr("No orders in the report."));
+        return;
+    }
+
+#ifdef RESORT_AUDIT_LOG
+    const QString runId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    QJsonObject start;
+    start[QStringLiteral("order_count")] = ids.count();
+    start[QStringLiteral("source")] = QStringLiteral("restaurant_total_report");
+    ResortLog::logJobEvent(runId, QStringLiteral("store_recalc_start"), start);
+#else
+    const QString runId;
+#endif
+
+    RecalculateStoreOutputs *r = new RecalculateStoreOutputs(ids, runId, this);
     r->exec();
     delete r;
 }
@@ -919,24 +1362,74 @@ void FRestaurantTotal::removeOrder()
     }
 
     DlgPERemoveReason *d = new DlgPERemoveReason(this);
-    int state = d->exec();
+    const int dishRemoveState = d->exec();
+    delete d;
 
-    if(state == QDialog::Rejected) {
+    if(dishRemoveState == QDialog::Rejected) {
         return;
     }
 
-    fDb.fDb.transaction();
-    fDbBind[":f_id"] = val.at(0);
-    fDb.select("select f_discountcard, f_discount from o_header_payment where f_id=:f_id", fDbBind, fDbRows);
-    double discamount = 0.0;
+    const int orderId = val.at(0).toInt();
+
+    if(orderId <= 0) {
+        message_error(tr("Invalid order id"));
+        return;
+    }
+
+    if(!ensureDatabaseReady(fDb)) {
+        return;
+    }
+
+    fDbBind[":f_id"] = orderId;
+
+    if(!execSql(fDb,
+                "select f_state from o_header where f_id=:f_id",
+                fDbBind,
+                fDbRows)) {
+        return;
+    }
+
+    if(fDbRows.isEmpty()) {
+        message_error(tr("Order not found"));
+        return;
+    }
+
+    if(fDbRows.at(0).at(0).toInt() == ORDER_STATE_REMOVED) {
+        message_error(tr("Order is already removed"));
+        return;
+    }
+
+    abortRemoveTransaction(fDb);
+
+    if(!fDb.fDb.transaction()) {
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    fDbBind[":f_id"] = orderId;
+
+    if(!execSql(fDb,
+                "select f_discountcard, f_discount from o_header_payment where f_id=:f_id",
+                fDbBind,
+                fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
 
     if(fDbRows.count() > 0) {
-        QString disccard = fDbRows.at(0).at(0).toString();
+        const QString disccard = fDbRows.at(0).at(0).toString();
 
-        if(disccard.isEmpty() == false) {
-            discamount = fDbRows.at(0).at(1).toDouble();
+        if(!disccard.isEmpty()) {
+            const double discamount = fDbRows.at(0).at(1).toDouble();
             fDbBind[":f_card"] = disccard;
-            fDb.select("select f_mode from d_car_client where f_card=:f_card", fDbBind, fDbRows);
+
+            if(!execSql(fDb,
+                        "select f_mode from d_car_client where f_card=:f_card",
+                        fDbBind,
+                        fDbRows)) {
+                abortRemoveTransaction(fDb);
+                return;
+            }
 
             if(fDbRows.count() > 0) {
                 QStringList params = fDbRows.at(0).at(0).toString().split(";", Qt::SkipEmptyParts);
@@ -945,29 +1438,81 @@ void FRestaurantTotal::removeOrder()
                     params[2] = QString::number(params[2].toDouble() + discamount, 'f', 0);
                     fDbBind[":f_card"] = disccard;
                     fDbBind[":f_mode"] = params.join(";") + ";";
-                    fDb.select("update d_car_client set f_mode=:f_mode where f_card=:f_card", fDbBind, fDbRows);
+
+                    if(!execSql(fDb,
+                                "update d_car_client set f_mode=:f_mode where f_card=:f_card",
+                                fDbBind,
+                                fDbRows)) {
+                        abortRemoveTransaction(fDb);
+                        return;
+                    }
                 }
             }
         }
     }
 
+    StoreOutput so(fDb, orderId);
+    so.rollbackSale(fDb, orderId);
+
+    fDbBind[":f_header"] = orderId;
+
+    if(!execSql(fDb, "delete from o_recipe where f_header=:f_header", fDbBind, fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
     fDbBind[":f_state"] = ORDER_STATE_REMOVED;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
-    fDb.update("o_header", fDbBind, where_id(val.at(0).toInt()));
-    fDbBind[":f_state"] = 3;
+
+    if(!fDb.update("o_header", fDbBind, where_id(orderId))) {
+        abortRemoveTransaction(fDb);
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    fDbBind[":f_state"] = dishRemoveState;
     fDbBind[":f_state_cond"] = DISH_STATE_READY;
-    fDbBind[":f_header"] = val.at(0);
+    fDbBind[":f_header"] = orderId;
     fDbBind[":f_comment"] = "Canceled by " + WORKING_USERNAME;
-    fDbBind[":f_emark"] = QVariant();
-    fDb.select("update o_dish set f_state=:f_state, f_comment=:f_comment, f_emarks=null "
-               "where f_header=:f_header and f_state=:f_state_cond", fDbBind, fDbRows);
-    fDbBind[":f_id"] = val.at(0);
+
+    if(!execSql(fDb,
+                "update o_dish set f_state=:f_state, f_comment=:f_comment, f_emark=null "
+                "where f_header=:f_header and f_state=:f_state_cond",
+                fDbBind,
+                fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
+    fDbBind[":f_id"] = orderId;
     fDbBind[":f_cancelReason"] = "Canceled by " + WORKING_USERNAME;
-    fDb.select("update m_register set f_canceled=1, f_cancelReason=:f_cancelReason where f_id=:f_id",
-               fDbBind, fDbRows);
-    StoreOutput so(fDb, val.at(0).toInt());
-    so.rollbackSale(fDb, val.at(0).toInt());
-    fDb.fDb.commit();
+
+    if(!execSql(fDb,
+                "update m_register set f_canceled=1, f_cancelReason=:f_cancelReason where f_id=:f_id",
+                fDbBind,
+                fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
+    if(!fDb.fDb.commit()) {
+        abortRemoveTransaction(fDb);
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    fDbBind[":f_id"] = orderId;
+
+    if(!execSql(fDb,
+                "select f_state from o_header where f_id=:f_id",
+                fDbBind,
+                fDbRows)
+            || fDbRows.isEmpty()
+            || fDbRows.at(0).at(0).toInt() != ORDER_STATE_REMOVED) {
+        message_error(tr("Order was not removed"));
+        return;
+    }
+
     message_info_tr("Please, refresh report to view the changes");
 }
 
@@ -989,16 +1534,49 @@ void FRestaurantTotal::removePermanently()
         return;
     }
 
-    fDb.fDb.transaction();
-    fDbBind[":f_header"] = val.at(0);
-    fDb.select("delete from o_dish where f_header=:f_header", fDbBind, fDbRows);
-    fDbBind[":f_id"] = val.at(0);
-    fDb.select("delete from o_header where f_id=:f_id", fDbBind, fDbRows);
-    fDbBind[":f_id"] = val.at(0);
-    fDb.select("delete from m_register where f_id=:f_id", fDbBind, fDbRows);
-    StoreOutput so(fDb, val.at(0).toInt());
-    so.rollbackSale(fDb, val.at(0).toInt());
-    fDb.fDb.commit();
+    const int orderId = val.at(0).toInt();
+
+    if(orderId <= 0) {
+        message_error(tr("Invalid order id"));
+        return;
+    }
+
+    if(!ensureDatabaseReady(fDb)) {
+        return;
+    }
+
+    abortRemoveTransaction(fDb);
+
+    if(!fDb.fDb.transaction()) {
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    StoreOutput so(fDb, orderId);
+    so.rollbackSale(fDb, orderId);
+
+    fDbBind[":f_header"] = orderId;
+
+    if(!execSql(fDb, "delete from o_recipe where f_header=:f_header", fDbBind, fDbRows)
+            || !execSql(fDb, "delete from o_dish where f_header=:f_header", fDbBind, fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
+    fDbBind[":f_id"] = orderId;
+
+    if(!execSql(fDb, "delete from o_header where f_id=:f_id", fDbBind, fDbRows)
+            || !execSql(fDb, "delete from m_register where f_id=:f_id", fDbBind, fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
+    if(!fDb.fDb.commit()) {
+        abortRemoveTransaction(fDb);
+        message_error(fDb.fLastError);
+        return;
+    }
+
     message_info_tr("Please, refresh report to view the changes");
 }
 
@@ -1044,22 +1622,246 @@ void FRestaurantTotal::on_btnPrevDate_clicked()
 {
     ui->deStart->setDate(ui->deStart->date().addDays(-1));
     ui->deEnd->setDate(ui->deEnd->date().addDays(-1));
-    apply(fReportGrid);
 }
 
 void FRestaurantTotal::on_btnNextDate_clicked()
 {
     ui->deStart->setDate(ui->deStart->date().addDays(1));
     ui->deEnd->setDate(ui->deEnd->date().addDays(1));
-    apply(fReportGrid);
 }
 
-void FRestaurantTotal::on_chShowDiscount_clicked(bool checked)
+void FRestaurantTotal::compareFiscalInfo()
 {
-    fReportGrid->fIncludes["op.f_discountcard"] = checked;
-    fReportGrid->fIncludes["op.f_discount"] = checked;
+    QXLSX_USE_NAMESPACE
 
-    if(checked) {
+    const QString sourceFile = QFileDialog::getOpenFileName(this,
+                                                            tr("Open portal fiscal file"),
+                                                            QString(),
+                                                            tr("Excel files (*.xlsx)"));
+
+    if(sourceFile.isEmpty()) {
+        return;
+    }
+
+    if(!ui->chOrderNum->isChecked()) {
         ui->chOrderNum->setChecked(true);
     }
+
+    if(!ui->chTax->isChecked()) {
+        ui->chTax->setChecked(true);
+    }
+
+    QMap<QString, QMap<QString, QString>> portalByFiscal;
+    QString error;
+
+    if(!readPortalFiscals(sourceFile, portalByFiscal, error)) {
+        message_error(error);
+        return;
+    }
+
+    QMultiMap<QString, int> dbOrdersByFiscal;
+    const QString sql = QString(
+                            "select distinct oh.f_id, od.f_fiscal "
+                            "from o_header oh "
+                            "inner join o_dish od on od.f_header=oh.f_id "
+                            "where oh.f_dateCash between '%1' and '%2' "
+                            "and coalesce(od.f_fiscal, 0) > 0 "
+                            "order by oh.f_id, od.f_fiscal")
+                            .arg(ui->deStart->date().toString(def_mysql_date_format),
+                                 ui->deEnd->date().toString(def_mysql_date_format));
+
+    if(fDb.select(sql, fDbBind, fDbRows) < 0) {
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    QSet<QString> dbFiscals;
+
+    for(const QList<QVariant> &row : qAsConst(fDbRows)) {
+        if(row.count() < 2) {
+            continue;
+        }
+
+        const QString fiscal = normalizeFiscalNumber(row.at(1));
+
+        if(fiscal.isEmpty()) {
+            continue;
+        }
+
+        dbFiscals.insert(fiscal);
+        dbOrdersByFiscal.insert(fiscal, row.at(0).toInt());
+    }
+
+    QString saveFile = QFileDialog::getSaveFileName(this,
+                                                    tr("Save fiscal comparison"),
+                                                    QString(),
+                                                    tr("Excel files (*.xlsx)"));
+
+    if(saveFile.isEmpty()) {
+        return;
+    }
+
+    if(!saveFile.endsWith(".xlsx", Qt::CaseInsensitive)) {
+        saveFile += ".xlsx";
+    }
+
+    Document out;
+    out.addSheet("Comparison");
+    out.selectSheet("Comparison");
+    Worksheet *sheet = out.currentWorksheet();
+
+    if(!sheet) {
+        message_error(tr("Cannot create excel sheet"));
+        return;
+    }
+
+    Format headerFormat;
+    headerFormat.setFontBold(true);
+    headerFormat.setPatternForegroundColor(QColor::fromRgb(200, 200, 250));
+    headerFormat.setPatternBackgroundColor(QColor::fromRgb(200, 200, 250));
+    headerFormat.setFillPattern(Format::PatternSolid);
+    headerFormat.setBorderStyle(Format::BorderThin);
+
+    Format mismatchFormat;
+    mismatchFormat.setPatternForegroundColor(QColor::fromRgb(255, 220, 220));
+    mismatchFormat.setPatternBackgroundColor(QColor::fromRgb(255, 220, 220));
+    mismatchFormat.setFillPattern(Format::PatternSolid);
+    mismatchFormat.setBorderStyle(Format::BorderThin);
+
+    Format matchFormat;
+    matchFormat.setBorderStyle(Format::BorderThin);
+
+    int matched = 0;
+    int onlyPortal = 0;
+    int onlyDb = 0;
+
+    for(auto it = portalByFiscal.constBegin(); it != portalByFiscal.constEnd(); ++it) {
+        if(dbFiscals.contains(it.key())) {
+            ++matched;
+        } else {
+            ++onlyPortal;
+        }
+    }
+
+    for(const QString &fiscal : qAsConst(dbFiscals)) {
+        if(!portalByFiscal.contains(fiscal)) {
+            ++onlyDb;
+        }
+    }
+
+    sheet->write(1, 1, tr("Period"), headerFormat);
+    sheet->write(1, 2, QString("%1 - %2").arg(ui->deStart->text(), ui->deEnd->text()));
+    sheet->write(2, 1, tr("Portal file"), headerFormat);
+    sheet->write(2, 2, sourceFile);
+    sheet->write(3, 1, tr("Portal fiscal count"), headerFormat);
+    sheet->write(3, 2, portalByFiscal.count());
+    sheet->write(4, 1, tr("DB fiscal count"), headerFormat);
+    sheet->write(4, 2, dbFiscals.count());
+    sheet->write(5, 1, tr("Matched"), headerFormat);
+    sheet->write(5, 2, matched);
+    sheet->write(6, 1, tr("Only in portal"), headerFormat);
+    sheet->write(6, 2, onlyPortal);
+    sheet->write(7, 1, tr("Only in DB"), headerFormat);
+    sheet->write(7, 2, onlyDb);
+
+    const int headerRow = 9;
+    const QStringList titles = {
+        tr("Status"),
+        tr("Fiscal"),
+        tr("Order"),
+        tr("Portal receipt"),
+        tr("Portal datetime"),
+        tr("Portal service"),
+        tr("Portal amount")
+    };
+
+    for(int col = 0; col < titles.count(); ++col) {
+        sheet->write(headerRow, col + 1, titles.at(col), headerFormat);
+    }
+
+    int outRow = headerRow + 1;
+
+    auto writeRow = [&](const QString &status,
+                        const QString &fiscal,
+                        const QString &order,
+                        const QMap<QString, QString> &info,
+                        bool mismatch) {
+        const Format &fmt = mismatch ? mismatchFormat : matchFormat;
+        sheet->write(outRow, 1, status, fmt);
+        sheet->write(outRow, 2, fiscal, fmt);
+        sheet->write(outRow, 3, order, fmt);
+        sheet->write(outRow, 4, info.value("receipt"), fmt);
+        sheet->write(outRow, 5, info.value("datetime"), fmt);
+        sheet->write(outRow, 6, info.value("service"), fmt);
+        sheet->write(outRow, 7, info.value("amount"), fmt);
+        ++outRow;
+    };
+
+    QStringList portalKeys = portalByFiscal.keys();
+    std::sort(portalKeys.begin(), portalKeys.end());
+
+    for(const QString &fiscal : qAsConst(portalKeys)) {
+        const QMap<QString, QString> info = portalByFiscal.value(fiscal);
+
+        if(dbFiscals.contains(fiscal)) {
+            const QList<int> orders = dbOrdersByFiscal.values(fiscal);
+            QStringList orderTexts;
+
+            for(int orderId : orders) {
+                orderTexts << QString::number(orderId);
+            }
+
+            writeRow(tr("Matched"),
+                     fiscal,
+                     orderTexts.join(", "),
+                     info,
+                     false);
+        } else {
+            writeRow(tr("Only in portal"),
+                     fiscal,
+                     QString(),
+                     info,
+                     true);
+        }
+    }
+
+    QStringList dbOnlyKeys;
+
+    for(const QString &fiscal : qAsConst(dbFiscals)) {
+        if(!portalByFiscal.contains(fiscal)) {
+            dbOnlyKeys.append(fiscal);
+        }
+    }
+
+    std::sort(dbOnlyKeys.begin(), dbOnlyKeys.end());
+
+    for(const QString &fiscal : qAsConst(dbOnlyKeys)) {
+        const QList<int> orders = dbOrdersByFiscal.values(fiscal);
+        QStringList orderTexts;
+
+        for(int orderId : orders) {
+            orderTexts << QString::number(orderId);
+        }
+
+        writeRow(tr("Only in DB"),
+                 fiscal,
+                 orderTexts.join(", "),
+                 QMap<QString, QString>(),
+                 true);
+    }
+
+    out.setColumnWidth(1, 18);
+    out.setColumnWidth(2, 14);
+    out.setColumnWidth(3, 12);
+    out.setColumnWidth(4, 16);
+    out.setColumnWidth(5, 22);
+    out.setColumnWidth(6, 36);
+    out.setColumnWidth(7, 12);
+
+    if(!out.saveAs(saveFile)) {
+        message_error(tr("Failed to save Excel file"));
+        return;
+    }
+
+    message_info(tr("Fiscal comparison saved to %1").arg(saveFile));
 }

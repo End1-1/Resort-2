@@ -520,8 +520,12 @@ system</string>
    </property>
   </action>
   <action name="actionNames_of_menu">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/cutlery.png</normaloff>:/images/cutlery.png</iconset>
+   </property>
    <property name="text">
-    <string>Names of menu</string>
+    <string>Menu names list</string>
    </property>
   </action>
   <action name="actionMain_partitions_of_menu">
@@ -599,6 +603,15 @@ system</string>
     <string>Change password</string>
    </property>
   </action>
+  <action name="actionBranches">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Branches</string>
+   </property>
+  </action>
   <action name="actionGlobal_config">
    <property name="icon">
     <iconset resource="res.qrc">
@@ -606,6 +619,15 @@ system</string>
    </property>
    <property name="text">
     <string>Global config</string>
+   </property>
+  </action>
+  <action name="actionResort_audit_log">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resort audit log</string>
    </property>
   </action>
   <action name="actionComplex_dish">
@@ -1072,6 +1094,15 @@ system</string>
    </property>
    <property name="text">
     <string>Order debts</string>
+   </property>
+  </action>
+  <action name="actionTax_return">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/refund.png</normaloff>:/images/refund.png</iconset>
+   </property>
+   <property name="text">
+    <string>HDM return</string>
    </property>
   </action>
   <action name="actionArmSoftExport">

@@ -8,6 +8,8 @@ C5Printing::C5Printing()
 {
     fLogicalDpiX = 96;
     fNormalWidth = 500;
+    fLeftMarginMm = 0;
+    fRightMarginMm = 0;
     reset();
 }
 
@@ -21,6 +23,8 @@ void C5Printing::reset()
 {
     fTop = 0;
     fTempTop = 0;
+    fLeftMarginMm = 0;
+    fRightMarginMm = 0;
     fJsonData = QJsonArray();
     setSceneParams(fNormalWidth, 20000, fLogicalDpiX);
 
@@ -30,6 +34,7 @@ void C5Printing::reset()
 
 void C5Printing::setSceneParams(qreal width, qreal height, qreal logicalDpiX)
 {
+    Q_UNUSED(logicalDpiX);
     // Устанавливаем 203 или 300 для плотности, близкой к физической головке принтера
     fLogicalDpiX = 203;
     fMM = fLogicalDpiX / 25.4;
@@ -50,6 +55,32 @@ void C5Printing::setSceneParams(qreal width, qreal height, qreal logicalDpiX)
     fPainter.setRenderHint(QPainter::Antialiasing, true);
     fPainter.setRenderHint(QPainter::TextAntialiasing, true);
     fPainter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+}
+
+void C5Printing::setSceneFromPrinter(QPrinter &printer)
+{
+    const QRectF pr = printer.pageRect(QPrinter::DevicePixel);
+    const qreal dpiX = qMax(1, printer.logicalDpiX());
+    const qreal dpiY = qMax(1, printer.logicalDpiY());
+    // setSceneParams expects width/height in 96dpi units, then scales canvas to 203dpi
+    setSceneParams(pr.width() * 96.0 / dpiX, pr.height() * 96.0 / dpiY, 96.0);
+}
+
+void C5Printing::setRightMarginMm(qreal mm)
+{
+    const qreal v = qMax<qreal>(0.0, mm);
+    fLeftMarginMm = v;
+    fRightMarginMm = v;
+}
+
+int C5Printing::leftMarginPx() const
+{
+    return qRound(fLeftMarginMm * fMM);
+}
+
+int C5Printing::rightMarginPx() const
+{
+    return qRound(fRightMarginMm * fMM);
 }
 
 void C5Printing::addToJson(const QString &type, const QVariantMap &params)
@@ -75,13 +106,8 @@ void C5Printing::setFont(const QFont &font)
 void C5Printing::setFontSize(int size)
 {
     fFont.setPointSize(size);
-    fFont.setStyleStrategy(QFont::PreferAntialias); // Разрешаем сглаживание
-    fFont.setHintingPreference(QFont::PreferFullHinting);
-
-    // Пересчитываем высоту строки с учетом нового DPI
     fLineHeight = QFontMetrics(fFont).height();
-
-    addToJson("font", {{"family", fFont.family()}, {"size", fFont.pointSize()}});
+    addToJson("fontsize", {{"size", size}});
 }
 
 void C5Printing::setFontBold(bool bold)
@@ -98,7 +124,10 @@ void C5Printing::ltext(const QString &text, qreal x, qreal textWidth)
     int posX = qRound(x * fMM);
 
     // Считаем ширину в пикселях
-    int width = (textWidth > 0) ? qRound(textWidth * fMM) : (fNormalWidth - posX);
+    int width = (textWidth > 0) ? qRound(textWidth * fMM) : (fNormalWidth - posX - rightMarginPx());
+    if(width < 1) {
+        width = 1;
+    }
 
     // Отрисовка с переносом
     // Используем высоту 10000, чтобы тексту было куда расти вниз
@@ -122,7 +151,9 @@ void C5Printing::ltext(const QString &text, qreal x, qreal textWidth)
 void C5Printing::ctext(const QString &text)
 {
     fPainter.setFont(fFont);
-    QRect rect(0, fTop, fNormalWidth, 10000);
+    const int leftPad = leftMarginPx();
+    const int rightPad = rightMarginPx();
+    QRect rect(leftPad, fTop, qMax(1, fNormalWidth - leftPad - rightPad), 10000);
     QRect bound = fPainter.boundingRect(rect, Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap, text);
     fPainter.drawText(rect, Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap, text);
 
@@ -134,7 +165,7 @@ void C5Printing::rtext(const QString text)
 {
     fPainter.setFont(fFont);
     int w = QFontMetrics(fFont).horizontalAdvance(text);
-    int posX = qMax(0, fNormalWidth - w - 5);
+    int posX = qMax(0, fNormalWidth - w - 5 - rightMarginPx());
     fPainter.drawText(posX, fTop + QFontMetrics(fFont).ascent(), text);
 
     fTempTop = qMax(fTempTop, fLineHeight);
@@ -159,7 +190,7 @@ void C5Printing::line(int lineWidth)
 {
     fLinePen.setWidth(lineWidth);
     fPainter.setPen(fLinePen);
-    fPainter.drawLine(0, fTop, fNormalWidth, fTop);
+    fPainter.drawLine(leftMarginPx(), fTop, qMax(leftMarginPx(), fNormalWidth - rightMarginPx()), fTop);
 
     if (lineWidth > 1) {
         addToJson("line2", {{"width", lineWidth}});
@@ -180,25 +211,48 @@ bool C5Printing::br(qreal height)
 
 void C5Printing::image(const QPixmap &img, Qt::Alignment align)
 {
-    if (img.isNull())
+    if (img.isNull()) {
         return;
+    }
 
-    int x = 0;
-    if (align == Qt::AlignRight)
-        x = fNormalWidth - img.width();
-    else if (align == Qt::AlignHCenter)
-        x = (fNormalWidth - img.width()) / 2;
+    // 1. ПОДГОТОВКА ИЗОБРАЖЕНИЯ
+    // Просто берем локальную копию без изменения цветов
+    QPixmap p = img;
 
-    fPainter.drawPixmap(x, fTop, img);
-    fTempTop = qMax(fTempTop, img.height());
+    // 2. МАСШТАБИРОВАНИЕ внутри боковых отступов
+    const int leftPad = leftMarginPx();
+    const int contentW = qMax(1, fNormalWidth - leftPad - rightMarginPx());
+    if (p.width() > contentW) {
+        p = p.scaledToWidth(contentW, Qt::SmoothTransformation);
+    }
 
+    // 3. РАСЧЕТ КООРДИНАТЫ X
+    int posX = leftPad;
+    if (align & Qt::AlignHCenter) {
+        posX = leftPad + (contentW - p.width()) / 2;
+    } else if (align & Qt::AlignRight) {
+        posX = leftPad + contentW - p.width();
+    }
+
+    if (posX < leftPad) {
+        posX = leftPad;
+    }
+
+    // 4. ОТРИСОВКА
+    if (fPainter.isActive()) {
+        fPainter.drawPixmap(posX, fTop, p);
+    }
+
+    // Обновляем временную высоту для корректной работы br()
+    fTempTop = qMax(fTempTop, p.height());
+
+    // 5. СОХРАНЕНИЕ В JSON ДЛЯ МОБИЛКИ
     QByteArray ba;
     QBuffer bu(&ba);
     bu.open(QIODevice::WriteOnly);
-    img.save(&bu, "PNG");
+    p.save(&bu, "PNG");
 
-    addToJson("image",
-              {{"data", QString::fromLatin1(ba.toBase64())}, {"align", (int) align}, {"width", img.width()}, {"height", img.height()}});
+    addToJson("image", {{"data", QString::fromLatin1(ba.toBase64())}, {"align", (int) align}, {"width", p.width()}, {"height", p.height()}});
 }
 
 void C5Printing::image(const QString &fileName, Qt::Alignment align)
@@ -223,12 +277,8 @@ bool C5Printing::print(QPrinter &prn)
     if (fPainter.isActive())
         fPainter.end();
 
-    // Вместо этого:
-    // QImage finalImage = resultImage().convertToFormat(QImage::Format_Mono, Qt::ThresholdDither | Qt::AvoidDither);
+    QImage finalImage = resultImage().convertToFormat(QImage::Format_Mono, Qt::ThresholdDither | Qt::AvoidDither);
 
-    // Сделай вот так:
-    QImage finalImage = resultImage().convertToFormat(QImage::Format_Mono, Qt::DiffuseDither | Qt::OrderedAlphaDither);
-    //NO! - QImage finalImage = resultImage().convertToFormat(QImage::Format_Grayscale8);
     prn.setFullPage(true);
     QPainter p(&prn);
     QRect targetPageRect = prn.pageRect(QPrinter::DevicePixel).toRect();

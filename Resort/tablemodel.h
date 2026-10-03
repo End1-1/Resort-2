@@ -58,7 +58,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setDataFromSource(const QList<QList<QVariant> >& dataSource);
     void clearProxyRows();
-    TableModel& setColumn(int width, const QString &fieldName, const QString &title);
+    TableModel& setColumn(int width, const QString &fieldName, const QString &title, bool checkBox = false);
     TableModel& setColumn(Column *column);
     TableModel& setColumns(const QList<Column>& cols);
     void setSqlQuery(const QString &query);

@@ -4,15 +4,14 @@
 #include <QInputDialog>
 #include <QItemDelegate>
 #include <QJsonDocument>
+#include <QImage>
 #include <QJsonObject>
-#include <QPrintDialog>
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QScrollBar>
 #include <QTimer>
 #include "baseorder.h"
 #include "branchstoremap.h"
-#include "c5printing.h"
 #include "cachecar.h"
 #include "cacherights.h"
 #include "cacheusers.h"
@@ -20,7 +19,46 @@
 #include "database2.h"
 #include "databaseresult.h"
 #include "defrest.h"
+#include "customerdisplay.h"
 #include "dlgcalc.h"
+#include "rmessage.h"
+#include "winprinternames.h"
+
+namespace {
+
+QString resolveSystemPrinterName(const QString &requested, QStringList *availablePrinters)
+{
+#ifdef Q_OS_WIN
+    const QStringList available = winInstalledPrinterNames();
+#else
+    const QStringList available = QPrinterInfo::availablePrinterNames();
+#endif
+    if(availablePrinters) {
+        *availablePrinters = available;
+    }
+    const QString trimmed = requested.trimmed();
+    for(const QString &name : available) {
+        if(name.compare(trimmed, Qt::CaseInsensitive) == 0) {
+            return name;
+        }
+    }
+    return QString();
+}
+
+void showPrinterNotInstalledError(QWidget *parent, const QString &requested, const QStringList &availablePrinters)
+{
+    const QString listText = availablePrinters.isEmpty()
+                                 ? QObject::tr("(no printers found)")
+                                 : availablePrinters.join("<br>");
+    RMessage::showError(QObject::tr("Printer \"%1\" is not installed on this computer.")
+                        .arg(requested.toHtmlEscaped())
+                        + "<br><br>"
+                        + QObject::tr("Available printers:") + "<br>"
+                        + listText,
+                        parent);
+}
+
+} // namespace
 #include "dlgcarselection.h"
 #include "dlgdate.h"
 #include "dlgdeptholder.h"
@@ -33,16 +71,13 @@
 #include "logging.h"
 #include "logwriter.h"
 #include "paymentmode.h"
-#include "pimage.h"
 #include "pprintreceipt.h"
-#include "pprintscene.h"
+#include "restaurantc5print.h"
 #include "printtaxno.h"
-#include "ptextrect.h"
 #include "rchangelanguage.h"
 #include "rchangemenu.h"
 #include "rdishcomment.h"
 #include "reportprint.h"
-#include "rmessage.h"
 #include "rmodifiers.h"
 #include "rnumbers.h"
 #include "rtools.h"
@@ -367,7 +402,12 @@ RDesk::RDesk(QWidget *parent) :
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
-    db2.exec("select * from r_menu_names where f_enabled=1 ");
+    const int branch = defrest(dr_branch).toInt();
+    db2[":f_branch"] = branch;
+    db2.exec("select mn.* from r_menu_names mn "
+             "inner join r_branch_menu bm on bm.f_menu=mn.f_id and bm.f_branch=:f_branch "
+             "where mn.f_enabled=1 "
+             "order by mn.f_id");
     QPushButton *firstBtn = nullptr;
 
     while(db2.next()) {
@@ -386,7 +426,9 @@ RDesk::RDesk(QWidget *parent) :
 
     fDataVersion = 0;
     ui->widget->setVisible(false);
-    firstBtn->click();
+    if (firstBtn) {
+        firstBtn->click();
+    }
 }
 
 RDesk::~RDesk()
@@ -402,6 +444,7 @@ void RDesk::prepareToShow()
 #else
     showFullScreen();
 #endif
+    CustomerDisplay::tryAttachSecondScreen();
     qApp->processEvents();
 }
 
@@ -627,78 +670,55 @@ void RDesk::printVoidReport()
               left join users u2 on u2.f_id=od.f_cancelUser \
               where od.f_state in (2, 3) and oh.f_dateCash=:f_dateCash \
               order by 1", fDbBind);
-    QList<PPrintScene*> lps;
-    PPrintScene *ps = new PPrintScene(Portrait);
-    lps.append(ps);
-    PTextRect th;
-    QFont f("Arial", 30);
-    th.setTextAlignment(Qt::AlignHCenter);
-    th.setFont(f);
-    th.setBorders(false, false, false, false);
-    int top = 10;
-    th.setTextAlignment(Qt::AlignHCenter);
-    int rowHeight = 60;
-    PImage *logo = new PImage("logo_print.png");
-    ps->addItem(logo);
-    logo->setRect(QRectF(200, top, 400, 250));
-    top += 250;
-    top += ps->addTextRect(new PTextRect(10, top, 750, rowHeight, QString("%1").arg(tr("VOID REPORT")), &th,
-                                         f))->textHeight();
-    top += ps->addTextRect(10, top, 680, rowHeight, WORKING_DATE.toString(def_date_format), &th)->textHeight();
-    f.setPointSize(24);
-    th.setFont(f);
-    top += ps->addTextRect(10, top, 680, rowHeight, tr("Printed by ") + CacheUsers::instance()->get(trackUser)->fFull,
-                           &th)->textHeight();
-    top += ps->addTextRect(0, top, 680, rowHeight, tr("Date") + ": " + WORKING_DATE.toString(def_date_format),
-                           &th)->textHeight();
-    ps->addLine(10, top, 750, top);
-    th.setTextAlignment(Qt::AlignLeft);
-    QPen dotPen(Qt::DotLine);
+    ReceiptPrinter printer(fHall->fReceiptPrinter);
+    C5Printing doc;
+    setupC5Printing(doc, printer.printer());
+
+    doc.image("./logo_print.png", Qt::AlignHCenter);
+    doc.br(4);
+    doc.setFontSize(receiptFontPt(12));
+    doc.setFontBold(true);
+    doc.ctext(tr("VOID REPORT"));
+    doc.br();
+    doc.setFontSize(receiptFontPt(10));
+    doc.setFontBold(false);
+    doc.ctext(WORKING_DATE.toString(def_date_format));
+    doc.br();
+    doc.ltext(tr("Printed by ") + CacheUsers::instance()->get(trackUser)->fFull, 0);
+    doc.br();
+    doc.line();
+    doc.br(2);
 
     for(int i = 0; i < dr.rowCount(); i++) {
-        QString row = QString("%1 / %2 / #%3")
+        doc.setFontBold(true);
+        doc.ltext(QString("%1 / %2 / #%3")
                       .arg(dr.value(i, "hname").toString())
                       .arg(dr.value(i, "tname").toString())
-                      .arg(dr.value(i, "f_id").toString());
-        top += ps->addTextRect(10, top, 680, rowHeight, row, &th)->textHeight();
-        ps->addLine(10, top, 680, top, dotPen);
-        row = QString("%1 / %2 / %3")
-              .arg(dr.value(i, "dish").toString())
-              .arg(dr.value(i, "f_qty").toString())
-              .arg(dr.value(i, "f_total").toString());
-        top += ps->addTextRect(10, top, 680, rowHeight, row, &th)->textHeight();
-        row = QString("%1").arg(dr.value(i, "staff").toString());
-        top += ps->addTextRect(10, top, 680, rowHeight, row, &th)->textHeight();
-        top += ps->addTextRect(10, top, 680, rowHeight, tr("Type: ") + dr.value(i, "state").toString(), &th)->textHeight();
-        top += ps->addTextRect(10, top, 680, rowHeight, tr("Manager"), &th)->textHeight();
-        top += ps->addTextRect(10, top, 680, rowHeight, dr.value(i, "staffcancel").toString(), &th)->textHeight();
-        top ++;
-        ps->addLine(10, top, 680, top, dotPen);
-        top += 2;
-        ps->addLine(10, top, 680, top, dotPen);
-        top += rowHeight;
-
-        if(top > sizePortrait.height() - 200) {
-            top = 10;
-            ps = new PPrintScene(Portrait);
-            lps.append(ps);
-        }
+                      .arg(dr.value(i, "f_id").toString()),
+                  0);
+        doc.br();
+        doc.setFontBold(false);
+        doc.line();
+        doc.ltext(QString("%1 / %2 / %3")
+                      .arg(dr.value(i, "dish").toString())
+                      .arg(dr.value(i, "f_qty").toString())
+                      .arg(dr.value(i, "f_total").toString()),
+                  0);
+        doc.br();
+        doc.ltext(dr.value(i, "staff").toString(), 0);
+        doc.br();
+        doc.ltext(tr("Type: ") + dr.value(i, "state").toString(), 0);
+        doc.br();
+        doc.ltext(tr("Manager"), 0);
+        doc.br();
+        doc.ltext(dr.value(i, "staffcancel").toString(), 0);
+        doc.br();
+        doc.line();
+        doc.br(2);
     }
 
-    ps->addTextRect(10, top, 300, rowHeight, "_", &th);
-    QPrinter printer;
-    printer.setPrinterName(fHall->fReceiptPrinter);
-    QPainter painter(&printer);
-
-    for(int i = 0; i < lps.count(); i++) {
-        if(i > 0) {
-            printer.newPage();
-        }
-
-        lps[i]->render(&painter);
-    }
-
-    qDeleteAll(lps);
+    doc.ctext("_");
+    printC5(doc, printer.printer());
 }
 
 void RDesk::openTools()
@@ -971,16 +991,10 @@ void RDesk::saledItem()
         return;
     }
 
-    int bs = 20;
+    const int bs = receiptFontPt(10);
+    ReceiptPrinter printer(defrest(dr_first_receipt_printer));
     C5Printing p;
-    QPrinterInfo pi = QPrinterInfo::printerInfo(defrest(dr_first_receipt_printer));
-    QPrinter printer(pi);
-    printer.setPageSize(QPageSize::Custom);
-    printer.setFullPage(false);
-    QRectF pr = printer.pageRect(QPrinter::DevicePixel);
-    constexpr qreal SAFE_RIGHT_MM = 2.0;
-    qreal safePx = SAFE_RIGHT_MM * printer.logicalDpiX() / 25.4;
-    p.setSceneParams(pr.width() - safePx, pr.height(), printer.logicalDpiX());
+    setupC5Printing(p, printer.printer(), 2.0);
     p.setFont(qApp->font());
     p.setFontSize(bs);
     p.ctext(tr("Daily sale"));
@@ -1054,9 +1068,9 @@ void RDesk::saledItem()
 
     p.br();
     p.br();
-    p.setFontSize(bs - 2);
+    p.setFontSize(receiptFontPt(8));
     p.ltext(QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm:ss"), 0);
-    p.print(printer);
+    printC5(p, printer.printer());
 }
 
 void RDesk::employesOfDay()
@@ -1172,228 +1186,151 @@ void RDesk::closeEvent(QCloseEvent *e)
     }
 
     checkEmpty();
+    CustomerDisplay::destroyInstance();
     BaseExtendedDialog::closeEvent(e);
 }
 
 void RDesk::printCanceledOrder(int id)
 {
-    int trackUser = fStaff->fId;
+    Q_UNUSED(id);
     QString userName = fStaff->fName;
-    CI_User *u = CacheUsers::instance()->get(trackUser);
+    CI_User *u = CacheUsers::instance()->get(fStaff->fId);
 
     if(u) {
         userName = u->fFull;
-    } else {
-        userName = "#Username Error";
-    }
-
-    for(int i = 0, count = ui->tblOrder->rowCount(); i < count; i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
     }
 
     ui->tblOrder->viewport()->update();
-    QList<PPrintScene*> lps;
-    PPrintScene *ps = new PPrintScene(Portrait);
-    lps.append(ps);
-    PTextRect th;
-    QFont f("Arial", 30);
-    th.setFont(f);
-    th.setBorders(false, false, false, false);
-    PTextRect thdc;
-    f.setPointSize(14);
-    thdc.setFont(f);
-    thdc.setBorders(false, false, false, false);
-    int top = 10;
-    th.setTextAlignment(Qt::AlignHCenter);
-    int rowHeight = 60;
-    PImage *logo = new PImage("logo_print.png");
-    ps->addItem(logo);
-    logo->setRect(QRectF(150, top, 400, 250));
-    top += 250;
-    f.setPointSize(36);
-    th.setFont(f);
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight + 10, fHall->fName, &th, f))->textHeight();
-    top += 20;
-    f.setBold(true);
-    th.setFont(f);
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("CANCELED"), &th))->textHeight();
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1 %2")
-                                         .arg(tr("Receipt S/N "))
-                                         .arg(fTable->fOrder),
-                                         &th, f))->textHeight();
-    f.setPointSize(24);
-    th.setFont(f);
-    th.setTextAlignment(Qt::AlignLeft);
-    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Table"), &th, f));
-    top += ps->addTextRect(new PTextRect(210, top, 200, rowHeight, fTable->fName, &th, f))->textHeight();
+
+    const QString printerName = defrest(dr_first_receipt_printer).isEmpty()
+                                    ? QStringLiteral("local")
+                                    : defrest(dr_first_receipt_printer);
+    ReceiptPrinter printer(printerName);
+    C5Printing doc;
+    setupC5Printing(doc, printer.printer());
+
+    doc.image("./logo_print.png", Qt::AlignHCenter);
+    doc.br(4);
+    doc.setFontSize(receiptFontPt(12));
+    doc.setFontBold(true);
+    doc.ctext(fHall->fName);
+    doc.br();
+    doc.ctext(tr("CANCELED"));
+    doc.br();
+    doc.ctext(QString("%1 %2").arg(tr("Receipt S/N ")).arg(fTable->fOrder));
+    doc.br();
+    doc.setFontSize(receiptFontPt(10));
+    doc.setFontBold(false);
+    doc.lrtext(tr("Table"), fTable->fName);
+    doc.br();
 
     if(!fCarModel.isEmpty()) {
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Car"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 400, rowHeight, fCarModel + ": " + fCarGovNum, &th, f))->textHeight();
+        doc.lrtext(tr("Car"), fCarModel + ": " + fCarGovNum);
+        doc.br();
     }
 
-    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Date"), &th, f));
-    top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, WORKING_DATE.toString(def_date_format), &th, f))
-           ->textHeight();
-    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Waiter"), &th, f));
-    top += ps->addTextRect(new PTextRect(210, top, 500, rowHeight, userName, &th, f))->textHeight();
-    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Opened"), &th, f));
-    top += ps->addTextRect(new PTextRect(210, top, 350, rowHeight, fTable->fOpened.toString(def_date_time_format), &th,
-                                         f))->textHeight();
-    ps->addTextRect(new PTextRect(10, top, 200, rowHeight, tr("Canceled"), &th, f));
-    top += ps->addTextRect(new PTextRect(210, top, 350, rowHeight,
-                                         QDateTime::currentDateTime().toString(def_date_time_format), &th, f))->textHeight();
-    top += 2;
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    ps->addTextRect(new PTextRect(10, top, 100, rowHeight, tr("Qty"), &th, f));
-    ps->addTextRect(new PTextRect(110, top, 390, rowHeight, tr("Description"), &th, f));
-    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, tr("Amount"), &th, f))->textHeight();
-    top ++;
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    f.setPointSize(18);
-    f.setBold(true);
-    th.setFont(f);
+    doc.lrtext(tr("Date"), WORKING_DATE.toString(def_date_format));
+    doc.br();
+    doc.lrtext(tr("Waiter"), userName);
+    doc.br();
+    doc.lrtext(tr("Opened"), fTable->fOpened.toString(def_date_time_format));
+    doc.br();
+    doc.lrtext(tr("Canceled"), QDateTime::currentDateTime().toString(def_date_time_format));
+    doc.br();
+    doc.line();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ltext(tr("Qty"), 0, 14);
+    doc.ltext(tr("Description"), 14, 50);
+    doc.ltext(tr("Amount"), 64, 0);
+    doc.br();
+    doc.setFontBold(false);
+    doc.line();
+    doc.br(2);
 
-    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
+    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
         OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
 
-        if(!od) {
+        if(!od || od->fState != DISH_STATE_READY) {
             continue;
         }
 
-        if(od->fState != DISH_STATE_READY) {
-            continue;
-        }
-
-        ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
-        th.setWrapMode(QTextOption::WordWrap);
-        int t = ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f))->textHeight();
-        int k = ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
-        top += (t > k ? t : k);
-
-        if(top > sizePortrait.height()  - 200) {
-            top = 10;
-            ps = new PPrintScene(Portrait);
-            lps.append(ps);
-        }
+        doc.ltext(float_str(od->fQty, 1), 0, 14);
+        doc.ltext(od->fName, 14, 50);
+        doc.rtext(float_str(od->fTotal, 2));
+        doc.br();
     }
 
-    if(!ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString().isEmpty()) {
-        ps->addTextRect(new PTextRect(10, top, 400, rowHeight, ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString(), &th,
-                                      f));
-        top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(2,
-                                             1)->data(Qt::DisplayRole).toString(), &th, f))->textHeight();
+    if(ui->tblTotal->item(2, 0) && !ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString().isEmpty()) {
+        doc.ltext(ui->tblTotal->item(2, 0)->data(Qt::DisplayRole).toString(), 0, 50);
+        doc.rtext(ui->tblTotal->item(2, 1)->data(Qt::DisplayRole).toString());
+        doc.br();
     }
 
-    top += 2;
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    f.setPointSize(24);
-    th.setFont(f);
-    ps->addTextRect(new PTextRect(10, top, 400, rowHeight, tr("Total, AMD"), &th, f));
-    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, ui->tblTotal->item(1, 1)->data(Qt::EditRole).toString(),
-                                         &th, f))->textHeight();
-    top += rowHeight;
-    f.setPointSize(28);
-    th.setFont(f);
-    th.setTextAlignment(Qt::AlignHCenter);
-
-    if(top > sizePortrait.height()  - 200) {
-        top = 10;
-        ps = new PPrintScene(Portrait);
-        lps.append(ps);
-    }
+    doc.line();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ltext(tr("Total, AMD"), 0, 50);
+    doc.rtext(ui->tblTotal->item(1, 1)->data(Qt::EditRole).toString());
+    doc.br();
+    doc.setFontBold(false);
+    doc.br(2);
 
     if(!fTable->fRoomComment.isEmpty()) {
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, fTable->fRoomComment, &th, f))->textHeight();
-        top += rowHeight;
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("Signature"), &th, f))->textHeight();
-        top += rowHeight + 2;
-        ps->addLine(150, top, 680, top);
-    }
-
-    if(top > sizePortrait.height()  - 200) {
-        top = 10;
-        ps = new PPrintScene(Portrait);
-        lps.append(ps);
+        doc.ctext(fTable->fRoomComment);
+        doc.br();
+        doc.ctext(tr("Signature"));
+        doc.br();
+        doc.line();
+        doc.br();
     }
 
     if(fTable->fPaymentMode == PAYMENT_COMPLIMENTARY) {
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("COMPLIMENTARY"), &th, f))->textHeight();
-    } else {
-        //top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, tr("SALES"), &th, f))->textHeight();
+        doc.ctext(tr("COMPLIMENTARY"));
+        doc.br();
     }
 
-    if(true) {
-        top += (rowHeight * 3);
-        top += ps->addTextRect(10, top, 600, rowHeight, tr("****VOID****"), &th)->textHeight();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ctext(tr("****VOID****"));
+    doc.br();
+    doc.setFontBold(false);
 
-        for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-            OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
+        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
 
-            if(!od) {
-                continue;
-            }
-
-            if(od->fState != DISH_STATE_REMOVED_STORE) {
-                continue;
-            }
-
-            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
-            top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
-
-            if(top > sizePortrait.height()  - 200) {
-                top = 10;
-                ps = new PPrintScene(Portrait);
-                lps.append(ps);
-            }
+        if(!od || od->fState != DISH_STATE_REMOVED_STORE) {
+            continue;
         }
 
-        top += rowHeight;
-        top += ps->addTextRect(10, top, 600, rowHeight, tr("****MISTAKE****"), &th)->textHeight();
-
-        for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-            OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
-
-            if(!od) {
-                continue;
-            }
-
-            if(od->fState != DISH_STATE_REMOVED_NOSTORE) {
-                continue;
-            }
-
-            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(od->fQty, 1), &th, f));
-            ps->addTextRect(new PTextRect(110, top, 390, rowHeight, od->fName, &th, f));
-            top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(od->fTotal, 2), &th, f))->textHeight();
-
-            if(top > sizePortrait.height()  - 200) {
-                top = 10;
-                ps = new PPrintScene(Portrait);
-                lps.append(ps);
-            }
-        }
+        doc.ltext(float_str(od->fQty, 1), 0, 14);
+        doc.ltext(od->fName, 14, 50);
+        doc.rtext(float_str(od->fTotal, 2));
+        doc.br();
     }
 
-    //Finish
-    top += rowHeight;
-    ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "_", &th, f));
-    QPrinter printer;
-    qDebug() << defrest(dr_second_receipt_printer);
-    qDebug() << defrest(dr_first_receipt_printer);
-    printer.setPrinterName("local");
-    QPainter painter(&printer);
+    doc.br();
+    doc.setFontBold(true);
+    doc.ctext(tr("****MISTAKE****"));
+    doc.br();
+    doc.setFontBold(false);
 
-    for(int i = 0; i < lps.count(); i++) {
-        if(i > 0) {
-            printer.newPage();
+    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
+        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+
+        if(!od || od->fState != DISH_STATE_REMOVED_NOSTORE) {
+            continue;
         }
 
-        lps[i]->render(&painter);
+        doc.ltext(float_str(od->fQty, 1), 0, 14);
+        doc.ltext(od->fName, 14, 50);
+        doc.rtext(float_str(od->fTotal, 2));
+        doc.br();
     }
+
+    doc.br();
+    doc.ctext("_");
+    printC5(doc, printer.printer());
 
     fTable->fPrint = abs(fTable->fPrint) + 1;
     fDbBind[":f_print"] = fTable->fPrint;
@@ -1650,7 +1587,20 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
         fHall = Hall::getHallById(fTable->fHall);
     }
 
+    if(!fTable) {
+        return 0;
+    }
+
+    if(!fStaff) {
+        message_error(tr("Staff is not set."));
+        return 0;
+    }
+
     checkOrderHeader(fTable);
+
+    if(!fHall) {
+        fHall = Hall::getHallById(fTable->fHall);
+    }
 
     if (fNeedCar) {
         if(fCarId == 0) {
@@ -1681,13 +1631,32 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
         delete m;
     }
 
+    if(!fHall) {
+        message_error(tr("Hall configuration not found for this table."));
+        delete od;
+        return 0;
+    }
+
     od->fQty = max;
-    od->fQtyPrint = max;
     od->fDishId = d->fId;
     od->fState = DISH_STATE_READY;
-    od->fPrint1 = d->fPrint1;
+    od->fPrint1 = d->fPrint1.trimmed();
     od->fPrint2 = d->fPrint2;
-    od->fStore = storealias(d->fStore);
+    const bool autoPrintKitchen = !od->fPrint1.isEmpty()
+                                  && fHall
+                                  && od->fDishId != fHall->fServiceItem;
+    {
+        int mappedStore = 0;
+        if(!BranchStoreMap::lookup(d->fStore, &mappedStore)) {
+            message_error(tr("Store %1 is not mapped for branch %2. "
+                             "Add it in r_branch_storemap (Resort / branch store map).")
+                          .arg(d->fStore)
+                          .arg(defrest(dr_branch)));
+            delete od;
+            return 0;
+        }
+        od->fStore = mappedStore;
+    }
     od->fName = d->fName;
     od->fPrice = d->fPrice;
 
@@ -1706,7 +1675,7 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
     od->fDctValue = 0;
     od->fDctAmount = 0;
     od->fQty = max;
-    od->fQtyPrint = max;
+    od->fQtyPrint = od->fQty;
     od->fAdgt = d->fAdgt;
     od->fTax = d->fTax;
     od->fRow = ui->tblOrder->rowCount();
@@ -1745,13 +1714,44 @@ int RDesk::addDishToOrder(DishStruct * d, bool counttotal)
                     .arg(od->fQty)
                     .arg(od->fPrice)
                     .arg(od->fRecId));
-    addDishToTable(od, counttotal, true);
+    if(!addDishToTable(od, counttotal, true)) {
+        fDb.queryDirect(QString("delete from o_dish where f_id=%1").arg(od->fRecId));
+        delete od;
+        message_error(tr("Failed to add dish to order."));
+        return 0;
+    }
+
+    if(autoPrintKitchen) {
+        QStringList availablePrinters;
+        const QString systemPrinter = resolveSystemPrinterName(od->fPrint1, &availablePrinters);
+        const int recId = od->fRecId;
+        const QString print1 = od->fPrint1;
+        if(systemPrinter.isEmpty()) {
+            QTimer::singleShot(0, this, [this, print1, availablePrinters]() {
+                showPrinterNotInstalledError(this, print1, availablePrinters);
+                changeBtnState();
+            });
+        } else {
+            QTimer::singleShot(0, this, [this, recId, print1]() {
+                if(printServiceCheck(print1, 1, recId)) {
+                    fTrackControl->insert("Printed service check", print1, "");
+                }
+                ui->tblOrder->viewport()->update();
+                changeBtnState();
+            });
+        }
+    }
+
     resetPrintQty();
     fTrackControl->insert("New dish", od->fName, "");
     return od->fRecId;
 }
-void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkservice)
+bool RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkservice)
 {
+    if(!fTable || !fHall || !od) {
+        return false;
+    }
+
     int row = ui->tblOrder->rowCount();
     ui->tblOrder->setRowCount(row + 1);
 
@@ -1763,7 +1763,11 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
     bool serviceItemExists = false;
 
     for(int i = 0; i < ui->tblOrder->rowCount() - 1; i++) {
-        OrderDishStruct *odd = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *odd = cell->data(Qt::UserRole).value<OrderDishStruct*>();
 
         if(odd) {
             if(odd->fDishId == fHall->fServiceItem && odd->fState == DISH_STATE_READY) {
@@ -1789,7 +1793,16 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
         so->fState = DISH_STATE_READY;
         so->fPrint1 = "";
         so->fPrint2 = "";
-        so->fStore = storealias(3);
+        {
+            int serviceStore = 0;
+            if(!BranchStoreMap::lookup(3, &serviceStore)) {
+                message_error(tr("Store 3 is not mapped for branch %1 (required for service charge line). "
+                                 "Configure r_branch_storemap.")
+                              .arg(defrest(dr_branch)));
+                return false;
+            }
+            so->fStore = serviceStore;
+        }
         so->fName = fHall->fServiceName;
         so->fPrice = 0;
         so->fSvcValue = od->fSvcValue;
@@ -1837,15 +1850,31 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
             ui->tblOrder->setItem(rows, i, new QTableWidgetItem());
         }
 
-        ui->tblOrder->item(rows, 0)->setData(Qt::UserRole, QVariant::fromValue(so));
-        ui->tblOrder->item(rows, 1)->setData(Qt::UserRole, QVariant::fromValue(so));
-        ui->tblOrder->item(rows, 2)->setData(Qt::UserRole, QVariant::fromValue(so));
+        QTableWidgetItem *serviceCells[3] = {
+            ui->tblOrder->item(rows, 0),
+            ui->tblOrder->item(rows, 1),
+            ui->tblOrder->item(rows, 2)
+        };
+        if(!serviceCells[0] || !serviceCells[1] || !serviceCells[2]) {
+            return false;
+        }
+        serviceCells[0]->setData(Qt::UserRole, QVariant::fromValue(so));
+        serviceCells[1]->setData(Qt::UserRole, QVariant::fromValue(so));
+        serviceCells[2]->setData(Qt::UserRole, QVariant::fromValue(so));
         //}
     }
 
-    ui->tblOrder->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(od));
-    ui->tblOrder->item(row, 1)->setData(Qt::UserRole, QVariant::fromValue(od));
-    ui->tblOrder->item(row, 2)->setData(Qt::UserRole, QVariant::fromValue(od));
+    QTableWidgetItem *dishCells[3] = {
+        ui->tblOrder->item(row, 0),
+        ui->tblOrder->item(row, 1),
+        ui->tblOrder->item(row, 2)
+    };
+    if(!dishCells[0] || !dishCells[1] || !dishCells[2]) {
+        return false;
+    }
+    dishCells[0]->setData(Qt::UserRole, QVariant::fromValue(od));
+    dishCells[1]->setData(Qt::UserRole, QVariant::fromValue(od));
+    dishCells[2]->setData(Qt::UserRole, QVariant::fromValue(od));
     ui->tblOrder->setCurrentCell(row, 0);
     setOrderRowHidden(row, od);
 
@@ -1853,6 +1882,7 @@ void RDesk::addDishToTable(OrderDishStruct * od, bool counttotal, bool checkserv
         countTotal();
         changeBtnState();
     }
+    return true;
 }
 void RDesk::updateDish(OrderDishStruct * od)
 {
@@ -1884,7 +1914,11 @@ double RDesk::countTotal()
     double servicevalue = 0;
 
     for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct*>();
 
         if(!od) {
             continue;
@@ -1913,7 +1947,11 @@ double RDesk::countTotal()
     }
 
     for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct*>();
 
         if(!od) {
             continue;
@@ -1940,9 +1978,10 @@ double RDesk::countTotal()
     }
 
     double grandTotal = total + (fNoService ? 0 : servicevalue);
-    qDebug() << fHall << fTable;
     fHall = Hall::getHallById(fTable->fHall);
-    ui->tblTotal->item(1, 1)->setData(Qt::EditRole, float_str(grandTotal, 2));
+    if(QTableWidgetItem *totalItem = ui->tblTotal->item(1, 1)) {
+        totalItem->setData(Qt::EditRole, float_str(grandTotal, 2));
+    }
     fDbBind[":f_total"] = grandTotal;
     fDb.update("o_header", fDbBind, where_id(ap(fTable->fOrder)));
     fDbBind[":f_cash"] = grandTotal;
@@ -1952,6 +1991,7 @@ double RDesk::countTotal()
     fDb.update("o_header_payment", fDbBind, where_id(ap(fTable->fOrder)));
     fTable->fAmount = float_str(grandTotal, 2);
     updateTableInfo();
+    refreshCustomerDisplay();
     return grandTotal;
 }
 void RDesk::countDish(OrderDishStruct * d)
@@ -2043,7 +2083,11 @@ bool RDesk::setTable(TableStruct * t, bool nosmile)
             OrderDishStruct *od = nullptr;
 
             for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-                od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+                QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+                if(!cell) {
+                    continue;
+                }
+                od = cell->data(Qt::UserRole).value<OrderDishStruct*>();
 
                 if(!od) {
                     continue;
@@ -2084,7 +2128,11 @@ bool RDesk::setTable(TableStruct * t, bool nosmile)
 }
 void RDesk::checkOrderHeader(TableStruct * t)
 {
-    if (!fHall || (t && fHall->fId != t->fHall)) {
+    if(!t) {
+        return;
+    }
+
+    if(!fHall || fHall->fId != t->fHall) {
         fHall = Hall::getHallById(t->fHall);
     }
 
@@ -2093,6 +2141,11 @@ void RDesk::checkOrderHeader(TableStruct * t)
 
         if(!Session::isValidForWorkingDate(sessionError)) {
             message_error(sessionError);
+            return;
+        }
+
+        if(!fHall) {
+            message_error(tr("Hall configuration not found for this table."));
             return;
         }
 
@@ -2151,6 +2204,50 @@ void RDesk::clearOrder()
     }
 
     fTable = nullptr;
+    refreshCustomerDisplay();
+}
+void RDesk::refreshCustomerDisplay()
+{
+    CustomerDisplay *cd = CustomerDisplay::instance();
+    if(!cd) {
+        return;
+    }
+
+    if(!fTable || fTable->fOrder <= 0) {
+        cd->showWelcome();
+        return;
+    }
+
+    CustomerDisplayOrder order;
+
+    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
+        if(ui->tblOrder->isRowHidden(i)) {
+            continue;
+        }
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct *>();
+        if(!od || od->fState != DISH_STATE_READY) {
+            continue;
+        }
+
+        CustomerDisplayLine line;
+        line.name = od->fName;
+        line.qty = float_str(od->fQty, 1);
+        line.total = float_str(od->fTotal, 2);
+        line.comment = od->fComment.trimmed();
+        order.lines.append(line);
+    }
+
+    const QTableWidgetItem *totalItem = ui->tblTotal->item(1, 1);
+    order.grandTotal = totalItem ? totalItem->data(Qt::EditRole).toString().trimmed() : QStringLiteral("0");
+    if(order.grandTotal.isEmpty()) {
+        order.grandTotal = QStringLiteral("0");
+    }
+
+    cd->showOrder(order);
 }
 void RDesk::loadOrder(bool showwarning)
 {
@@ -2265,121 +2362,143 @@ void RDesk::setOrderRowHidden(int row, OrderDishStruct * od)
         break;
     }
 }
-void RDesk::printServiceCheck(const QString & prn, int side)
+bool RDesk::printServiceCheck(const QString & prn, int side, int onlyRecId)
 {
-    QStringList printers = QPrinterInfo::availablePrinterNames();
-
-    foreach(QString s, printers) {
-        writelog("printer - " + s);
+    if(!fTable || !fHall || !fStaff) {
+        message_error(tr("Cannot print service check: order is not open."));
+        return false;
     }
 
-    if(!printers.contains(prn, Qt::CaseInsensitive)) {
-        message_error(tr("The printer with name not exists on the system") + "\r\n" + prn);
-        return;
+    QStringList availablePrinters;
+    const QString systemPrinter = resolveSystemPrinterName(prn, &availablePrinters);
+
+    if(systemPrinter.isEmpty()) {
+        QTimer::singleShot(0, this, [this, prn, availablePrinters]() {
+            showPrinterNotInstalledError(this, prn, availablePrinters);
+        });
+        return false;
     }
 
-    QList<PPrintScene*> lps;
-    PPrintScene *ps = new PPrintScene(Portrait);
-    lps.append(ps);
-    PTextRect th;
-    QFont f("Arial", 24);
-    th.setFont(f);
-    th.setBorders(false, false, false, false);
-    PTextRect *r = 0;
-    int top = 10;
-    th.setTextAlignment(Qt::AlignHCenter);
-    int rowHeight = 60;
-    f.setPointSize(34);
-    th.setFont(f);
-    top += ps->addTextRect(10, top, 680, rowHeight, fHall->fName, &th)->textHeight();
-    f.setPointSize(24);
-    th.setFont(f);
-    r = ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1 %2")
-                                      .arg(tr("Service check, order #"))
-                                      .arg(fTable->fOrder),
-                                      &th, f));
-    top += r->textHeight();
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1: %2").arg(tr("Table")).arg(fTable->fName),
-                                         &th, f))->textHeight();
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1: %2").arg(tr("Time"))
-                                         .arg(QDateTime::currentDateTime().toString(def_date_time_format)), &th, f))->textHeight();
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1: %2").arg(tr("Waiter"))
-                                         .arg(fStaff->fName), &th, f))->textHeight();
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    ps->addTextRect(new PTextRect(10, top, 80, rowHeight, tr("Qty"), &th, f));
-    top += ps->addTextRect(new PTextRect(90, top, 680, rowHeight, tr("Description"), &th, f))->textHeight();
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    th.setTextAlignment(Qt::AlignLeft);
+    if(QPrinterInfo::printerInfo(systemPrinter).isNull()) {
+        showPrinterNotInstalledError(this, prn, availablePrinters);
+        return false;
+    }
+
+    ReceiptPrinter printer(systemPrinter);
+    C5Printing doc;
+    setupC5Printing(doc, printer.printer());
+
+    doc.setFontSize(receiptFontPt(12));
+    doc.setFontBold(true);
+    doc.ctext(fHall->fName);
+    doc.br();
+
+    doc.setFontSize(receiptFontPt(10));
+    doc.setFontBold(false);
+    doc.ctext(QString("%1 %2").arg(tr("Service check, order #")).arg(fTable->fOrder));
+    doc.br();
+    doc.lrtext(tr("Table"), fTable->fName);
+    doc.br();
+    doc.lrtext(tr("Time"), QDateTime::currentDateTime().toString(def_date_time_format));
+    doc.br();
+    doc.lrtext(tr("Waiter"), fStaff->fName);
+    doc.br();
+    doc.line();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ltext(tr("Qty"), 0, 14);
+    doc.ltext(tr("Description"), 14, 0);
+    doc.br();
+    doc.setFontBold(false);
+    doc.line();
+    doc.br(2);
 
     for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct*>();
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct*>();
 
-        if(!od) {
+        if(!od || od->fState != DISH_STATE_READY) {
             continue;
         }
 
-        if(od->fState != DISH_STATE_READY) {
+        if(side == 1 && od->fPrint1.compare(prn, Qt::CaseInsensitive) != 0) {
+            continue;
+        }
+        if(side == 2 && od->fPrint2.compare(prn, Qt::CaseInsensitive) != 0) {
+            continue;
+        }
+        if(onlyRecId > 0 && od->fRecId != onlyRecId) {
             continue;
         }
 
-        if(side == 1) {
-            if(od->fPrint1 != prn) {
-                continue;
-            }
-        }
+        const float qty = (onlyRecId > 0 && od->fRecId == onlyRecId)
+                              ? od->fQty
+                              : (od->fQty - od->fQtyPrint);
 
-        if(side == 2) {
-            if(od->fPrint2 != prn) {
-                continue;
-            }
-        }
-
-        float qty = od->fQty - od->fQtyPrint;
-
-        if(qty < 0.1) {
+        if(qty < 0.1f) {
             continue;
         }
 
-        ps->addTextRect(new PTextRect(10, top, 80, rowHeight, float_str(qty, 1), &th, f));
-        top += ps->addTextRect(new PTextRect(90, top, 680, rowHeight, od->fName, &th, f))->textHeight();
+        doc.ltext(float_str(qty, 1), 0, 14);
+        doc.ltext(od->fName, 14, 0);
+        doc.br();
 
         if(!od->fComment.isEmpty()) {
-            f.setPointSize(18);
-            f.setBold(true);
-            th.setFont(f);
-            top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, od->fComment, &th, f))->textHeight();
-            f.setPointSize(24);
-            f.setBold(false);
-            th.setFont(f);
+            doc.setFontSize(receiptFontPt(9));
+            doc.setFontBold(true);
+            doc.ltext(od->fComment, 14, 0);
+            doc.br();
+            doc.setFontSize(receiptFontPt(10));
+            doc.setFontBold(false);
         }
 
-        ps->addLine(10, top, 680, top);
-
-        if(top > sizePortrait.height() - 200) {
-            top = 10;
-            ps = new PPrintScene(Portrait);
-            lps.append(ps);
-        }
+        doc.line();
     }
 
-    top += 25;
-    th.setTextAlignment(Qt::AlignLeft);
-    ps->addTextRect(10, top, 680, rowHeight, tr("Printer: ") + prn, &th);
-    top += 5;
-    ps->addTextRect(10, top, 680, rowHeight, "_", &th);
-    QPrinter printer;
-    printer.setPrinterName(prn.toUpper());
-    QPainter painter(&printer);
-    QPrintDialog pd(&printer, this);
+    doc.br(4);
+    doc.ltext(tr("Printer: ") + systemPrinter, 0);
+    doc.br();
+    doc.ctext("_");
 
-    for (int i = 0; i < lps.count(); i++) {
-        if(i > 0) {
-            printer.newPage();
+    if(!printC5(doc, printer.printer())) {
+        message_error(tr("Failed to start printing on printer \"%1\".").arg(systemPrinter));
+        return false;
+    }
+
+    return true;
+}
+
+void RDesk::markKitchenPrinted(const QString &prn, int side, int onlyRecId)
+{
+    for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
         }
-
-        lps[i]->render(&painter);
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct *>();
+        if(!od || od->fState != DISH_STATE_READY) {
+            continue;
+        }
+        if(onlyRecId > 0 && od->fRecId != onlyRecId) {
+            continue;
+        }
+        if(side == 1) {
+            if(od->fPrint1.isEmpty() || od->fPrint1.compare(prn, Qt::CaseInsensitive) != 0) {
+                continue;
+            }
+        } else if(side == 2) {
+            if(od->fPrint2.isEmpty() || od->fPrint2.compare(prn, Qt::CaseInsensitive) != 0) {
+                continue;
+            }
+        }
+        if(od->fQty - od->fQtyPrint < 0.1f) {
+            continue;
+        }
+        od->fQtyPrint = od->fQty;
+        updateDish(od);
     }
 }
 
@@ -2401,17 +2520,10 @@ void RDesk::printReceipt(bool printModePayment)
     if (u)
         userName = u->fFull;
 
-    // --- 3. Инициализация C5Printing ---
-    int bs = 22;
+    const int bs = receiptFontPt(10);
+    ReceiptPrinter printer(defrest(dr_first_receipt_printer));
     C5Printing p;
-    QPrinterInfo pi = QPrinterInfo::printerInfo(defrest(dr_first_receipt_printer));
-    QPrinter printer(pi);
-    printer.setPageSize(QPageSize::Custom);
-    printer.setFullPage(false);
-    QRectF pr = printer.pageRect(QPrinter::DevicePixel);
-    constexpr qreal SAFE_RIGHT_MM = 4.0;
-    qreal safePx = SAFE_RIGHT_MM * printer.logicalDpiX() / 25.4;
-    p.setSceneParams(pr.width() - safePx, pr.height(), printer.logicalDpiX());
+    setupC5Printing(p, printer.printer());
 
     // --- 4. Шапка (Лого и Заголовок) ---
     p.image("logo_print.png", Qt::AlignHCenter);
@@ -2507,7 +2619,7 @@ void RDesk::printReceipt(bool printModePayment)
     p.br(2);
 
     // Обычные блюда
-    p.setFontSize(bs - 2);
+    p.setFontSize(receiptFontPt(8));
     p.setFontBold(false);
     for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
         OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct *>();
@@ -2568,7 +2680,7 @@ void RDesk::printReceipt(bool printModePayment)
 
     // --- 11. Финализация и Печать ---
 
-    p.print(printer);
+    printC5(p, printer.printer());
 
     // Обновление счетчика печати
     fTable->fPrint = abs(fTable->fPrint) + 1;
@@ -2585,8 +2697,19 @@ void RDesk::changeBtnState()
     bool btnPrintService = false;
     bool btnPrintReceipt = false;
 
+    if(!fTable) {
+        ui->btnPayment_2->setEnabled(false);
+        ui->btnPrint->setEnabled(false);
+        ui->btnPayment->setEnabled(false);
+        return;
+    }
+
     for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct *>();
+        QTableWidgetItem *cell = ui->tblOrder->item(i, 0);
+        if(!cell) {
+            continue;
+        }
+        OrderDishStruct *od = cell->data(Qt::UserRole).value<OrderDishStruct *>();
 
         if (!od) {
             continue;
@@ -2596,17 +2719,17 @@ void RDesk::changeBtnState()
             continue;
         }
 
-        float qty = od->fQty - od->fQtyPrint;
         emptyReceipt = false;
 
-        if (qty > 0.1) {
+        const float qty = od->fQty - od->fQtyPrint;
+        const bool needsKitchenPrint = !od->fPrint1.isEmpty() || !od->fPrint2.isEmpty();
+        if (needsKitchenPrint && qty > 0.1f) {
             btnPrintService = true;
             break;
         }
     }
 
     btnPrintReceipt = !btnPrintService;
-    btnPrintReceipt = btnPrintReceipt;
     ui->btnPayment_2->setEnabled(btnPrintReceipt);
     ui->btnPrint->setEnabled(btnPrintService);
     ui->btnPayment->setEnabled(btnPrintReceipt && !emptyReceipt && fTable->fPrint > 0);
@@ -2764,7 +2887,8 @@ TableStruct *RDesk::loadHall(int hall)
     HallStruct *hs = Hall::getHallById(hall);
 
     if (hs == nullptr) {
-        message_error(tr("Hall is empty"));
+        message_error(tr("Hall id %1 is not configured for this branch (check «Show hall» and branch in hall settings).")
+                      .arg(hall));
         return nullptr;
     }
 
@@ -2903,29 +3027,20 @@ void RDesk::on_btnPrint_clicked()
 
     if (prn1.count() > 0) {
         for (QSet<QString>::const_iterator prn = prn1.begin(); prn != prn1.end(); prn++) {
-            printServiceCheck(*prn, 1);
+            if(printServiceCheck(*prn, 1)) {
+                markKitchenPrinted(*prn, 1);
+                printed = true;
+            }
         }
-
-        printed = true;
     }
 
     if (prn2.count() > 0) {
         for (QSet<QString>::const_iterator prn = prn2.begin(); prn != prn2.end(); prn++) {
-            printServiceCheck(*prn, 2);
+            if(printServiceCheck(*prn, 2)) {
+                markKitchenPrinted(*prn, 2);
+                printed = true;
+            }
         }
-
-        printed = true;
-    }
-
-    for (int i = 0; i < ui->tblOrder->rowCount(); i++) {
-        OrderDishStruct *od = ui->tblOrder->item(i, 0)->data(Qt::UserRole).value<OrderDishStruct *>();
-
-        if (!od) {
-            continue;
-        }
-
-        od->fQtyPrint = od->fQty;
-        updateDish(od);
     }
 
     ui->tblOrder->viewport()->update();

@@ -19,7 +19,7 @@
      <item row="8" column="1">
       <widget class="EQLineEdit" name="leServiceItem">
        <property name="Field" stdset="0">
-        <string>f_serviceItem</string>
+        <string>f_serviceitem</string>
        </property>
       </widget>
      </item>

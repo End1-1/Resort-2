@@ -331,6 +331,16 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_resort_audit_log">
+         <property name="text">
+          <string>Resort լոգեր (audit)</string>
+         </property>
+         <property name="tag" stdset="0">
+          <number>18</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>

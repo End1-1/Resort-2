@@ -1,4 +1,6 @@
 #include "printtaxno.h"
+#include "preferences.h"
+#include "rmessage.h"
 #include <QByteArray>
 #include <QCryptographicHash>
 #include <QDataStream>
@@ -31,6 +33,42 @@ static QMutex fTaxMutex;
     QString::number(value, 'f', f) \
         .remove(QRegularExpression("\\.0+$")) \
         .remove(QRegularExpression("\\.$"))
+
+static bool hasInvalidJsonStringChar(const QString &s)
+{
+    for(const QChar c : s) {
+        if(c.unicode() < 0x20 || c == QLatin1Char('\\')) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static QString sanitizeProductNameForJson(const QString &name)
+{
+    QString result;
+    result.reserve(name.length());
+
+    for(const QChar c : name) {
+        if(c.unicode() < 0x20 || c == QLatin1Char('\\')) {
+            result += QLatin1Char(' ');
+        } else {
+            result += c;
+        }
+    }
+
+    result.replace(QRegularExpression(QStringLiteral(" +")), QStringLiteral(" "));
+    return result.trimmed();
+}
+
+static QString escapeJsonStringForManualBuild(const QString &s)
+{
+    QString r = s;
+    r.replace("\\", "\\\\");
+    r.replace("\"", "\\\"");
+    return r;
+}
 
 int PrintTaxNO::connectToHost(QString &err)
 {
@@ -443,7 +481,7 @@ void PrintTaxNO::addGoods(int dep, const QString &adgt, const QString &code, con
     data["dep"] = dep;
     data["adgCode"] = adgt;
     data["productCode"] = code;
-    data["productName"] = QString(name).replace("\"", "\\\"");
+    data["productName"] = name;
     data["price"] = price;
     data["qty"] = qty;
     double total = price * qty;
@@ -478,9 +516,42 @@ void PrintTaxNO::addReturnItem(int row, double qty)
         {"quantity", qty}});
 }
 
+void PrintTaxNO::sanitizeGoodsForJsonPrint()
+{
+    QStringList affected;
+
+    for(int i = 0; i < fJsonGoods.count(); i++) {
+        QMap<QString, QJsonValue> &g = fJsonGoods[i];
+        const QString raw = g["productName"].toString();
+
+        if(hasInvalidJsonStringChar(raw)) {
+            affected.append(raw.trimmed().isEmpty() ? tr("(empty name)") : raw);
+            g["productName"] = escapeJsonStringForManualBuild(sanitizeProductNameForJson(raw));
+        } else {
+            g["productName"] = escapeJsonStringForManualBuild(raw);
+        }
+    }
+
+    if(affected.isEmpty()) {
+        return;
+    }
+
+    QString msg = tr("Invalid character in product name (e.g. line break). "
+                     "It will be replaced with a space and printing will continue.\n\n"
+                     "Products:");
+    msg += "\n";
+
+    for(const QString &name : affected) {
+        msg += QString("\n• %1").arg(name);
+    }
+
+    RMessage::showInfo(msg, Preferences().getDefaultParentForMessage());
+}
+
 void PrintTaxNO::makeJsonAndPrint(double cash, double card, double prepaid)
 {
     emit started();
+    sanitizeGoodsForJsonPrint();
     QString emarks;
 
     for (QString e : fEmarks) {
@@ -568,6 +639,7 @@ void PrintTaxNO::makeJsonAndPrint(double cash, double card, double prepaid)
 
 int PrintTaxNO::makeJsonAndPrint(double card, double prepaid, QString &outInJson, QString &outOutJson, QString &err)
 {
+    sanitizeGoodsForJsonPrint();
     QString emarks;
 
     for(QString e : fEmarks) {
@@ -656,6 +728,7 @@ int PrintTaxNO::makeJsonAndPrint(double card, double prepaid, QString &outInJson
 int PrintTaxNO::makeJsonAndPrint(double cash, double card, double prepaid, QString &outInJson, QString &outOutJson, QString &err)
 {
     emit started();
+    sanitizeGoodsForJsonPrint();
     QString emarks;
 
     for(QString e : fEmarks) {

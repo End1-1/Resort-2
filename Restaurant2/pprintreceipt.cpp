@@ -1,65 +1,62 @@
 #include "pprintreceipt.h"
+#include "c5printing.h"
+#include "cacheusers.h"
 #include "databaseresult.h"
-#include "pprintscene.h"
-#include "trackcontrol.h"
-#include "ptextrect.h"
-#include "pimage.h"
+#include "database2.h"
 #include "message.h"
 #include "paymentmode.h"
-#include "cacheusers.h"
-#include "printtaxn.h"
-#include "database2.h"
-#include <QMessageBox>
-#include <QPrinter>
-#include <QPainter>
-#include <QPrinterInfo>
-#include <QPrintDialog>
-#include <QJsonObject>
+#include "restaurantc5print.h"
+#include "trackcontrol.h"
 #include <QJsonDocument>
-#include <QDateTime>
-#include <QPageSize>
+#include <QJsonObject>
+#include <QMessageBox>
 
-PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
-    Base()
+namespace {
+
+void addLabelValue(C5Printing &doc, const QString &label, const QString &value)
+{
+    doc.ltext(label, 0, 32);
+    doc.ltext(value, 32, 0);
+    doc.br();
+}
+
+} // namespace
+
+PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user)
+    : Base()
 {
     Db b = Preferences().getDatabase(Base::fDbName);
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2[":f_id"] = number;
     db2.exec("select * from o_header where f_id=:f_id");
-    if (!db2.next()) {
+    if(!db2.next()) {
         message_error(QObject::tr("Not valid order id"));
         return;
     }
-    int fiscalnumber = db2.integer("f_tax");
-    int orderstate = db2.integer("f_state");
-    //QString sn, firm, address, fiscal, hvhh, rseq, devnum, time;
+    const int fiscalnumber = db2.integer("f_tax");
+    const int orderstate = db2.integer("f_state");
     QString partnerTin;
     QJsonObject jh;
-    if (fiscalnumber > 0) {
+    if(fiscalnumber > 0) {
         db2[":f_fiscal"] = fiscalnumber;
         db2.exec("select * from o_tax_log where f_fiscal=:f_fiscal");
-        if (!db2.next()) {
+        if(!db2.next()) {
             message_error(QObject::tr("Not valid fiscal number"));
             return;
         }
-        //PrintTaxN::parseResponse(db2.string("f_out"), firm, hvhh, fiscal, rseq, sn, address, devnum, time);
         QJsonObject jo = QJsonDocument::fromJson(db2.string("f_in").toUtf8()).object();
         jh = QJsonDocument::fromJson(db2.string("f_out").toUtf8()).object();
         partnerTin = jo["partnerTin"].toString();
     }
 
-    QString costumer;
     db2[":f_order"] = number;
     db2.exec("select * from o_car where f_order=:f_order");
-    if (db2.next()) {
-        int costname = db2.integer("f_costumer");
-        if (costname > 0) {
+    if(db2.next()) {
+        const int costname = db2.integer("f_costumer");
+        if(costname > 0) {
             db2[":f_id"] = costname;
             db2.exec("select * from o_debt_holder where f_id=:f_id");
-            if (db2.next()) {
-                costumer = db2.string("f_name");
-            }
         }
     }
 
@@ -74,7 +71,7 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
                left join users u on u.f_id=oh.f_staff \
                where oh.f_id=:f_id ", fDbBind);
 
-    if (drh.rowCount() == 0) {
+    if(drh.rowCount() == 0) {
         QMessageBox::warning(0, QObject::tr("Print receipt"), QObject::tr("Incorrect order number"));
         return;
     }
@@ -89,251 +86,168 @@ PPrintReceipt::PPrintReceipt(const QString &printerName, int number, int user) :
                order by od.f_row ",
                fDbBind);
 
-    QList<PPrintScene*> lps;
-    PPrintScene *ps = new PPrintScene(Portrait);
-    lps.append(ps);
-    PTextRect th;
-    QFont f("Arial", 30);
-    th.setFont(f);
-    th.setBorders(false, false, false, false);
-    int top = 10;
-    th.setTextAlignment(Qt::AlignHCenter);
-    int rowHeight = 60;
-    PImage *logo = new PImage("logo_print.png");
-    ps->addItem(logo);
-    logo->setRect(QRectF(150, top, 400, 250));
-    top += 250;
-    f.setPointSize(30);
-    th.setFont(f);
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight + 10, drh.value("hname").toString(), &th, f))->textHeight();
-    top += 20;
-    f.setPointSize(30);
-    th.setFont(f);
-    if (orderstate == ORDER_STATE_REMOVED) {
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "ՉԵՂԱՐԿՎԱԾ", &th))->textHeight();
-    }
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QString("%1 %2")
-                                     .arg(QObject::tr("Receipt S/N "))
-                                     .arg(number),
-                                     &th, f))->textHeight();
-    th.setTextAlignment(Qt::AlignLeft);
-    if (fiscalnumber > 0) {
-        top += ps->addTextRect(new PTextRect(10, top, 200, rowHeight, jh["taxpayer"].toString(), &th, f))->textHeight();
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Taxpayer id"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["tin"].toString(), &th, f))
-                ->textHeight();
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Device number"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["crn"].toString(), &th, f))
-                ->textHeight();ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Serial"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["sn"].toString(), &th, f))
-                ->textHeight();
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Fiscal"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["fiscal"].toString(), &th, f))
-                ->textHeight();
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Receipt number"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, jh["rseq"].toString(), &th, f))
-                ->textHeight();
-        ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Date"), &th, f));
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight,
-                                             QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(jh["time"].toDouble()))
-                                                 .addSecs(3600*4).toString("dd.MM.yyyy HH:mm:ss"), &th, f))
-                ->textHeight();
-        top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, QObject::tr("(F)"), &th, f))
-                ->textHeight();
-        if (!partnerTin.isEmpty()) {
-            ps->addTextRect(new PTextRect(10, top, 200, rowHeight, QObject::tr("Partner tin"), &th, f));
-            top += ps->addTextRect(new PTextRect(210, top, 450, rowHeight, partnerTin, &th, f))
-                    ->textHeight();
-        }
-    }
-
-    f.setPointSize(24);
-    th.setFont(f);
-    th.setTextAlignment(Qt::AlignLeft);
-    ps->addTextRect(new PTextRect(10, top, 150, rowHeight, QObject::tr("Table"), &th, f));
-    ps->addTextRect(new PTextRect(160, top, 200, rowHeight, drh.value("tname").toString(), &th, f));
-    ps->addTextRect(new PTextRect(340, top, 230, rowHeight, QObject::tr("Date"), &th, f));
-    top += ps->addTextRect(new PTextRect(450, top, 250, rowHeight, drh.value("f_dateCash").toDate().toString(def_date_format), &th, f))->textHeight();
-    /*
-    ps->addTextRect(new PTextRect(10, top, 150, rowHeight, QObject::tr("Time"), &th, f));
-    top += ps->addTextRect(new PTextRect(160, top, 200, rowHeight, QTime::currentTime().toString(def_time_format), &th, f))->textHeight();
-    */
-    ps->addTextRect(new PTextRect(10, top, 150, rowHeight, QObject::tr("Waiter"), &th, f));
-    top += ps->addTextRect(new PTextRect(160, top, 500, rowHeight, drh.value("staff").toString(), &th, f))->textHeight();
-
-    ps->addTextRect(new PTextRect(10, top, 150, rowHeight, QObject::tr("Opened"), &th, f));
-    top += ps->addTextRect(new PTextRect(160, top, 350, rowHeight, drh.value("f_dateOpen").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
-    ps->addTextRect(new PTextRect(10, top, 150, rowHeight, QObject::tr("Closed"), &th, f));
-    top += ps->addTextRect(new PTextRect(160, top, 350, rowHeight, drh.value("f_dateClose").toDateTime().toString(def_date_time_format), &th, f))->textHeight();
-
-    top += 2;
-    ps->addLine(10, top, 680, top);
-    top ++;
-    ps->addTextRect(new PTextRect(10, top, 100, rowHeight, QObject::tr("Qty"), &th, f));
-    ps->addTextRect(new PTextRect(110, top, 390, rowHeight, QObject::tr("Description"), &th, f));
-    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, QObject::tr("Amount"), &th, f))->textHeight();
-    ps->addLine(10, top, 680, top);
-    top ++;
-    f.setPointSize(18);
-    f.setBold(true);
-    th.setFont(f);
-
-    for (int i = 0; i < drd.rowCount(); i++) {
-        if (drd.value(i, "f_state").toInt() != DISH_STATE_READY) {
-            continue;
-        }
-        ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(drd.value(i, "f_qty").toDouble(), 1), &th, f));
-        ps->addTextRect(new PTextRect(110, top, 390, rowHeight, drd.value(i, "f_" + def_lang).toString(), &th, f));
-        top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(drd.value(i, "f_total").toDouble(), 2), &th, f))->textHeight();
-        if (top > sizePortrait.height()  - 200) {
-            top = 10;
-            ps = new PPrintScene(Portrait);
-            lps.append(ps);
-        }
-    }
-    ps->addLine(10, top, 680, top);
-    top += 2;
-    f.setPointSize(24);
-    th.setFont(f);
-    ps->addTextRect(new PTextRect(10, top, 400, rowHeight, QObject::tr("Total, AMD"), &th, f));
-    top += ps->addTextRect(new PTextRect(500, top, 200, rowHeight, float_str(drh.value("f_total").toDouble(), 2), &th, f))->textHeight();
-
-    top += rowHeight;
-    f.setPointSize(28);
-    th.setFont(f);
-    th.setTextAlignment(Qt::AlignHCenter);
-
-    if (top > sizePortrait.height()  - 200) {
-        top = 10;
-        ps = new PPrintScene(Portrait);
-        lps.append(ps);
-    }
-    if (!drh.value("f_roomComment").toString().isEmpty()) {
-       top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, drh.value("f_roomComment").toString(), &th, f))->textHeight();
-       top += rowHeight;
-       top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("Signature"), &th, f))->textHeight();
-       top += rowHeight + 2;
-       ps->addLine(150, top, 680, top);
-    }
-
-    if (top > sizePortrait.height()  - 200) {
-        top = 10;
-        ps = new PPrintScene(Portrait);
-        lps.append(ps);
-    }
-    if (drh.value("f_paymentMode").toInt() == PAYMENT_COMPLIMENTARY) {
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("COMPLIMENTARY"), &th, f))->textHeight();
-    } else {
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("SALES"), &th, f))->textHeight();
-    }
-
-    top += rowHeight;
-    top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("Mode Of Payment"), &th, f))->textHeight();
-    switch (drh.value("f_paymentMode").toInt()) {
-    case PAYMENT_CASH:
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("CASH") + "/" + drh.value("f_paymentComment").toString(), &th, f))->textHeight();
-        break;
-    case PAYMENT_CARD:
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, QObject::tr("CARD") + "/" + drh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-        break;
-    case PAYMENT_ROOM:
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, drh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-        break;
-    case PAYMENT_CL:
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "CL/" +
-                                             drh.value("f_paymentModeComment").toString() +
-                                             "(" + drh.value("f_cityLedger").toString() + ")", &th, f))->textHeight();
-        break;
-    case PAYMENT_COMPLIMENTARY:
-        top += ps->addTextRect(new PTextRect(10, top, 680, rowHeight, drh.value("f_paymentModeComment").toString(), &th, f))->textHeight();
-        break;
-    }
-
-    top += 10;
-    f.setPointSize(28);
-    f.setBold(true);
-    th.setFont(f);
-
-    bool voida = false;
-    for (int i = 0; i < drd.rowCount(); i++) {
-        if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE && drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_NOSTORE) {
-            continue;
-        }
-        voida = true;
-    }
-    if (voida) {
-        top += (rowHeight * 3);
-        top += ps->addTextRect(10, top, 600, rowHeight, QObject::tr("****VOID****"), &th)->textHeight();
-        f.setPointSize(22);
-        f.setBold(false);
-        th.setFont(f);
-        for (int i = 0; i < drd.rowCount(); i++) {
-            if (drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_STORE && drd.value(i, "f_state").toInt() != DISH_STATE_REMOVED_NOSTORE) {
-                continue;
-            }
-            ps->addTextRect(new PTextRect(10, top, 100, rowHeight, float_str(drd.value(i, "f_qty").toDouble(), 1), &th, f));
-            top += ps->addTextRect(new PTextRect(110, top, 390, rowHeight, drd.value(i, "f_" + def_lang).toString(), &th, f))->textHeight();
-            top += ps->addTextRect(new PTextRect(400, top, 200, rowHeight, float_str(drd.value(i, "f_total").toDouble(), 2), &th, f))->textHeight();
-            if (top > sizePortrait.height()  - 200) {
-                top = 10;
-                ps = new PPrintScene(Portrait);
-                lps.append(ps);
-            }
-        }
-    }
-
-    //Finish
-    top += rowHeight;
-    ps->addTextRect(new PTextRect(10, top, 680, rowHeight, "_", &th, f));
-
-    top += 10;
-    f.setPointSize(18);
-    f.setBold(false);
-    th.setFont(f);
-    top += ps->addTextRect(10, top, 680, rowHeight, QString("Printed %1").arg(QDateTime::currentDateTime().toString(def_date_time_format)), &th)->textHeight();
-    CI_User *u = CacheUsers::instance()->get(user);
-    if (u) {
-        top += ps->addTextRect(10, top, 680, rowHeight, QString("By ") + u->fFull, &th)->textHeight();
-    }
-
     if(printerName.isEmpty()) {
         return;
     }
 
-    QPrinterInfo pi = QPrinterInfo::printerInfo(printerName);
-    QPrinter printer(pi);
-    printer.setPageSize(QPageSize::Custom);
-    printer.setFullPage(true);
+    ReceiptPrinter printer(printerName);
+    C5Printing doc;
+    setupC5Printing(doc, printer.printer());
 
-    QPainter painter(&printer);
-    const QRectF pageRect = printer.pageRect(QPrinter::DevicePixel);
+    doc.image("./logo_print.png", Qt::AlignHCenter);
+    doc.br(4);
 
-    for(int i = 0; i < lps.count(); i++) {
-        if(i > 0) {
-            printer.newPage();
+    doc.setFontSize(receiptFontPt(12));
+    doc.setFontBold(true);
+    doc.ctext(drh.value("hname").toString());
+    doc.br();
+
+    doc.setFontSize(receiptFontPt(10));
+    doc.setFontBold(false);
+    if(orderstate == ORDER_STATE_REMOVED) {
+        doc.setFontBold(true);
+        doc.ctext(QStringLiteral("ՉԵՂԱՐԿՎԱԾ"));
+        doc.br();
+        doc.setFontBold(false);
+    }
+
+    doc.ctext(QString("%1 %2").arg(QObject::tr("Receipt S/N ")).arg(number));
+    doc.br();
+
+    if(fiscalnumber > 0) {
+        doc.ctext(jh["taxpayer"].toString());
+        doc.br();
+        addLabelValue(doc, QObject::tr("Taxpayer id"), jh["tin"].toString());
+        addLabelValue(doc, QObject::tr("Device number"), jh["crn"].toString());
+        addLabelValue(doc, QObject::tr("Serial"), jh["sn"].toString());
+        addLabelValue(doc, QObject::tr("Fiscal"), jh["fiscal"].toString());
+        addLabelValue(doc, QObject::tr("Receipt number"), jh["rseq"].toString());
+        addLabelValue(doc, QObject::tr("Date"),
+                       QDateTime::fromMSecsSinceEpoch(static_cast<qint64>(jh["time"].toDouble()))
+                           .addSecs(3600 * 4)
+                           .toString("dd.MM.yyyy HH:mm:ss"));
+        doc.ltext(QObject::tr("(F)"), 32, 0);
+        doc.br();
+        if(!partnerTin.isEmpty()) {
+            addLabelValue(doc, QObject::tr("Partner tin"), partnerTin);
         }
+    }
 
-        QRectF sourceRect = lps[i]->itemsBoundingRect().adjusted(-10, -10, 10, 20);
+    addLabelValue(doc, QObject::tr("Table"), drh.value("tname").toString());
+    addLabelValue(doc, QObject::tr("Date"), drh.value("f_dateCash").toDate().toString(def_date_format));
+    addLabelValue(doc, QObject::tr("Waiter"), drh.value("staff").toString());
+    addLabelValue(doc, QObject::tr("Opened"), drh.value("f_dateOpen").toDateTime().toString(def_date_time_format));
+    addLabelValue(doc, QObject::tr("Closed"), drh.value("f_dateClose").toDateTime().toString(def_date_time_format));
 
-        if(sourceRect.isEmpty()) {
+    doc.line();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ltext(QObject::tr("Qty"), 0, 14);
+    doc.ltext(QObject::tr("Description"), 14, 50);
+    doc.ltext(QObject::tr("Amount"), 64, 0);
+    doc.br();
+    doc.setFontBold(false);
+    doc.line();
+    doc.br(2);
+
+    for(int i = 0; i < drd.rowCount(); i++) {
+        if(drd.value(i, "f_state").toInt() != DISH_STATE_READY) {
             continue;
         }
-
-        QImage image(qMax(1, qRound(sourceRect.width())),
-                     qMax(1, qRound(sourceRect.height())),
-                     QImage::Format_RGB32);
-        image.fill(Qt::white);
-
-        QPainter imagePainter(&image);
-        lps[i]->render(&imagePainter,
-                        QRectF(0, 0, sourceRect.width(), sourceRect.height()),
-                        sourceRect);
-        imagePainter.end();
-
-        const qreal scale = pageRect.width() / sourceRect.width();
-        const int targetHeight = qMax(1, qRound(image.height() * scale));
-        painter.drawImage(QRect(0, 0, qRound(pageRect.width()), targetHeight), image);
+        doc.ltext(float_str(drd.value(i, "f_qty").toDouble(), 1), 0, 14);
+        doc.ltext(drd.value(i, "f_" + def_lang).toString(), 14, 50);
+        doc.rtext(float_str(drd.value(i, "f_total").toDouble(), 2));
+        doc.br();
     }
+
+    doc.line();
+    doc.br(2);
+    doc.setFontBold(true);
+    doc.ltext(QObject::tr("Total, AMD"), 0, 50);
+    doc.rtext(float_str(drh.value("f_total").toDouble(), 2));
+    doc.br();
+    doc.setFontBold(false);
+    doc.br(2);
+
+    if(!drh.value("f_roomComment").toString().isEmpty()) {
+        doc.ctext(drh.value("f_roomComment").toString());
+        doc.br();
+        doc.ctext(QObject::tr("Signature"));
+        doc.br();
+        doc.line();
+        doc.br();
+    }
+
+    if(drh.value("f_paymentMode").toInt() == PAYMENT_COMPLIMENTARY) {
+        doc.ctext(QObject::tr("COMPLIMENTARY"));
+    } else {
+        doc.ctext(QObject::tr("SALES"));
+    }
+    doc.br();
+    doc.ctext(QObject::tr("Mode Of Payment"));
+    doc.br();
+
+    switch(drh.value("f_paymentMode").toInt()) {
+    case PAYMENT_CASH:
+        doc.ctext(QObject::tr("CASH") + "/" + drh.value("f_paymentComment").toString());
+        break;
+    case PAYMENT_CARD:
+        doc.ctext(QObject::tr("CARD") + "/" + drh.value("f_paymentModeComment").toString());
+        break;
+    case PAYMENT_ROOM:
+        doc.ctext(drh.value("f_paymentModeComment").toString());
+        break;
+    case PAYMENT_CL:
+        doc.ctext("CL/" + drh.value("f_paymentModeComment").toString()
+                  + "(" + drh.value("f_cityLedger").toString() + ")");
+        break;
+    case PAYMENT_COMPLIMENTARY:
+        doc.ctext(drh.value("f_paymentModeComment").toString());
+        break;
+    default:
+        break;
+    }
+    doc.br();
+
+    bool voida = false;
+    for(int i = 0; i < drd.rowCount(); i++) {
+        const int st = drd.value(i, "f_state").toInt();
+        if(st == DISH_STATE_REMOVED_STORE || st == DISH_STATE_REMOVED_NOSTORE) {
+            voida = true;
+            break;
+        }
+    }
+    if(voida) {
+        doc.br(4);
+        doc.setFontBold(true);
+        doc.ctext(QObject::tr("****VOID****"));
+        doc.br();
+        doc.setFontBold(false);
+        for(int i = 0; i < drd.rowCount(); i++) {
+            const int st = drd.value(i, "f_state").toInt();
+            if(st != DISH_STATE_REMOVED_STORE && st != DISH_STATE_REMOVED_NOSTORE) {
+                continue;
+            }
+            doc.ltext(float_str(drd.value(i, "f_qty").toDouble(), 1), 0, 14);
+            doc.ltext(drd.value(i, "f_" + def_lang).toString(), 14, 50);
+            doc.rtext(float_str(drd.value(i, "f_total").toDouble(), 2));
+            doc.br();
+        }
+    }
+
+    doc.br(2);
+    doc.ctext("_");
+    doc.br();
+    doc.setFontSize(receiptFontPt(9));
+    doc.ltext(QString("Printed %1").arg(QDateTime::currentDateTime().toString(def_date_time_format)), 0);
+    doc.br();
+    CI_User *u = CacheUsers::instance()->get(user);
+    if(u) {
+        doc.ltext(QString("By ") + u->fFull, 0);
+        doc.br();
+    }
+
+    printC5(doc, printer.printer());
 
     fDbBind[":f_print"] = drh.value("f_print").toInt() + 1;
     fDb.update("o_header", fDbBind, where_id(ap(number)));

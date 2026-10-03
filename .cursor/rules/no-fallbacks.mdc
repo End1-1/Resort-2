@@ -1,0 +1,21 @@
+---
+description: Never add fallback logic unless explicitly requested
+alwaysApply: true
+---
+
+# No fallbacks
+
+Never add fallback, degrade, or "plan B" logic unless the user explicitly asks for it.
+
+This includes:
+- alternate code paths when the primary query/API returns empty or fails
+- hardcoded substitute values when DB/config data is missing
+- silent retries with a different strategy
+- "if empty, try something else" without explicit user approval
+
+If the primary approach fails or returns no data:
+- fix the root cause, or
+- show a clear error / empty state, or
+- ask the user what to do
+
+Do not invent compensating behavior on your own.

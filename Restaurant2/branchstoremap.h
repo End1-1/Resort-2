@@ -16,6 +16,8 @@ public:
     QMap<int, int> fStoreMap;
 
     static int alias(int store);
+    static bool lookup(int store, int *aliasOut);
+    static bool hasMappings();
 
     static void setAlias(int store, int alias);
 

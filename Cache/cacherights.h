@@ -22,6 +22,7 @@
 #define pr_edit_cash_doc 15
 #define pr_hall_manager 16
 #define pr_partners 17
+#define pr_resort_audit_log 18
 
 class UserPermssions: public QObject
 {

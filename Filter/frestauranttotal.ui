@@ -887,6 +887,35 @@ ledger</string>
      </property>
     </widget>
    </item>
+   <item row="8" column="12">
+    <widget class="QLabel" name="label_26">
+     <property name="layoutDirection">
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Talon customer</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="14">
+    <widget class="EQCheckBox" name="chTalonCostumer">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="Field" stdset="0">
+      <string>tl.f_partner;tp.f_name</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -1243,6 +1272,22 @@ ledger</string>
     <hint type="destinationlabel">
      <x>733</x>
      <y>15</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chTalonCostumer</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>963</x>
+     <y>527</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>239</y>
     </hint>
    </hints>
   </connection>

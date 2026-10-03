@@ -27,6 +27,7 @@ INCLUDEPATH += c:/projects/resort2/Controls
 INCLUDEPATH += c:/projects/resort2/Cache
 INCLUDEPATH += c:/projects/resort2/Print
 INCLUDEPATH += c:/projects/resort2/Resort
+INCLUDEPATH += ../Filter
 INCLUDEPATH += c:/projects/resort2/Selector
 INCLUDEPATH += c:/projects/Cafe5/Classes
 INCLUDEPATH += C:/Projects/NewTax/Src/
@@ -34,12 +35,16 @@ INCLUDEPATH += c:/Soft/OpenSSL-Win32/include
 INCLUDEPATH += c:/Soft/OpenSSL-Win32/include/openssl
 
 SOURCES += main.cpp\
-    ../Resort/c5printing.cpp \
+    ../Print/c5printing.cpp \
+    restaurantc5print.cpp \
     ../Resort/database2.cpp \
     ../Resort/logwriter.cpp \
     ../Resort/message.cpp \
     ../Resort/storeoutput.cpp \
+    ../Filter/giftcartstore.cpp \
     branchstoremap.cpp \
+    customerdisplay.cpp \
+    winprinternames.cpp \
     dlgpassword.cpp \
     dlgprintmultiplefiscal.cpp \
     dlgsalarytotal.cpp \
@@ -106,10 +111,6 @@ SOURCES += main.cpp\
     ../Controls/eqtablewidget.cpp \
     dlgcomplexdish.cpp \
     ../Controls/epushbutton.cpp \
-    ../Print/pimage.cpp \
-    ../Print/pprintpreview.cpp \
-    ../Print/pprintscene.cpp \
-    ../Print/ptextrect.cpp \
     ../Base/logging.cpp \
     reportprint.cpp \
     ../Controls/eqcombobox.cpp \
@@ -132,6 +133,7 @@ SOURCES += main.cpp\
     ../Cache/cachecar.cpp \
     dlgpayment.cpp \
     dlgdeptholder.cpp \
+    dlgtalonredeem.cpp \
     ../Cache/cacherestdebtholder.cpp \
     ../Cache/cachedocpayment.cpp \
     dlgprinttaxnew.cpp \
@@ -143,10 +145,13 @@ SOURCES += main.cpp\
     sslsocket.cpp
 
 HEADERS  += rface.h \
-    ../Resort/c5printing.h \
+    ../Print/c5printing.h \
+    restaurantc5print.h \
     ../Resort/database2.h \
     ../Resort/logwriter.h \
     branchstoremap.h \
+    customerdisplay.h \
+    winprinternames.h \
     c:/projects/NewTax/Src/printtaxn.h \
     dlgpassword.h \
     dlgprintmultiplefiscal.h \
@@ -214,10 +219,6 @@ HEADERS  += rface.h \
     dlgcomplexdish.h \
     ../Controls/epushbutton.h \
     ../Print/pdefaults.h \
-    ../Print/pimage.h \
-    ../Print/pprintpreview.h \
-    ../Print/pprintscene.h \
-    ../Print/ptextrect.h \
     ../Base/logging.h \
     reportprint.h \
     ../Controls/eqcombobox.h \
@@ -241,6 +242,7 @@ HEADERS  += rface.h \
     ../Cache/cachecar.h \
     dlgpayment.h \
     dlgdeptholder.h \
+    dlgtalonredeem.h \
     ../Cache/cacherestdebtholder.h \
     ../Cache/cachedocpayment.h \
     dlgprinttaxnew.h \
@@ -273,7 +275,6 @@ FORMS    += rface.ui \
     rmodifiers.ui \
     dlgreservation.ui \
     dlgcomplexdish.ui \
-    ../Print/pprintpreview.ui \
     dlgbanketitems.ui \
     dlglist.ui \
     dlgdate.ui \
@@ -283,6 +284,7 @@ FORMS    += rface.ui \
     dlgcarselection.ui \
     dlgpayment.ui \
     dlgdeptholder.ui \
+    dlgtalonredeem.ui \
     dlgprinttaxnew.ui \
     dlgsalary.ui \
     ../Resort/message.ui \
@@ -293,6 +295,10 @@ LIBS += -lopenssl
 LIBS += -llibcrypto
 LIBS += -lwsock32
 LIBS += -ladvapi32
+LIBS += -lwinspool
+
+TRANSLATIONS += \
+    Restaurant.am.ts
 
 RESOURCES += \
     res.qrc
@@ -308,6 +314,11 @@ win32 {
     version_inc.commands = powershell -NoProfile -ExecutionPolicy Bypass -File $$shell_path($$PWD/increase_version.ps1)
     QMAKE_EXTRA_TARGETS += version_inc
     PRE_TARGETDEPS += version_inc
+
+    restaurant_qm.target = restaurant_qm
+    restaurant_qm.commands = powershell -NoProfile -ExecutionPolicy Bypass -File $$shell_path($$PWD/compile_restaurant_qm.ps1)
+    QMAKE_EXTRA_TARGETS += restaurant_qm
+    PRE_TARGETDEPS += restaurant_qm
 }
 
 

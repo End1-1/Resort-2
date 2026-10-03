@@ -1,18 +1,17 @@
 #include "dlgsalary.h"
-#include "ui_dlgsalary.h"
-#include "dlglist.h"
-#include "dlgreservation.h"
+#include <QInputDialog>
+#include <QPrinter>
 #include "branchstoremap.h"
-#include "rmessage.h"
-#include "rnumbers.h"
-#include "cacheusersgroups.h"
 #include "cacheusers.h"
+#include "cacheusersgroups.h"
 #include "database2.h"
 #include "defrest.h"
+#include "dlglist.h"
+#include "dlgreservation.h"
 #include "dlgsalarytotal.h"
-#include "c5printing.h"
-#include <QInputDialog>
-
+#include "rmessage.h"
+#include "rnumbers.h"
+#include "ui_dlgsalary.h"
 DlgSalary::DlgSalary(bool day, QWidget *parent) :
     BaseExtendedDialog(parent),
     ui(new Ui::DlgSalary)

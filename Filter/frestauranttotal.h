@@ -44,13 +44,17 @@ private:
     DWSelectorDishType *fDockDishType;
     DWSelectorPaymentMode *fDockPay;
     void printNewPage(int &top, int &left, int &page, PPrintPreview *pp, PPrintScene *&ps, int nextHeight = 0);
+    void syncColumnIncludesFromCheckboxes(bool countAmount);
+    static QString resolveAggregateIncludeField(const QString &field);
 
 private slots:
+    void groupCheckClicked(bool value);
     void branchEditDoubleClick(bool v);
     void printReceipt();
     void recalculateStore();
     void removeOrder();
     void removePermanently();
+    void compareFiscalInfo();
     void hall(CI_RestHall *c);
     void user(CI_User *c);
     void store(CI_RestStore *c);
@@ -58,7 +62,6 @@ private slots:
     void doubleClick(const QList<QVariant> &row);
     void on_btnPrevDate_clicked();
     void on_btnNextDate_clicked();
-    void on_chShowDiscount_clicked(bool checked);
 };
 
 #endif // FRESTAURANTTOTAL_H

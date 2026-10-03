@@ -28,6 +28,8 @@ CacheRestStore *CacheRestStore::instance()
 
 void CacheRestStore::load()
 {
+    qDeleteAll(fStaticCache[fCacheId]);
+    fStaticCache[fCacheId].clear();
     QSqlQuery *q = prepareDb();
     while (q->next()) {
         CI_RestStore *c = new CI_RestStore();

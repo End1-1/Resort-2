@@ -13,7 +13,8 @@ DWSelector::DWSelector(int cacheId, QWidget *parent) :
     ui->setupUi(this);
     setWindowFlag(Qt::Window, true);
     setWindowModality(Qt::NonModal);
-    ui->btnRefresh->setVisible(false);
+    ui->btnRefresh->setVisible(true);
+    ui->btnRefresh->setToolTip(tr("Refresh cache"));
     ui->tblData->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     hide();
     fTable = ui->tblData;
@@ -86,7 +87,16 @@ void DWSelector::select(const QVariant &value)
 
 void DWSelector::refresh()
 {
-
+    CacheOne::clearCache(fCacheId);
+    configure();
+    const QString filter = ui->lineEdit->text();
+    if(filter.isEmpty()) {
+        for(int i = 0, rowCount = fTable->rowCount(); i < rowCount; i++) {
+            fTable->setRowHidden(i, false);
+        }
+    } else {
+        on_lineEdit_textEdited(filter);
+    }
 }
 
 void DWSelector::applyTextFilter()
@@ -171,14 +181,16 @@ void DWSelector::on_lineEdit_textEdited(const QString &arg1)
     for (int i = 0, rowCount = fTable->rowCount(); i < rowCount; i++) {
         if (fColumnFilter.count() > 0) {
             for (QMap<int, QString>::const_iterator it = fColumnFilter.begin(); it != fColumnFilter.end(); it++) {
-                if (!fTable->item(i, it.key())->text().contains(it.value(), Qt::CaseInsensitive)) {
+                QTableWidgetItem *cell = fTable->item(i, it.key());
+                if (!cell || !cell->text().contains(it.value(), Qt::CaseInsensitive)) {
                     fTable->setRowHidden(i, true);
                     goto mark;
                 }
             }
         }
         foreach (int j, cols) {
-            if (fTable->item(i, j)->text().contains(arg1, Qt::CaseInsensitive)) {
+            QTableWidgetItem *cell = fTable->item(i, j);
+            if (cell && cell->text().contains(arg1, Qt::CaseInsensitive)) {
                 fTable->setRowHidden(i, false);
                 goto mark;
             }

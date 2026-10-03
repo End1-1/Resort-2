@@ -2,8 +2,15 @@
 #include "ui_rerestdish.h"
 #include "dlgtracking.h"
 #include "eqcheckbox.h"
+#include "eqcombobox.h"
 #include "dwselectorunit.h"
 #include "cachedish.h"
+#include "databaseresult.h"
+#include "defines.h"
+#include "message.h"
+#ifdef RESORT_AUDIT_LOG
+#include "resortlog.h"
+#endif
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QBuffer>
@@ -16,7 +23,8 @@ enum MenuTableColumn {
     MENU_COL_REC_ID = 1,
     MENU_COL_MENU_ID = 2,
     MENU_COL_MENU_NAME = 3,
-    MENU_COL_PRICE = 4
+    MENU_COL_PRICE = 4,
+    MENU_COL_PRINT1 = 5
 };
 
 RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
@@ -53,8 +61,13 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
     fTable = "r_dish";
     ui->leQueue->setValidator(new QIntValidator());
     Utils::tableSetColumnWidths(ui->tblMenu, ui->tblMenu->columnCount(),
-                                30, 0, 0, 200, 100);
-    fDb.select("select f_id, f_en from r_menu_names", fDbBind, fDbRows);
+                                30, 0, 0, 160, 80, 120);
+    fDb.select("select f_name from r_printers order by f_id", fDbBind, fDbRows);
+    foreach_rows {
+        fPrinterNames << it->at(0).toString();
+    }
+    fDb.select(QString("select f_id, f_%1 from r_menu_names where f_enabled=1 order by f_id").arg(def_lang),
+               fDbBind, fDbRows);
     ui->tblMenu->setRowCount(fDbRows.count());
     int row = 0;
     foreach_rows {
@@ -64,6 +77,10 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
         fTrackControl->addWidget(check, "Checkbox of " + it->at(1).toString());
 
         for(int i = 1; i < ui->tblMenu->columnCount(); i++) {
+            if(i == MENU_COL_PRINT1) {
+                createPrinterCombo(row, it->at(1).toString());
+                continue;
+            }
             EQLineEdit *l = createLineEdit(row, i);
 
             switch(i) {
@@ -112,6 +129,52 @@ RERestDish::RERestDish(QList<QVariant>& values, QWidget *parent) :
 RERestDish::~RERestDish()
 {
     delete ui;
+}
+
+bool RERestDish::openEditor(int dishId, QWidget *parent)
+{
+    if (dishId <= 0) {
+        return false;
+    }
+    QMap<QString, QVariant> bind;
+    bind[":f_id"] = dishId;
+    DatabaseResult dr;
+    Database db;
+    const Db dbInfo = Base::fPreferences.getDatabase(Base::fDbName);
+    db.setConnectionParams(dbInfo.dc_main_host, dbInfo.dc_main_path, dbInfo.dc_main_user, dbInfo.dc_main_pass);
+    if (!db.open()) {
+        message_error(db.fLastError);
+        return false;
+    }
+    const QString sql = QString(
+                            "select d.f_id, p.f_%1 as f_partname, d.f_defstore, st.f_name as f_defstorename, "
+                            "d.f_type, t.f_%1 as f_type_name, d.f_%1 as f_dish_name, d.f_armsoftname, d.f_text_%1 as f_description, "
+                            "d.f_bgColor, d.f_textColor, d.f_queue, d.f_adgt, d.f_as, d.f_lastPrice, d.f_unit, u.f_name as f_unitName, "
+                            "d.f_minreminder, d.f_taxdebt, d.f_scancode, d.f_needemarks, d.f_enabled "
+                            "from r_dish d "
+                            "inner join r_dish_type t on t.f_id=d.f_type "
+                            "inner join r_dish_part p on p.f_id=t.f_part "
+                            "inner join r_unit u on u.f_id=d.f_unit "
+                            "left join r_store st on st.f_id=d.f_defstore "
+                            "where d.f_id=:f_id")
+                            .arg(def_lang);
+    if (!dr.select(db, sql, bind) || dr.rowCount() == 0) {
+        message_error(tr("Dish not found"));
+        return false;
+    }
+    static const int kDishEditorFieldCount = 22;
+    if (dr.columnCount() != kDishEditorFieldCount) {
+        message_error(tr("Dish not found"));
+        return false;
+    }
+    QList<QVariant> values;
+    values.reserve(kDishEditorFieldCount);
+    for (int c = 0; c < kDishEditorFieldCount; c++) {
+        values << dr.value(0, c);
+    }
+    RERestDish dlg(values, parent);
+    dlg.setValues();
+    return dlg.exec() == QDialog::Accepted;
 }
 
 void RERestDish::selector(int number, const QVariant &value)
@@ -167,7 +230,7 @@ void RERestDish::valuesToWidgets()
 
     if(!isNew) {
         fDbBind[":f_dish"] = ui->leCode->asInt();
-        fDb.select("select m.f_id, m.f_state, m.f_menu, m.f_price "
+        fDb.select("select m.f_id, m.f_state, m.f_menu, m.f_price, m.f_print1 "
                    "from r_menu m "
                    "where m.f_dish=:f_dish", fDbBind, fDbRows);
         foreach_rows {
@@ -190,6 +253,7 @@ void RERestDish::valuesToWidgets()
 
             setCellValue(row, MENU_COL_REC_ID, it->at(0).toString());
             setCellValue(row, MENU_COL_PRICE, it->at(3).toString());
+            setPrinterCombo(row, it->at(4).toString());
 
             if(it->at(1).toInt() == 1) {
                 QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(row, MENU_COL_ENABLED));
@@ -249,6 +313,7 @@ void RERestDish::clearWidgets()
         check->setChecked(false);
         setCellValue(i, MENU_COL_REC_ID, "");
         setCellValue(i, MENU_COL_PRICE, "");
+        setPrinterCombo(i, QString());
     }
 
     ui->tblModifier->clearContents();
@@ -262,9 +327,21 @@ void RERestDish::clearWidgets()
 void RERestDish::save()
 {
     ui->leBarcode->setText(ui->leBarcode->text().trimmed());
+#ifdef RESORT_AUDIT_LOG
+    const int dishIdBefore = ui->leCode->asInt();
+    const QString snapshotBefore = dishIdBefore > 0 ? ResortLog::dishSnapshotJson(fDb, dishIdBefore) : QString();
+#endif
     RowEditorDialog::save();
     fDbBind[":f_dish"] = ui->leCode->asInt();
-    fDb.select("delete from r_menu where f_dish=:f_dish", fDbBind, fDbRows);
+    QStringList enabledMenuIds;
+    for(int i = 0, rowCount = ui->tblMenu->rowCount(); i < rowCount; i++) {
+        enabledMenuIds << cellValue(i, MENU_COL_MENU_ID);
+    }
+    if(!enabledMenuIds.isEmpty()) {
+        fDb.select(QString("delete from r_menu where f_dish=:f_dish and f_menu in (%1)")
+                       .arg(enabledMenuIds.join(",")),
+                   fDbBind, fDbRows);
+    }
 
     for(int i = 0, rowCount = ui->tblMenu->rowCount(); i < rowCount; i++) {
         QCheckBox *check = static_cast<QCheckBox*>(ui->tblMenu->cellWidget(i, MENU_COL_ENABLED));
@@ -272,7 +349,8 @@ void RERestDish::save()
         fDbBind[":f_menu"] = cellValue(i, MENU_COL_MENU_ID);
         fDbBind[":f_dish"] = ui->leCode->text();
         fDbBind[":f_price"] = QLocale().toFloat(cellValue(i, MENU_COL_PRICE));
-        fDbBind[":f_print1"] = QString();
+        EQComboBox *print1 = printerCombo(i);
+        fDbBind[":f_print1"] = print1 ? print1->currentText().trimmed() : QString();
         fDbBind[":f_print2"] = QString();
         fDbBind[":f_store"] = 0;
         fDbBind[":f_complex"] = 0;
@@ -336,6 +414,22 @@ void RERestDish::save()
     fDbBind[":f_tax"] = ui->chAutoPrintTax->isChecked();
     fDbBind[":f_defstore"] = ui->leDefStore->asInt();
     fDb.update("r_dish", fDbBind, where_id(ui->leCode->asInt()));
+
+#ifdef RESORT_AUDIT_LOG
+    const int dishIdAfter = ui->leCode->asInt();
+    if(dishIdAfter > 0) {
+        const QString snapshotAfter = ResortLog::dishSnapshotJson(fDb, dishIdAfter);
+        if(dishIdBefore > 0) {
+            if(snapshotBefore != snapshotAfter) {
+                ResortLog::logSnapshot(QStringLiteral("dish"), QString::number(dishIdAfter),
+                                       QStringLiteral("dish_save"), snapshotBefore, snapshotAfter);
+            }
+        } else {
+            ResortLog::logSnapshot(QStringLiteral("dish"), QString::number(dishIdAfter),
+                                   QStringLiteral("dish_create"), QString(), snapshotAfter);
+        }
+    }
+#endif
 }
 
 void RERestDish::hide()
@@ -435,6 +529,34 @@ void RERestDish::on_btnOk_clicked()
     }
 
     save();
+}
+
+EQComboBox *RERestDish::createPrinterCombo(int row, const QString &menuName)
+{
+    EQComboBox *cb = new EQComboBox(this);
+    cb->fRow = row;
+    cb->addItem(QString());
+    for(const QString &name : fPrinterNames) {
+        cb->addItem(name);
+    }
+    ui->tblMenu->setCellWidget(row, MENU_COL_PRINT1, cb);
+    fTrackControl->addWidget(cb, "Printer1 for " + menuName);
+    return cb;
+}
+
+EQComboBox *RERestDish::printerCombo(int row) const
+{
+    return qobject_cast<EQComboBox *>(ui->tblMenu->cellWidget(row, MENU_COL_PRINT1));
+}
+
+void RERestDish::setPrinterCombo(int row, const QString &printerName)
+{
+    EQComboBox *cb = printerCombo(row);
+    if(!cb) {
+        return;
+    }
+    const int idx = printerName.isEmpty() ? 0 : cb->findText(printerName);
+    cb->setCurrentIndex(idx >= 0 ? idx : 0);
 }
 
 EQLineEdit* RERestDish::createLineEdit(int row, int column)

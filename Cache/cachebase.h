@@ -78,6 +78,9 @@ public:
     }
 
     int elementsCount() {
+        if(fStaticCache[fCacheId].isEmpty()) {
+            load();
+        }
         return fStaticCache[fCacheId].count();
     }
 

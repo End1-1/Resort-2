@@ -93,6 +93,7 @@ target_compile_definitions(EliteCarwash PRIVATE
     _ORGANIZATION_="SmartHotel"
     _APPLICATION_="SmartHotel"
     _DBDRIVER_="QMARIADB"
+    RESORT_AUDIT_LOG
 )
 
 # --- Qt libs ---
@@ -137,3 +138,30 @@ target_sources(EliteCarwash PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../Filter/dlgasexportconstants.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../Filter/dlgasexportconstants.ui
 )
+
+find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt6
+    HINTS
+        ${Qt6_DIR}/../../../bin
+        ${Qt5_DIR}/../../../bin
+        "C:/Development/Qt/5.15.2/msvc2019/bin"
+)
+
+if(LRELEASE_EXECUTABLE)
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Resort.qm
+        COMMAND ${LRELEASE_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/Resort.ts
+            -qm ${CMAKE_CURRENT_SOURCE_DIR}/Resort.qm
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Resort.ts
+        COMMENT "Generating Resort.qm"
+    )
+    add_custom_target(resort_qm DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Resort.qm)
+    add_dependencies(EliteCarwash resort_qm)
+
+    add_custom_command(TARGET EliteCarwash POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${CMAKE_CURRENT_SOURCE_DIR}/Resort.qm
+            $<TARGET_FILE_DIR:EliteCarwash>/Resort.qm
+        COMMENT "Copy Resort.qm next to executable"
+    )
+endif()

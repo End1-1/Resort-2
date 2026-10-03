@@ -30,13 +30,15 @@ void FBalanceOnCard::apply(WReportGrid *rg)
     rg->fModel->setColumn(150, "", tr("Code"))
             .setColumn(200, "", tr("Info"))
             .setColumn(100, "", tr("Balance"));
-    QString sql = "select c.f_code, c.f_info, coalesce(u.f_amount, '-') as f_balance "
-                "from d_gift_cart  c "
-                "left join (select f_code, sum(f_amount) as f_amount from d_gift_cart_use group by 1) u on u.f_code=c.f_code ";
+    QString sql = "select c.f_code, c.f_info, coalesce(u.f_amount, 0) as f_balance "
+                  "from d_gift_cart c "
+                  "left join (select f_code, sum(f_amount) as f_amount from d_gift_cart_use group by 1) u on u.f_code=c.f_code ";
     if (ui->rbAll->isChecked()) {
 
     } else if (ui->rbFree->isChecked()) {
         sql += "where u.f_amount=c.f_initialamount ";
+    } else if (ui->rbNotSold->isChecked()) {
+        sql += "where coalesce(c.f_fiscal, 0) =0 ";
     } else {
         sql += "where coalesce(u.f_amount, 0)=0";
     }

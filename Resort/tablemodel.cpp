@@ -216,6 +216,9 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
     switch(role) {
     case Qt::DisplayRole: {
+        if (fCheckBoxColumns.contains(index.column())) {
+            return QVariant();
+        }
         switch(v.type()) {
         case QVariant::Date:
             return v.toDate().toString(def_date_format);
@@ -362,10 +365,13 @@ void TableModel::clearProxyRows()
     endRemoveRows();
 }
 
-TableModel& TableModel::setColumn(int width, const QString &fieldName, const QString &title)
+TableModel& TableModel::setColumn(int width, const QString &fieldName, const QString &title, bool checkBox)
 {
     Column *c = new Column(width, fieldName, title);
     fColumns.append(c);
+    if (checkBox) {
+        fCheckBoxColumns.append(fColumns.count() - 1);
+    }
     return *this;
 }
 
@@ -491,11 +497,7 @@ void TableModel::searchInTable(const QString &text)
 
 void TableModel::appendRow(const QList<QVariant>& values)
 {
-    int row = fRows.count() - 1;
-
-    if(row < 0) {
-        row = 0;
-    }
+    const int row = fRows.count();
 
     beginInsertRows(QModelIndex(), row, row);
     fDD.fDbRows.append(values);

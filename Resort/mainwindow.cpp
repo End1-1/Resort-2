@@ -19,6 +19,7 @@
 #include "fattendance.h"
 #include "fearningswash.h"
 #include "fheaderdebt.h"
+#include "ftaxreturn.h"
 #include "fsalesbycar.h"
 #include "fbalanceoncard.h"
 #include "fcouponsservice.h"
@@ -54,6 +55,7 @@
 #include "cachebase.h"
 #include "fsalarybyemployes.h"
 #include "reresthall.h"
+#include "rerestbranch.h"
 #include "reresttable.h"
 #include "rerestmenunames.h"
 #include "wreportssetold.h"
@@ -65,6 +67,7 @@
 #include "rerestprinter.h"
 #include "recreditcard.h"
 #include "ftrackchanges.h"
+#include "fresortlog.h"
 #include "restorepartner.h"
 #include "cacherights.h"
 #include "dlguserpasswords.h"
@@ -330,6 +333,7 @@ void MainWindow::buildMenuOfRole()
         a1.append(ui->actionSales_by_storages);
         a1.append(ui->actionReport_by_payment);
         a1.append(ui->actionOrder_debts);
+        a1.append(ui->actionTax_return);
         a1.append(ui->actionSales_report_by_cars);
     }
 
@@ -398,6 +402,7 @@ void MainWindow::buildMenuOfRole()
     if(check_permission(pr_indexes)) {
         a5.append(ui->actionHakk);
         a5.append(ui->actionTables);
+        a5.append(ui->actionNames_of_menu);
         a5.append(ui->actionStorages);
         a5.append(ui->actionAccounts_2);
         a5.append(ui->actionCash_operation);
@@ -407,7 +412,13 @@ void MainWindow::buildMenuOfRole()
     }
 
     if(check_permission(pr_global_config)) {
+        a5.append(ui->actionBranches);
         a5.append(ui->actionGlobal_config);
+        a5.append(ui->actionPrinters);
+    }
+
+    if(check_permission(pr_resort_audit_log)) {
+        a5.append(ui->actionResort_audit_log);
     }
 
     if(check_permission(pr_partners)) {
@@ -539,6 +550,21 @@ void MainWindow::on_actionUsers_groups_triggered()
     addTab<WUsersGroups>();
 }
 
+void MainWindow::on_actionBranches_triggered()
+{
+    QList<int> widths;
+    widths << 80 << 250;
+    QStringList fields;
+    fields << "f_id" << "f_name";
+    QStringList titles;
+    titles << tr("Code") << tr("Name");
+    const QString title = tr("Branches");
+    const QString icon = ":/images/settings.png";
+    const QString query = "select f_id, f_name from r_branch order by f_name";
+    WReportGrid *r = addTab<WReportGrid>();
+    r->fullSetup<RERestBranch>(widths, fields, titles, title, icon, query);
+}
+
 void MainWindow::on_actionHakk_triggered()
 {
     QList<int> widths;
@@ -555,6 +581,7 @@ void MainWindow::on_actionHakk_triggered()
            << 30
            << 30
            << 30
+           << 80
            ;
     QStringList fields;
     fields << "f_id"
@@ -570,6 +597,7 @@ void MainWindow::on_actionHakk_triggered()
            << "f_showHall"
            << "f_serviceitem"
            << "f_servicevalue"
+           << "f_prefix"
            ;
     QStringList titles;
     titles << tr("Code")
@@ -585,12 +613,13 @@ void MainWindow::on_actionHakk_triggered()
            << tr("Hall")
            << tr("Service item")
            << tr("Serivce value")
+           << tr("Order prefix")
            ;
     QString title = tr("Hall");
     QString icon = ":/images/hall.png";
     QString query = "select h.f_id, h.f_name, h.f_defaultMenu, m.f_" + def_lang + ", h.f_defaultSvc, "
                     "h.f_itemForInvoice, h.f_receiptPrinter, f_vatDept, f_noVatDept, f_showBanket, f_showHall, "
-                    "f_serviceitem, f_servicevalue "
+                    "f_serviceitem, f_servicevalue, h.f_prefix "
                     "from r_hall h "
                     "inner join r_menu_names m on m.f_id=h.f_defaultMenu ";
     WReportGrid *r = addTab<WReportGrid>();
@@ -630,23 +659,33 @@ void MainWindow::on_actionTables_triggered()
 void MainWindow::on_actionNames_of_menu_triggered()
 {
     QList<int> widths;
-    widths << 100
-           << 230
-           << 230
-           << 230;
+    widths << 60
+           << 200
+           << 200
+           << 200
+           << 60
+           << 60
+           << 60;
     QStringList fields;
     fields << "f_id"
            << "f_am"
            << "f_en"
-           << "f_ru";
+           << "f_ru"
+           << "f_enabled"
+           << "f_noservice"
+           << "f_needcar";
     QStringList titles;
     titles << tr("Code")
            << tr("Name, am")
            << tr("Name, en")
-           << tr("Name, ru");
-    QString title = tr("Names of menu");
+           << tr("Name, ru")
+           << tr("Enabled")
+           << tr("No service charge")
+           << tr("Need car number");
+    QString title = tr("Menu names list");
     QString icon = ":/images/cutlery.png";
-    QString query = "select f_id, f_am, f_en, f_ru from r_menu_names ";
+    QString query = "select f_id, f_am, f_en, f_ru, f_enabled, f_noservice, f_needcar "
+                    "from r_menu_names order by f_id";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestMenuNames>(widths, fields, titles, title, icon, query);
 }
@@ -835,6 +874,18 @@ void MainWindow::on_actionMenu_review_triggered()
     QString icon = ":/images/cutlery.png";
     WReportGrid *r = addTab<WReportGrid>();
     r->fullSetup<RERestDish>(widths, fields, titles, title, icon, query, false);
+    connect(r, &WReportGrid::doubleClickOnRow, r, [r](const QList<QVariant> &values) {
+        if (values.isEmpty()) {
+            return;
+        }
+        const int dishId = values.at(0).toInt();
+        if (dishId <= 0) {
+            return;
+        }
+        if (RERestDish::openEditor(dishId, r)) {
+            r->on_btnRefresh_clicked();
+        }
+    });
 }
 
 void MainWindow::on_actionPrinters_triggered()
@@ -884,6 +935,11 @@ void MainWindow::on_actionChange_password_triggered()
 void MainWindow::on_actionGlobal_config_triggered()
 {
     addTab<WGlobalDbConfig>();
+}
+
+void MainWindow::on_actionResort_audit_log_triggered()
+{
+    FResortLog::openFilterReport<FResortLog, WReportGrid>();
 }
 
 void MainWindow::on_actionComplex_dish_triggered()
@@ -1208,6 +1264,11 @@ void MainWindow::on_actionAttendance_triggered()
 void MainWindow::on_actionOrder_debts_triggered()
 {
     FHeaderDebt::openFilterReport<FHeaderDebt, WReportGrid>();
+}
+
+void MainWindow::on_actionTax_return_triggered()
+{
+    FTaxReturn::openFilterReport<FTaxReturn, WReportGrid>();
 }
 
 void MainWindow::on_actionArmSoftExport_triggered()

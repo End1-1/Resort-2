@@ -28,6 +28,7 @@ SOURCES += main.cpp\
     ../Filter/fcouponsservice.cpp \
     ../Filter/fearningswash.cpp \
     ../Filter/fheaderdebt.cpp \
+    ../Filter/ftaxreturn.cpp \
     ../Filter/fmenureview.cpp \
     ../Filter/freportfromstoredproc.cpp \
     ../Filter/fsalarybyemployes.cpp \
@@ -50,7 +51,7 @@ SOURCES += main.cpp\
     ../Xlsx/src/xlsxworkbook.cpp \
     ../Xlsx/src/xlsxwriter.cpp \
     c5graphicsview.cpp \
-    c5printing.cpp \
+    ../Print/c5printing.cpp \
     c5printpreview.cpp \
     database2.cpp \
     dialog.cpp \
@@ -66,6 +67,7 @@ SOURCES += main.cpp\
     dlgonetwoall.cpp \
     inventorization.cpp \
     logwriter.cpp \
+    resortlog.cpp \
         mainwindow.cpp \
     login.cpp \
     loginsettings.cpp \
@@ -130,6 +132,7 @@ SOURCES += main.cpp\
     ../RowEditor/rerestdishmod.cpp \
     ../RowEditor/rereststore.cpp \
     ../RowEditor/rerestprinter.cpp \
+    ../RowEditor/rerestbranch.cpp \
     ../Cache/cacheone.cpp \
     ../Controls/eqlineedit.cpp \
     ../Controls/trackcontrol.cpp \
@@ -138,6 +141,7 @@ SOURCES += main.cpp\
     ../Controls/cacheforcombobox.cpp \
     ../Filter/wfilterbase.cpp \
     ../Filter/ftrackchanges.cpp \
+    ../Filter/fresortlog.cpp \
     ../Controls/eqtimeedit.cpp \
     ../Cache/cachetrackingtables.cpp \
     ../Selector/dwselectortrackingtables.cpp \
@@ -286,7 +290,11 @@ SOURCES += main.cpp\
     ../Cache/cacheunit.cpp \
     ../Selector/dwselectorunit.cpp \
     ftstorereport.cpp \
-    ../Filter/fbalanceoncard.cpp
+    ../Filter/fbalanceoncard.cpp \
+    ../Filter/fgiftcart.cpp \
+    ../Filter/fgiftcartusage.cpp \
+    ../Filter/giftcartstore.cpp \
+    ../Filter/dlggiftcartstatus.cpp
 
 HEADERS  += mainwindow.h \
     ../../NewTax/Src/printtaxn.h \
@@ -300,6 +308,7 @@ HEADERS  += mainwindow.h \
     ../Filter/fcouponsservice.h \
     ../Filter/fearningswash.h \
     ../Filter/fheaderdebt.h \
+    ../Filter/ftaxreturn.h \
     ../Filter/fmenureview.h \
     ../Filter/freportfromstoredproc.h \
     ../Filter/fsalarybyemployes.h \
@@ -325,7 +334,7 @@ HEADERS  += mainwindow.h \
     ../Xlsx/src/xlsxwriter.h \
     ../Xlsx/src/zip.h \
     c5graphicsview.h \
-    c5printing.h \
+    ../Print/c5printing.h \
     c5printpreview.h \
     database2.h \
     dialog.h \
@@ -343,6 +352,7 @@ HEADERS  += mainwindow.h \
     login.h \
     loginsettings.h \
     logwriter.h \
+    resortlog.h \
     message.h \
     databasesconnections.h \
     databaseconnection.h \
@@ -406,6 +416,7 @@ HEADERS  += mainwindow.h \
     ../RowEditor/rerestdishmod.h \
     ../RowEditor/rereststore.h \
     ../RowEditor/rerestprinter.h \
+    ../RowEditor/rerestbranch.h \
     ../Cache/cacheone.h \
     ../Controls/eqlineedit.h \
     ../Controls/trackcontrol.h \
@@ -414,6 +425,7 @@ HEADERS  += mainwindow.h \
     ../Controls/cacheforcombobox.h \
     ../Filter/wfilterbase.h \
     ../Filter/ftrackchanges.h \
+    ../Filter/fresortlog.h \
     ../Controls/eqtimeedit.h \
     ../Cache/cachetrackingtables.h \
     ../Selector/dwselectortrackingtables.h \
@@ -564,7 +576,11 @@ HEADERS  += mainwindow.h \
     ../Cache/cacheunit.h \
     ../Selector/dwselectorunit.h \
     ftstorereport.h \
-    ../Filter/fbalanceoncard.h
+    ../Filter/fbalanceoncard.h \
+    ../Filter/fgiftcart.h \
+    ../Filter/fgiftcartusage.h \
+    ../Filter/giftcartstore.h \
+    ../Filter/dlggiftcartstatus.h
 
 FORMS    += mainwindow.ui \
     ../Filter/fasexportsale.ui \
@@ -574,6 +590,7 @@ FORMS    += mainwindow.ui \
     ../Filter/fcouponsservice.ui \
     ../Filter/fearningswash.ui \
     ../Filter/fheaderdebt.ui \
+    ../Filter/ftaxreturn.ui \
     ../Filter/fmenureview.ui \
     ../Filter/freportfromstoredproc.ui \
     ../Filter/fsalarybyemployes.ui \
@@ -616,7 +633,9 @@ FORMS    += mainwindow.ui \
     ../RowEditor/rerestdishmod.ui \
     ../RowEditor/rereststore.ui \
     ../RowEditor/rerestprinter.ui \
+    ../RowEditor/rerestbranch.ui \
     ../Filter/ftrackchanges.ui \
+    ../Filter/fresortlog.ui \
     ../RowEditor/reusers.ui \
     ../Print/pprintpreview.ui \
     ../RowEditor/recreditcard.ui \
@@ -681,10 +700,22 @@ FORMS    += mainwindow.ui \
     dlgreservationguests.ui \
     ../Filter/fdiscountfullstat.ui \
     ftstorereport.ui \
-    ../Filter/fbalanceoncard.ui
+    ../Filter/fbalanceoncard.ui \
+    ../Filter/fgiftcart.ui \
+    ../Filter/fgiftcartusage.ui \
+    ../Filter/dlggiftcartstatus.ui
+
+TRANSLATIONS += \
+    Resort.ts
 
 RESOURCES += \
     res.qrc
+
+copy_resort_qm.target = copy_resort_qm
+copy_resort_qm.commands = $$QMAKE_COPY $$shell_path($$PWD/Resort.qm) $$shell_path($$OUT_PWD/Resort.qm)
+copy_resort_qm.depends = $$PWD/Resort.qm
+POST_TARGETDEPS += copy_resort_qm
+QMAKE_EXTRA_TARGETS += copy_resort_qm
 
 LIBS += -lVersion
 LIBS += -LC:/soft/OpenSSLWin64/lib/VC/x64/MD
@@ -715,6 +746,7 @@ INCLUDEPATH += c:/projects/NewTax/Src
 DEFINES += _ORGANIZATION_=\\\"SmartHotel\\\"
 DEFINES += _APPLICATION_=\\\"SmartHotel\\\"
 DEFINES += _DBDRIVER_=\\\"QMARIADB\\\"
+DEFINES += RESORT_AUDIT_LOG
 
 win32 {
     version_inc.target = version_inc

@@ -77,7 +77,9 @@ public:
                    const QString &title, const QString &icon, const QString &query, bool showNewBtn = true) {
         setupTabTextAndIcon(title, icon);
         for (int i = 0, count = widths.count(); i < count; i++) {
-            fModel->setColumn(widths.at(i), fields.at(i), titles.at(i));
+            const QString &field = fields.at(i);
+            const bool checkBox = field == "f_enabled" || field == "f_noservice" || field == "f_needcar";
+            fModel->setColumn(widths.at(i), field, titles.at(i), checkBox);
         }
         fStaticQuery = query;
         fModel->setSqlQuery(query);
@@ -107,8 +109,10 @@ public:
     QMap<QString,bool> fIncludes;
     void dontResizeSave(bool v);
     void setBtnNewVisible(bool value = true);
+    void setRowEditor(RowEditorDialog *editor);
     virtual QWidget *gridOptionWidget();
     void syncTotalsWithMain();
+    QList<QVariant> fRowValues;
 
 public slots:
     virtual void on_btnRefresh_clicked();
@@ -118,7 +122,7 @@ protected:
     QString fGridClassName;
     QString fHelp;
     RowEditorDialog *fRowEditorDialog;
-    QList<QVariant> fRowValues;
+
     virtual void processValues(int row, bool isNew);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool event(QEvent *event);

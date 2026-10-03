@@ -64,6 +64,7 @@
         <file>images/wifi_on.png</file>
         <file>images/wifi_b.png</file>
         <file>images/qrcode.png</file>
+        <file>images/pos-terminal.png</file>
     </qresource>
     <qresource prefix="/files">
         <file>stylesheet.qss</file>

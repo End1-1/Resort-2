@@ -126,7 +126,7 @@ private:
     void setupType(int partId);
     void setupDish(int typeId);
     int addDishToOrder(DishStruct *d, bool counttotal);
-    void addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice);
+    bool addDishToTable(OrderDishStruct *od, bool counttotal, bool checkservice);
     void updateDish(OrderDishStruct *od);
     double countTotal();
     void countDish(OrderDishStruct *d);
@@ -135,7 +135,8 @@ private:
     void clearOrder();
     void loadOrder(bool showwarning);
     void setOrderRowHidden(int row, OrderDishStruct *od);
-    void printServiceCheck(const QString &prn, int side);
+    bool printServiceCheck(const QString &prn, int side, int onlyRecId = 0);
+    void markKitchenPrinted(const QString &prn, int side, int onlyRecId = 0);
     void printReceipt(bool printModePayment);
     void changeBtnState();
     void checkEmpty();
@@ -144,6 +145,7 @@ private:
     void updateTableInfo();
     void manualdisc(double val, int costumer);
     void repaintTables();
+    void refreshCustomerDisplay();
 };
 
 #endif // RDESK_H

@@ -15,8 +15,10 @@ class RERestHall : public RowEditorDialog
 public:
     explicit RERestHall(QList<QVariant> &values, QWidget *parent = 0);
     ~RERestHall();
+    virtual void setValues();
 protected:
     virtual bool isDataCorrect();
+    virtual void prepareDbBind(EQLineEdit *id);
 private slots:
     void menu(CI_RestMenu *m);
     void on_btnCancel_clicked();

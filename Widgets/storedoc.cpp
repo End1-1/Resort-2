@@ -13,6 +13,9 @@
 #include "rerestdish.h"
 #include "storeoutput.h"
 #include "ui_storedoc.h"
+#ifdef RESORT_AUDIT_LOG
+#include "resortlog.h"
+#endif
 
 #define SEL_DOC_TYPE 10
 #define SEL_PARTNER 2
@@ -131,7 +134,17 @@ void StoreDoc::loadDoc(int id)
                    "left join r_unit u on u.f_id=m.f_unit "
                    "where b.f_doc=:f_doc " + add, fDbBind);
 
+    const bool isMoveDoc = ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE;
+
     for(int i = 0; i < dh.rowCount(); i++) {
+        const int sign = dh.value(i, "f_sign").toInt();
+
+        if(isMoveDoc && sign == -1) {
+            CI_RestStore *rs = CacheRestStore::instance()->get(dh.value(i, "f_store").toString());
+            store2(rs);
+            continue;
+        }
+
         CI_Dish *d = CacheDish::instance()->get(dh.value(i, "f_material").toString());
 
         if(!d) {
@@ -140,24 +153,20 @@ void StoreDoc::loadDoc(int id)
         }
 
         newGoods(d);
-        ui->tblGoods->setItemWithValue(i, 0, dh.value(i, "f_id"));
-        ui->tblGoods->lineEdit(i, 3)->setDouble(dh.value(i, "f_qty").toDouble());
-        ui->tblGoods->setItemWithValue(i, 4, dh.value(i, "f_unitName"));
-        ui->tblGoods->lineEdit(i, 5)->setDouble(dh.value(i, "f_price").toDouble());
-        ui->tblGoods->lineEdit(i, 6)->setDouble(dh.value(i, "f_total").toDouble());
-        ui->tblGoods->lineEdit(i, 7)->setDouble(dh.value(i, "f_vat").toDouble());
-        ui->tblGoods->lineEdit(i, 8)->setDouble(dh.value(i, "f_qty").toDouble() * dh.value(i, "f_vat").toDouble());
+        const int row = ui->tblGoods->rowCount() - 1;
+        ui->tblGoods->setItemWithValue(row, 0, dh.value(i, "f_id"));
+        ui->tblGoods->lineEdit(row, 3)->setDouble(dh.value(i, "f_qty").toDouble());
+        ui->tblGoods->setItemWithValue(row, 4, dh.value(i, "f_unitName"));
+        ui->tblGoods->lineEdit(row, 5)->setDouble(dh.value(i, "f_price").toDouble());
+        ui->tblGoods->lineEdit(row, 6)->setDouble(dh.value(i, "f_total").toDouble());
+        ui->tblGoods->lineEdit(row, 7)->setDouble(dh.value(i, "f_vat").toDouble());
+        ui->tblGoods->lineEdit(row, 8)->setDouble(dh.value(i, "f_qty").toDouble() * dh.value(i, "f_vat").toDouble());
 
-        if(dh.value(i, "f_sign").toInt() == 1) {
+        if(sign == 1) {
             CI_RestStore *rs = CacheRestStore::instance()->get(dh.value(i, "f_store").toString());
             store(rs);
         } else {
             CI_RestStore *rs = CacheRestStore::instance()->get(dh.value(i, "f_store").toString());
-
-            if(ui->leAction->fHiddenText.toInt() == STORE_DOC_MOVE) {
-                continue;
-            }
-
             store2(rs);
         }
     }
@@ -312,6 +321,12 @@ void StoreDoc::saveDoc(int docState)
         message_error(errors);
         return;
     }
+
+#ifdef RESORT_AUDIT_LOG
+    const int existingDocId = ui->leDocNumber->asInt();
+    const QString storeDocSnapshotBefore = existingDocId > 0
+            ? ResortLog::storeDocSnapshotJson(fDb, existingDocId) : QString();
+#endif
 
     fDb.fDb.transaction();
     QJsonObject jdoc;
@@ -522,6 +537,14 @@ void StoreDoc::saveDoc(int docState)
 
     /* END WRITE STORE RECORD */
     fDb.fDb.commit();
+
+#ifdef RESORT_AUDIT_LOG
+    const QString storeDocSnapshotAfter = QString::fromUtf8(QJsonDocument(jdoc).toJson(QJsonDocument::Compact));
+    const QString docAction = existingDocId > 0 ? QStringLiteral("store_doc_save") : QStringLiteral("store_doc_create");
+    ResortLog::logSnapshot(QStringLiteral("store_doc"), ui->leDocNumber->text(), docAction,
+                           storeDocSnapshotBefore, storeDocSnapshotAfter);
+#endif
+
     bool v = docState == 0;
     ui->wCommon->setEnabled(v);
 

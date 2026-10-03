@@ -36,6 +36,7 @@ public slots:
     void on_actionReports_set_triggered();
     void on_actionStatistics_triggered();
     void on_actionHakk_triggered();
+    void on_actionBranches_triggered();
     void on_actionTables_triggered();
     void on_actionNames_of_menu_triggered();
     void on_actionMain_partitions_of_menu_triggered();
@@ -61,6 +62,7 @@ public slots:
     void on_actionCredit_card_triggered();
     void on_actionChange_password_triggered();
     void on_actionGlobal_config_triggered();
+    void on_actionResort_audit_log_triggered();
     void on_actionComplex_dish_triggered();
     void on_actionComplimentary_comment_triggered();
     void on_actionReport_buillder_triggered();
@@ -123,6 +125,8 @@ private slots:
     void on_actionAttendance_triggered();
 
     void on_actionOrder_debts_triggered();
+
+    void on_actionTax_return_triggered();
 
     void on_actionArmSoftExport_triggered();
 

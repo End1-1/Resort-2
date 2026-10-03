@@ -52,10 +52,11 @@ void StoreOutput::output(QMap<int, double>& priceList)
         QMap<QString, QVariant> b;
         QList<QList<QVariant> > r;
         b[":f_goods"] = v.at(2);
+        b[":f_store"] = v.at(1);
         fDb.select("select s.f_base, s.f_price, sum(s.f_qty*s.f_sign) "
                    "from r_store_acc s "
                    "inner join r_docs d on d.f_id=s.f_doc "
-                   "where s.f_goods=:f_goods "
+                   "where s.f_goods=:f_goods and s.f_store=:f_store and d.f_state=1 "
                    "group by s.f_base "
                    "having sum(s.f_qty*s.f_sign)>0 "
                    "order by d.f_date ", b, r);

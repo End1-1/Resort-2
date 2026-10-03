@@ -1,19 +1,13 @@
 #include "reportprint.h"
 #include "debtpay.h"
-#include <QPainter>
-#include <QPrinter>
-#include <QPrinterInfo>
 #include "branchstoremap.h"
 #include "c5printing.h"
 #include "database2.h"
 #include "defrest.h"
 #include "preferences.h"
-#include "pimage.h"
-#include "pprintscene.h"
-#include "ptextrect.h"
+#include "restaurantc5print.h"
 #include "utils.h"
 #include <QDateTime>
-#include <QPageSize>
 
 ReportPrint::ReportPrint() :
     QObject(),
@@ -24,19 +18,10 @@ ReportPrint::ReportPrint() :
 void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const QString &prn,
                              const QString &reportTitle)
 {
-    // 1. Настройка принтера
-    QPrinterInfo pi = QPrinterInfo::printerInfo(prn.isEmpty() ? "local" : prn);
-    QPrinter printer(pi);
-    printer.setPageSize(QPageSize::Custom);
-    printer.setFullPage(false);
-
-    QRectF pr = printer.pageRect(QPrinter::DevicePixel);
-    constexpr qreal SAFE_RIGHT_MM = 4.0;
-    qreal safePx = SAFE_RIGHT_MM * printer.logicalDpiX() / 25.4;
-
-    int bs = 22;
+    ReceiptPrinter printer(prn.isEmpty() ? QStringLiteral("local") : prn);
     C5Printing p;
-    p.setSceneParams(pr.width() - safePx, pr.height(), printer.logicalDpiX());
+    setupC5Printing(p, printer.printer());
+    const int bs = receiptFontPt(10);
 
     // Логотип
     p.image("./logo_print.png", Qt::AlignHCenter);
@@ -400,7 +385,7 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
     p.rtext(float_str(commCash - debtPayCash, 2));
     p.br();
 
-    p.print(printer);
+    printC5(p, printer.printer());
 }
 
 void ReportPrint::printSessionCloseTotal(const QString &printedBy, const QString &prn)
@@ -410,17 +395,10 @@ void ReportPrint::printSessionCloseTotal(const QString &printedBy, const QString
 
 void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, const QString &prn)
 {
-    QPrinterInfo pi = QPrinterInfo::printerInfo(prn.isEmpty() ? "local" : prn);
-    QPrinter printer(pi);
-    printer.setPageSize(QPageSize::Custom);
-    printer.setFullPage(false);
-
-    QRectF pr = printer.pageRect(QPrinter::DevicePixel);
-    qreal safePx = 4.0 * printer.logicalDpiX() / 25.4;
-
-    int bs = 22;
+    ReceiptPrinter printer(prn.isEmpty() ? QStringLiteral("local") : prn);
     C5Printing p;
-    p.setSceneParams(pr.width() - safePx, pr.height(), printer.logicalDpiX());
+    setupC5Printing(p, printer.printer());
+    const int bs = receiptFontPt(10);
 
     p.image("./logo_print.png", Qt::AlignHCenter);
     p.br();
@@ -560,7 +538,7 @@ void ReportPrint::printTotalShort(const QDate &date, const QString &printedBy, c
     p.br(20);
     p.ctext("_");
 
-    p.print(printer);
+    printC5(p, printer.printer());
 }
 
 double ReportPrint::totalx500(const QDate &date)
@@ -647,26 +625,18 @@ void ReportPrint::printDebtPaymentReceipt(int orderId,
     }
 
     const QDateTime payDate = QDateTime::currentDateTime();
-    QPrinterInfo pi = QPrinterInfo::printerInfo(printerName);
-    QPrinter prn(pi);
-    prn.setPageSize(QPageSize::Custom);
-    prn.setFullPage(false);
-
-    const QRectF pageRect = prn.pageRect(QPrinter::DevicePixel);
-    constexpr qreal safeRightMm = 4.0;
-    const qreal safePx = safeRightMm * prn.logicalDpiX() / 25.4;
-
+    ReceiptPrinter receiptPrinter(printerName);
     C5Printing p;
-    p.setSceneParams(pageRect.width() - safePx, pageRect.height(), prn.logicalDpiX());
+    setupC5Printing(p, receiptPrinter.printer());
     p.image("./logo_print.png", Qt::AlignHCenter);
     p.br();
 
-    p.setFontSize(22);
+    p.setFontSize(receiptFontPt(22));
     p.setFontBold(true);
     p.ctext(tr("Debt payment"));
     p.br();
 
-    p.setFontSize(18);
+    p.setFontSize(receiptFontPt(18));
     p.setFontBold(false);
     p.lrtext(tr("Order"), QString::number(orderId));
     p.br();
@@ -682,5 +652,5 @@ void ReportPrint::printDebtPaymentReceipt(int orderId,
     p.lrtext(tr("Amount"), float_str(amount, 2));
     p.br();
     p.line();
-    p.print(prn);
+    printC5(p, receiptPrinter.printer());
 }

@@ -16,8 +16,15 @@ int main(int argc, char *argv[])
 
 
     QTranslator t;
-    if (t.load(":/Resort.qm")) {
-        a.installTranslator(&t);
+    const QString qmPaths[] = {
+        a.applicationDirPath() + "/Resort.qm",
+        ":/Resort.qm",
+    };
+    for (const QString &qmPath : qmPaths) {
+        if (t.load(qmPath)) {
+            a.installTranslator(&t);
+            break;
+        }
     }
 
     a.setStyle(QStyleFactory::create("fusion"));

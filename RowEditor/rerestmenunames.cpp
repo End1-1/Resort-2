@@ -11,6 +11,9 @@ RERestMenuNames::RERestMenuNames(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->leNameAm, "Name, am");
     addWidget(ui->leNameEn, "Name, en");
     addWidget(ui->leNameRu, "Name, ru");
+    addWidget(ui->chEnabled, "Enabled");
+    addWidget(ui->chNoservice, "No service charge");
+    addWidget(ui->chNeedcar, "Need car number");
     fTable = "r_menu_names";
     fCacheId = cid_rest_menu;
 }

@@ -265,3 +265,20 @@ INSERT into airlog.logt values (48, 'Reservation group');
 --16062018
 ALTER TABLE `airwick`.`serv_id_counter` CHANGE COLUMN `f_id` `f_id` VARCHAR(4) NULL DEFAULT NULL ;
 alter table r_hall add column f_prefix nvarchar(32);
+
+create table r_resort_log (
+  f_id integer primary key auto_increment,
+  f_datetime datetime not null,
+  f_user_id integer,
+  f_user varchar(64),
+  f_host varchar(64),
+  f_entity_type varchar(32) not null,
+  f_entity_id varchar(32) not null,
+  f_action varchar(64) not null,
+  f_field varchar(256),
+  f_value_old mediumtext,
+  f_value_new mediumtext,
+  f_snapshot mediumtext,
+  key idx_r_resort_log_dt (f_datetime),
+  key idx_r_resort_log_entity (f_entity_type, f_entity_id)
+);

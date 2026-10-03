@@ -1,6 +1,9 @@
 #include "reresthall.h"
 #include "ui_reresthall.h"
 #include "cacheresthall.h"
+#include "defrest.h"
+#include "databaseresult.h"
+#include <QHostInfo>
 
 RERestHall::RERestHall(QList<QVariant> &values, QWidget *parent) :
     RowEditorDialog(values, TRACK_REST_HALL, parent),
@@ -22,6 +25,7 @@ RERestHall::RERestHall(QList<QVariant> &values, QWidget *parent) :
     addWidget(ui->chShowHall, "Show in hall");
     addWidget(ui->leServiceItem, "Service item");
     addWidget(ui->leServiceValue, "Service value");
+    addWidget(ui->lePrefix, "Order prefix");
     fTable = "r_hall";
     fCacheId = cid_rest_hall;
     fDockMenu = new DWSelectorRestMenu(this);
@@ -33,6 +37,33 @@ RERestHall::RERestHall(QList<QVariant> &values, QWidget *parent) :
 RERestHall::~RERestHall()
 {
     delete ui;
+}
+
+void RERestHall::setValues()
+{
+    RowEditorDialog::setValues();
+    if (isNew) {
+        ui->chShowHall->setChecked(true);
+    }
+}
+
+void RERestHall::prepareDbBind(EQLineEdit *id)
+{
+    if (id->asInt() == 0 && !fDbBind.contains(":f_branch")) {
+        QMap<QString, QVariant> bind;
+        bind[":f_comp"] = QHostInfo::localHostName();
+        bind[":f_key"] = dr_branch;
+        DatabaseResult dr;
+        dr.select(fDb,
+                  "select f_value from r_config where upper(f_comp)=upper(:f_comp) and f_key=:f_key",
+                  bind);
+        if (dr.rowCount() > 0) {
+            const int branch = dr.value(0, "f_value").toInt();
+            if (branch > 0) {
+                fDbBind[":f_branch"] = branch;
+            }
+        }
+    }
 }
 
 bool RERestHall::isDataCorrect()

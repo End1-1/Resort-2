@@ -1,4 +1,5 @@
 #include "dlggposorderinfo.h"
+#include <QAbstractItemView>
 #include <QInputDialog>
 #include <QPrintDialog>
 #include <QPrinter>
@@ -16,7 +17,8 @@
 
 DlgGPOSOrderInfo::DlgGPOSOrderInfo(QWidget *parent) :
     BaseExtendedDialog(parent),
-    ui(new Ui::DlgGPOSOrderInfo)
+    ui(new Ui::DlgGPOSOrderInfo),
+    fReadOnly(false)
 {
     ui->setupUi(this);
     Utils::tableSetColumnWidths(ui->tblData, ui->tblData->columnCount(),
@@ -82,8 +84,21 @@ void DlgGPOSOrderInfo::setVaucher(const QString &id)
     }
 }
 
+void DlgGPOSOrderInfo::setReadOnly(bool readOnly)
+{
+    fReadOnly = readOnly;
+    ui->btnSetFiscalNumber->setVisible(!readOnly);
+    ui->btnTracking->setVisible(!readOnly);
+    ui->lePayment->setReadOnly(true);
+    ui->tblData->setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+
 void DlgGPOSOrderInfo::addRowButtons()
 {
+    if(fReadOnly) {
+        return;
+    }
+
     for(int i = 0; i < ui->tblData->rowCount(); i++) {
         ui->tblData->addButton(i, 7, SLOT(showDishHistory(int)), this, QIcon(":/images/update.png"));
         ui->tblData->addButton(i, 9, SLOT(deleteDishRow(int)), this, QIcon(":/images/garbage.png"));

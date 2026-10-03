@@ -389,6 +389,54 @@
     </message>
 </context>
 <context>
+    <name>DlgTalonRedeem</name>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="14"/>
+        <source>Talon confirmation</source>
+        <translation>Կտրոնի հաստատում</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="32"/>
+        <source>Talon number</source>
+        <translation>Կտրոնի համար</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="47"/>
+        <source>Talon price</source>
+        <translation>Կտրոնի գին</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="62"/>
+        <source>Order amount</source>
+        <translation>Պատվերի գումար</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="94"/>
+        <source>Apply</source>
+        <translation>Կիրառել</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="101"/>
+        <source>Cancel</source>
+        <translation>Չեղարկել</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.ui" line="108"/>
+        <source>OK</source>
+        <translation>Լավ</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.cpp" line="37"/>
+        <source>Amounts match.</source>
+        <translation>Գումարները համընկնում են։</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.cpp" line="42"/>
+        <source>Amounts do not match. The talon cannot be applied.</source>
+        <translation>Գումարները չեն համընկնում։ Կտրոնը հնարավոր չէ կիրառել։</translation>
+    </message>
+</context>
+<context>
     <name>DlgPayment</name>
     <message>
         <location filename="dlgpayment.ui" line="14"/>
@@ -577,6 +625,11 @@
         <translation>Կտրոնը օգտագործված է</translation>
     </message>
     <message>
+        <location filename="dlgpayment.cpp" line="785"/>
+        <source>Talon price does not match the order amount</source>
+        <translation>Կտրոնի գինը չի համապատասխանում պատվերի գումարին</translation>
+    </message>
+    <message>
         <location filename="dlgpayment.cpp" line="720"/>
         <source>Cannot discount with coupon</source>
         <translation>Նվեր քարտը և զեղչը չի կարելի կիրարել միաժամանակ</translation>
@@ -685,6 +738,23 @@
         <location filename="dlgprinttaxnew.ui" line="14"/>
         <source>Dialog</source>
         <translation>-</translation>
+    </message>
+</context>
+<context>
+    <name>PrintTaxNO</name>
+    <message>
+        <location filename="printtaxno.cpp" line="528"/>
+        <source>(empty name)</source>
+        <translation>(դատարկ անվանում)</translation>
+    </message>
+    <message>
+        <location filename="printtaxno.cpp" line="539"/>
+        <source>Invalid character in product name (e.g. line break). It will be replaced with a space and printing will continue.
+
+Products:</source>
+        <translation>Ապրանքի անվանման մեջ հայտնաբերվել է անթույլատրելի նիշ (օր.` տողի անցում): Այն կփոխարինվի բացատով, տպումը կշարունակվի:
+
+Ապրանքներ:</translation>
     </message>
 </context>
 <context>
@@ -1129,7 +1199,7 @@
         <translation>Չի հաջողվել պատվերը %1 փոխանցել պարտքով</translation>
     </message>
     <message>
-        <location filename="talonservice.cpp" line="73"/>
+        <location filename="talonservice.cpp" line="133"/>
         <source>Invalid order</source>
         <translation>Սխալ պատվեր</translation>
     </message>
@@ -1172,7 +1242,7 @@
     <message>
         <location filename="debtpay.cpp" line="203"/>
         <location filename="debtpay.cpp" line="319"/>
-        <location filename="talonservice.cpp" line="157"/>
+        <location filename="talonservice.cpp" line="178"/>
         <source>Database error</source>
         <translation>Տվյալների հանրի սխալ</translation>
     </message>
@@ -2701,6 +2771,40 @@ removed items</source>
         <location filename="../Resort/message.ui" line="89"/>
         <source>Cancel</source>
         <translation>Հրաժարվել</translation>
+    </message>
+</context>
+<context>
+    <name>CustomerDisplay</name>
+    <message>
+        <location filename="customerdisplay.cpp" line="80"/>
+        <location filename="customerdisplay.cpp" line="375"/>
+        <source>Your order</source>
+        <translation>Ձեր պատվերը</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="91"/>
+        <source>Items will appear here as your order is prepared.</source>
+        <translation>Պատվերի կետերը կհայտնվեն այստեղ։</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="129"/>
+        <source>Total</source>
+        <translation>Ընդամենը</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="360"/>
+        <source>Welcome</source>
+        <translation>Բարի գալուստ</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="362"/>
+        <source>Thank you for visiting us</source>
+        <translation>Շնորհակալություն, որ մեզ այցելեցիք</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="395"/>
+        <source>Your order is empty.</source>
+        <translation>Պատվերը դատարկ է։</translation>
     </message>
 </context>
 </TS>

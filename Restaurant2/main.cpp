@@ -140,6 +140,13 @@ int main(int argc, char* argv[])
         setstorealias(db2.integer("f_store"), db2.integer("f_alias"));
     }
 
+    if(!BranchStoreMap::hasMappings()) {
+        RMessage::showError(QObject::tr("No store mappings for branch %1 (table r_branch_storemap). "
+                                        "POS cannot add dishes until mappings are configured.")
+                                .arg(defrest(dr_branch)),
+                            nullptr);
+    }
+
     TableStruct *ts = nullptr;
     RDesk *rd = new RDesk(nullptr);
     rd->prepareToShow();

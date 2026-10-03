@@ -7,8 +7,6 @@ namespace Ui {
 class FCouponsService;
 }
 
-class ReportQuery;
-
 class FCouponsService : public WFilterBase
 {
     Q_OBJECT
@@ -22,7 +20,6 @@ public:
 
 private:
     Ui::FCouponsService *ui;
-    ReportQuery *fReportQuery;
 };
 
 #endif // FCOUPONSSERVICE_H

@@ -24,6 +24,7 @@ update talon_service_items_group p set f_price=(select f_price from talon_servic
 alter table talon_service add column f_discount decimal(14,2) after f_price;
 create table talon_payment (f_id integer primary key auto_increment, f_document integer, f_refdocument integer, f_debit decimal (14,2), f_credit decimal(14,2));
 insert into talon_documents_type (f_id, f_name) values (4, 'Դրամարկղ');
+insert into talon_documents_type (f_id, f_name) values (5, 'Կտրոնների  մնացորդ');
 create table queries_names (f_id integer primary key auto_increment, f_name tinytext, f_query tinytext);
 
 
@@ -46,3 +47,22 @@ create table sessions (f_id integer primary key auto_increment, f_status int, f_
 create index idx_sessions_branch_status on sessions (f_branch, f_status);
 
 create table o_log (f_id integer primary key auto_increment, f_order int, f_datetime datetime, f_action varchar(36), f_data text);
+
+create table r_branch_menu (f_id integer primary key auto_increment, f_branch integer not null, f_menu integer not null, unique key uk_r_branch_menu (f_branch, f_menu));
+
+create table r_resort_log (
+  f_id integer primary key auto_increment,
+  f_datetime datetime not null,
+  f_user_id integer,
+  f_user varchar(64),
+  f_host varchar(64),
+  f_entity_type varchar(32) not null,
+  f_entity_id varchar(32) not null,
+  f_action varchar(64) not null,
+  f_field varchar(256),
+  f_value_old mediumtext,
+  f_value_new mediumtext,
+  f_snapshot mediumtext,
+  key idx_r_resort_log_dt (f_datetime),
+  key idx_r_resort_log_entity (f_entity_type, f_entity_id)
+);

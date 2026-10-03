@@ -89,6 +89,7 @@ signals:
 private:
     PrintTaxNO();
     void logMessage(const QString &msg);
+    void sanitizeGoodsForJsonPrint();
     QJsonArray fReturnItemList;
 };
 

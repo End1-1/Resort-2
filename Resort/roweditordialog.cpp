@@ -1,4 +1,5 @@
 #include "roweditordialog.h"
+#include "cacheone.h"
 #include "eqcheckbox.h"
 #include "ecolorlineedit.h"
 #include "eqcombobox.h"
@@ -222,12 +223,24 @@ bool RowEditorDialog::saveOnly()
         message_error(error);
         return false;
     }
+    prepareDbBind(id);
     if (id->asInt() == 0) {
-        id->setInt(fDb.insert(fTable, fDbBind));
+        const int newId = fDb.insert(fTable, fDbBind);
+        if (newId <= 0) {
+            message_error(tr("Save failed") + "<br>" + fDb.fLastError);
+            return false;
+        }
+        id->setInt(newId);
     } else {
-        fDb.update(fTable, fDbBind, where_id(id->text()));
+        if (!fDb.update(fTable, fDbBind, where_id(id->text()))) {
+            message_error(tr("Save failed") + "<br>" + fDb.fLastError);
+            return false;
+        }
     }
     widgetsToValues();
+    if (fCacheId > 0) {
+        CacheOne::updateCache(fCacheId, id->text());
+    }
     if (fTrackControl->hasChanges()) {
         fTrackControl->fRecord = id->text();
         fTrackControl->saveChanges();
@@ -241,6 +254,11 @@ void RowEditorDialog::save()
     if (saveOnly()) {
         accept();
     }
+}
+
+void RowEditorDialog::prepareDbBind(EQLineEdit *id)
+{
+    Q_UNUSED(id)
 }
 
 bool RowEditorDialog::isDataCorrect()

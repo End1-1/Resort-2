@@ -21,9 +21,22 @@ find_package(Qt6 REQUIRED COMPONENTS
     Network
     Xml
     PrintSupport
+    LinguistTools
 )
 
 qt_standard_project_setup()
+
+set(RESTAURANT_QM "${CMAKE_CURRENT_SOURCE_DIR}/Restaurant.am.qm")
+add_custom_command(
+    OUTPUT "${RESTAURANT_QM}"
+    COMMAND "${CMAKE_COMMAND}" -E echo "Updating Restaurant.am.qm"
+    COMMAND powershell -NoProfile -ExecutionPolicy Bypass
+            -File "${CMAKE_CURRENT_SOURCE_DIR}/compile_restaurant_qm.ps1"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Restaurant.am.ts"
+            "${CMAKE_CURRENT_SOURCE_DIR}/compile_restaurant_qm.ps1"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    VERBATIM
+)
 
 # ---------- SOURCES ----------
 set(SOURCES
@@ -32,7 +45,10 @@ set(SOURCES
     ../Resort/logwriter.cpp
     ../Resort/message.cpp
     ../Resort/storeoutput.cpp
+    ../Filter/giftcartstore.cpp
     branchstoremap.cpp
+    customerdisplay.cpp
+    winprinternames.cpp
     dlgpassword.cpp
     dlgprintmultiplefiscal.cpp
     dlgsalarytotal.cpp
@@ -99,10 +115,8 @@ set(SOURCES
     ../Controls/eqtablewidget.cpp
 
     ../Controls/epushbutton.cpp
-    ../Print/pimage.cpp
-    ../Print/pprintpreview.cpp
-    ../Print/pprintscene.cpp
-    ../Print/ptextrect.cpp
+    ../Print/c5printing.cpp
+    restaurantc5print.cpp
     ../Base/logging.cpp
     reportprint.cpp
     ../Controls/eqcombobox.cpp
@@ -125,6 +139,7 @@ set(SOURCES
     ../Cache/cachecar.cpp
     dlgpayment.cpp
     dlgdeptholder.cpp
+    dlgtalonredeem.cpp
 
     ../Cache/cachedocpayment.cpp
     dlgprinttaxnew.cpp
@@ -135,8 +150,6 @@ set(SOURCES
     printtaxno.h
     printtaxno.cpp
     sslsocket.cpp
-    c5printing.h
-    c5printing.cpp
 )
 
 set(HEADERS
@@ -144,6 +157,8 @@ set(HEADERS
     ../Resort/database2.h
     ../Resort/logwriter.h
     branchstoremap.h
+    customerdisplay.h
+    winprinternames.h
     dlgpassword.h
     version.h
 )
@@ -165,9 +180,9 @@ qt_add_executable(Restaurant WIN32
     ${HEADERS}
     ${FORMS}
     ${RESOURCES}
+    ${RESTAURANT_QM}
     printtaxno.cpp printtaxno.h
-    printtaxno.cpp printtaxno.h
-    c5printing.cpp c5printing.h
+    restaurantc5print.h restaurantc5print.cpp
     checktime.h checktime.cpp
     dlgcalc.h dlgcalc.cpp dlgcalc.ui
 )
@@ -188,6 +203,7 @@ target_include_directories(Restaurant PRIVATE
     C:/Development/projects/elite.carwash/Cache
     C:/Development/projects/elite.carwash/Print
     C:/Development/projects/elite.carwash/Resort
+    C:/Development/projects/elite.carwash/Filter
     C:/Development/projects/elite.carwash/Selector
     C:/Development/projects/desktop.newtax/Src
     C:/Development/OpenSSL-Win64/include

@@ -8,6 +8,8 @@
 #include "database2.h"
 #include "dlgdeptholder.h"
 #include "dlglist.h"
+#include "dlgtalonredeem.h"
+#include "giftcartstore.h"
 #include "printtaxno.h"
 #include "rmessage.h"
 #include "orderlog.h"
@@ -15,6 +17,12 @@
 #include "rnumbers.h"
 #include "ui_dlgpayment.h"
 #include "dishestable.h"
+#include <QtMath>
+
+namespace {
+constexpr double kTalonAmountTolerance = 1.0;
+constexpr int kGiftCardSoldStatus = GiftCartStore::SOLD_CARD_STATUS;
+}
 
 static void appendEmarkIfValid(PrintTaxNO &pn, const QString &emark, const QString &adgt)
 {
@@ -25,6 +33,15 @@ static void appendEmarkIfValid(PrintTaxNO &pn, const QString &emark, const QStri
     if (!pn.fEmarks.contains(emark)) {
         pn.fEmarks.append(emark);
     }
+}
+
+static QString fiscalUseExtPos(const QMap<QString, QVariant> &machine, bool posButtonChecked)
+{
+    if(posButtonChecked) {
+        return QStringLiteral("true");
+    }
+
+    return machine.value(QStringLiteral("extpos")).toString();
 }
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
@@ -136,6 +153,12 @@ bool DlgPayment::payment(int order, int hallid)
         d->ui->btnPrintTax->setChecked(false);
     }
 
+    d->ui->leDept->setDouble(0);
+    d->ui->leDeptHolder->clear();
+    d->ui->leDeptHolder->fHiddenText.clear();
+    d->restoreTalonPaymentState();
+    d->updateDeptHolderState();
+
     result = d->exec() == QDialog::Accepted;
     delete d;
     return result;
@@ -149,6 +172,7 @@ void DlgPayment::accept()
 void DlgPayment::reject()
 {
     if(fCanReject) {
+        fPendingTalonCode.clear();
         BaseExtendedDialog::reject();
     }
 }
@@ -190,7 +214,7 @@ void DlgPayment::on_btnOk_clicked()
         PrintTaxNO pn(s.value("ip").toString(),
                       s.value("port").toInt(),
                       s.value("password").toString(),
-                      s.value("extpos").toString(),
+                      fiscalUseExtPos(s, ui->btnPOS->isChecked()),
                       s.value("opcode").toString(),
                       s.value("oppin").toString());
         db2[":f_header"] = fOrder;
@@ -256,7 +280,7 @@ void DlgPayment::on_btnOk_clicked()
         PrintTaxNO pn(s.value("ip").toString(),
                       s.value("port").toInt(),
                       s.value("password").toString(),
-                      s.value("extpos").toString(),
+                      fiscalUseExtPos(s, ui->btnPOS->isChecked()),
                       s.value("opcode").toString(),
                       s.value("oppin").toString());
         db2[":f_header"] = fOrder;
@@ -348,6 +372,19 @@ void DlgPayment::on_btnOk_clicked()
         }
     }
 
+    if(!fPendingTalonCode.isEmpty()) {
+        TalonRedeemInfo info;
+        QString error;
+
+        if(!TalonService::redeemForOrder(fOrder, fPendingTalonCode, info, error)) {
+            logDiscountScan(fPendingTalonCode, false, "talon_redeem_failed", QString("detail=%1").arg(error));
+            message_error(error);
+            return;
+        }
+
+        fPendingTalonCode.clear();
+    }
+
     fDbBind[":f_cash"] = (ui->btnCouponService->isChecked() || ui->btnOldTalon->isChecked()) ? 0 : ui->leCash->asDouble();
     fDbBind[":f_idram"] = ui->leIdram->asDouble();
     fDbBind[":f_card"] = ui->leCard->asDouble();
@@ -427,6 +464,8 @@ void DlgPayment::calcCash()
             ui->btnPrintTax->setChecked(false);
         }
     }
+
+    updateDeptHolderState();
 }
 
 void DlgPayment::calcDebt()
@@ -444,7 +483,19 @@ void DlgPayment::calcDebt()
     ui->leDiscountAmount->setText("0");
     ui->leCardHolder->clear();
     ui->leCardHolder->fHiddenText.clear();
+    ui->leDeptHolder->clear();
+    ui->leDeptHolder->fHiddenText.clear();
     ui->btnPrintTax->setChecked(false);
+    updateDeptHolderState();
+}
+
+void DlgPayment::updateDeptHolderState()
+{
+    if(ui->btnPrepaid->isEnabled()) {
+        return;
+    }
+
+    ui->btnDeptHolder->setEnabled(ui->leDept->asDouble() > 0.1);
 }
 
 void DlgPayment::calcCard()
@@ -462,6 +513,7 @@ void DlgPayment::calcCard()
     ui->leCardHolder->clear();
     ui->leCardHolder->fHiddenText.clear();
     ui->btnPrintTax->setChecked(true);
+    updateDeptHolderState();
 }
 
 void DlgPayment::calcIdram()
@@ -480,6 +532,7 @@ void DlgPayment::calcIdram()
     ui->leCardHolder->clear();
     ui->leCardHolder->fHiddenText.clear();
     ui->btnPrintTax->setChecked(true);
+    updateDeptHolderState();
 }
 
 void DlgPayment::readFiscalMachines()
@@ -582,7 +635,8 @@ void DlgPayment::on_btnDept_clicked()
 
 void DlgPayment::on_leDept_textChanged(const QString &arg1)
 {
-    ui->btnDeptHolder->setEnabled(arg1.toDouble() > 0.1);
+    Q_UNUSED(arg1);
+    updateDeptHolderState();
 }
 
 void DlgPayment::on_btnDeptHolder_clicked()
@@ -702,6 +756,60 @@ void DlgPayment::applyTalonRedeemUi(const TalonRedeemInfo &info)
     ui->btnPrintTax->setChecked(false);
 }
 
+void DlgPayment::restoreTalonPaymentState()
+{
+    if(fUpdateHeader) {
+        return;
+    }
+
+    TalonRedeemInfo info;
+
+    if(!TalonService::loadRedeemedForOrder(fOrder, info)) {
+        return;
+    }
+
+    applyTalonRedeemUi(info);
+}
+
+bool DlgPayment::tryRedeemTalon(const QString &rawCode)
+{
+    const QString code = TalonService::normalizeCode(rawCode);
+
+    if(code.isEmpty()) {
+        return false;
+    }
+
+    TalonRedeemInfo info;
+    QString error;
+
+    if(!TalonService::lookupForRedeem(code, info, error)) {
+        logDiscountScan(code, false, "talon_lookup_failed", QString("detail=%1").arg(error));
+        message_error(error);
+        return false;
+    }
+
+    const double orderAmount = ui->leFinalAmount->asDouble();
+
+    if(qAbs(info.price - orderAmount) >= kTalonAmountTolerance) {
+        logDiscountScan(code, false, "talon_amount_mismatch",
+                        QString("talon_price=%1;order_amount=%2").arg(info.price).arg(orderAmount));
+        message_error(tr("Talon price does not match the order amount"));
+        return false;
+    }
+
+    if(!DlgTalonRedeem::confirm(info, orderAmount, this)) {
+        logDiscountScan(code, false, "talon_not_confirmed",
+                        QString("talon_price=%1;order_amount=%2").arg(info.price).arg(orderAmount));
+        return false;
+    }
+
+    fPendingTalonCode = code;
+    applyTalonRedeemUi(info);
+    logDiscountScan(code, true, "talon_pending",
+                    QString("talon_price=%1;order_amount=%2").arg(info.price).arg(orderAmount));
+    return true;
+}
+
 void DlgPayment::logDiscountScan(const QString &code, bool ok, const QString &reason, const QString &extra)
 {
     QString data = QString("code=%1;result=%2;reason=%3").arg(code, ok ? "ok" : "fail", reason);
@@ -725,16 +833,7 @@ void DlgPayment::on_leDiscount_returnPressed()
     ui->leDiscount->clear();
 
     if(TalonService::talonExists(code)) {
-        TalonRedeemInfo info;
-        QString error;
-
-        if(!TalonService::redeemForOrder(fOrder, code, info, error)) {
-            logDiscountScan(code, false, "talon_redeem_failed", QString("detail=%1").arg(error));
-            message_error(error);
-            return;
-        }
-
-        applyTalonRedeemUi(info);
+        tryRedeemTalon(code);
         return;
     }
 
@@ -1026,16 +1125,9 @@ void DlgPayment::on_btnCouponService_clicked(bool checked)
         return;
     }
 
-    TalonRedeemInfo info;
-    QString error;
-
-    if(!TalonService::redeemForOrder(fOrder, code, info, error)) {
+    if(!tryRedeemTalon(code)) {
         ui->btnCouponService->setChecked(false);
-        message_error(error);
-        return;
     }
-
-    applyTalonRedeemUi(info);
 }
 
 void DlgPayment::on_btnPrepaid_clicked()
@@ -1074,7 +1166,7 @@ void DlgPayment::on_btnPrepaid_clicked()
     PrintTaxNO pn(s.value("ip").toString(),
                   s.value("port").toInt(),
                   s.value("password").toString(),
-                  s.value("extpos").toString(),
+                  fiscalUseExtPos(s, ui->btnPOS->isChecked()),
                   s.value("opcode").toString(),
                   s.value("oppin").toString());
     QString in, out, err;
@@ -1100,14 +1192,47 @@ void DlgPayment::on_btnPrepaid_clicked()
     }
 
     QJsonObject jo = QJsonDocument::fromJson(out.toUtf8()).object();
-    db2[":f_fiscal"] = jo["rseq"].toInt();
+    const int fiscalRseq = jo["rseq"].toInt();
+    db2[":f_fiscal"] = fiscalRseq;
     db2.update("o_tax_log", "f_id", fiscalrecid);
-    db2[":f_tax"] = jo["rseq"].toInt();
-    db2.update("o_header", "f_id", fOrder);
-    db2[":f_code"] = ui->leGiftCardCode->text();
-    db2[":f_fiscal"] = jo["rseq"].toInt();
-    db2[":f_holder"] = ui->leDeptHolder->text();
-    db2.exec("update d_gift_cart set f_fiscal=:f_fiscal, f_info=concat_ws(' ', f_info, :f_holder) where f_code=:f_code");
+
+    const QString cardCode = ui->leGiftCardCode->text().trimmed();
+    QMap<QString, QVariant> cardBind;
+    QList<QList<QVariant> > cardRows;
+    cardBind[":f_code"] = cardCode;
+    if(fDb.select("select f_id from d_gift_cart where f_code=:f_code", cardBind, cardRows) < 0 || cardRows.isEmpty()) {
+        message_error(tr("Gift card not found."));
+        return;
+    }
+
+    const int cardId = cardRows.at(0).at(0).toInt();
+    QString storeErr;
+    if(!GiftCartStore::moveStatus(fDb, cardId, kGiftCardSoldStatus, storeErr)) {
+        message_error(storeErr);
+        return;
+    }
+
+    fDbBind.clear();
+    fDbBind[":f_fiscal"] = fiscalRseq;
+    fDbBind[":f_holder"] = ui->leDeptHolder->text();
+    fDbBind[":f_code"] = cardCode;
+    if(fDb.select("update d_gift_cart set f_fiscal=:f_fiscal, f_info=concat_ws(' ', f_info, :f_holder) where f_code=:f_code",
+                  fDbBind, fDbRows) < 0) {
+        message_error(fDb.fLastError);
+        return;
+    }
+
+    fDbBind.clear();
+    fDbBind[":f_tax"] = fiscalRseq;
+    fDbBind[":f_card"] = cardCode;
+    fDbBind[":f_id"] = fOrder;
+    if(fDb.select("update o_header set f_tax=:f_tax, "
+                  "f_paymentModeComment=trim(concat_ws(' ', f_paymentModeComment, :f_card)) "
+                  "where f_id=:f_id",
+                  fDbBind, fDbRows) < 0) {
+        message_error(fDb.fLastError);
+        return;
+    }
     fDbBind[":f_id"] = fOrder;
     DatabaseResult drDisc;
     drDisc.select(fDb, "select * from o_temp_disc where f_id=:f_id", fDbBind);
@@ -1171,7 +1296,7 @@ void DlgPayment::on_leGiftCardCode_returnPressed()
     Database2 db2;
     db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass);
     db2[":f_code"] = ui->leGiftCardCode->text();
-    db2.exec("select f_fiscal from d_gift_cart where f_code=:f_code");
+    db2.exec("select f_fiscal, coalesce(f_status, 0) as f_status from d_gift_cart where f_code=:f_code");
 
     if(!db2.next()) {
         ui->leGiftCardCode->clear();
@@ -1179,7 +1304,7 @@ void DlgPayment::on_leGiftCardCode_returnPressed()
         return;
     }
 
-    if(db2.integer("f_fiscal") > 0) {
+    if(db2.integer("f_fiscal") > 0 || db2.integer("f_status") == kGiftCardSoldStatus) {
         ui->leGiftCardCode->clear();
         message_error("Այս քարտը հնարավոր չէ վաճառել");
         return;

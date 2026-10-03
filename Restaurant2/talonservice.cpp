@@ -63,17 +63,11 @@ bool TalonService::talonExists(const QString &normalizedCode)
     return db2.next();
 }
 
-bool TalonService::redeemForOrderInTx(Database2 &db2,
-                                      int orderId,
+bool TalonService::loadTalonForRedeem(Database2 &db2,
                                       const QString &normalizedCode,
                                       TalonRedeemInfo &info,
                                       QString &error)
 {
-    if(orderId <= 0) {
-        error = QObject::tr("Invalid order");
-        return false;
-    }
-
     if(normalizedCode.isEmpty()) {
         error = QObject::tr("Talon code is empty");
         return false;
@@ -115,6 +109,66 @@ bool TalonService::redeemForOrderInTx(Database2 &db2,
     info.partnerId = db2.integer("f_partner");
     info.partnerName = db2.string("f_partnername");
     info.price = db2.doubleValue("f_price");
+    return true;
+}
+
+bool TalonService::lookupForRedeem(const QString &rawCode, TalonRedeemInfo &info, QString &error)
+{
+    const QString code = normalizeCode(rawCode);
+    Database2 db2;
+
+    if(!openDb(db2)) {
+        error = QObject::tr("Database error");
+        return false;
+    }
+
+    return loadTalonForRedeem(db2, code, info, error);
+}
+
+bool TalonService::loadRedeemedForOrder(int orderId, TalonRedeemInfo &info)
+{
+    if(orderId <= 0) {
+        return false;
+    }
+
+    Database2 db2;
+
+    if(!openDb(db2)) {
+        return false;
+    }
+
+    db2[":f_order"] = orderId;
+    db2.exec("select t.f_code, t.f_price, t.f_partner, p.f_name as f_partnername "
+             "from talon_service t "
+             "left join r_partners p on p.f_id=t.f_partner "
+             "where t.f_order=:f_order and t.f_used=1 "
+             "limit 1");
+
+    if(!db2.next()) {
+        return false;
+    }
+
+    info.code = db2.string("f_code");
+    info.partnerId = db2.integer("f_partner");
+    info.partnerName = db2.string("f_partnername");
+    info.price = db2.doubleValue("f_price");
+    return true;
+}
+
+bool TalonService::redeemForOrderInTx(Database2 &db2,
+                                      int orderId,
+                                      const QString &normalizedCode,
+                                      TalonRedeemInfo &info,
+                                      QString &error)
+{
+    if(orderId <= 0) {
+        error = QObject::tr("Invalid order");
+        return false;
+    }
+
+    if(!loadTalonForRedeem(db2, normalizedCode, info, error)) {
+        return false;
+    }
 
     db2[":f_costumer"] = info.partnerId;
     db2[":f_order"] = orderId;

@@ -1,6 +1,5 @@
 #include "dlgsalarytotal.h"
 #include "ui_dlgsalarytotal.h"
-#include "c5printing.h"
 #include "database2.h"
 #include "defrest.h"
 

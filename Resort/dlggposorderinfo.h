@@ -17,6 +17,7 @@ public:
     ~DlgGPOSOrderInfo();
     void setOrder(const QString &id);
     void setVaucher(const QString &id);
+    void setReadOnly(bool readOnly);
 private slots:
     void showDishHistory(int tag);
     void deleteDishRow(int row);
@@ -31,6 +32,7 @@ private slots:
 
 private:
     Ui::DlgGPOSOrderInfo* ui;
+    bool fReadOnly = false;
     void countTotal();
     void addRowButtons();
     void updateOrderTotal();
