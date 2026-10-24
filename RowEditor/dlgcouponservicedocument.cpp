@@ -12,7 +12,85 @@
 #include <QPageSize>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QSet>
 #include <QTextDocument>
+
+namespace {
+constexpr int kCouponSuffixLen = 5;
+
+bool splitCouponCode(const QString &code, QString &prefix, int &number)
+{
+    if(code.size() < kCouponSuffixLen) {
+        return false;
+    }
+
+    bool ok = false;
+    number = code.right(kCouponSuffixLen).toInt(&ok);
+
+    if(!ok) {
+        return false;
+    }
+
+    prefix = code.left(code.size() - kCouponSuffixLen);
+    return true;
+}
+
+bool couponSpan(const QString &first, const QString &last, QString &prefix, int &from, int &to)
+{
+    QString prefixLast;
+    int firstNo = 0;
+    int lastNo = 0;
+    const QString end = last.isEmpty() ? first : last;
+
+    if(!splitCouponCode(first, prefix, firstNo) || !splitCouponCode(end, prefixLast, lastNo) || prefix != prefixLast) {
+        return false;
+    }
+
+    from = qMin(firstNo, lastNo);
+    to = qMax(firstNo, lastNo);
+    return true;
+}
+
+bool couponRangesOverlap(const QString &aFirst, const QString &aLast, const QString &bFirst, const QString &bLast)
+{
+    QString aPrefix;
+    QString bPrefix;
+    int aFrom = 0;
+    int aTo = 0;
+    int bFrom = 0;
+    int bTo = 0;
+    const bool aOk = couponSpan(aFirst, aLast, aPrefix, aFrom, aTo);
+    const bool bOk = couponSpan(bFirst, bLast, bPrefix, bFrom, bTo);
+
+    if(aOk && bOk) {
+        return aPrefix == bPrefix && aFrom <= bTo && bFrom <= aTo;
+    }
+
+    const QString aEnd = aLast.isEmpty() ? aFirst : aLast;
+    const QString bEnd = bLast.isEmpty() ? bFirst : bLast;
+    return aFirst == bFirst || aFirst == bEnd || aEnd == bFirst || aEnd == bEnd;
+}
+
+QStringList couponCodes(const QString &first, const QString &last)
+{
+    QString prefix;
+    int from = 0;
+    int to = 0;
+
+    if(!couponSpan(first, last, prefix, from, to)) {
+        return QStringList(first);
+    }
+
+    QStringList codes;
+    codes.reserve(to - from + 1);
+
+    for(int n = from; n <= to; ++n) {
+        codes.append(prefix + QStringLiteral("%1").arg(n, kCouponSuffixLen, 10, QChar('0')));
+    }
+
+    return codes;
+}
+}
 
 DlgCouponServiceDocument::DlgCouponServiceDocument(ReportQuery *rq, QWidget *parent) :
     QDialog(parent),
@@ -70,16 +148,29 @@ void DlgCouponServiceDocument::on_btnPlus_clicked()
 {
     DlgCouponServiceDocumentPlus d(fReportQuery, this);
     if (d.exec() == QDialog::Accepted) {
-        QString couponType, first;
+        QString couponType, first, last;
         double qty = 1, price, discount, total;
         int group;
-        d.getResult(couponType, first, price, discount, total, group);
+        d.getResult(couponType, first, last, qty, price, discount, total, group);
+
+        if(last.isEmpty()) {
+            last = first;
+        }
+
+        for(int i = 0; i < ui->tbl->rowCount(); i++) {
+            if(couponRangesOverlap(first, last, ui->tbl->item(i, 2)->text(), ui->tbl->item(i, 3)->text())) {
+                message_error(tr("Coupon %1 — %2 is already included in this document")
+                              .arg(first, last));
+                return;
+            }
+        }
+
         int r = ui->tbl->rowCount();
         ui->tbl->setRowCount(r + 1);
         ui->tbl->setItem(r, 0, new QTableWidgetItem());
         ui->tbl->setItem(r, 1, new QTableWidgetItem(couponType));
         ui->tbl->setItem(r, 2, new QTableWidgetItem(first));
-        ui->tbl->setItem(r, 3, new QTableWidgetItem(first));
+        ui->tbl->setItem(r, 3, new QTableWidgetItem(last));
         ui->tbl->setItem(r, 4, new QTableWidgetItem(QString::number(qty)));
         ui->tbl->setItem(r, 5, new QTableWidgetItem(QString::number(price)));
         ui->tbl->setItem(r, 6, new QTableWidgetItem(QString::number(discount)));
@@ -109,6 +200,23 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
         message_error(db.lastDbError());
         return;
     }
+    QSet<QString> usedCodes;
+
+    for(int i = 0; i < ui->tbl->rowCount(); i++) {
+        const QString first = ui->tbl->item(i, 2)->text();
+        const QString last = ui->tbl->item(i, 3)->text();
+        const QStringList codes = couponCodes(first, last);
+
+        for(const QString &code : codes) {
+            if(usedCodes.contains(code)) {
+                message_error(tr("Coupon %1 is already included in this document").arg(code));
+                return;
+            }
+
+            usedCodes.insert(code);
+        }
+    }
+
     db.startTransaction();
     db[":f_type"] = 2;
     db[":f_date"] = ui->leDate->date();
@@ -117,15 +225,55 @@ void DlgCouponServiceDocument::on_btnSave_clicked()
     int docid = 0;
     db.insert("talon_documents_header", docid);
     for (int i = 0; i < ui->tbl->rowCount(); i++) {
-        db[":f_code"] = ui->tbl->item(i, 2)->text();
-        db[":f_trsale"] = docid;
-        db[":f_group"]  = ui->tbl->item(i, 8)->text().toInt();
-        db[":f_partner"] = ui->cbPartner->currentData();
-        db[":f_price"] = str_float(ui->tbl->item(i, 5)->text());
-        db[":f_validto"] = ui->leValid->date();
-        db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
-        db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, "
-                "f_price=:f_price, f_trback=null, f_partner=:f_partner, f_group=:f_group, f_validto=:f_validto where f_code=:f_code");
+        const QString first = ui->tbl->item(i, 2)->text();
+        const QString last = ui->tbl->item(i, 3)->text();
+        const int group = ui->tbl->item(i, 8)->text().toInt();
+        const QStringList codes = couponCodes(first, last);
+
+        for(const QString &code : codes) {
+            db[":f_code"] = code;
+
+            if(!db.exec("select f_id, f_group, coalesce(f_trsale, 0) as f_trsale from talon_service where f_code=:f_code for update")) {
+                message_error(db.lastDbError());
+                db.rollback();
+                return;
+            }
+
+            if(!db.next()) {
+                message_error(tr("Coupon %1 was not found").arg(code));
+                db.rollback();
+                return;
+            }
+
+            if(db.integer("f_group") != group) {
+                message_error(tr("Coupon %1 belongs to another type").arg(code));
+                db.rollback();
+                return;
+            }
+
+            if(db.integer("f_trsale") != 0) {
+                message_error(tr("This coupon already saled") + ": " + code);
+                db.rollback();
+                return;
+            }
+
+            db[":f_code"] = code;
+            db[":f_trsale"] = docid;
+            db[":f_group"]  = group;
+            db[":f_partner"] = ui->cbPartner->currentData();
+            db[":f_price"] = str_float(ui->tbl->item(i, 5)->text());
+            db[":f_validto"] = ui->leValid->date();
+            db[":f_discount"] = ui->tbl->item(i, 6)->data(Qt::EditRole).toDouble();
+
+            if(!db.exec("update talon_service set f_trsale=:f_trsale, f_discount=:f_discount, "
+                        "f_price=:f_price, f_trback=null, f_partner=:f_partner, f_group=:f_group, f_validto=:f_validto "
+                        "where f_code=:f_code and coalesce(f_trsale, 0)=0")) {
+                message_error(db.lastDbError());
+                db.rollback();
+                return;
+            }
+        }
+
         db[":f_doc"] = docid;
         db[":f_group"] = ui->tbl->item(i, 1)->text();
         db[":f_first"] = ui->tbl->item(i, 2)->text();

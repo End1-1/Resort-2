@@ -1383,6 +1383,26 @@ name</source>
         <source>group</source>
         <translation>խումբ</translation>
     </message>
+    <message>
+        <location filename="../RowEditor/dlgcouponservicedocument.cpp" line="164"/>
+        <source>Coupon %1 — %2 is already included in this document</source>
+        <translation>Կտրոն %1 — %2 արդեն կա այս փաստաթղթում</translation>
+    </message>
+    <message>
+        <location filename="../RowEditor/dlgcouponservicedocument.cpp" line="212"/>
+        <source>Coupon %1 is already included in this document</source>
+        <translation>Կտրոն %1 արդեն կա այս փաստաթղթում</translation>
+    </message>
+    <message>
+        <location filename="../RowEditor/dlgcouponservicedocument.cpp" line="243"/>
+        <source>Coupon %1 was not found</source>
+        <translation>Կտրոն %1 չի գտնվել</translation>
+    </message>
+    <message>
+        <location filename="../RowEditor/dlgcouponservicedocument.cpp" line="249"/>
+        <source>Coupon %1 belongs to another type</source>
+        <translation>Կտրոն %1 այլ տեսակի է</translation>
+    </message>
 </context>
 <context>
     <name>DlgCouponServiceDocumentPlus</name>
@@ -3465,23 +3485,63 @@ for this operation</source>
     </message>
     <message>
         <location filename="../Filter/fheaderdebt.cpp" line="49"/>
-        <source>Date</source>
-        <translation>Ամսաթիվ</translation>
+        <source>Debt date</source>
+        <translation>Պարտքի ամսաթիվ</translation>
     </message>
     <message>
         <location filename="../Filter/fheaderdebt.cpp" line="50"/>
+        <source>Payment date</source>
+        <translation>Վճարման ամսաթիվ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="51"/>
         <source>Debt</source>
         <translation>Պարտք</translation>
     </message>
     <message>
-        <location filename="../Filter/fheaderdebt.cpp" line="51"/>
+        <location filename="../Filter/fheaderdebt.cpp" line="52"/>
         <source>Payment</source>
         <translation>Վճարում</translation>
     </message>
     <message>
-        <location filename="../Filter/fheaderdebt.cpp" line="52"/>
+        <location filename="../Filter/fheaderdebt.cpp" line="53"/>
         <source>Balance</source>
         <translation>Բալանս</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.ui" line="45"/>
+        <source>By movement</source>
+        <translation>Ըստ շարժի</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="66"/>
+        <source>Date</source>
+        <translation>Ամսաթիվ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="67"/>
+        <source>Type</source>
+        <translation>Տեսակ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="68"/>
+        <source>Amount</source>
+        <translation>Գումար</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="69"/>
+        <source>Payment mode</source>
+        <translation>Վճարման եղանակ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="58"/>
+        <source>Debt</source>
+        <translation>Պարտք</translation>
+    </message>
+    <message>
+        <location filename="../Filter/fheaderdebt.cpp" line="59"/>
+        <source>Payment</source>
+        <translation>Վճարում</translation>
     </message>
 </context>
 <context>
@@ -4548,6 +4608,13 @@ ledger</source>
         <location filename="../Filter/frestauranttotal.ui" line="896"/>
         <source>Talon customer</source>
         <translation>Կտրոնի հաճախորդ</translation>
+    </message>
+    <message>
+        <location filename="../Filter/frestauranttotal.ui" line="927"/>
+        <location filename="../Filter/frestauranttotal.cpp" line="627"/>
+        <location filename="../Filter/frestauranttotal.cpp" line="731"/>
+        <source>Transfer customer</source>
+        <translation>Փոխանցման հաճախորդ</translation>
     </message>
     <message>
         <location filename="../Filter/frestauranttotal.cpp" line="218"/>

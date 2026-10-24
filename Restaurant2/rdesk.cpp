@@ -445,6 +445,17 @@ void RDesk::prepareToShow()
     showFullScreen();
 #endif
     CustomerDisplay::tryAttachSecondScreen();
+    if(CustomerDisplay *cd = CustomerDisplay::instance()) {
+        Db b = Preferences().getDatabase(Base::fDbName);
+        Database2 db2;
+        if(db2.open(b.dc_main_host, b.dc_main_path, b.dc_main_user, b.dc_main_pass)) {
+            db2[":f_id"] = defrest(dr_branch).toInt();
+            db2.exec("select f_name from r_branch where f_id=:f_id");
+            if(db2.next()) {
+                cd->setBranchName(db2.string("f_name"));
+            }
+        }
+    }
     qApp->processEvents();
 }
 
@@ -1929,9 +1940,7 @@ double RDesk::countTotal()
         }
 
         if(fHall->fServiceItem != od->fDishId) {
-            if (!fNoService) {
-                servicevalue += od->fTotal * od->fSvcValue;
-            }
+            servicevalue += od->fTotal * od->fSvcValue;
             total += od->fTotal;
         }
 
@@ -1961,23 +1970,13 @@ double RDesk::countTotal()
             continue;
         }
 
-        if (fNoService) {
-            if (od->fPrice > 0.001 || od->fTotal > 0.001) {
-                od->fPrice = 0;
-                od->fTotal = 0;
-                od->fQty = 1;
-                updateDish(od);
-            }
-            continue;
-        }
-
         od->fPrice = servicevalue;
         od->fTotal = servicevalue;
         od->fQty = 1;
         updateDish(od);
     }
 
-    double grandTotal = total + (fNoService ? 0 : servicevalue);
+    double grandTotal = total + servicevalue;
     fHall = Hall::getHallById(fTable->fHall);
     if(QTableWidgetItem *totalItem = ui->tblTotal->item(1, 1)) {
         totalItem->setData(Qt::EditRole, float_str(grandTotal, 2));
@@ -1997,12 +1996,7 @@ double RDesk::countTotal()
 void RDesk::countDish(OrderDishStruct * d)
 {
     d->fTotal = d->fQty * d->fPrice;
-    if (fNoService) {
-        d->fSvcValue = 0;
-        d->fSvcAmount = 0;
-    } else {
-        d->fSvcAmount = d->fTotal * d->fSvcValue;
-    }
+    d->fSvcAmount = d->fTotal * d->fSvcValue;
     d->fDctAmount = d->fTotal * d->fDctValue;
 }
 bool RDesk::setTable(TableStruct * t, bool nosmile)
@@ -2219,6 +2213,17 @@ void RDesk::refreshCustomerDisplay()
     }
 
     CustomerDisplayOrder order;
+    const int serviceDishId = fHall ? fHall->fServiceItem : 0;
+
+    struct DisplayAgg {
+        QString name;
+        QString comment;
+        double price = 0;
+        double qty = 0;
+        double total = 0;
+    };
+    QList<DisplayAgg> aggregated;
+    double serviceAmount = 0;
 
     for(int i = 0; i < ui->tblOrder->rowCount(); i++) {
         if(ui->tblOrder->isRowHidden(i)) {
@@ -2233,12 +2238,47 @@ void RDesk::refreshCustomerDisplay()
             continue;
         }
 
+        if(serviceDishId > 0 && od->fDishId == serviceDishId) {
+            serviceAmount += od->fTotal;
+            continue;
+        }
+
+        const QString comment = od->fComment.trimmed();
+        DisplayAgg *same = nullptr;
+
+        for(DisplayAgg &row : aggregated) {
+            if(row.name == od->fName
+                    && row.comment == comment
+                    && qAbs(row.price - od->fPrice) < 0.01) {
+                same = &row;
+                break;
+            }
+        }
+
+        if(!same) {
+            DisplayAgg row;
+            row.name = od->fName;
+            row.comment = comment;
+            row.price = od->fPrice;
+            aggregated.append(row);
+            same = &aggregated.last();
+        }
+
+        same->qty += od->fQty;
+        same->total += od->fTotal;
+    }
+
+    for(const DisplayAgg &row : aggregated) {
         CustomerDisplayLine line;
-        line.name = od->fName;
-        line.qty = float_str(od->fQty, 1);
-        line.total = float_str(od->fTotal, 2);
-        line.comment = od->fComment.trimmed();
+        line.name = row.name;
+        line.qty = float_str(row.qty, 1);
+        line.total = float_str(row.total, 2);
+        line.comment = row.comment;
         order.lines.append(line);
+    }
+
+    if(serviceAmount > 0.001) {
+        order.serviceAmount = float_str(serviceAmount, 2);
     }
 
     const QTableWidgetItem *totalItem = ui->tblTotal->item(1, 1);

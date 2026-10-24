@@ -54,7 +54,9 @@ bool DebtPay::loadOpenDebts(const QString &govNumber, QList<OpenDebtRow> &rows)
     }
 
     db2[":f_govnumber"] = normalized;
-    db2.exec("select d.f_order, d.f_govnumber, max(d.f_datetime) as f_datetime, sum(d.f_debt) as f_balance "
+    db2.exec("select d.f_order, d.f_govnumber, "
+             "min(case when d.f_debt > 0 then d.f_datetime end) as f_datetime, "
+             "sum(d.f_debt) as f_balance "
              "from o_header_debt d "
              "where upper(replace(d.f_govnumber, ' ', ''))=:f_govnumber "
              "group by d.f_order, d.f_govnumber "
@@ -75,7 +77,9 @@ bool DebtPay::loadAllOpenDebts(int branch, QList<OpenDebtRow> &rows)
     }
 
     db2[":f_branch"] = branch;
-    db2.exec("select d.f_order, d.f_govnumber, max(d.f_datetime) as f_datetime, sum(d.f_debt) as f_balance "
+    db2.exec("select d.f_order, d.f_govnumber, "
+             "min(case when d.f_debt > 0 then d.f_datetime end) as f_datetime, "
+             "sum(d.f_debt) as f_balance "
              "from o_header_debt d "
              "inner join o_header oh on oh.f_id=d.f_order "
              "where oh.f_branch=:f_branch "
@@ -172,7 +176,7 @@ static bool insertDebtPayment(Database2 &db2,
     db2[":f_order"] = orderId;
     db2[":f_govnumber"] = govNumber;
     db2[":f_debt"] = amount * -1;
-    db2[":f_datetime"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    db2[":f_datetime"] = QDateTime::currentDateTime();
     db2[":f_payment_mode"] = paymentMode;
 
     int debtId = 0;
@@ -383,6 +387,7 @@ bool DebtPay::printOrderFiscalIfNeeded(int orderId, double amount, int paymentMo
     switch(paymentMode) {
     case PAYMENT_CARD:
         card = amount;
+        pn.fPaymentSystem = pt_payment_system_card;
         break;
     case PAYMENT_PREPAID:
         prepaid = amount;

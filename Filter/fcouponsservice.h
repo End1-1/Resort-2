@@ -20,6 +20,9 @@ public:
 
 private:
     Ui::FCouponsService *ui;
+
+private slots:
+    void createTalons();
 };
 
 #endif // FCOUPONSSERVICE_H

@@ -435,6 +435,16 @@
         <source>Amounts do not match. The talon cannot be applied.</source>
         <translation>Գումարները չեն համընկնում։ Կտրոնը հնարավոր չէ կիրառել։</translation>
     </message>
+    <message>
+        <location filename="dlgtalonredeem.cpp" line="38"/>
+        <source>Talon covers this order.</source>
+        <translation>Կտրոնը ծածկում է այս պատվերը։</translation>
+    </message>
+    <message>
+        <location filename="dlgtalonredeem.cpp" line="46"/>
+        <source>Order amount exceeds the talon price. The talon cannot be applied.</source>
+        <translation>Պատվերի գումարը գերազանցում է կտրոնի գինը։ Կտրոնը հնարավոր չէ կիրառել։</translation>
+    </message>
 </context>
 <context>
     <name>DlgPayment</name>
@@ -628,6 +638,11 @@
         <location filename="dlgpayment.cpp" line="785"/>
         <source>Talon price does not match the order amount</source>
         <translation>Կտրոնի գինը չի համապատասխանում պատվերի գումարին</translation>
+    </message>
+    <message>
+        <location filename="dlgpayment.cpp" line="808"/>
+        <source>Order amount exceeds the talon price</source>
+        <translation>Պատվերի գումարը գերազանցում է կտրոնի գինը</translation>
     </message>
     <message>
         <location filename="dlgpayment.cpp" line="720"/>
@@ -2780,6 +2795,11 @@ removed items</source>
         <location filename="customerdisplay.cpp" line="375"/>
         <source>Your order</source>
         <translation>Ձեր պատվերը</translation>
+    </message>
+    <message>
+        <location filename="customerdisplay.cpp" line="129"/>
+        <source>Service</source>
+        <translation>Սպասարկում</translation>
     </message>
     <message>
         <location filename="customerdisplay.cpp" line="91"/>

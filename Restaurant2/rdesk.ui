@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>955</width>
-    <height>609</height>
+    <width>1479</width>
+    <height>1016</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -718,13 +718,6 @@
            <attribute name="verticalHeaderDefaultSectionSize">
             <number>120</number>
            </attribute>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTreeView" name="treeView">
-           <property name="focusPolicy">
-            <enum>Qt::FocusPolicy::NoFocus</enum>
-           </property>
           </widget>
          </item>
          <item>

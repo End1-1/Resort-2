@@ -3,7 +3,9 @@
 #include <QFrame>
 #include <QGuiApplication>
 #include <QHBoxLayout>
+#include <QImage>
 #include <QLabel>
+#include <QPixmap>
 #include <QResizeEvent>
 #include <QScreen>
 #include <QScrollArea>
@@ -13,6 +15,16 @@
 #include <QWindow>
 
 CustomerDisplay *CustomerDisplay::fInstance = nullptr;
+
+QPixmap customerLogo(const QSize &target)
+{
+    const QImage source(QStringLiteral(":/images/logo.elite.png"));
+    if(source.isNull() || target.width() < 2 || target.height() < 2) {
+        return {};
+    }
+    return QPixmap::fromImage(source.convertToFormat(QImage::Format_RGB32)
+                                  .scaled(target, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
 
 CustomerDisplay *CustomerDisplay::instance()
 {
@@ -59,6 +71,33 @@ CustomerDisplay::CustomerDisplay(QWidget *parent)
     auto *outer = new QVBoxLayout(this);
     outer->setContentsMargins(0, 0, 0, 0);
     outer->setSpacing(0);
+
+    fLogoLabel = new QLabel(this);
+    fLogoLabel->setObjectName(QStringLiteral("cdLogo"));
+    fLogoLabel->setAlignment(Qt::AlignCenter);
+    fLogoLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    outer->addWidget(fLogoLabel, 1);
+
+    fOrderHeader = new QFrame(this);
+    fOrderHeader->setObjectName(QStringLiteral("cdOrderHeader"));
+    auto *headerBar = new QHBoxLayout(fOrderHeader);
+    headerBar->setContentsMargins(16, 6, 24, 6);
+    headerBar->setSpacing(16);
+
+    fHeaderLogo = new QLabel(fOrderHeader);
+    fHeaderLogo->setObjectName(QStringLiteral("cdHeaderLogo"));
+    fHeaderLogo->setFixedHeight(50);
+    fHeaderLogo->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    fHeaderLogo->setPixmap(customerLogo(QSize(400, 50)));
+
+    fBranchLabel = new QLabel(fOrderHeader);
+    fBranchLabel->setObjectName(QStringLiteral("cdBranch"));
+    fBranchLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    headerBar->addWidget(fHeaderLogo, 0, Qt::AlignVCenter);
+    headerBar->addWidget(fBranchLabel, 0, Qt::AlignVCenter);
+    headerBar->addStretch(1);
+    outer->addWidget(fOrderHeader);
+    fOrderHeader->hide();
 
     auto *bodyRow = new QHBoxLayout();
     bodyRow->setContentsMargins(32, 36, 32, 24);
@@ -117,34 +156,58 @@ CustomerDisplay::CustomerDisplay(QWidget *parent)
     fFooter = new QFrame(this);
     fFooter->setObjectName(QStringLiteral("cdFooter"));
     auto *footerOuter = new QHBoxLayout(fFooter);
-    footerOuter->setContentsMargins(48, 0, 48, 0);
-    footerOuter->addStretch(1);
+    footerOuter->setContentsMargins(0, 0, 0, 0);
 
     auto *footerInner = new QFrame(fFooter);
     footerInner->setObjectName(QStringLiteral("cdFooterInner"));
     auto *footerLayout = new QHBoxLayout(footerInner);
-    footerLayout->setContentsMargins(40, 28, 40, 32);
+    footerLayout->setContentsMargins(40, 8, 40, 8);
     footerLayout->setSpacing(16);
+
+    fServiceCaption = new QLabel(tr("Service"), footerInner);
+    fServiceCaption->setObjectName(QStringLiteral("cdServiceCaption"));
+    fServiceCaption->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+
+    fServiceAmount = new QLabel(footerInner);
+    fServiceAmount->setObjectName(QStringLiteral("cdServiceAmount"));
+    fServiceAmount->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    auto *serviceCol = new QVBoxLayout();
+    serviceCol->setSpacing(4);
+    serviceCol->setContentsMargins(0, 0, 0, 0);
+    serviceCol->addWidget(fServiceCaption);
+    serviceCol->addWidget(fServiceAmount);
 
     fTotalCaption = new QLabel(tr("Total"), footerInner);
     fTotalCaption->setObjectName(QStringLiteral("cdTotalCaption"));
-    fTotalCaption->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    fTotalCaption->setAlignment(Qt::AlignRight | Qt::AlignBottom);
 
     fTotalAmount = new QLabel(QStringLiteral("0"), footerInner);
     fTotalAmount->setObjectName(QStringLiteral("cdTotalAmount"));
-    fTotalAmount->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    fTotalAmount->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     fTotalCurrency = new QLabel(QStringLiteral("AMD"), footerInner);
     fTotalCurrency->setObjectName(QStringLiteral("cdTotalCurrency"));
-    fTotalCurrency->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    fTotalCurrency->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 
+    auto *totalValue = new QHBoxLayout();
+    totalValue->setSpacing(8);
+    totalValue->setContentsMargins(0, 0, 0, 0);
+    totalValue->addStretch(1);
+    totalValue->addWidget(fTotalAmount, 0, Qt::AlignBottom);
+    totalValue->addWidget(fTotalCurrency, 0, Qt::AlignBottom);
+
+    auto *totalCol = new QVBoxLayout();
+    totalCol->setSpacing(4);
+    totalCol->setContentsMargins(0, 0, 0, 0);
+    totalCol->addWidget(fTotalCaption);
+    totalCol->addLayout(totalValue);
+
+    footerLayout->addLayout(serviceCol, 0);
     footerLayout->addStretch(1);
-    footerLayout->addWidget(fTotalCaption, 0, Qt::AlignVCenter);
-    footerLayout->addWidget(fTotalAmount, 0, Qt::AlignVCenter);
-    footerLayout->addWidget(fTotalCurrency, 0, Qt::AlignBottom);
+    footerLayout->addLayout(totalCol, 0);
 
-    footerOuter->addWidget(footerInner, 0, Qt::AlignHCenter);
-    footerOuter->addStretch(1);
+    footerOuter->addWidget(footerInner, 1);
 
     outer->addWidget(fFooter);
     fFooter->hide();
@@ -157,11 +220,6 @@ void CustomerDisplay::rebuildStyles()
     const int w = qMax(width(), 640);
     const int centerW = qMin(920, qMax(520, int(w * 0.52)));
     fCenterColumn->setFixedWidth(centerW);
-
-    const int footerW = qMin(920, qMax(520, int(w * 0.52)));
-    if(QFrame *inner = fFooter->findChild<QFrame *>(QStringLiteral("cdFooterInner"))) {
-        inner->setFixedWidth(footerW);
-    }
 
     const int brand = qMax(28, w / 38);
     const int context = qMax(17, w / 58);
@@ -176,9 +234,21 @@ void CustomerDisplay::rebuildStyles()
 
     setStyleSheet(QString(
         "#CustomerDisplayRoot {"
-        "  background: qlineargradient(x1:0,y1:0,x2:1,y2:1,"
-        "    stop:0 #0a0e17, stop:0.45 #121827, stop:1 #0f1419);"
+        "  background: #111111;"
         "  font-family: %10;"
+        "}"
+        "QLabel#cdLogo { background: #111111; }"
+        "QFrame#cdOrderHeader {"
+        "  background: #111111;"
+        "  border: none;"
+        "  border-bottom: 1px solid #2a2a2a;"
+        "}"
+        "QLabel#cdHeaderLogo { background: transparent; }"
+        "QLabel#cdBranch {"
+        "  color: #e6c98a;"
+        "  font-size: %8px;"
+        "  font-weight: 600;"
+        "  background: transparent;"
         "}"
         "QWidget#cdCenter { background: transparent; }"
         "QFrame#cdHeaderPanel {"
@@ -212,12 +282,25 @@ void CustomerDisplay::rebuildStyles()
         "QFrame#cdFooter {"
         "  background: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 transparent, stop:0.35 #0a0e17);"
         "  border: none;"
-        "  min-height: 120px;"
         "}"
         "QFrame#cdFooterInner {"
         "  background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #1a2436, stop:1 #1e2d42);"
-        "  border-radius: 28px;"
-        "  border: 1px solid #3d4f68;"
+        "  border-radius: 0;"
+        "  border: none;"
+        "  border-top: 1px solid #3d4f68;"
+        "}"
+        "QLabel#cdServiceCaption {"
+        "  color: #c6a15b;"
+        "  font-size: %8px;"
+        "  font-weight: 600;"
+        "  letter-spacing: 1px;"
+        "  background: transparent;"
+        "}"
+        "QLabel#cdServiceAmount {"
+        "  color: #e6c98a;"
+        "  font-size: %7px;"
+        "  font-weight: 700;"
+        "  background: transparent;"
         "}"
         "QLabel#cdTotalCaption {"
         "  color: #8fa0b5;"
@@ -225,7 +308,6 @@ void CustomerDisplay::rebuildStyles()
         "  font-weight: 600;"
         "  text-transform: uppercase;"
         "  letter-spacing: 2px;"
-        "  padding-right: 12px;"
         "  background: transparent;"
         "}"
         "QLabel#cdTotalAmount {"
@@ -293,6 +375,33 @@ void CustomerDisplay::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     rebuildStyles();
+    updateLogo();
+}
+
+void CustomerDisplay::updateLogo()
+{
+    if(!fLogoLabel || !fLogoLabel->isVisible()) {
+        return;
+    }
+
+    fLogoLabel->setPixmap(customerLogo(fLogoLabel->size()));
+}
+
+void CustomerDisplay::setIdleLayout(bool idle)
+{
+    auto *outer = qobject_cast<QVBoxLayout *>(layout());
+    if(!outer) {
+        return;
+    }
+
+    for(int i = 0; i < outer->count(); ++i) {
+        QLayout *sub = outer->itemAt(i)->layout();
+        if(!sub) {
+            continue;
+        }
+        outer->setStretch(i, idle ? 0 : 1);
+        sub->setContentsMargins(idle ? 0 : 32, idle ? 0 : 36, idle ? 0 : 32, idle ? 0 : 24);
+    }
 }
 
 void CustomerDisplay::clearItems()
@@ -355,21 +464,40 @@ void CustomerDisplay::addItemRow(const CustomerDisplayLine &line)
     fItemsLayout->addStretch(1);
 }
 
+void CustomerDisplay::setBranchName(const QString &name)
+{
+    if(fBranchLabel) {
+        fBranchLabel->setText(name);
+    }
+}
+
 void CustomerDisplay::showWelcome()
 {
-    fBrandLabel->setText(tr("Welcome"));
-    fContextLabel->setText(tr("Thank you for visiting us"));
-    fContextLabel->show();
-    fHeaderPanel->show();
-    fEmptyHint->show();
-    fScroll->hide();
-    fFooter->hide();
     clearItems();
+    fOrderHeader->hide();
+    fCenterColumn->hide();
+    fFooter->hide();
+    setIdleLayout(true);
+    fLogoLabel->show();
+    if(QLayout *lay = layout()) {
+        lay->activate();
+    }
+    updateLogo();
 }
 
 void CustomerDisplay::showOrder(const CustomerDisplayOrder &order)
 {
-    fBrandLabel->setText(tr("Your order"));
+    if(order.lines.isEmpty()) {
+        showWelcome();
+        return;
+    }
+
+    fLogoLabel->hide();
+    fLogoLabel->clear();
+    setIdleLayout(false);
+    fOrderHeader->show();
+    fCenterColumn->show();
+    fHeaderPanel->hide();
     fContextLabel->hide();
 
     clearItems();
@@ -377,17 +505,14 @@ void CustomerDisplay::showOrder(const CustomerDisplayOrder &order)
         addItemRow(line);
     }
 
-    if(order.lines.isEmpty()) {
-        fEmptyHint->setText(tr("Your order is empty."));
-        fEmptyHint->show();
-        fScroll->hide();
-        fFooter->hide();
-        return;
-    }
-
     fEmptyHint->hide();
     fScroll->show();
     fFooter->show();
+
+    const bool hasService = !order.serviceAmount.isEmpty();
+    fServiceCaption->setVisible(hasService);
+    fServiceAmount->setVisible(hasService);
+    fServiceAmount->setText(order.serviceAmount);
     fTotalAmount->setText(order.grandTotal);
 
     QTimer::singleShot(0, this, [this]() {

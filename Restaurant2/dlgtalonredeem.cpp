@@ -1,15 +1,5 @@
 #include "dlgtalonredeem.h"
 #include "ui_dlgtalonredeem.h"
-#include <QtMath>
-
-namespace {
-const double AMOUNT_TOLERANCE = 1.0;
-
-bool amountsMatch(double talonPrice, double orderAmount)
-{
-    return qAbs(talonPrice - orderAmount) < AMOUNT_TOLERANCE;
-}
-}
 
 DlgTalonRedeem::DlgTalonRedeem(QWidget *parent) :
     BaseExtendedDialog(parent),
@@ -32,17 +22,21 @@ bool DlgTalonRedeem::confirm(const TalonRedeemInfo &info, double orderAmount, QW
     dlg.ui->lbTalonPrice->setText(QString::number(info.price, 'f', 0));
     dlg.ui->lbOrderAmount->setText(QString::number(orderAmount, 'f', 0));
 
-    const bool match = amountsMatch(info.price, orderAmount);
+    const bool match = info.coversOrder(orderAmount);
 
     if(match) {
-        dlg.ui->lbMessage->setText(dlg.tr("Amounts match."));
+        dlg.ui->lbMessage->setText(info.special && qAbs(info.price - orderAmount) >= 1.0
+                                   ? dlg.tr("Talon covers this order.")
+                                   : dlg.tr("Amounts match."));
         dlg.ui->btnApply->setVisible(true);
         dlg.ui->btnCancel->setVisible(true);
         dlg.ui->btnOk->setVisible(false);
         return dlg.exec() == QDialog::Accepted;
     }
 
-    dlg.ui->lbMessage->setText(dlg.tr("Amounts do not match. The talon cannot be applied."));
+    dlg.ui->lbMessage->setText(info.special
+                               ? dlg.tr("Order amount exceeds the talon price. The talon cannot be applied.")
+                               : dlg.tr("Amounts do not match. The talon cannot be applied."));
     dlg.ui->btnApply->setVisible(false);
     dlg.ui->btnCancel->setVisible(false);
     dlg.ui->btnOk->setVisible(true);

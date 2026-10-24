@@ -2,6 +2,7 @@
 #include "ui_dlggiftcartstatus.h"
 #include "giftcartstore.h"
 #include "basewidget.h"
+#include "cacherights.h"
 #include "message.h"
 
 DlgGiftCartStatus::DlgGiftCartStatus(int cardId, const QString &cardCode, QWidget *parent) :
@@ -148,6 +149,11 @@ void DlgGiftCartStatus::populateStatuses()
 
 void DlgGiftCartStatus::on_btnOk_clicked()
 {
+    if(!check_permission(pr_gift_cart_change_status)) {
+        message_error(tr("Access denied"));
+        return;
+    }
+
     if(ui->cbNewStatus->currentIndex() < 0) {
         message_error(tr("Select a new status."));
         return;

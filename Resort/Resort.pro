@@ -62,6 +62,7 @@ SOURCES += main.cpp\
     dlgcouponserviceback.cpp \
     dlgcouponservicedocumentplus.cpp \
     dlgcouponservicefirstnumber.cpp \
+    dlgtalonservicecreate.cpp \
     dlgcouponservicepayment.cpp \
     dlggetidname.cpp \
     dlgonetwoall.cpp \
@@ -345,6 +346,7 @@ HEADERS  += mainwindow.h \
     dlgcouponserviceback.h \
     dlgcouponservicedocumentplus.h \
     dlgcouponservicefirstnumber.h \
+    dlgtalonservicecreate.h \
     dlgcouponservicepayment.h \
     dlggetidname.h \
     dlgonetwoall.h \
@@ -606,6 +608,7 @@ FORMS    += mainwindow.ui \
     dlgcouponserviceback.ui \
     dlgcouponservicedocumentplus.ui \
     dlgcouponservicefirstnumber.ui \
+    dlgtalonservicecreate.ui \
     dlgcouponservicepayment.ui \
     dlggetidname.ui \
     dlgonetwoall.ui \

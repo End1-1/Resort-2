@@ -17,10 +17,8 @@
 #include "rnumbers.h"
 #include "ui_dlgpayment.h"
 #include "dishestable.h"
-#include <QtMath>
 
 namespace {
-constexpr double kTalonAmountTolerance = 1.0;
 constexpr int kGiftCardSoldStatus = GiftCartStore::SOLD_CARD_STATUS;
 }
 
@@ -42,6 +40,18 @@ static QString fiscalUseExtPos(const QMap<QString, QVariant> &machine, bool posB
     }
 
     return machine.value(QStringLiteral("extpos")).toString();
+}
+
+static int fiscalPaymentSystem(double card, double idram)
+{
+    const bool hasCard = card > 0.001;
+    const bool hasIdram = idram > 0.001;
+
+    if(hasCard == hasIdram) {
+        return 0;
+    }
+
+    return hasCard ? pt_payment_system_card : pt_payment_system_idram;
 }
 
 DlgPayment::DlgPayment(int order, QWidget *parent) :
@@ -93,6 +103,9 @@ DlgPayment::DlgPayment(int order, QWidget *parent) :
     if(hasgift) {
         ui->btnDeptHolder->setEnabled(true);
     }
+
+    ui->btnPOS->setVisible(false);
+    ui->btnPOS->setChecked(false);
 }
 
 DlgPayment::~DlgPayment()
@@ -245,6 +258,7 @@ void DlgPayment::on_btnOk_clicked()
             pn.fPartnerTin = ui->leTaxpayerId->text();
         }
 
+        pn.fPaymentSystem = fiscalPaymentSystem(ui->leCard->asDouble(), ui->leIdram->asDouble());
         QString in, out, err;
         int fiscalrecid;
         int result = pn.makeJsonAndPrint(ui->leCard->asDouble() + ui->leIdram->asDouble(),
@@ -325,6 +339,7 @@ void DlgPayment::on_btnOk_clicked()
         }
 
         if(f) {
+            pn.fPaymentSystem = fiscalPaymentSystem(ui->leCard->asDouble(), ui->leIdram->asDouble());
             QString in, out, err;
             int fiscalrecid;
             int result = pn.makeJsonAndPrint(ui->leCard->asDouble() + ui->leIdram->asDouble(),
@@ -574,6 +589,15 @@ void DlgPayment::readFiscalMachines()
     if(ui->cbFiscalMachine->currentIndex() == -1 && !fDefaultFiscalMachine.isEmpty()) {
         ui->cbFiscalMachine->setCurrentIndex(ui->cbFiscalMachine->findText(fDefaultFiscalMachine));
     }
+
+    s.beginGroup(QStringLiteral("externalposbutton"));
+    const bool externalPosButton = s.value(QStringLiteral("enabled"), false).toBool();
+    s.endGroup();
+    ui->btnPOS->setVisible(externalPosButton);
+
+    if(!externalPosButton) {
+        ui->btnPOS->setChecked(false);
+    }
 }
 
 void DlgPayment::getGiftAmount()
@@ -790,10 +814,15 @@ bool DlgPayment::tryRedeemTalon(const QString &rawCode)
 
     const double orderAmount = ui->leFinalAmount->asDouble();
 
-    if(qAbs(info.price - orderAmount) >= kTalonAmountTolerance) {
+    if(!info.coversOrder(orderAmount)) {
         logDiscountScan(code, false, "talon_amount_mismatch",
-                        QString("talon_price=%1;order_amount=%2").arg(info.price).arg(orderAmount));
-        message_error(tr("Talon price does not match the order amount"));
+                        QString("talon_price=%1;order_amount=%2;special=%3")
+                        .arg(info.price)
+                        .arg(orderAmount)
+                        .arg(info.special ? 1 : 0));
+        message_error(info.special
+                      ? tr("Order amount exceeds the talon price")
+                      : tr("Talon price does not match the order amount"));
         return false;
     }
 
@@ -1169,6 +1198,7 @@ void DlgPayment::on_btnPrepaid_clicked()
                   fiscalUseExtPos(s, ui->btnPOS->isChecked()),
                   s.value("opcode").toString(),
                   s.value("oppin").toString());
+    pn.fPaymentSystem = fiscalPaymentSystem(ui->leCard->asDouble(), ui->leIdram->asDouble());
     QString in, out, err;
     int result = pn.printAdvanceJson(ui->leCash->asDouble(), ui->leCard->asDouble()  + ui->leIdram->asDouble(), in, out, err);
     Db b = Preferences().getDatabase(Base::fDbName);

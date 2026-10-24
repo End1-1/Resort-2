@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
     }
     QFont f("Tahoma", 12);
     a.setFont(f);
-    a.setWindowIcon(QIcon(":/images/app.ico"));
+    a.setWindowIcon(QIcon(QStringLiteral(":/images/app.ico")));
 //    QFont font("Arial LatArm Unicode", 12);
 //    a.setFont(font);
     DefRest(QHostInfo::localHostName().toUpper());

@@ -122,7 +122,7 @@ static bool closeSingleOrderAsDebt(Database &db, const SessionDebtOrder &item, i
     bind[":f_order"] = item.orderId;
     bind[":f_govnumber"] = item.govNumber;
     bind[":f_debt"] = item.total;
-    bind[":f_datetime"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    bind[":f_datetime"] = QDateTime::currentDateTime();
 
     if(db.insert("o_header_debt", bind) <= 0) {
         db.fDb.rollback();

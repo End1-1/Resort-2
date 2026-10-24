@@ -28,6 +28,9 @@
 #define report_x 1
 #define report_z 2
 
+#define pt_payment_system_card 1
+#define pt_payment_system_idram 13
+
 class PrintTaxNO : public QObject
 {
     Q_OBJECT
@@ -81,6 +84,7 @@ public:
     double fCashAmountForReturn;
     double fCardAmountForReturn;
     double fPrepaymentAmountForReturn;
+    int fPaymentSystem;
 signals:
     void started();
     void done(int code, const QString &message);
@@ -90,6 +94,7 @@ private:
     PrintTaxNO();
     void logMessage(const QString &msg);
     void sanitizeGoodsForJsonPrint();
+    QString paymentSystemField(const QString &useExtPos) const;
     QJsonArray fReturnItemList;
 };
 

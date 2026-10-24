@@ -24,8 +24,23 @@ ReceiptPrinter::ReceiptPrinter(const QString &printerName)
 
 void setupC5Printing(C5Printing &doc, QPrinter &printer, qreal sideMarginMm)
 {
+    printer.setFullPage(false);
+    QRectF pr = printer.pageRect(QPrinter::DevicePixel);
+    qreal dpi = qMax<qreal>(1.0, printer.logicalDpiX());
+    const qreal pageMm = pr.width() * 25.4 / dpi;
+
+    if(pageMm > 100.0) {
+        printer.setPageSize(QPageSize(QSizeF(80, 2000), QPageSize::Millimeter));
+        pr = printer.pageRect(QPrinter::DevicePixel);
+        dpi = qMax<qreal>(1.0, printer.logicalDpiX());
+    }
+
+    constexpr qreal kSafeRightMm = 6.0;
+    const qreal safePx = kSafeRightMm * dpi / 25.4;
+    const qreal width96 = qMax<qreal>(40.0, (pr.width() - safePx) * 96.0 / dpi);
+    const qreal height96 = qMax<qreal>(400.0, pr.height() * 96.0 / dpi);
     doc.reset();
-    doc.setSceneFromPrinter(printer);
+    doc.setSceneParams(width96, height96, 96.0);
     doc.setRightMarginMm(sideMarginMm);
 }
 

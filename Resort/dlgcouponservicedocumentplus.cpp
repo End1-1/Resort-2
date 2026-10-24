@@ -26,15 +26,23 @@ DlgCouponServiceDocumentPlus::~DlgCouponServiceDocumentPlus()
     delete ui;
 }
 
-void DlgCouponServiceDocumentPlus::getResult(QString &couponType, QString &first, double& price, double& discount,
-        double& total, int& group)
+void DlgCouponServiceDocumentPlus::getResult(QString &couponType, QString &first, QString &last, double &qty,
+        double& price, double& discount, double& total, int& group)
 {
     couponType = ui->cbType->currentText();
     first = ui->leStartNumber->text();
+    last = fLastNumber.isEmpty() ? first : fLastNumber;
+    qty = fQty < 1 ? 1 : fQty;
     price = ui->lePrice->asDouble();
     discount = ui->leDiscount->asDouble();
     total = ui->leTotal->asDouble();
     group = ui->cbType->currentData().toInt();
+}
+
+void DlgCouponServiceDocumentPlus::refreshTotal()
+{
+    const double qty = fQty < 1 ? 1 : fQty;
+    ui->leTotal->setDouble(qty * (ui->lePrice->asDouble() - ui->leDiscount->asDouble()));
 }
 
 void DlgCouponServiceDocumentPlus::keyPressEvent(QKeyEvent *e)
@@ -89,13 +97,19 @@ void DlgCouponServiceDocumentPlus::on_btnFirstNumber_clicked()
     double qty;
 
     if(DlgCouponServiceFirstNumber::getFirstNumber(ui->cbType->currentData().toInt(), first, last, qty, this)) {
-        ui->leStartNumber->setText(first);
+        fRangeStart = first;
         fLastNumber = last;
+        fQty = qty < 1 ? 1 : qty;
+        ui->leStartNumber->setText(first);
+        refreshTotal();
     }
 }
 
 void DlgCouponServiceDocumentPlus::on_cbType_currentIndexChanged(int index)
 {
+    fRangeStart.clear();
+    fLastNumber.clear();
+    fQty = 1;
     ui->leStartNumber->clear();
     ui->lePrice->clear();
     ui->leTotal->clear();
@@ -112,7 +126,7 @@ void DlgCouponServiceDocumentPlus::on_cbType_currentIndexChanged(int index)
 
 void DlgCouponServiceDocumentPlus::on_leDiscount_textChanged(const QString &arg1)
 {
-    ui->leTotal->setDouble(1 * (ui->lePrice->asDouble() - arg1.toDouble()));
+    refreshTotal();
     _s.setValue("lastcoupondiscount", arg1);
 }
 
@@ -127,7 +141,18 @@ void DlgCouponServiceDocumentPlus::on_leStartNumber_returnPressed()
         return;
     }
 
-    db[":f_code"] = ui->leStartNumber->text();
+    const QString code = ui->leStartNumber->text();
+
+    if(fRangeStart == code && !fLastNumber.isEmpty()) {
+        refreshTotal();
+        return;
+    }
+
+    fRangeStart.clear();
+    fLastNumber = code;
+    fQty = 1;
+
+    db[":f_code"] = code;
     db.exec("select f_id, f_group, f_trsale from talon_service where f_code=:f_code");
 
     if(db.next() == false) {
@@ -136,7 +161,7 @@ void DlgCouponServiceDocumentPlus::on_leStartNumber_returnPressed()
             return;
         }
 
-        db[":f_code"] = ui->leStartNumber->text();
+        db[":f_code"] = code;
         db[":f_group"] = ui->cbType->currentData().toInt();
         db[":f_price"] = ui->lePrice->asDouble();
         db[":f_trregister"] = -1;
@@ -146,6 +171,8 @@ void DlgCouponServiceDocumentPlus::on_leStartNumber_returnPressed()
     }
 
     if(db.integer("f_trsale") != 0) {
+        fLastNumber.clear();
+        fQty = 1;
         ui->leStartNumber->clear();
         message_error(tr("This coupon already saled"));
         return;
@@ -154,7 +181,7 @@ void DlgCouponServiceDocumentPlus::on_leStartNumber_returnPressed()
     ui->cbType->setCurrentIndex(ui->cbType->findData(db.integer("f_group")));
     ui->lePrice->setEnabled(true);
     ui->lePrice->setFocus();
-    ui->leTotal->setText(ui->lePrice->text());
+    refreshTotal();
 }
 
 void DlgCouponServiceDocumentPlus::on_lePrice_textChanged(const QString &arg1)

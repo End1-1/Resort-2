@@ -17,7 +17,8 @@ class DlgCouponServiceDocumentPlus : public QDialog
 public:
     explicit DlgCouponServiceDocumentPlus(ReportQuery *rq, QWidget *parent = nullptr);
     ~DlgCouponServiceDocumentPlus();
-    void getResult(QString &couponType, QString &first, double &price, double &discount, double &total, int &group);
+    void getResult(QString &couponType, QString &first, QString &last, double &qty, double &price, double &discount,
+                   double &total, int &group);
     virtual void keyPressEvent(QKeyEvent *e);
 
 private slots:
@@ -31,9 +32,13 @@ private slots:
     void on_lePrice_textChanged(const QString &arg1);
 
 private:
+    void refreshTotal();
+
     Ui::DlgCouponServiceDocumentPlus *ui;
 
+    QString fRangeStart;
     QString fLastNumber;
+    double fQty = 1;
 };
 
 #endif // DLGCOUPONSERVICEDOCUMENTPLUS_H

@@ -403,6 +403,7 @@ FRestaurantTotal::FRestaurantTotal(QWidget *parent) :
     fReportGrid->fIncludes["pm.f_" + def_lang] = false;
     fReportGrid->fIncludes["oc.f_govnumber"] = false;
     fReportGrid->fIncludes["oh.f_comment"] = false;
+    fReportGrid->fIncludes["dh.f_name"] = false;
     fReportGrid->fIncludes["sum(od.f_qty)"] = true;
     fReportGrid->fIncludes["sum(od.f_total)"] = true;
     fReportGrid->fIncludes["count(oh.f_id)"] = false;
@@ -549,8 +550,11 @@ void FRestaurantTotal::groupCheckClicked(bool value)
 
     EQCheckBox *check = qobject_cast<EQCheckBox *>(sender());
 
-    if(check && check->objectName() == QLatin1String("chShowDiscount") && check->isChecked()) {
-        ui->chOrderNum->setChecked(true);
+    if(check && check->isChecked()) {
+        if(check->objectName() == QLatin1String("chShowDiscount")
+                || check->objectName() == QLatin1String("chTransferCustomer")) {
+            ui->chOrderNum->setChecked(true);
+        }
     }
 }
 
@@ -620,6 +624,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldsWidths[tr("Payment mode code")] = 0;
     rg->fFieldsWidths[tr("P/M")] = 150;
     rg->fFieldsWidths["Մեկնաբանություն"] = 100;
+    rg->fFieldsWidths[tr("Transfer customer")] = 180;
     rg->fFieldsWidths["Կանխավճար"] = 100;
     rg->fFieldsWidths[tr("Discount card")] = 100;
     rg->fFieldsWidths[tr("Discount amount")] = 80;
@@ -663,6 +668,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "oh.f_paymentMode"
                 << "pm.f_" + def_lang << "oc.f_govnumber"
                 << "oh.f_comment"
+                << "dh.f_name"
                 << "op.f_discountcard"
                 << "tl.f_special"
                 << "tl.f_partner"
@@ -722,6 +728,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
     rg->fFieldTitles["oh.f_paymentMode"] = tr("Payment mode code");
     rg->fFieldTitles["pm.f_" + def_lang] = tr("P/M");
     rg->fFieldTitles["oh.f_comment"] = "Մեկնաբանություն";
+    rg->fFieldTitles["dh.f_name"] = tr("Transfer customer");
     rg->fFieldTitles["oc.f_govnumber"] = tr("Lisence plate");
     rg->fFieldTitles["op.f_discountcard"] = tr("Discount card");
     rg->fFieldTitles["sum(op.f_discount)"] = tr("Discount amount");
@@ -756,6 +763,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                 << "f_payment_type pm"
                 << "o_dish_state ds"
                 << "o_header_payment op"
+                << "o_debt_holder dh"
                 << "r_branch br"
                 << "talon_service tl"
                 << "r_partners tp";
@@ -774,6 +782,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                << "inner" //pm
                << "left"  //ds
                << "left"  //op
+               << "left"  //dh
                << "left"  //br
                << "left"  //tl
                << "left"  //tp
@@ -793,6 +802,7 @@ void FRestaurantTotal::apply(WReportGrid *rg)
                    << "pm.f_id=oh.f_paymentMode"
                    << "ds.f_id=od.f_state"
                    << "op.f_id=oh.f_id"
+                   << "dh.f_id=op.f_debtHolder"
                    << "br.f_id=oh.f_branch"
                    << "tl.f_order=oh.f_id"
                    << "tp.f_id=tl.f_partner";
@@ -1495,6 +1505,13 @@ void FRestaurantTotal::removeOrder()
         return;
     }
 
+    fDbBind[":f_id"] = orderId;
+
+    if(!execSql(fDb, "delete from o_header_debt where f_order=:f_id", fDbBind, fDbRows)) {
+        abortRemoveTransaction(fDb);
+        return;
+    }
+
     if(!fDb.fDb.commit()) {
         abortRemoveTransaction(fDb);
         message_error(fDb.fLastError);
@@ -1565,7 +1582,8 @@ void FRestaurantTotal::removePermanently()
 
     fDbBind[":f_id"] = orderId;
 
-    if(!execSql(fDb, "delete from o_header where f_id=:f_id", fDbBind, fDbRows)
+    if(!execSql(fDb, "delete from o_header_debt where f_order=:f_id", fDbBind, fDbRows)
+            || !execSql(fDb, "delete from o_header where f_id=:f_id", fDbBind, fDbRows)
             || !execSql(fDb, "delete from m_register where f_id=:f_id", fDbBind, fDbRows)) {
         abortRemoveTransaction(fDb);
         return;

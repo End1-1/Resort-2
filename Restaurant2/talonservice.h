@@ -11,6 +11,9 @@ struct TalonRedeemInfo
     int partnerId = 0;
     QString partnerName;
     double price = 0;
+    bool special = false;
+
+    bool coversOrder(double orderAmount) const;
 };
 
 class TalonService

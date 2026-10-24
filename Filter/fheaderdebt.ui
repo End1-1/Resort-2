@@ -40,6 +40,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chLedger">
+     <property name="text">
+      <string>By movement</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QComboBox" name="cbDebtState">
      <property name="minimumSize">
       <size>

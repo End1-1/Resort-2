@@ -59,9 +59,12 @@ void C5Printing::setSceneParams(qreal width, qreal height, qreal logicalDpiX)
 
 void C5Printing::setSceneFromPrinter(QPrinter &printer)
 {
+    const bool wasFullPage = printer.fullPage();
+    printer.setFullPage(false);
     const QRectF pr = printer.pageRect(QPrinter::DevicePixel);
-    const qreal dpiX = qMax(1, printer.logicalDpiX());
-    const qreal dpiY = qMax(1, printer.logicalDpiY());
+    const qreal dpiX = qMax<qreal>(1.0, printer.logicalDpiX());
+    const qreal dpiY = qMax<qreal>(1.0, printer.logicalDpiY());
+    printer.setFullPage(wasFullPage);
     // setSceneParams expects width/height in 96dpi units, then scales canvas to 203dpi
     setSceneParams(pr.width() * 96.0 / dpiX, pr.height() * 96.0 / dpiY, 96.0);
 }
@@ -278,13 +281,24 @@ bool C5Printing::print(QPrinter &prn)
         fPainter.end();
 
     QImage finalImage = resultImage().convertToFormat(QImage::Format_Mono, Qt::ThresholdDither | Qt::AvoidDither);
+    finalImage = finalImage.convertToFormat(QImage::Format_RGB32);
 
-    prn.setFullPage(true);
+    prn.setFullPage(false);
     QPainter p(&prn);
-    QRect targetPageRect = prn.pageRect(QPrinter::DevicePixel).toRect();
-    qreal scale = (qreal) targetPageRect.width() / (qreal) fNormalWidth;
+    const int pageW = qMax(1, prn.pageRect(QPrinter::DevicePixel).toRect().width());
+    const qreal deviceDpi = qMax<qreal>(1.0, prn.resolution() > 0 ? prn.resolution() : prn.logicalDpiX());
+    constexpr qreal kCanvasDpi = 203.0;
+    constexpr qreal kSafeLeftMm = 3.0;
+    const int leftPx = qRound(kSafeLeftMm / 25.4 * deviceDpi);
+    int destW = qRound(fNormalWidth * deviceDpi / kCanvasDpi);
+    const int maxW = qMax(1, pageW - leftPx);
 
-    p.drawImage(QRect(0, 0, targetPageRect.width(), qRound(finalImage.height() * scale)), finalImage);
+    if(destW > maxW) {
+        destW = maxW;
+    }
+
+    const qreal scale = (qreal) destW / (qreal) qMax(1, fNormalWidth);
+    p.drawImage(QRect(leftPx, 0, destW, qRound(finalImage.height() * scale)), finalImage);
     p.end();
     return true;
 }

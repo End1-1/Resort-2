@@ -1,4 +1,4 @@
-IDI_ICON1 ICON DISCARDABLE  "images/app.ico"
+IDI_ICON1 ICON "C:/Development/projects/elite.carwash/Restaurant2/images/app.ico"
 
 #include <windows.h>
 #include "rc.h"
@@ -22,7 +22,7 @@ VALUE "FileDescription", "Restaurant"
 VALUE "FileVersion", FILE_VERSION_STR
 VALUE "InternalName", "Shopping"
 VALUE "LegalCopyright", "(C)2017-2026, Kudryashov Vasili"
-VALUE "OriginalFilename", "Restaurant.exe"
+VALUE "OriginalFilename", "elite.wash.exe"
 VALUE "Email", "end1_1@yahoo.com"
 VALUE "ProductName", "Elite Carwash"
 VALUE "ProductVersion", FILE_VERSION_STR

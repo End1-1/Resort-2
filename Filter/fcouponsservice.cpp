@@ -1,6 +1,9 @@
 #include "fcouponsservice.h"
 #include "ui_fcouponsservice.h"
+#include "dlgtalonservicecreate.h"
+#include "preferences.h"
 #include "wreportgrid.h"
+#include <QDialog>
 
 namespace {
 
@@ -51,6 +54,10 @@ FCouponsService::FCouponsService(QWidget *parent) :
 {
     ui->setupUi(this);
     fReportGrid->setupTabTextAndIcon(tr("Coupons of services"), ":/images/talon.png");
+    if(WORKING_USERGROUP == 1) {
+        fReportGrid->addToolBarButton(":/images/new.png", tr("New talons"), SLOT(createTalons()), this)
+                ->setFocusPolicy(Qt::NoFocus);
+    }
 }
 
 FCouponsService::~FCouponsService()
@@ -78,4 +85,12 @@ QWidget *FCouponsService::firstElement()
 QString FCouponsService::reportTitle()
 {
     return tr("Coupon of service remains");
+}
+
+void FCouponsService::createTalons()
+{
+    DlgTalonServiceCreate d(this);
+    if(d.exec() == QDialog::Accepted) {
+        apply(fReportGrid);
+    }
 }

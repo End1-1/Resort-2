@@ -185,6 +185,15 @@ qt_add_executable(Restaurant WIN32
     restaurantc5print.h restaurantc5print.cpp
     checktime.h checktime.cpp
     dlgcalc.h dlgcalc.cpp dlgcalc.ui
+    res.rc
+)
+
+set_source_files_properties(res.rc PROPERTIES
+    OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/images/app.ico"
+)
+
+set_target_properties(Restaurant PROPERTIES
+    OUTPUT_NAME "elite.wash"
 )
 
 # ---------- DEFINES ----------

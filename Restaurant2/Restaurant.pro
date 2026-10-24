@@ -8,7 +8,7 @@ QT       += core gui sql network xml printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Restaurant
+TARGET = elite.wash
 TEMPLATE = app
 
 DEFINES += _WASH_

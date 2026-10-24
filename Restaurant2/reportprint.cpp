@@ -214,9 +214,10 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
             p.ctext(tr("Debt payment"));
             p.br();
             p.ltext(tr("Order"), 0);
-            p.ltext(tr("Plate"), 22);
-            p.ltext(tr("Debt from"), 38);
-            p.ltext(tr("Mode"), 68);
+            p.ltext(tr("Plate"), 18);
+            p.ltext(tr("Debt from"), 32);
+            p.ltext(tr("Payment date"), 52);
+            p.ltext(tr("Mode"), 72);
             p.br();
             p.line();
             p.setFontBold(false);
@@ -265,11 +266,16 @@ void ReportPrint::printTotal(const QDate &date, const QString &printedBy, const 
         const QString debtCreatedText = debtCreated.isValid()
                                         ? debtCreated.toString("yyyy-MM-dd HH:mm")
                                         : "-";
+        const QDateTime paidAt = db2.dateTimeValue("f_pay_dt");
+        const QString paidAtText = paidAt.isValid()
+                                   ? paidAt.toString("yyyy-MM-dd HH:mm")
+                                   : "-";
 
         p.ltext(db2.string("f_order"), 0);
-        p.ltext(db2.string("f_govnumber"), 22);
-        p.ltext(debtCreatedText, 38);
-        p.ltext(modeName, 68);
+        p.ltext(db2.string("f_govnumber"), 18);
+        p.ltext(debtCreatedText, 32);
+        p.ltext(paidAtText, 52);
+        p.ltext(modeName, 72);
         p.rtext(float_str(amount, 2));
         p.br();
     }

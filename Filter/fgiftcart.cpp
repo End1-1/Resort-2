@@ -3,6 +3,7 @@
 #include <QMenu>
 #include <QSignalBlocker>
 #include "basewidget.h"
+#include "cacherights.h"
 #include "dlggiftcartstatus.h"
 #include "fgiftcartusage.h"
 #include "message.h"
@@ -219,6 +220,11 @@ void FGiftCart::onRowDoubleClick(const QList<QVariant> &row)
     const QString code = row.at(1).toString().trimmed();
     if(cardId <= 0 && code.isEmpty()) {
         message_error(tr("Select a gift card row."));
+        return;
+    }
+
+    if(!check_permission(pr_gift_cart_change_status)) {
+        message_error(tr("Access denied"));
         return;
     }
 

@@ -23,6 +23,7 @@
 #define pr_hall_manager 16
 #define pr_partners 17
 #define pr_resort_audit_log 18
+#define pr_gift_cart_change_status 19
 
 class UserPermssions: public QObject
 {

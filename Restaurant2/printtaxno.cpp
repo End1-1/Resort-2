@@ -239,6 +239,7 @@ PrintTaxNO::PrintTaxNO()
     fJsonHeader["paidAmountCard"] = 0.0;
     fJsonHeader["prePaymentAmount"] = 0.0;
     fJsonHeader["userExtPOS"] = "true";
+    fPaymentSystem = 0;
     fTaxCashier = "3";
     fTaxPin = "3";
 }
@@ -268,6 +269,7 @@ PrintTaxNO::PrintTaxNO(const QString &ip,
     fCashAmountForReturn = 0;
     fCardAmountForReturn = 0;
     fPrepaymentAmountForReturn = 0;
+    fPaymentSystem = 0;
 }
 
 void PrintTaxNO::setParams(const QString &ip, int port, const QString &password, const QString &op, const QString &pin, const QString &extPos)
@@ -516,6 +518,15 @@ void PrintTaxNO::addReturnItem(int row, double qty)
         {"quantity", qty}});
 }
 
+QString PrintTaxNO::paymentSystemField(const QString &useExtPos) const
+{
+    if(fPaymentSystem <= 0 || useExtPos.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0) {
+        return {};
+    }
+
+    return QStringLiteral(", \"PaymentSystem\":%1").arg(fPaymentSystem);
+}
+
 void PrintTaxNO::sanitizeGoodsForJsonPrint()
 {
     QStringList affected;
@@ -569,11 +580,12 @@ void PrintTaxNO::makeJsonAndPrint(double cash, double card, double prepaid)
     fJsonHeader["prePaymentAmount"] = prepaid;
     fJsonHeader["paidAmount"] = cash;
     QString json = QString("{\"seq\":1,\"paidAmount\":%1, \"paidAmountCard\":%2, \"partialAmount\":0, "
-                           "\"prePaymentAmount\":%3, \"useExtPOS\":%4, \"mode\":2, %5 %6 \"items\":[")
+                           "\"prePaymentAmount\":%3, \"useExtPOS\":%4%5, \"mode\":2, %6 %7 \"items\":[")
                        .arg(float_str_pt(fJsonHeader["paidAmount"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["paidAmountCard"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["prePaymentAmount"].toDouble(), 2))
                        .arg(fJsonHeader["userExtPOS"].toString())
+                       .arg(paymentSystemField(fJsonHeader["userExtPOS"].toString()))
                        .arg(fPartnerTin.length() > 0 ? QString("\"partnerTin\":\"%1\",").arg(fPartnerTin) : "\"partnerTin\":null,")
                        .arg(fEmarks.isEmpty() ? "" : QString("\"eMarks\":[%1],").arg(emarks));
     bool first = true;
@@ -658,11 +670,12 @@ int PrintTaxNO::makeJsonAndPrint(double card, double prepaid, QString &outInJson
     fJsonHeader["paidAmount"] = fJsonHeader["paidAmount"].toDouble() - card - prepaid;
     QString json = QString(
                        "{\"seq\":1,\"paidAmount\":%1, \"paidAmountCard\":%2, \"partialAmount\":0, "
-                       "\"prePaymentAmount\":%3, \"useExtPOS\":%4, \"mode\":2, %5 %6 \"items\":[")
+                       "\"prePaymentAmount\":%3, \"useExtPOS\":%4%5, \"mode\":2, %6 %7 \"items\":[")
                        .arg(float_str_pt(fJsonHeader["paidAmount"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["paidAmountCard"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["prePaymentAmount"].toDouble(), 2))
                        .arg(fJsonHeader["userExtPOS"].toString())
+                       .arg(paymentSystemField(fJsonHeader["userExtPOS"].toString()))
                        .arg(fPartnerTin.length() > 0
                                 ? QString("\"partnerTin\":\"%1\",").arg(fPartnerTin)
                                 : "\"partnerTin\":null,")
@@ -747,11 +760,12 @@ int PrintTaxNO::makeJsonAndPrint(double cash, double card, double prepaid, QStri
     fJsonHeader["paidAmount"] = cash;
     QString json = QString(
                        "{\"seq\":1,\"paidAmount\":%1, \"paidAmountCard\":%2, \"partialAmount\":0, "
-                       "\"prePaymentAmount\":%3, \"useExtPOS\":%4, \"mode\":2, %5 %6 \"items\":[")
+                       "\"prePaymentAmount\":%3, \"useExtPOS\":%4%5, \"mode\":2, %6 %7 \"items\":[")
                        .arg(float_str_pt(fJsonHeader["paidAmount"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["paidAmountCard"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["prePaymentAmount"].toDouble(), 2))
                        .arg(fJsonHeader["userExtPOS"].toString())
+                       .arg(paymentSystemField(fJsonHeader["userExtPOS"].toString()))
                        .arg(fPartnerTin.length() > 0
                                 ? QString("\"partnerTin\":\"%1\",").arg(fPartnerTin)
                                 : "\"partnerTin\":null,")
@@ -835,14 +849,15 @@ int PrintTaxNO::makeJsonAndPrintSimple(
     fJsonHeader["paidAmount"] = fJsonHeader["paidAmount"].toDouble() - card - prepaid;
     QString json = QString("{\"seq\":1,\"paidAmount\":%1, \"paidAmountCard\":%2, \"partialAmount\":0, "
                            "\"dep\":%7,"
-                           "\"prePaymentAmount\":%3, \"useExtPOS\":%4, \"mode\":1, %5 %6 \"items\":null}")
+                           "\"prePaymentAmount\":%3, \"useExtPOS\":%4%8, \"mode\":1, %5 %6 \"items\":null}")
                        .arg(float_str_pt(fJsonHeader["paidAmount"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["paidAmountCard"].toDouble(), 2))
                        .arg(float_str_pt(fJsonHeader["prePaymentAmount"].toDouble(), 2))
                        .arg(useExtPos)
                        .arg(fPartnerTin.length() > 0 ? QString("\"partnerTin\":\"%1\",").arg(fPartnerTin) : "\"partnerTin\":null,")
                        .arg(fEmarks.isEmpty() ? QString("\"eMarks\":[],") : QString("\"eMarks\":[%1],").arg(emarks))
-                       .arg(dep);
+                       .arg(dep)
+                       .arg(paymentSystemField(useExtPos));
     QByteArray jdata = json.toUtf8();
 
     int result = printJSON(jdata, err, opcode_print_receipt);
@@ -880,10 +895,11 @@ int PrintTaxNO::printAdvanceJson(double advanceCash, double advanceCard, QString
     outInJson = QString("{\"seq\":1, "
                         "\"paidAmount\":%1, \"paidAmountCard\":%2,"
                         "\"prePaymentAmount\":0.0,"
-                        "\"mode\":3, \"useExtPOS\":%3}")
+                        "\"mode\":3, \"useExtPOS\":%3%4}")
                     .arg(advanceCash)
                     .arg(advanceCard)
-                    .arg(fJsonHeader["userExtPOS"].toString());
+                    .arg(fJsonHeader["userExtPOS"].toString())
+                    .arg(paymentSystemField(fJsonHeader["userExtPOS"].toString()));
     QByteArray jdata = outInJson.toUtf8();
     int result = printJSON(jdata, err, opcode_print_receipt);
 

@@ -916,6 +916,29 @@ ledger</string>
      </property>
     </widget>
    </item>
+   <item row="12" column="12">
+    <widget class="QLabel" name="label_transferCustomer">
+     <property name="layoutDirection">
+      <enum>Qt::LayoutDirection::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Transfer customer</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="14">
+    <widget class="EQCheckBox" name="chTransferCustomer">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="Field" stdset="0">
+      <string>dh.f_name</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -1240,6 +1263,22 @@ ledger</string>
     <hint type="destinationlabel">
      <x>162</x>
      <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chTransferCustomer</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FRestaurantTotal</receiver>
+   <slot>groupCheckClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>962</x>
+     <y>550</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>260</y>
     </hint>
    </hints>
   </connection>

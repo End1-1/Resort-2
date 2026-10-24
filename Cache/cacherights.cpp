@@ -5,7 +5,8 @@
 
 UserPermssions *UserPermssions::fInstance= nullptr;
 
-UserPermssions::UserPermssions(int group)
+UserPermssions::UserPermssions(int group) :
+    fGroup(group)
 {
 #ifdef _RESTAURANT_
     Db b = Preferences().getDatabase(Base::fDbName);

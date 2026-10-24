@@ -66,3 +66,16 @@ create table r_resort_log (
   key idx_r_resort_log_dt (f_datetime),
   key idx_r_resort_log_entity (f_entity_type, f_entity_id)
 );
+
+/* Restaurant: order debt on session close + debt payment */
+create table if not exists o_header_debt (
+  f_id integer primary key auto_increment,
+  f_order integer not null,
+  f_govnumber varchar(32),
+  f_debt decimal(14,2) not null,
+  f_datetime datetime not null,
+  f_payment_mode integer default null,
+  key idx_o_header_debt_order (f_order),
+  key idx_o_header_debt_dt (f_datetime)
+);
+alter table o_header_debt add column f_payment_mode integer default null;

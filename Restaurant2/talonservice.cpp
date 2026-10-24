@@ -6,6 +6,20 @@
 #include "preferences.h"
 #include <QDate>
 #include <QObject>
+#include <QtMath>
+
+namespace {
+constexpr double kTalonAmountTolerance = 1.0;
+}
+
+bool TalonRedeemInfo::coversOrder(double orderAmount) const
+{
+    if(special) {
+        return orderAmount > 0.001 && orderAmount - price < kTalonAmountTolerance;
+    }
+
+    return qAbs(price - orderAmount) < kTalonAmountTolerance;
+}
 
 static bool openDb(Database2 &db2)
 {
@@ -109,6 +123,7 @@ bool TalonService::loadTalonForRedeem(Database2 &db2,
     info.partnerId = db2.integer("f_partner");
     info.partnerName = db2.string("f_partnername");
     info.price = db2.doubleValue("f_price");
+    info.special = db2.integer("f_special") == 1;
     return true;
 }
 
